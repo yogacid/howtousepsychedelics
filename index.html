@@ -37,6 +37,11 @@
 
       --white:  #ffffff;
       --nav-h:  68px;
+
+      /* Semantic status colours */
+      --danger:   #d45252;
+      --warn:     #d4a832;
+      --teal-dim: rgba(62,201,191,0.08);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -72,6 +77,10 @@
       --accent-border:rgba(31,140,132,0.22);
 
       --grad: linear-gradient(135deg, #1f8c84 0%, #3d8228 100%);
+
+      --danger:   #b83333;
+      --warn:     #a67c00;
+      --teal-dim: rgba(31,140,132,0.08);
     }
 
     /* Nav hard-codes its bg — override for light */
@@ -1971,6 +1980,43 @@
     .planner-page .flag-banner.visible { display: block; }
     .planner-page .flag-banner strong { color: var(--danger); }
 
+    /* Caution check-card state */
+    .planner-page .check-card.caution { border-color: rgba(212,168,50,0.5); background: rgba(212,168,50,0.04); }
+    .planner-page .check-card.caution .check-mark { background: rgba(212,168,50,0.18); border-color: var(--warn); color: var(--warn); }
+    .planner-page .check-btn.caution { border-color: rgba(212,168,50,0.45); color: var(--warn); background: rgba(212,168,50,0.07); }
+
+    /* Risk tier badge */
+    .planner-page .risk-tier-wrap { margin-bottom: 2rem; }
+    .planner-page .risk-tier-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.45rem 1rem; border-radius: 4px; margin-bottom: 0.75rem;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase;
+    }
+    .planner-page .risk-tier-badge.low      { background: rgba(62,201,191,0.1);  border: 1.5px solid var(--teal);   color: var(--teal); }
+    .planner-page .risk-tier-badge.moderate { background: rgba(212,168,50,0.1);  border: 1.5px solid var(--warn);   color: var(--warn); }
+    .planner-page .risk-tier-badge.high     { background: rgba(212,82,82,0.1);   border: 1.5px solid var(--danger); color: var(--danger); }
+    .planner-page .risk-tier-desc {
+      font-size: 0.85rem; color: var(--cream-dim); line-height: 1.7;
+      padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0;
+      background: var(--bg-card);
+    }
+    .planner-page .risk-tier-desc.low      { border-left: 3px solid var(--teal); }
+    .planner-page .risk-tier-desc.moderate { border-left: 3px solid var(--warn); }
+    .planner-page .risk-tier-desc.high     { border-left: 3px solid var(--danger); }
+
+    /* Psygaia CTA strip */
+    .planner-page .psygaia-cta {
+      border: 1px solid rgba(62,201,191,0.35); border-radius: 6px;
+      padding: 1.25rem 1.5rem; background: rgba(62,201,191,0.04); margin-top: 1.5rem;
+    }
+    .planner-page .psygaia-cta-head {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 0.5rem;
+    }
+    .planner-page .psygaia-cta p { font-size: 0.83rem; color: var(--cream-dim); line-height: 1.65; margin-bottom: 0.6rem; }
+    .planner-page .psygaia-cta a { color: var(--teal); text-decoration: none; font-size: 0.82rem; font-weight: 600; }
+    .planner-page .psygaia-cta a:hover { text-decoration: underline; }
+
     /* Timeline */
     .planner-page .pl-timeline { position: relative; padding-left: 2rem; }
     .planner-page .pl-timeline::before {
@@ -2051,7 +2097,7 @@
 
     /* Summary */
     .planner-page .summary-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
       background: var(--cream-border); border: 1px solid var(--cream-border);
       border-radius: 6px; overflow: hidden; margin-bottom: 2rem;
     }
@@ -7423,6 +7469,17 @@
             </div>
           </div>
 
+          <div class="field-group">
+            <label class="field-label">Intended dose range</label>
+            <div class="pill-grid" id="pl-dose-pills">
+              <div class="pill" onclick="plSelectPill(this,'dose')">Low / threshold</div>
+              <div class="pill" onclick="plSelectPill(this,'dose')">Moderate</div>
+              <div class="pill" onclick="plSelectPill(this,'dose')">High</div>
+              <div class="pill" onclick="plSelectPill(this,'dose')">Unsure</div>
+            </div>
+            <p class="field-hint" style="margin-top:0.6rem;font-size:0.78rem;line-height:1.6;">Low = sub-perceptual to gentle; Moderate = full experience with functional awareness; High = strong, ego dissolution possible. When in doubt, start lower.</p>
+          </div>
+
           <div class="pl-nav">
             <div></div>
             <button class="pl-btn pl-btn-primary" onclick="plGoTo(1)">Continue →</button>
@@ -7432,18 +7489,18 @@
         <!-- ══ STEP 1: Readiness ══════════════════════════════════════════ -->
         <div class="pl-section" id="pl-step-1">
           <div class="pl-eyebrow">Journey Planner · Step 2 of 6</div>
-          <h2 class="pl-title">Readiness check</h2>
-          <p class="pl-intro">These are not gatekeeping questions — they are the same questions a responsible facilitator would ask. Honest answers protect you. Flag anything that needs attention before proceeding.</p>
+          <h2 class="pl-title">Readiness assessment</h2>
+          <p class="pl-intro">These are not gatekeeping questions — they are the same questions a responsible facilitator would ask. Honest answers protect you, and they shape the personalised guidance in your plan. Flag anything that needs attention before proceeding.</p>
 
           <div class="check-card" id="pl-chk-medications">
             <div class="check-mark" id="pl-chk-medications-mark">?</div>
             <div class="check-text">
-              <strong>Medications &amp; substances</strong>
-              <p>Do you take SSRIs, MAOIs, lithium, antipsychotics, or blood pressure medications? Are you currently using stimulants or other psychoactives regularly?</p>
+              <strong>Medications</strong>
+              <p>Are you currently taking MAOIs, lithium, antipsychotics, or blood pressure medications? Or SSRIs, antidepressants, or stimulants?</p>
               <div class="check-options">
-                <button class="check-btn" onclick="plSetCheck('medications','clear')">No / None</button>
-                <button class="check-btn" onclick="plSetCheck('medications','flagged')">Yes</button>
-                <button class="check-btn" onclick="plSetCheck('medications','caution')">Some</button>
+                <button class="check-btn" onclick="plSetCheck('medications','clear')">None</button>
+                <button class="check-btn" onclick="plSetCheck('medications','caution')">SSRIs / antidepressants</button>
+                <button class="check-btn" onclick="plSetCheck('medications','flagged')">MAOIs, lithium, or antipsychotics</button>
               </div>
             </div>
           </div>
@@ -7464,10 +7521,24 @@
             <div class="check-mark" id="pl-chk-state-mark">?</div>
             <div class="check-text">
               <strong>Current psychological state</strong>
-              <p>Are you currently in acute crisis, processing recent trauma, or experiencing severe anxiety or depression? Psychedelics are not appropriate stabilisers for acute psychological distress.</p>
+              <p>How would you describe your current emotional and psychological baseline? Psychedelics are not appropriate stabilisers for acute distress.</p>
               <div class="check-options">
                 <button class="check-btn" onclick="plSetCheck('state','clear')">Reasonably stable</button>
-                <button class="check-btn" onclick="plSetCheck('state','flagged')">In acute difficulty</button>
+                <button class="check-btn" onclick="plSetCheck('state','caution')">Experiencing some difficulty</button>
+                <button class="check-btn" onclick="plSetCheck('state','flagged')">In acute crisis</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="check-card" id="pl-chk-trauma">
+            <div class="check-mark" id="pl-chk-trauma-mark">?</div>
+            <div class="check-text">
+              <strong>Trauma history</strong>
+              <p>Psychedelics can amplify and surface unprocessed trauma. This is not a contraindication in itself, but it significantly shapes the appropriate level of support.</p>
+              <div class="check-options">
+                <button class="check-btn" onclick="plSetCheck('trauma','clear')">None or well resolved</button>
+                <button class="check-btn" onclick="plSetCheck('trauma','caution')">Present and manageable</button>
+                <button class="check-btn" onclick="plSetCheck('trauma','flagged')">Recent or significantly unresolved</button>
               </div>
             </div>
           </div>
@@ -7476,10 +7547,23 @@
             <div class="check-mark" id="pl-chk-support-mark">?</div>
             <div class="check-text">
               <strong>Sitter or support person</strong>
-              <p>For higher-dose experiences, do you have a trusted, sober person who can be present or on call? This is strongly recommended for all but low-dose or highly experienced individuals.</p>
+              <p>For moderate or higher doses, do you have a trusted, sober person who can be present or on call? This is strongly recommended for all but low-dose experiences.</p>
               <div class="check-options">
                 <button class="check-btn" onclick="plSetCheck('support','clear')">Yes / Arranged</button>
                 <button class="check-btn" onclick="plSetCheck('support','flagged')">No / Not yet</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="check-card" id="pl-chk-environment">
+            <div class="check-mark" id="pl-chk-environment-mark">?</div>
+            <div class="check-text">
+              <strong>Life circumstances and environmental stability</strong>
+              <p>The external container matters. Significant instability in relationships, housing, work, or finances adds risk — not because it disqualifies you, but because the psyche tends to work with what's present.</p>
+              <div class="check-options">
+                <button class="check-btn" onclick="plSetCheck('environment','clear')">Stable and supportive</button>
+                <button class="check-btn" onclick="plSetCheck('environment','caution')">Some instability or stress</button>
+                <button class="check-btn" onclick="plSetCheck('environment','flagged')">Significantly unstable</button>
               </div>
             </div>
           </div>
@@ -7488,7 +7572,7 @@
             <div class="check-mark" id="pl-chk-testing-mark">?</div>
             <div class="check-text">
               <strong>Substance verification</strong>
-              <p>Have you tested or otherwise verified the substance? Reagent test kits are inexpensive and available legally. Fentanyl test strips are also strongly recommended for any street-sourced material.</p>
+              <p>Have you tested or otherwise verified the substance? Reagent test kits are inexpensive and legally available. Fentanyl test strips are strongly recommended for any street-sourced material.</p>
               <div class="check-options">
                 <button class="check-btn" onclick="plSetCheck('testing','clear')">Tested / Verified</button>
                 <button class="check-btn" onclick="plSetCheck('testing','flagged')">Not yet</button>
@@ -7497,7 +7581,7 @@
           </div>
 
           <div class="flag-banner" id="pl-flag-banner">
-            <strong>One or more items flagged.</strong> Please do not ignore these — they represent genuine safety considerations. Visiting our <span style="color:var(--teal);cursor:pointer;" onclick="showPage('assessment')">Assessment page</span> will help you understand each concern in more detail. You can still complete this planner, but address flagged items before your journey date.
+            <strong>One or more items flagged.</strong> Please do not ignore these — they represent genuine safety considerations. Visit the <span style="color:var(--teal);cursor:pointer;" onclick="showPage('assessment')">Assessment page</span> for detail on each concern. You can still complete this planner, but address flagged items before your journey date.
           </div>
 
           <div class="pl-nav">
@@ -7539,6 +7623,11 @@
           <div class="prompt-card">
             <p class="prompt-q">"If the experience became difficult — if it went to the hardest place — what would you want to remember?"</p>
             <textarea id="pl-int-q4" placeholder="A reminder to yourself. A phrase, a person, an image, a commitment."></textarea>
+          </div>
+
+          <div class="prompt-card">
+            <p class="prompt-q">"What in the living world around you — a place, a species, a season, a landscape — feels like it is calling for attention or relationship?"</p>
+            <textarea id="pl-int-q5" placeholder="A forest you've been avoiding. A season you close against. The last time you lay on the ground. What comes to mind?"></textarea>
           </div>
 
           <div class="pl-nav">
@@ -7597,6 +7686,13 @@
             <div class="summary-cell"><div class="summary-cell-label">Journey date</div><div class="summary-cell-val" id="pl-sum-date">—</div></div>
             <div class="summary-cell"><div class="summary-cell-label">Setting</div><div class="summary-cell-val" id="pl-sum-setting">—</div></div>
             <div class="summary-cell"><div class="summary-cell-label">Experience level</div><div class="summary-cell-val" id="pl-sum-exp">—</div></div>
+            <div class="summary-cell"><div class="summary-cell-label">Dose range</div><div class="summary-cell-val" id="pl-sum-dose">—</div></div>
+            <div class="summary-cell" style="background:var(--bg-card-alt);"></div>
+          </div>
+
+          <div class="risk-tier-wrap" id="pl-risk-tier-wrap">
+            <div class="risk-tier-badge" id="pl-risk-tier-badge">—</div>
+            <div class="risk-tier-desc" id="pl-risk-tier-desc"></div>
           </div>
 
           <div class="readiness-meter-wrap">
@@ -7625,17 +7721,14 @@
             <div id="pl-intentions-container"></div>
           </div>
 
-          <div class="pl-integration-strip">
-            <h4>Integration window — first 72 hours</h4>
-            <p>Protect time outdoors the day after. Unhurried journalling — not systematic capture, but following what arises. Avoid demanding professional commitments. Slow, quiet meals. Conversations with people who understand what you've been through.</p>
+          <div id="pl-integration-content">
+            <!-- populated by plBuildSummary() -->
           </div>
-          <div class="pl-integration-strip" style="border-color: rgba(62,201,191,0.4);">
-            <h4>Weeks 1–4 post-journey</h4>
-            <p>Integration is not a phase — it is the practice of allowing what was encountered to actually change how you live, relate, and perceive. Journal regularly. Spend unhurried time in nature. Notice what has shifted in your ordinary perception. Consider working with an integration therapist or circle if significant material arose.</p>
-          </div>
-          <div class="pl-integration-strip" style="border-color: rgba(62,201,191,0.2);">
-            <h4>Ongoing ecological integration</h4>
-            <p>The Psygaia framework understands integration as relational restoration — not just inward processing, but the gradual reorientation of how you participate in social and ecological systems. What would it mean to bring what you encountered back into your relationship with the places, people, and nonhuman world you live with?</p>
+
+          <div id="pl-psygaia-cta" style="display:none;" class="psygaia-cta">
+            <div class="psygaia-cta-head">Structured support available</div>
+            <p>Psygaia's Elemental Way programme offers guided preparation, peer support, and ecological integration — a structured container for those who want more than a solo process.</p>
+            <a href="https://psygaia.org" target="_blank">Explore The Elemental Way at psygaia.org →</a>
           </div>
 
           <div class="print-note">
@@ -7651,6 +7744,9 @@
 
       </div><!-- /planner-content -->
     </div><!-- /planner-page -->
+
+    <!-- ══ HIDDEN PDF LAYOUT (rendered by html2canvas) ══════════════ -->
+    <div id="pdf-doc" style="position:absolute;left:-9999px;top:0;width:794px;min-height:1px;background:#ffffff;box-sizing:border-box;"></div>
   </div><!-- /page-planner -->
 
 <!-- ═══════════════════════════════════════════
@@ -7664,11 +7760,13 @@
     substance: null,
     exp: null,
     setting: null,
+    dose: null,
     journeyDate: null,
     checks: {}
   };
   var plCurrent = 0;
 
+  /* ── Navigation ──────────────────────────────────────────────── */
   function plGoTo(n) {
     document.getElementById('pl-step-' + plCurrent).classList.remove('active');
     var oldDot = document.getElementById('pl-dot-' + plCurrent);
@@ -7689,6 +7787,7 @@
     plGoTo(n);
   }
 
+  /* ── Pill selection ───────────────────────────────────────────── */
   function plSelectPill(el, group) {
     el.closest('.pill-grid').querySelectorAll('.pill').forEach(function (p) {
       p.classList.remove('selected');
@@ -7697,12 +7796,12 @@
     plState[group] = el.textContent.trim();
   }
 
+  /* ── Date field ───────────────────────────────────────────────── */
   function plUpdateDate() {
     var val = document.getElementById('pl-journey-date').value;
     if (!val) return;
     plState.journeyDate = new Date(val + 'T12:00:00');
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
+    var today = new Date(); today.setHours(0, 0, 0, 0);
     var diff = Math.round((plState.journeyDate - today) / 86400000);
     var hint = document.getElementById('pl-days-out');
     if      (diff < 0)   hint.textContent = 'That date has passed.';
@@ -7713,11 +7812,14 @@
     else                 hint.textContent = diff + ' days away — excellent preparation window. Use it fully.';
   }
 
+  /* ── Readiness checks ─────────────────────────────────────────── */
   function plSetCheck(id, val) {
     var card = document.getElementById('pl-chk-' + id);
     var mark = document.getElementById('pl-chk-' + id + '-mark');
-    card.className = 'check-card ' + (val === 'caution' ? 'flagged' : val);
-    mark.textContent = val === 'clear' ? '\u2713' : val === 'caution' ? '\u25b3' : '\u2715';
+    card.className = 'check-card ' + val;
+    if (val === 'clear')   { mark.textContent = '\u2713'; }
+    if (val === 'caution') { mark.textContent = '\u25b3'; }
+    if (val === 'flagged') { mark.textContent = '\u2715'; }
     plState.checks[id] = val;
     plUpdateFlagBanner();
   }
@@ -7729,6 +7831,82 @@
     document.getElementById('pl-flag-banner').classList.toggle('visible', hasFlag);
   }
 
+  /* ── Risk tier calculation ────────────────────────────────────── */
+  function plCalcRiskTier() {
+    var c = plState.checks;
+    // Hard flags → always High
+    if (c.mental      === 'flagged') return 'high';
+    if (c.state       === 'flagged') return 'high';
+    if (c.medications === 'flagged') return 'high';
+    // Scored
+    var score = 0;
+    if (c.medications === 'caution') score += 1;
+    if (c.state       === 'caution') score += 1;
+    if (c.trauma      === 'flagged') score += 2;
+    if (c.trauma      === 'caution') score += 1;
+    if (c.support     === 'flagged') score += 1;
+    if (c.environment === 'flagged') score += 2;
+    if (c.environment === 'caution') score += 1;
+    if (c.testing     === 'flagged') score += 1;
+    if (score >= 4) return 'high';
+    if (score >= 1) return 'moderate';
+    return 'low';
+  }
+
+  /* ── Substance-specific integration notes ─────────────────────── */
+  function plSubstanceNote(substance) {
+    var notes = {
+      'Psilocybin':  'Psilocybin experiences frequently foreground relational and ecological material — a heightened sense of aliveness in the more-than-human world, boundary dissolution, and affectively charged encounters with interdependence. Integration practices that involve unhurried time in nature (forest bathing, sit spots, slow walks without a destination) are particularly well-suited to what tends to emerge.',
+      'LSD':         'LSD experiences range widely in their phenomenological character, often heightening sensory acuity and catalysing novel associative thinking. Follow what actually arose rather than a generic template — the specific material that surfaced is your integration curriculum. Journalling in the first 72 hours tends to be particularly fruitful.',
+      'MDMA':        'MDMA experiences tend to foreground relational and interpersonal material — empathy, emotional openness, and the loosening of habitual interpersonal defences. Integration practices that centre on honest communication, relationship repair, and reconnection with community are particularly relevant. The 24–72 hour window is especially valuable for relational conversations.',
+      'Ayahuasca':   'Ayahuasca ceremonies often carry cosmological and ecological dimensions alongside intense emotional and somatic processing. Integration may benefit from community containers, nature-based practices, and explicit attention to the relational dimensions of what arose — including material that felt difficult or confronting.',
+      'Mescaline':   'Mescaline experiences are characterised by slow, sustained unfolding — often with deep heart-centred openings and heightened perception of the natural world. Integration can be similarly unhurried. Long walks in nature, slow meals, and patient journalling tend to be well-suited companions to what mescaline tends to offer.',
+      'Ketamine':    'Ketamine experiences often involve profound dissociation and novel perceptual states with a shorter duration than classical psychedelics. Integration tends to focus on the felt sense of altered perspective and embodied reconnection after re-entry. Gentle somatic practices and grounding in ordinary sensory experience are particularly useful.',
+      'DMT':         'DMT experiences are brief but often intensely non-ordinary — encounters that can feel charged with meaning and difficult to frame in ordinary language. Integration tends to centre on sitting with what cannot be fully explained: allowing the encounter to inform your sense of relational embeddedness without forcing it into premature narrative.',
+      'Other':       'Your integration path will be shaped by what actually arose in the experience. Follow the phenomenology — the material that surfaced, the emotions that were activated, the insights that emerged — rather than a generic template.'
+    };
+    return notes[substance] || notes['Other'];
+  }
+
+  /* ── Build personalised integration section ───────────────────── */
+  function plBuildIntegrationHTML(tier, substance) {
+    var substanceNote = substance && substance !== 'Not specified'
+      ? '<div class="pl-integration-strip" style="border-color:rgba(62,201,191,0.35);">' +
+          '<h4>Working with ' + substance + '</h4>' +
+          '<p>' + plSubstanceNote(substance) + '</p>' +
+        '</div>'
+      : '';
+
+    var tierNote = '';
+    if (tier === 'high') {
+      tierNote = '<div class="pl-integration-strip" style="border-color:var(--danger);background:rgba(212,82,82,0.04);">' +
+        '<h4>A note on your readiness assessment</h4>' +
+        '<p>Your responses indicate one or more significant safety concerns. We strongly recommend not proceeding until these have been addressed — ideally with the support of a clinician, guide, or therapist experienced with psychedelics. Integration support cannot substitute for appropriate preparation, and proceeding without resolving these concerns substantially increases risk.</p>' +
+        '</div>';
+    } else if (tier === 'moderate') {
+      tierNote = '<div class="pl-integration-strip" style="border-color:var(--warn);background:rgba(212,168,50,0.04);">' +
+        '<h4>A note on your readiness assessment</h4>' +
+        '<p>Your readiness profile indicates some areas that benefit from extra attention before and after the experience. Consider having integration support available — a therapist, guide, or peer integration circle — particularly if significant or difficult material arises.</p>' +
+        '</div>';
+    }
+
+    return '<div class="pl-integration-strip">' +
+        '<h4>Integration window — first 72 hours</h4>' +
+        '<p>Protect time outdoors the day after. Unhurried journalling — not systematic capture, but following what arises. Avoid demanding professional commitments. Slow, quiet meals. Conversations with people who understand what you\'ve been through.</p>' +
+      '</div>' +
+      substanceNote +
+      '<div class="pl-integration-strip" style="border-color:rgba(62,201,191,0.4);">' +
+        '<h4>Weeks 1–4 post-journey</h4>' +
+        '<p>Integration is not a phase — it is the practice of allowing what was encountered to actually change how you live, relate, and perceive. Journal regularly. Spend unhurried time in nature. Notice what has shifted in your ordinary perception. Consider working with an integration therapist or circle if significant material arose.</p>' +
+      '</div>' +
+      '<div class="pl-integration-strip" style="border-color:rgba(62,201,191,0.18);">' +
+        '<h4>Ongoing ecological integration</h4>' +
+        '<p>The Psygaia framework understands integration as relational restoration — not just inward processing, but the gradual reorientation of how you participate in social and ecological systems. What would it mean to bring what you encountered back into your relationship with the places, people, and nonhuman world you live with?</p>' +
+      '</div>' +
+      tierNote;
+  }
+
+  /* ── Timeline ─────────────────────────────────────────────────── */
   function plBuildTimeline() {
     var container = document.getElementById('pl-timeline-container');
     var date = plState.journeyDate;
@@ -7746,6 +7924,10 @@
       return '<div class="task-item" onclick="plToggleTask(this)"><div class="task-box">\u2713</div><span class="task-text">' + text + '</span></div>';
     }
 
+    var highDose = plState.dose === 'High';
+    var lowDose  = plState.dose === 'Low / threshold';
+    var tier = plCalcRiskTier();
+
     container.innerHTML =
       '<div class="timeline-item">' +
         '<div class="timeline-meta">Now \u00b7 Begin here</div>' +
@@ -7755,7 +7937,7 @@
           task('Read the full Assessment guide on this site') +
           task('Complete substance-specific research (dose, duration, contraindications)') +
           task('Write your intentions (Step 4 of this planner)') +
-          task('Confirm your sitter and their availability') +
+          (lowDose ? '' : task('Confirm your sitter and their availability')) +
         '</div></div>' +
 
       '<div class="timeline-item">' +
@@ -7767,6 +7949,7 @@
           task('Improve sleep quality; begin tracking dreams if inclined') +
           task('Spend time in nature — unhurried, without a phone') +
           task('Begin a simple daily journalling or reflection practice') +
+          (tier !== 'low' ? task('Research integration support options — therapists, circles, guides') : '') +
         '</div></div>' +
 
       '<div class="timeline-item">' +
@@ -7778,7 +7961,8 @@
           task('Test your substance using a reagent kit if not yet done') +
           task('Build or finalise your playlist; listen through it sober') +
           task('Revisit and refine your intention — let it simplify') +
-          task('Discuss the experience openly with your sitter') +
+          (lowDose ? '' : task('Discuss the experience openly with your sitter')) +
+          (highDose ? task('Re-read the guide on navigating difficult experiences') : '') +
         '</div></div>' +
 
       '<div class="timeline-item">' +
@@ -7826,10 +8010,13 @@
   function plToggleTask(el) { el.classList.toggle('checked'); }
   function plToggleCL(el)   { el.classList.toggle('done'); }
 
+  /* ── Build summary (Step 5) ───────────────────────────────────── */
   function plBuildSummary() {
-    document.getElementById('pl-sum-substance').textContent = plState.substance || 'Not specified';
-    document.getElementById('pl-sum-setting').textContent   = plState.setting   || 'Not specified';
-    document.getElementById('pl-sum-exp').textContent       = plState.exp       || 'Not specified';
+    // Summary grid
+    document.getElementById('pl-sum-substance').textContent = plState.substance || '—';
+    document.getElementById('pl-sum-setting').textContent   = plState.setting   || '—';
+    document.getElementById('pl-sum-exp').textContent       = plState.exp       || '—';
+    document.getElementById('pl-sum-dose').textContent      = plState.dose      || '—';
 
     if (plState.journeyDate) {
       document.getElementById('pl-sum-date').textContent =
@@ -7839,36 +8026,47 @@
       document.getElementById('pl-prog-days').textContent = diff > 0 ? diff : '\u2014';
     }
 
-    var cleared = Object.values(plState.checks).filter(function (v) { return v === 'clear'; }).length;
-    var total   = Object.keys(plState.checks).length || 5;
-    document.getElementById('pl-prog-readiness').textContent = cleared + '/' + total;
+    // Risk tier badge
+    var tier = plCalcRiskTier();
+    var tierBadge = document.getElementById('pl-risk-tier-badge');
+    var tierDesc  = document.getElementById('pl-risk-tier-desc');
+    tierBadge.className = 'risk-tier-badge ' + tier;
+    tierDesc.className  = 'risk-tier-desc ' + tier;
+    if (tier === 'low') {
+      tierBadge.textContent = '\u25cf  Low risk';
+      tierDesc.textContent  = 'Your responses suggest a reasonable readiness profile. Standard preparation applies. Take the timeline and checklist seriously, and ensure your sitter arrangement and substance verification are in place before your journey date.';
+    } else if (tier === 'moderate') {
+      tierBadge.textContent = '\u25cf  Moderate risk';
+      tierDesc.textContent  = 'One or more of your responses indicates an area that warrants extra attention. Proceed thoughtfully, with robust support in place. Consider working with an integration therapist or guide — particularly if significant or difficult material arises. Your flagged items are listed below.';
+    } else {
+      tierBadge.textContent = '\u25cf  High risk — delay recommended';
+      tierDesc.textContent  = 'Your responses indicate one or more significant safety considerations. We strongly recommend delaying until these have been addressed — ideally with the guidance of a clinician or psychedelic-informed therapist. Proceeding without resolving these concerns substantially increases risk.';
+    }
 
-    var step4  = document.getElementById('pl-step-4');
-    var clDone = step4.querySelectorAll('.checklist-item.done').length;
-    var clTot  = step4.querySelectorAll('.checklist-item').length;
-    document.getElementById('pl-prog-checklist').textContent = clDone + '/' + clTot;
-
+    // Readiness meter
     var checkMeta = {
-      medications: { label: 'Medications & substances',               flagMsg: 'Medication interactions require consultation with a doctor or pharmacist before proceeding. SSRIs, MAOIs, and lithium carry serious interaction risks.' },
-      mental:      { label: 'History of psychosis',                   flagMsg: 'A personal or family history of psychosis is a primary medical contraindication for classical psychedelics. Delay and seek medical guidance.' },
-      state:       { label: 'Current psychological state',            flagMsg: 'Acute psychological distress is not an appropriate context for a psychedelic experience. Delay until more stable, or pursue clinical support.' },
-      support:     { label: 'Sitter or support person',               flagMsg: 'A trusted, sober support person is strongly recommended — especially for higher doses or first experiences. Arrange this before proceeding.' },
-      testing:     { label: 'Substance verification',                 flagMsg: 'Unverified substances carry the risk of adulteration. Obtain a reagent test kit and a fentanyl test strip before your journey date.' }
+      medications:  { label: 'Medications',                         flagMsg: 'Medication interactions require consultation with a doctor or pharmacist before proceeding. MAOIs, lithium, and antipsychotics carry serious risks.' },
+      mental:       { label: 'History of psychosis',                flagMsg: 'A personal or family history of psychosis is a primary medical contraindication for classical psychedelics. Delay and seek medical guidance.' },
+      state:        { label: 'Current psychological state',         flagMsg: 'Significant psychological difficulty is not an appropriate context. Delay until more stable, or pursue clinical support first.' },
+      trauma:       { label: 'Trauma history',                      flagMsg: 'Unresolved trauma can be significantly amplified by psychedelics. Professional support before and after is strongly recommended.' },
+      support:      { label: 'Sitter or support person',            flagMsg: 'A trusted, sober support person is strongly recommended — especially for moderate or higher doses. Arrange this before proceeding.' },
+      environment:  { label: 'Environmental stability',             flagMsg: 'Significant life instability adds meaningful risk. Stabilising your circumstances before proceeding is worth considering.' },
+      testing:      { label: 'Substance verification',              flagMsg: 'Unverified substances carry the risk of adulteration. Obtain a reagent test kit and fentanyl test strip before your journey date.' }
     };
 
-    var allKeys = ['medications', 'mental', 'state', 'support', 'testing'];
-    var score = 0;
-    var flaggedMessages = [];
+    var allKeys = ['medications', 'mental', 'state', 'trauma', 'support', 'environment', 'testing'];
+    var score = 0; var flaggedMessages = [];
     var itemsEl = document.getElementById('pl-meter-items');
     itemsEl.innerHTML = '';
 
     allKeys.forEach(function (key) {
       var val  = plState.checks[key];
       var meta = checkMeta[key];
-      var dotClass = 'rdot-pending', statusLabel = 'Not answered', pts = 0;
-      if (val === 'clear')   { dotClass = 'rdot-clear';   statusLabel = 'Cleared'; pts = 1; }
-      if (val === 'caution') { dotClass = 'rdot-caution'; statusLabel = 'Caution'; pts = 0.5; flaggedMessages.push(meta); }
-      if (val === 'flagged') { dotClass = 'rdot-flagged'; statusLabel = 'Flagged'; pts = 0;   flaggedMessages.push(meta); }
+      var dotClass, statusLabel, pts = 0;
+      if      (val === 'clear')   { dotClass = 'rdot-clear';   statusLabel = 'Cleared'; pts = 1; }
+      else if (val === 'caution') { dotClass = 'rdot-caution'; statusLabel = 'Caution'; pts = 0.5; flaggedMessages.push(meta); }
+      else if (val === 'flagged') { dotClass = 'rdot-flagged'; statusLabel = 'Flagged'; pts = 0;   flaggedMessages.push(meta); }
+      else                        { dotClass = 'rdot-pending'; statusLabel = 'Not answered'; }
       score += pts;
       itemsEl.innerHTML +=
         '<div class="readiness-row"><div class="readiness-dot ' + dotClass + '"></div>' +
@@ -7876,13 +8074,13 @@
     });
 
     var answered = allKeys.filter(function (k) { return plState.checks[k]; }).length;
-    var pct = Math.round((score / (answered || 5)) * 100);
+    var pct = Math.round((score / (answered || allKeys.length)) * 100);
 
     var fillColor, verdict, verdictColor;
-    if      (pct >= 80) { fillColor = 'var(--teal)';         verdict = 'Ready';                          verdictColor = 'var(--teal)'; }
-    else if (pct >= 50) { fillColor = 'var(--warn)';         verdict = 'Proceed with caution';           verdictColor = 'var(--warn)'; }
-    else if (pct > 0)   { fillColor = 'var(--danger)';       verdict = 'Not ready \u2014 delay recommended'; verdictColor = 'var(--danger)'; }
-    else                { fillColor = 'var(--cream-border)'; verdict = 'Incomplete';                     verdictColor = 'var(--cream-dim)'; }
+    if      (pct >= 80) { fillColor = 'var(--teal)';   verdict = 'Ready';                              verdictColor = 'var(--teal)'; }
+    else if (pct >= 50) { fillColor = 'var(--warn)';   verdict = 'Proceed with caution';               verdictColor = 'var(--warn)'; }
+    else if (pct >  0)  { fillColor = 'var(--danger)'; verdict = 'Not ready \u2014 delay recommended'; verdictColor = 'var(--danger)'; }
+    else                { fillColor = 'var(--cream-border)'; verdict = 'Incomplete'; verdictColor = 'var(--cream-dim)'; }
 
     var fill = document.getElementById('pl-meter-fill');
     fill.style.background = fillColor;
@@ -7890,6 +8088,7 @@
     var vEl = document.getElementById('pl-meter-verdict');
     vEl.textContent = verdict; vEl.style.color = verdictColor;
 
+    // Delay banner
     var banner = document.getElementById('pl-delay-banner');
     var dList  = document.getElementById('pl-delay-items');
     if (flaggedMessages.length > 0) {
@@ -7901,13 +8100,23 @@
       banner.style.display = 'none';
     }
 
+    // Progress counters
+    var cleared = allKeys.filter(function (k) { return plState.checks[k] === 'clear'; }).length;
+    document.getElementById('pl-prog-readiness').textContent = cleared + '/' + allKeys.length;
+    var step4  = document.getElementById('pl-step-4');
+    var clDone = step4.querySelectorAll('.checklist-item.done').length;
+    var clTot  = step4.querySelectorAll('.checklist-item').length;
+    document.getElementById('pl-prog-checklist').textContent = clDone + '/' + clTot;
+
+    // Intentions
     var questions = [
-      "What has been calling for attention in your life that you've been unable or unwilling to look at directly?",
-      "What relationships \u2014 to people, to places, to the nonhuman world \u2014 feel like they need tending?",
-      "What would it mean to return from this experience changed? What would be different \u2014 however small?",
-      "If the experience became difficult \u2014 if it went to the hardest place \u2014 what would you want to remember?"
+      'What has been calling for attention in your life that you\u2019ve been unable or unwilling to look at directly?',
+      'What relationships \u2014 to people, to places, to the nonhuman world \u2014 feel like they need tending?',
+      'What would it mean to return from this experience changed? What would be different \u2014 however small?',
+      'If the experience became difficult \u2014 if it went to the hardest place \u2014 what would you want to remember?',
+      'What in the living world around you \u2014 a place, a species, a season, a landscape \u2014 feels like it is calling for attention or relationship?'
     ];
-    var ids = ['pl-int-q1', 'pl-int-q2', 'pl-int-q3', 'pl-int-q4'];
+    var ids = ['pl-int-q1', 'pl-int-q2', 'pl-int-q3', 'pl-int-q4', 'pl-int-q5'];
     var ic  = document.getElementById('pl-intentions-container');
     var any = ids.some(function (id) { return document.getElementById(id).value.trim(); });
     if (!any) {
@@ -7923,9 +8132,17 @@
           '</div>';
       }).join('');
     }
+
+    // Personalised integration section
+    document.getElementById('pl-integration-content').innerHTML =
+      plBuildIntegrationHTML(tier, plState.substance || '');
+
+    // Psygaia CTA
+    var ctaEl = document.getElementById('pl-psygaia-cta');
+    ctaEl.style.display = (tier !== 'low') ? 'block' : 'none';
   }
 
-  // Default date: 3 weeks out
+  /* ── Init: default date 3 weeks out ──────────────────────────── */
   var d = new Date();
   d.setDate(d.getDate() + 21);
   var iso = d.toISOString().split('T')[0];
@@ -7933,7 +8150,7 @@
   plState.journeyDate = new Date(iso + 'T12:00:00');
   plUpdateDate();
 
-  // Expose to window
+  /* ── Expose to window ────────────────────────────────────────── */
   window.plGoTo       = plGoTo;
   window.plJumpTo     = plJumpTo;
   window.plSelectPill = plSelectPill;
@@ -7941,6 +8158,12 @@
   window.plSetCheck   = plSetCheck;
   window.plToggleTask = plToggleTask;
   window.plToggleCL   = plToggleCL;
+  window.plCalcRiskTier      = plCalcRiskTier;
+  window.plSubstanceNote     = plSubstanceNote;
+  window.plBuildIntegrationHTML = plBuildIntegrationHTML;
+
+  /* ── Expose plState for PDF ──────────────────────────────────── */
+  window._plState = plState;
 
 })();
 </script>
@@ -7948,47 +8171,265 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+/* ════════════════════════════════════════════════════════════════
+   JOURNEY PLANNER — PDF GENERATION
+   Builds a clean white-document HTML layout in a hidden div,
+   renders it with html2canvas at high resolution, then slices
+   it into A4 pages via jsPDF.
+   ════════════════════════════════════════════════════════════════ */
+
+function plBuildPDFHTML() {
+  const s = window._plState;
+
+  /* helpers */
+  const esc = t => (t || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const val = v => esc(v || '—');
+
+  /* dates */
+  const dateStr = s.journeyDate
+    ? s.journeyDate.toLocaleDateString('en-CA', { weekday:'long', year:'numeric', month:'long', day:'numeric' })
+    : '—';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const daysOut = s.journeyDate ? Math.round((s.journeyDate - today) / 86400000) : null;
+  const daysLabel = daysOut !== null && daysOut > 0 ? daysOut + ' days away' : (daysOut === 0 ? 'Today' : '—');
+
+  /* risk tier */
+  const tier = window.plCalcRiskTier ? window.plCalcRiskTier() : 'low';
+  const tierLabel = tier === 'high' ? 'High — delay recommended' : tier === 'moderate' ? 'Moderate' : 'Low';
+  const tierColor = tier === 'high' ? '#b83333' : tier === 'moderate' ? '#a67c00' : '#1f8c84';
+
+  /* readiness checks */
+  const checkDefs = [
+    { key:'medications',  label:'Medications' },
+    { key:'mental',       label:'History of psychosis' },
+    { key:'state',        label:'Psychological state' },
+    { key:'trauma',       label:'Trauma history' },
+    { key:'support',      label:'Sitter / support person' },
+    { key:'environment',  label:'Environmental stability' },
+    { key:'testing',      label:'Substance verification' }
+  ];
+  const statusLabel = v => v === 'clear' ? 'Cleared' : v === 'caution' ? 'Caution' : v === 'flagged' ? 'Flagged' : 'Not answered';
+  const statusColor = v => v === 'clear' ? '#1f8c84' : v === 'caution' ? '#a67c00' : v === 'flagged' ? '#b83333' : '#999';
+  const checkRows = checkDefs.map(d => {
+    const v = s.checks[d.key] || '';
+    return `<tr>
+      <td style="padding:5px 8px;font-size:9pt;color:#3a2e22;border-bottom:1px solid #e8e0d0;">${d.label}</td>
+      <td style="padding:5px 8px;font-size:9pt;font-weight:600;color:${statusColor(v)};border-bottom:1px solid #e8e0d0;">${statusLabel(v)}</td>
+    </tr>`;
+  }).join('');
+
+  /* intentions */
+  const intentionQs = [
+    'What has been calling for attention in your life that you\'ve been unable or unwilling to look at directly?',
+    'What relationships — to people, to places, to the nonhuman world — feel like they need tending?',
+    'What would it mean to return from this experience changed?',
+    'If the experience became difficult — what would you want to remember?',
+    'What in the living world around you feels like it is calling for attention or relationship?'
+  ];
+  const intentionIds = ['pl-int-q1','pl-int-q2','pl-int-q3','pl-int-q4','pl-int-q5'];
+  const intentionHTML = intentionIds.map((id, i) => {
+    const el = document.getElementById(id);
+    const answer = el ? el.value.trim() : '';
+    return `<div style="margin-bottom:14px;">
+      <div style="font-size:8.5pt;color:#7a6650;font-style:italic;margin-bottom:4px;line-height:1.4;">"${esc(intentionQs[i])}"</div>
+      <div style="font-size:9.5pt;color:#3a2e22;line-height:1.6;padding:8px 12px;background:#faf7f2;border-left:2.5px solid #1f8c84;border-radius:0 3px 3px 0;">${answer ? esc(answer) : '<span style="color:#bbb;font-style:italic;">Not answered</span>'}</div>
+    </div>`;
+  }).join('');
+
+  /* integration guidance — substance-specific if available */
+  const substanceNote = (window.plSubstanceNote && s.substance && s.substance !== '—')
+    ? `<div style="margin-bottom:14px;padding:10px 12px;background:#f4faf9;border-left:3px solid #1f8c84;border-radius:0 3px 3px 0;">
+        <div style="font-size:8pt;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#1f8c84;margin-bottom:5px;">Working with ${esc(s.substance)}</div>
+        <div style="font-size:9pt;color:#4a3e30;line-height:1.65;">${esc(window.plSubstanceNote(s.substance))}</div>
+      </div>`
+    : '';
+
+  const tierWarning = tier !== 'low'
+    ? `<div style="margin-bottom:14px;padding:10px 12px;background:#fff8f0;border-left:3px solid ${tierColor};border-radius:0 3px 3px 0;">
+        <div style="font-size:8pt;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${tierColor};margin-bottom:5px;">Note on your readiness profile</div>
+        <div style="font-size:9pt;color:#4a3e30;line-height:1.65;">${tier === 'high'
+          ? 'Your assessment indicates one or more significant safety concerns. We strongly recommend not proceeding until these have been resolved — ideally with a clinician or psychedelic-informed therapist.'
+          : 'One or more areas in your readiness profile warrant extra attention. Consider having integration support available — a therapist, guide, or peer integration circle — particularly if significant or difficult material arises.'
+        }</div>
+      </div>`
+    : '';
+
+  /* generate today's date for footer */
+  const generated = new Date().toLocaleDateString('en-CA', { year:'numeric', month:'long', day:'numeric' });
+
+  return `
+  <div style="font-family:'Georgia',serif;color:#3a2e22;background:#ffffff;padding:48px 56px;box-sizing:border-box;width:794px;">
+
+    <!-- Header -->
+    <div style="border-bottom:2px solid #1f8c84;padding-bottom:18px;margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+        <div>
+          <div style="font-size:7.5pt;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#1f8c84;margin-bottom:6px;">Psygaia · howtousepsychedelics.com</div>
+          <div style="font-family:'Georgia',serif;font-size:22pt;font-weight:400;color:#2c1f0e;line-height:1.1;">Journey Plan</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:8pt;color:#7a6650;">${dateStr}</div>
+          ${daysLabel !== '—' ? `<div style="font-size:8pt;color:#1f8c84;margin-top:2px;">${daysLabel}</div>` : ''}
+        </div>
+      </div>
+    </div>
+
+    <!-- Setup grid -->
+    <div style="margin-bottom:22px;">
+      <div style="font-size:7pt;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#1f8c84;margin-bottom:8px;">Your Journey</div>
+      <table style="width:100%;border-collapse:collapse;border:1px solid #e0d8cc;border-radius:4px;overflow:hidden;">
+        <tr>
+          <td style="padding:8px 12px;background:#faf7f2;border-right:1px solid #e0d8cc;border-bottom:1px solid #e0d8cc;width:25%;">
+            <div style="font-size:7pt;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#9a8870;margin-bottom:2px;">Substance</div>
+            <div style="font-size:11pt;font-family:'Georgia',serif;color:#2c1f0e;">${val(s.substance)}</div>
+          </td>
+          <td style="padding:8px 12px;background:#faf7f2;border-right:1px solid #e0d8cc;border-bottom:1px solid #e0d8cc;width:25%;">
+            <div style="font-size:7pt;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#9a8870;margin-bottom:2px;">Dose Range</div>
+            <div style="font-size:11pt;font-family:'Georgia',serif;color:#2c1f0e;">${val(s.dose)}</div>
+          </td>
+          <td style="padding:8px 12px;background:#faf7f2;border-right:1px solid #e0d8cc;border-bottom:1px solid #e0d8cc;width:25%;">
+            <div style="font-size:7pt;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#9a8870;margin-bottom:2px;">Setting</div>
+            <div style="font-size:11pt;font-family:'Georgia',serif;color:#2c1f0e;">${val(s.setting)}</div>
+          </td>
+          <td style="padding:8px 12px;background:#faf7f2;border-bottom:1px solid #e0d8cc;width:25%;">
+            <div style="font-size:7pt;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#9a8870;margin-bottom:2px;">Experience Level</div>
+            <div style="font-size:11pt;font-family:'Georgia',serif;color:#2c1f0e;">${val(s.exp)}</div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding:8px 12px;background:#faf7f2;border-right:1px solid #e0d8cc;">
+            <div style="font-size:7pt;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#9a8870;margin-bottom:2px;">Risk Tier</div>
+            <div style="font-size:10pt;font-weight:700;font-family:'Georgia',serif;color:${tierColor};">${tierLabel}</div>
+          </td>
+          <td colspan="2" style="padding:8px 12px;background:#faf7f2;">
+            <div style="font-size:7pt;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#9a8870;margin-bottom:2px;">Journey Date</div>
+            <div style="font-size:10pt;font-family:'Georgia',serif;color:#2c1f0e;">${dateStr}</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Readiness assessment -->
+    <div style="margin-bottom:22px;">
+      <div style="font-size:7pt;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#1f8c84;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #e0d8cc;">Readiness Assessment</div>
+      <table style="width:100%;border-collapse:collapse;">
+        ${checkRows}
+      </table>
+    </div>
+
+    <!-- Intentions -->
+    <div style="margin-bottom:22px;">
+      <div style="font-size:7pt;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#1f8c84;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid #e0d8cc;">Intentions</div>
+      ${intentionHTML}
+    </div>
+
+    <!-- Integration guidance -->
+    <div style="margin-bottom:22px;">
+      <div style="font-size:7pt;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#1f8c84;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid #e0d8cc;">Integration Guidance</div>
+
+      <div style="margin-bottom:14px;padding:10px 12px;background:#f4faf9;border-left:3px solid #1f8c84;border-radius:0 3px 3px 0;">
+        <div style="font-size:8pt;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#1f8c84;margin-bottom:5px;">First 72 hours</div>
+        <div style="font-size:9pt;color:#4a3e30;line-height:1.65;">Protect time outdoors the day after. Unhurried journalling — following what arises, not systematic capture. Avoid demanding commitments. Slow, quiet meals. Conversation with people who understand what you've been through.</div>
+      </div>
+
+      ${substanceNote}
+
+      <div style="margin-bottom:14px;padding:10px 12px;background:#f4faf9;border-left:3px solid rgba(31,140,132,0.45);border-radius:0 3px 3px 0;">
+        <div style="font-size:8pt;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#1f8c84;margin-bottom:5px;">Weeks 1–4</div>
+        <div style="font-size:9pt;color:#4a3e30;line-height:1.65;">Integration is not a phase — it is the practice of allowing what was encountered to actually change how you live, relate, and perceive. Journal regularly. Spend unhurried time in nature. Notice what has shifted in your ordinary perception.</div>
+      </div>
+
+      <div style="margin-bottom:14px;padding:10px 12px;background:#f4faf9;border-left:3px solid rgba(31,140,132,0.25);border-radius:0 3px 3px 0;">
+        <div style="font-size:8pt;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#1f8c84;margin-bottom:5px;">Ongoing ecological integration</div>
+        <div style="font-size:9pt;color:#4a3e30;line-height:1.65;">The Psygaia framework understands integration as relational restoration — not just inward processing, but the gradual reorientation of how you participate in social and ecological systems. What would it mean to bring what you encountered back into your relationship with the places, people, and nonhuman world you live with?</div>
+      </div>
+
+      ${tierWarning}
+    </div>
+
+    <!-- Footer -->
+    <div style="border-top:1px solid #e0d8cc;padding-top:14px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:7.5pt;color:#9a8870;">Generated ${generated} · howtousepsychedelics.com</div>
+      <div style="font-size:7.5pt;color:#9a8870;">Psygaia · psygaia.org</div>
+    </div>
+
+  </div>`;
+}
+
 async function plannerDownloadPDF() {
   const btn = document.getElementById('planner-download-btn');
   const orig = btn.textContent;
   btn.textContent = 'Generating…';
   btn.disabled = true;
+
   try {
     const { jsPDF } = window.jspdf;
-    const el = document.querySelector('#page-planner .pl-section.active');
-    const canvas = await html2canvas(el, {
-      scale: 2,
+
+    /* 1. Inject HTML into the hidden PDF doc div */
+    const pdfDoc = document.getElementById('pdf-doc');
+    pdfDoc.innerHTML = plBuildPDFHTML();
+
+    /* 2. Brief delay so fonts and layout settle */
+    await new Promise(r => setTimeout(r, 120));
+
+    /* 3. Render to canvas */
+    const canvas = await html2canvas(pdfDoc, {
+      scale: 2.5,
       useCORS: true,
-      backgroundColor: '#0e1912',
+      backgroundColor: '#ffffff',
       logging: false,
-      windowWidth: 800
+      windowWidth: 794,
+      width: 794,
+      scrollX: 0,
+      scrollY: -window.scrollY
     });
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pageW = pdf.internal.pageSize.getWidth();
-    const pageH = pdf.internal.pageSize.getHeight();
-    const margin = 10;
+
+    /* 4. Slice into A4 pages */
+    const pdf    = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW  = pdf.internal.pageSize.getWidth();   // 210
+    const pageH  = pdf.internal.pageSize.getHeight();  // 297
+    const margin = 0;
     const contentW = pageW - margin * 2;
-    const imgH = (canvas.height * contentW) / canvas.width;
-    let remaining = imgH;
-    let srcYPx = 0;
+    const contentH = pageH - margin * 2;
+
+    // px per mm at canvas scale
+    const pxPerMm = canvas.width / pageW;
+    const pageHpx = contentH * pxPerMm;
+
+    let srcY = 0;
     let firstPage = true;
-    while (remaining > 0) {
-      const sliceH = Math.min(remaining, pageH - margin * 2);
-      const srcHPx = (sliceH / imgH) * canvas.height;
+
+    while (srcY < canvas.height) {
+      const sliceHpx = Math.min(pageHpx, canvas.height - srcY);
+      const sliceHmm = sliceHpx / pxPerMm;
+
       const slice = document.createElement('canvas');
-      slice.width = canvas.width;
-      slice.height = Math.ceil(srcHPx);
-      slice.getContext('2d').drawImage(canvas, 0, srcYPx, canvas.width, srcHPx, 0, 0, canvas.width, srcHPx);
+      slice.width  = canvas.width;
+      slice.height = Math.ceil(sliceHpx);
+      slice.getContext('2d').drawImage(
+        canvas,
+        0, srcY, canvas.width, sliceHpx,
+        0, 0,    canvas.width, sliceHpx
+      );
+
       if (!firstPage) pdf.addPage();
-      pdf.addImage(slice.toDataURL('image/png'), 'PNG', margin, margin, contentW, sliceH);
-      srcYPx += srcHPx;
-      remaining -= sliceH;
+      pdf.addImage(slice.toDataURL('image/png'), 'PNG', margin, margin, contentW, sliceHmm);
+
+      srcY += sliceHpx;
       firstPage = false;
     }
-    pdf.save('journey-plan.pdf');
+
+    /* 5. Clean up and save */
+    pdfDoc.innerHTML = '';
+    const substance = (window._plState && window._plState.substance) || 'journey';
+    const dateSlug  = window._plState && window._plState.journeyDate
+      ? '-' + window._plState.journeyDate.toISOString().split('T')[0]
+      : '';
+    pdf.save('psygaia-plan' + dateSlug + '.pdf');
+
   } catch (err) {
     console.error('PDF error:', err);
-    window.print();
+    alert('PDF generation failed. Please try again or use your browser\'s print function (Ctrl/Cmd+P).');
   } finally {
     btn.textContent = orig;
     btn.disabled = false;
