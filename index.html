@@ -56,8 +56,25 @@
       -webkit-font-smoothing: antialiased;
     }
 
-
-    /* ── LIGHT MODE ──────────────────────────────────── */
+    /* ── ORPHAN & WIDOW PREVENTION ───────────────────── */
+    p, li, .hero-sub, .pl-intro, .card-desc, .timeline-body,
+    .check-text p, .risk-tier-desc, .psygaia-cta p,
+    .pl-integration-strip p, .intention-a {
+      text-wrap: pretty;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    h1, h2, h3, h4,
+    .pl-title, .timeline-head, .card-title, .section-title {
+      text-wrap: balance;
+    }
+    /* Hyphens only on small viewports where lines are short enough to need them */
+    @media (max-width: 600px) {
+      p, li, .hero-sub, .pl-intro, .timeline-body, .check-text p {
+        -webkit-hyphens: auto;
+        hyphens: auto;
+      }
+    }
     [data-theme="light"] {
       --bg:           #f4ede0;
       --bg-mid:       #ede4d4;
@@ -729,6 +746,140 @@
     .divider { border: none; border-top: 1px solid var(--cream-border); }
 
     /* ── PILLARS STRIP ───────────────────────────── */
+    /* ── START HERE ────────────────────────────────── */
+    .start-here {
+      background: var(--bg-mid);
+      border-top: 1px solid var(--cream-border);
+      border-bottom: 1px solid var(--cream-border);
+    }
+    .start-here-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .start-here-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 1.75rem;
+    }
+    .start-here-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .start-card {
+      padding: 1.5rem 2rem;
+      border-left: 1px solid var(--cream-border);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .start-card:first-child { border-left: none; }
+    .start-card:hover { background: var(--accent-dim); }
+    .start-card-who {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem;
+    }
+    .start-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem; font-weight: 500; color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+    .start-card p {
+      font-size: 0.86rem; font-weight: 300; color: var(--cream-dim);
+      line-height: 1.7; margin-bottom: 1.25rem;
+    }
+    .start-card-cta {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--teal);
+    }
+    @media (max-width: 800px) {
+      .start-here-grid { grid-template-columns: repeat(2, 1fr); }
+      .start-card:nth-child(2) { border-left: 1px solid var(--cream-border); }
+      .start-card:nth-child(3) { border-left: none; border-top: 1px solid var(--cream-border); }
+      .start-card:nth-child(4) { border-left: 1px solid var(--cream-border); border-top: 1px solid var(--cream-border); }
+    }
+    @media (max-width: 480px) {
+      .start-here-grid { grid-template-columns: 1fr; }
+      .start-card { border-left: none !important; border-top: 1px solid var(--cream-border); }
+      .start-card:first-child { border-top: none; }
+    }
+
+    /* ── TOOLS STRIP ───────────────────────────────── */
+    .tools-strip {
+      max-width: 1100px; margin: 0 auto; padding: 4rem 2rem;
+    }
+    .tools-strip-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem;
+    }
+    .tools-strip-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.1rem); font-weight: 500;
+      color: var(--cream); margin-bottom: 2rem;
+    }
+    .tools-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    }
+    .tool-card {
+      background: var(--bg-mid);
+      border: 1px solid var(--cream-border);
+      border-radius: 8px;
+      padding: 2rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .tool-card:hover { border-color: var(--teal); background: var(--accent-dim); }
+    .tool-card-badge {
+      display: inline-block;
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--teal);
+      border: 1px solid rgba(62,201,191,0.35);
+      border-radius: 3px; padding: 0.2em 0.5em;
+      width: fit-content;
+    }
+    .tool-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 500; color: var(--cream); margin: 0;
+    }
+    .tool-card p {
+      font-size: 0.9rem; color: var(--cream-dim); line-height: 1.6; margin: 0;
+    }
+    .tool-card-arrow {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--teal); margin-top: auto;
+    }
+    @media (max-width: 640px) {
+      .tools-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── INTERACTION CALLOUT (inline, substance pages + planner) ── */
+    .interaction-callout {
+      display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--bg-mid);
+      border: 1px solid rgba(212,168,50,0.35);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+    .interaction-callout-icon {
+      font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem;
+    }
+    .interaction-callout-body { flex: 1; }
+    .interaction-callout-body strong {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--warn);
+      display: block; margin-bottom: 0.3rem;
+    }
+    .interaction-callout-body p {
+      font-size: 0.86rem; color: var(--cream-dim); line-height: 1.55; margin: 0 0 0.5rem;
+    }
+    .interaction-callout-body .ic-link {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--teal); cursor: pointer;
+      text-decoration: none; border: none; background: none; padding: 0;
+    }
+    .interaction-callout-body .ic-link:hover { text-decoration: underline; }
+    [data-theme="light"] .interaction-callout { border-color: rgba(166,124,0,0.35); }
+
     .pillars {
       background: var(--bg-mid);
       border-top: 1px solid var(--cream-border);
@@ -2420,35 +2571,46 @@
     <h1>Learn to engage with<br>psychedelics <span class="accent-word">wisely.</span></h1>
     <p class="hero-sub">Evidence-informed education on preparation, navigation, integration, and more — grounded in harm reduction and the Psygaia Framework.</p>
     <div class="hero-cta-row">
-      <button class="btn btn-primary" onclick="showPage('foundations')">Start with Foundations</button>
+      <button class="btn btn-primary" onclick="showPage('planner')">Plan Your Journey</button>
       <button class="btn btn-outline" onclick="showPage('journeying')">Journeying Guide</button>
     </div>
   </div>
 
   <hr class="divider"/>
 
-  <div class="pillars">
-    <div class="pillars-inner">
-      <div class="pillar-item">
-        <div class="pillar-label">01 — Learn</div>
-        <h3>Foundations &amp; Substances</h3>
-        <p>The cultural, legal, and scientific context for psychedelics — and what distinguishes each substance.</p>
-        <button class="btn btn-teal" onclick="showPage('foundations')">Explore Foundations →</button>
-      </div>
-      <div class="pillar-item">
-        <div class="pillar-label">02 — Practice</div>
-        <h3>Microdosing &amp; Journeying</h3>
-        <p>From assessment and preparation through navigation and integration — practical guidance for every stage.</p>
-        <button class="btn btn-teal" onclick="showPage('journeying')">Explore Journeying →</button>
-      </div>
-      <div class="pillar-item">
-        <div class="pillar-label">03 — Support</div>
-        <h3>Facilitation</h3>
-        <p>Guidance for guides, sitters, and facilitators on holding safe, ethically grounded psychedelic spaces.</p>
-        <button class="btn btn-teal" onclick="showPage('facilitation')">Explore Facilitation →</button>
+  <!-- ── START HERE ─────────────────────────────────────────────── -->
+  <div class="start-here">
+    <div class="start-here-inner">
+      <div class="start-here-label">Where would you like to begin?</div>
+      <div class="start-here-grid">
+        <div class="start-card" onclick="showPage('foundations')">
+          <div class="start-card-who">01 — New to psychedelics</div>
+          <h3>Learn Foundations</h3>
+          <p>The science, cultural history, and legal landscape — before anything else.</p>
+          <div class="start-card-cta">Foundations →</div>
+        </div>
+        <div class="start-card" onclick="showPage('planner')">
+          <div class="start-card-who">02 — Planning an experience</div>
+          <h3>Plan a Journey</h3>
+          <p>Personalised preparation, readiness assessment, and integration guidance.</p>
+          <div class="start-card-cta">Journey Planner →</div>
+        </div>
+        <div class="start-card" onclick="showPage('substances')">
+          <div class="start-card-who">03 — Researching a substance</div>
+          <h3>Explore Substance Guides</h3>
+          <p>In-depth profiles covering pharmacology, risks, interactions, and legal status.</p>
+          <div class="start-card-cta">Substances →</div>
+        </div>
+        <div class="start-card" onclick="showPage('integration')">
+          <div class="start-card-who">04 — After an experience</div>
+          <h3>Integrate a Journey</h3>
+          <p>How to make meaning from the experience and translate insight into lasting change.</p>
+          <div class="start-card-cta">Integration →</div>
+        </div>
       </div>
     </div>
   </div>
+
 
   <div class="section">
     <div class="section-label">What's Inside</div>
@@ -2456,7 +2618,7 @@
     <div class="card-grid">
       <div class="card" onclick="showPage('foundations')">
         <div class="card-num">01 · Foundations</div>
-        <h3>Culture, Law &amp; Science</h3>
+        <h3>Basic Literacy</h3>
         <p>The historical, legal, and scientific context you need before anything else.</p>
         <div class="card-arrow">Explore →</div>
       </div>
@@ -2501,6 +2663,26 @@
         <h3>Holding Space</h3>
         <p>Ethics, training, and practical guidance for those supporting others' journeys.</p>
         <div class="card-arrow">Explore →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TOOLS ───────────────────────────────────────────────────── -->
+  <div class="tools-strip">
+    <div class="tools-strip-label">Interactive Tools</div>
+    <div class="tools-strip-title">Two resources built for<br><span class="grad-text">intentional practice.</span></div>
+    <div class="tools-grid">
+      <div class="tool-card" onclick="showPage('planner')">
+        <div class="tool-card-badge">Personalised</div>
+        <h3>Journey Planner</h3>
+        <p>A guided tool that helps you assess readiness, set intentions, build a preparation timeline, and create a personalised integration plan — tailored to your substance, setting, and experience level.</p>
+        <div class="tool-card-arrow">Open Planner →</div>
+      </div>
+      <div class="tool-card" onclick="showPageAnchor('assessment','ass-combochart')">
+        <div class="tool-card-badge">Safety Reference</div>
+        <h3>Drug Interaction Checker</h3>
+        <p>An interactive combination chart covering the most common and clinically significant psychedelic drug interactions — including medications, recreational substances, and harm reduction guidance for each pairing.</p>
+        <div class="tool-card-arrow">Check Interactions →</div>
       </div>
     </div>
   </div>
@@ -2571,7 +2753,7 @@
     <div class="article-header-inner">
       <div class="breadcrumb"><span onclick="showPage('home')">Home</span><span class="breadcrumb-sep">/</span>Foundations</div>
       <h1>Foundations</h1>
-      <p class="article-intro">Before choosing a substance, setting an intention, or attending a ceremony, four foundational questions deserve attention: <em>What do we know scientifically? What is the legal landscape? How did we get here culturally? And what is the relationship between psychedelics and the living world?</em></p>
+      <p class="article-intro">Before setting an intention, ingesting a substance, visiting a clinic, or attending a ceremony, some foundational questions deserve attention: <em>What do we know scientifically? What is the legal landscape? How did we get here culturally? And what is the relationship between psychedelics and the living world?</em></p>
     </div>
   </div>
   <div class="coming-soon-body">
@@ -2972,7 +3154,14 @@
       <p>A personal or family history of schizophrenia spectrum disorders or bipolar I disorder is the most significant medical contraindication. These conditions involve a vulnerability to <span class="tt" data-tip="A mental state characterised by a loss of contact with shared reality — involving hallucinations, delusions, and disorganised thinking. A personal or family history of psychosis or schizophrenia spectrum disorders is a primary contraindication for psychedelic use.">psychosis</span> that psychedelics can precipitate or exacerbate. This contraindication is taken seriously in all clinical research and should be taken seriously in any context. Other relevant considerations include a history of severe trauma, active psychosis, and certain cardiac conditions (psilocybin can mildly elevate heart rate and blood pressure).</p>
 
       <h3>Drug interactions</h3>
-      <p>SSRIs blunt or block psilocybin effects significantly through receptor competition and downregulation — individuals taking SSRIs often report little or no effect at typical doses. Some people discontinue SSRIs to use psilocybin, which should only be done under medical supervision; SSRI discontinuation syndrome is real and can be serious, particularly with paroxetine and venlafaxine. Lithium combined with psychedelics has produced seizures in case reports and should be considered a firm contraindication. MAOIs can potentiate effects and duration unpredictably. Stimulants and cannabis can amplify intensity in ways that increase psychological risk.</p>
+      <div class="interaction-callout">
+        <div class="interaction-callout-icon">⚠️</div>
+        <div class="interaction-callout-body">
+          <strong>Check your medications</strong>
+          <p>SSRIs, MAOIs, lithium, antipsychotics, and several other medications have significant interactions with psilocybin — ranging from blunted effects to serious safety risks.</p>
+          <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+        </div>
+      </div> — individuals taking SSRIs often report little or no effect at typical doses. Some people discontinue SSRIs to use psilocybin, which should only be done under medical supervision; SSRI discontinuation syndrome is real and can be serious, particularly with paroxetine and venlafaxine. Lithium combined with psychedelics has produced seizures in case reports and should be considered a firm contraindication. MAOIs can potentiate effects and duration unpredictably. Stimulants and cannabis can amplify intensity in ways that increase psychological risk.</p>
 
       <h3>Rare persistent effects</h3>
       <p><span class="tt" data-tip="Hallucinogen Persisting Perception Disorder — the recurrence of perceptual disturbances (visual distortions, geometric patterns, afterimages) weeks or months after psychedelic use, causing significant distress. Rare, but a genuine risk worth understanding.">HPPD</span> (hallucinogen persisting perception disorder) — persistent visual disturbances following psychedelic use — is rare but documented. Its aetiology is poorly understood. Risk appears to be higher with frequent heavy use, use of multiple psychedelics, and use in people with underlying visual cortex sensitivity. It is not the same as a flashback in the colloquial sense.</p>
@@ -4980,6 +5169,14 @@
       <p><strong>Nature-connectedness and ecological values.</strong> Qualitative and survey research consistently finds that ayahuasca experiences are associated with increased sense of connection to nature and motivation for pro-environmental behaviour — among the strongest effects in the psychedelic-ecology literature.</p>
 
       <h2 id="aya-safety">Critical Safety: MAOI Interactions</h2>
+      <div class="interaction-callout">
+        <div class="interaction-callout-icon">⚠️</div>
+        <div class="interaction-callout-body">
+          <strong>Ayahuasca carries unique interaction risks</strong>
+          <p>The MAOI content of ayahuasca creates potentially fatal interactions with SSRIs, stimulants, and many common medications. This is not a standard psychedelic precaution — these interactions are medically serious.</p>
+          <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+        </div>
+      </div>
       <p>This section requires serious attention. The MAOI content of ayahuasca creates interaction risks that do not apply to other psychedelics. Some of these interactions are potentially fatal.</p>
       <table class="risk-table">
         <thead><tr><th>Substance / Class</th><th>Risk</th><th>Level</th></tr></thead>
@@ -5148,6 +5345,14 @@
       <p>Contemporary research has resumed cautiously. Liechti and colleagues in Basel have published pharmacological and dose-finding studies. Imperial College London's work under David Nutt and Robin Carhart-Harris has included LSD in neuroimaging and comparative studies. Research specifically on LSD-assisted psychotherapy is less advanced than psilocybin research, but the pharmacological similarities suggest therapeutic mechanisms are broadly comparable.</p>
 
       <h2 id="lsd-risks">Risks and Harm Reduction</h2>
+      <div class="interaction-callout">
+        <div class="interaction-callout-icon">⚠️</div>
+        <div class="interaction-callout-body">
+          <strong>Check your medications before combining</strong>
+          <p>LSD shares the key interaction profile of classical psychedelics — SSRIs, MAOIs, lithium, and stimulants all carry meaningful risks.</p>
+          <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+        </div>
+      </div>
       <p><strong>Adulteration.</strong> Street LSD is frequently misdosed, and some tabs sold as LSD contain <span class="tt" data-tip="A family of potent synthetic psychedelics (25I-NBOMe, 25C-NBOMe, 25B-NBOMe) sometimes sold as LSD. Critically dangerous: active in microgram doses, with a narrow safety window and multiple documented fatalities. Always reagent-test LSD; NBOMe compounds do not dissolve on blotter.">NBOMe</span> compounds or other substances. Testing is not optional — see below.</p>
       <p><strong>Duration-related risks.</strong> The extended duration means that a difficult experience lasts significantly longer than with psilocybin. Having an experienced <span class="tt" data-tip="A person who remains sober and present during another person's psychedelic experience to provide safety and support. The sitter's role is primarily one of presence and reassurance — distinct from the more active role of a trained guide or therapist.">sitter</span> is especially valuable for first experiences.</p>
       <p><strong><span class="tt" data-tip="Hallucinogen Persisting Perception Disorder — the recurrence of perceptual disturbances (visual distortions, geometric patterns, afterimages) weeks or months after psychedelic use, causing significant distress. Rare, but a genuine risk worth understanding.">HPPD</span>.</strong> Hallucinogen Persisting Perception Disorder — persistent visual disturbances after the experience has ended — is rare but real. Risk appears to be dose-related and elevated in people with pre-existing anxiety disorders.</p>
@@ -5291,6 +5496,14 @@
       <p>The FDA Advisory Committee reviewed the MAPS data in 2024 and raised concerns about trial methodology — particularly around functional unblinding and sponsor involvement in training — and did not recommend approval at that time. This reflects genuine methodological challenges rather than a refutation of the clinical findings, but it underscores the importance of continued rigorous research.</p>
 
       <h2 id="mdma-risks">Risks and Contraindications</h2>
+      <div class="interaction-callout">
+        <div class="interaction-callout-icon">⚠️</div>
+        <div class="interaction-callout-body">
+          <strong>MDMA carries serious medication interactions</strong>
+          <p>Combining MDMA with MAOIs risks potentially fatal serotonin syndrome. SSRIs, lithium, and stimulants each carry significant risks. Check before you combine anything.</p>
+          <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+        </div>
+      </div>
       <p><strong>Cardiovascular.</strong> MDMA produces significant increases in heart rate and blood pressure. People with cardiovascular disease, hypertension, or arrhythmias should avoid it entirely.</p>
       <p><strong>Hyperthermia.</strong> Overheating is one of the primary causes of MDMA-related deaths, particularly in hot environments combined with dancing. Staying cool and moderately hydrated — but not overhydrated — is essential.</p>
       <p><strong>Hyponatraemia.</strong> Drinking excessive water while on MDMA — a response to fears about dehydration — has caused deaths by dilutional hyponatraemia (dangerously low blood sodium). In warm environments with dancing, drink approximately 500 mL per hour; in cool, sedentary settings, less.</p>
@@ -5440,6 +5653,14 @@
       <p>More recent survey research by Uthaug and colleagues and others has found that mescaline use is associated with high rates of reported personal and spiritual significance, increased nature-connectedness, and positive psychological outcomes — though this literature shares the methodological limitations (self-selection, self-report, lack of controls) common to all survey-based psychedelic research.</p>
 
       <h2 id="mes-risks">Risks and Contraindications</h2>
+      <div class="interaction-callout">
+        <div class="interaction-callout-icon">⚠️</div>
+        <div class="interaction-callout-body">
+          <strong>Check your medications</strong>
+          <p>Mescaline shares the interaction profile of classical psychedelics — SSRIs, MAOIs, and lithium all carry meaningful risks that require review before use.</p>
+          <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+        </div>
+      </div>
       <p>Mescaline shares the standard psychological <span class="tt" data-tip="Medical or psychological conditions that make a particular treatment inadvisable due to elevated risk of harm. For classical psychedelics, key contraindications include personal or family history of schizophrenia spectrum disorders, bipolar I, and certain medications.">contraindications</span> of classical psychedelics: personal or family history of schizophrenia spectrum disorders or bipolar I. The long duration (10–12 hours) means difficult experiences last significantly longer and demand greater preparation and support. Cardiovascular load is moderate — cardiac conditions warrant consultation.</p>
       <p>Nausea is more common with mescaline (especially peyote) than with psilocybin or LSD, and is understood in traditional contexts as part of the purgative and healing process. Ginger, preparation through fasting, and accepting rather than resisting the nausea reduce its intensity.</p>
 
@@ -5589,6 +5810,14 @@
       <p>Thoughtful ketamine therapy includes: careful intake and screening; intentional preparation; supervised administration with supportive presence; immediate post-session integration; and ongoing psychotherapy between sessions. Clinics that offer IV drips with noise-cancelling headphones but no psychological preparation or integration support are providing the <span class="tt" data-tip="The branch of science concerned with how substances interact with biological systems — including their mechanisms of action, absorption, distribution, metabolism, and effects at the receptor level.">pharmacology</span> without the context.</p>
 
       <h2 id="ket-risks">Risks: Dependence, Bladder, and Cognition</h2>
+      <div class="interaction-callout">
+        <div class="interaction-callout-icon">⚠️</div>
+        <div class="interaction-callout-body">
+          <strong>Ketamine and CNS depressants are a dangerous combination</strong>
+          <p>Combining ketamine with alcohol, opioids, or benzodiazepines significantly increases risk of respiratory depression. Check all combinations before use.</p>
+          <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+        </div>
+      </div>
       <p><strong>Dependence.</strong> Unlike classical psychedelics, ketamine carries genuine dependence potential — both psychological (the dissociative relief it provides can become a sought-after escape) and, with very frequent use, some degree of physical dependence. Daily or near-daily ketamine use has been documented and is associated with serious harm. This risk is primarily relevant in recreational/unmanaged use rather than structured therapeutic contexts.</p>
       <p><strong>Ketamine-induced uropathy.</strong> Frequent, high-dose ketamine use is associated with severe and potentially irreversible bladder damage — ketamine uropathy. Symptoms include urinary frequency, urgency, pain, and in advanced cases, reduced bladder capacity requiring surgical intervention. This risk is dose- and frequency-dependent; it has been documented primarily in recreational users taking large amounts frequently, but it is a serious harm and a meaningful reason to avoid chronic non-therapeutic use.</p>
       <p><strong>Cognitive effects.</strong> Heavy ketamine use is associated with impaired memory and cognitive function. Effects appear to be largely reversible with abstinence in moderate users, but may be more persistent in heavy, chronic users.</p>
@@ -5725,6 +5954,14 @@
       <p><strong>Tolerance.</strong> Rapid tolerance develops within days; cross-tolerance with psilocybin and LSD is substantial.</p>
 
       <h2 id="tcb-risks">Risks and Contraindications</h2>
+      <div class="interaction-callout">
+        <div class="interaction-callout-icon">⚠️</div>
+        <div class="interaction-callout-body">
+          <strong>Check your medications</strong>
+          <p>2C-B's serotonergic activity means it shares key interaction risks with classical psychedelics — SSRIs, MAOIs, and stimulants all warrant review before combining.</p>
+          <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+        </div>
+      </div>
       <p>2C-B shares standard psychological <span class="tt" data-tip="Medical or psychological conditions that make a particular treatment inadvisable due to elevated risk of harm. For classical psychedelics, key contraindications include personal or family history of schizophrenia spectrum disorders, bipolar I, and certain medications.">contraindications</span> with all classical psychedelics: personal or family history of schizophrenia spectrum disorders or bipolar I. Cardiovascular: moderate increase in heart rate and blood pressure. The same drug interaction considerations apply — particularly with SSRIs, <span class="tt" data-tip="Monoamine oxidase inhibitors — compounds that block the breakdown of serotonin, dopamine, and other neurotransmitters. Critical safety consideration with ayahuasca; potentially fatal in combination with SSRIs and many common medications.">MAOI</span>s, and <span class="tt" data-tip="A mood-stabilising medication used for bipolar disorder. A critical contraindication with serotonergic psychedelics and especially 5-MeO-DMT, where the combination has been associated with seizures and cardiac events. Requires complete washout before any psychedelic use.">lithium</span>.</p>
       <p><strong>Redosing risk.</strong> 2C-B's slow onset frequently prompts impatient redosing before the first dose has taken effect. A dose taken at 45 minutes that seems to have done nothing will often arrive in full force at 60–90 minutes — combined with the redose, this can produce an unexpectedly intense experience. Wait a minimum of 90 minutes before concluding that a dose has not worked.</p>
       <p><strong>Adulteration.</strong> 2C-B is sometimes sold as MDMA or mixed with other substances. Testing is essential.</p>
@@ -6318,6 +6555,15 @@
     }
   }
 
+  function showPageAnchor(id, anchorId) {
+    showPage(id);
+    // After showPage scrolls to top, scroll to anchor after brief paint delay
+    setTimeout(function() {
+      const el = document.getElementById(anchorId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+
   /* ══════════════════════════════════════════════════════
      TOOLTIP EDGE DETECTION
      Adjusts .tt bubbles that would overflow the viewport
@@ -6625,7 +6871,14 @@
         <h3>Absolute cardiac contraindications</h3>
         <p>Any pre-existing prolonged QTc interval (above 450ms in men, 470ms in women) is an absolute contraindication. Structural heart disease, arrhythmias, heart failure, and a family or personal history of sudden cardiac death also represent absolute contraindications. Before any flood-dose ibogaine administration, a 12-lead ECG is mandatory. Electrolyte imbalances — particularly low potassium or magnesium, which are common in people with substance use disorders — must be corrected before treatment, as electrolyte abnormalities independently increase arrhythmia risk and potentiate ibogaine's cardiac effects.</p>
         <h3>Drug interactions</h3>
-        <p>The most dangerous ibogaine drug interactions are with other QTc-prolonging agents. Methadone, in particular, significantly prolongs QTc and the combination with ibogaine represents a substantial cardiac risk. Methadone-maintained individuals typically require a medically supervised taper to shorter-acting opioids (most often buprenorphine) before ibogaine treatment — a process that itself requires medical management. SSRIs, TCAs, antipsychotics, and many other medications also prolong QTc and require careful assessment. Stimulants — particularly cocaine and methamphetamine — present cardiovascular risks in the ibogaine context. The combination with <span class="tt" data-tip="Monoamine oxidase inhibitors — compounds that block the breakdown of serotonin, dopamine, and other neurotransmitters. Critical safety consideration with ayahuasca; potentially fatal in combination with SSRIs and many common medications.">MAOIs</span> (present in ayahuasca) is dangerous and should be avoided.</p>
+        <div class="interaction-callout">
+          <div class="interaction-callout-icon">⚠️</div>
+          <div class="interaction-callout-body">
+            <strong>Ibogaine has life-threatening drug interactions</strong>
+            <p>QTc-prolonging medications — including methadone, SSRIs, antipsychotics, and others — can be fatal in combination with ibogaine. Review all medications with a physician before any ibogaine treatment.</p>
+            <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+          </div>
+        </div> Methadone, in particular, significantly prolongs QTc and the combination with ibogaine represents a substantial cardiac risk. Methadone-maintained individuals typically require a medically supervised taper to shorter-acting opioids (most often buprenorphine) before ibogaine treatment — a process that itself requires medical management. SSRIs, TCAs, antipsychotics, and many other medications also prolong QTc and require careful assessment. Stimulants — particularly cocaine and methamphetamine — present cardiovascular risks in the ibogaine context. The combination with <span class="tt" data-tip="Monoamine oxidase inhibitors — compounds that block the breakdown of serotonin, dopamine, and other neurotransmitters. Critical safety consideration with ayahuasca; potentially fatal in combination with SSRIs and many common medications.">MAOIs</span> (present in ayahuasca) is dangerous and should be avoided.</p>
         <h3>Psychological risks</h3>
         <p>The ibogaine experience is intense and often psychologically demanding. People with active <span class="tt" data-tip="A mental state characterised by a loss of contact with shared reality — involving hallucinations, delusions, and disorganised thinking. A personal or family history of psychosis or schizophrenia spectrum disorders is a primary contraindication for psychedelic use.">psychosis</span> or schizophrenia spectrum conditions should not receive ibogaine. Severe, untreated mood disorders warrant careful assessment. The life review nature of the experience means that traumatic material frequently surfaces — integration support before and after is not optional for responsible practice.</p>
         <h3>Iboga plant sustainability</h3>
@@ -6800,6 +7053,14 @@
         <p>Survey research has established population-level patterns: Gallimore and Strassman (2016) proposed that DMT induces a "reality switch" — a functional replacement of ordinary perceptual reality — rather than overlaying it, distinguishing it phenomenologically from other psychedelics. Entity encounter surveys (Davis et al., 2020; Timmermann et al., 2019) establish prevalence rates and find that most experiencers rate entities as conscious, benevolent, and as sources of insights or information. The meaning-making dimensions of DMT are substantial and require integration frameworks that can hold material of unusual experiential intensity.</p>
 
         <h2 id="dmt-risks">Risks & Contraindications</h2>
+        <div class="interaction-callout">
+          <div class="interaction-callout-icon">⚠️</div>
+          <div class="interaction-callout-body">
+            <strong>DMT and MAOIs: a critical combination to understand</strong>
+            <p>DMT in ayahuasca form is combined with MAOIs by design — but combining smoked DMT with pharmaceutical MAOIs or SSRIs carries serious interaction risks.</p>
+            <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+          </div>
+        </div>
         <p>DMT's short duration contributes to a relatively contained safety profile — the window of incapacitation is brief, and physiological effects (mild increases in blood pressure and heart rate) are transient. There are no documented deaths from DMT toxicity alone at commonly used doses. The primary risks are:</p>
         <p><strong>Psychological overwhelm:</strong> The rapidity and totality of DMT's onset leaves no transition time. People who are psychologically unprepared for complete <span class="tt" data-tip="The temporary loosening or dissolution of the ordinary sense of a bounded, separate self — one of the most consistent and therapeutically significant effects of high-dose psychedelic experiences.">ego dissolution</span> and reality replacement may experience terror. Having a trusted <span class="tt" data-tip="A person who remains sober and present during another person's psychedelic experience to provide safety and support. The sitter's role is primarily one of presence and reassurance — distinct from the more active role of a trained guide or therapist.">sitter</span> present is strongly recommended for any breakthrough dose.</p>
         <p><strong>Physical safety during the experience:</strong> During a breakthrough DMT experience, physical coordination is temporarily absent. Users must be seated or lying down in a safe environment; attempting to stand or move during peak effects carries a real fall risk.</p>
@@ -6967,6 +7228,14 @@
         <p>Timmermann and colleagues at Imperial College London have led the most methodologically rigorous neuroimaging and psychometric work: their 2023 study using combined EEG-fMRI found that 5-MeO-DMT produces the most globally interconnected brain state yet observed among studied psychedelics, characterised by suppression of the posterior hot zone (associated with conscious content) and expansion of global integration — consistent with the experiential obliteration of content into undifferentiated awareness. A <span class="tt" data-tip="The second phase of clinical drug trials, testing a treatment in a larger group of participants (typically dozens to hundreds) to assess efficacy and side effects. Most psychedelic clinical evidence — including early psilocybin depression trials — comes from Phase 2.">Phase 2</span> clinical trial examining 5-MeO-DMT for <span class="tt" data-tip="Major depressive disorder that has not responded adequately to at least two different antidepressant treatments. The population for which psilocybin and ketamine clinical evidence is strongest.">treatment-resistant depression</span> is underway at Imperial. The company Beckley Psytech has progressed a synthetic 5-MeO-DMT formulation (BPL-003) through Phase 2 trials for depression and alcohol use disorder.</p>
 
         <h2 id="meo-risks">Risks & Contraindications</h2>
+        <div class="interaction-callout">
+          <div class="interaction-callout-icon">⚠️</div>
+          <div class="interaction-callout-body">
+            <strong>5-MeO-DMT has serious medication interactions</strong>
+            <p>Lithium is a particularly dangerous combination with 5-MeO-DMT — associated with seizures and cardiac events. MAOIs, SSRIs, and stimulants also carry significant risk.</p>
+            <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">View full drug interaction chart →</button>
+          </div>
+        </div>
         <p><strong>Cardiac:</strong> Blood pressure and heart rate increase significantly during the acute experience. Individuals with cardiovascular disease, hypertension, or significant cardiac risk factors should approach this compound with medical consultation and significant caution.</p>
         <p><strong>Serotonin syndrome with <span class="tt" data-tip="Monoamine oxidase inhibitors — compounds that block the breakdown of serotonin, dopamine, and other neurotransmitters. Critical safety consideration with ayahuasca; potentially fatal in combination with SSRIs and many common medications.">MAOIs</span>:</strong> This is the most serious pharmacological interaction risk. Combining 5-MeO-DMT with pharmaceutical MAOIs is potentially fatal and represents an absolute contraindication. Syrian rue (<em>Peganum harmala</em>) and ayahuasca-style MAOI plants also present this risk. The <span class="tt" data-tip="A family of alkaloids — including harmine and harmaline — found in the ayahuasca vine (Banisteriopsis caapi). Beta-carbolines are reversible inhibitors of MAO-A (RIMAs), which is what allows orally consumed DMT to reach the brain instead of being broken down in the gut.">harmine</span> and harmaline present in ayahuasca are MAO inhibitors; combining them with 5-MeO-DMT — even sequentially within a short period — can be life-threatening. Practitioners who facilitate both ayahuasca and 5-MeO-DMT in the same retreat context must apply rigorous washout timing.</p>
         <p><strong>Personal or family history of <span class="tt" data-tip="A mental state characterised by a loss of contact with shared reality — involving hallucinations, delusions, and disorganised thinking. A personal or family history of psychosis or schizophrenia spectrum disorders is a primary contraindication for psychedelic use.">psychosis</span>:</strong> Absolute contraindication, as with all classic psychedelics.</p>
@@ -7512,6 +7781,7 @@
                 <button class="check-btn" onclick="plSetCheck('medications','caution')">SSRIs / antidepressants</button>
                 <button class="check-btn" onclick="plSetCheck('medications','flagged')">MAOIs, lithium, or antipsychotics</button>
               </div>
+              <p style="font-size:0.8rem;color:var(--cream-dim);margin:0.75rem 0 0;">Not sure about your medications? <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">Check the full interaction chart →</button></p>
             </div>
           </div>
 
