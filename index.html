@@ -757,10 +757,6 @@
       margin: 0 auto;
       padding: 4rem 2rem;
     }
-    .start-here-label {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em;
-      text-transform: uppercase; color: var(--teal); margin-bottom: 1.75rem;
-    }
     .start-here-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -1469,6 +1465,107 @@
     .feature-strip-inner .section-title { margin-bottom: 1.25rem; }
     .feature-strip-inner .section-body { margin: 0 auto 2.5rem; text-align: center; }
 
+    /* ── CHECKER PAGE ────────────────────────────── */
+    .checker-header {
+      background: var(--bg-mid);
+      border-bottom: 1px solid var(--cream-border);
+      padding: 3rem 2rem 2.5rem;
+    }
+    .checker-header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .checker-header-text { flex: 1; min-width: 260px; }
+    .checker-header p {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--cream-dim);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0.6rem 0 0;
+    }
+    .checker-body {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .checker-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .checker-table-wrap {
+      overflow-x: auto;
+      overflow-y: auto;
+      height: calc(100vh - 420px);
+      min-height: 400px;
+      border: 1px solid var(--cream-border);
+      border-radius: 6px;
+    }
+    .checker-lookup-panel {
+      background: var(--bg-mid);
+      border: 1px solid var(--cream-border);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .checker-lookup-selects {
+      display: flex;
+      gap: 1rem;
+      flex: 1;
+      min-width: 0;
+    }
+    .checker-lookup-selects > div {
+      flex: 1;
+      min-width: 0;
+    }
+    .checker-lookup-selects label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.3rem;
+    }
+    .checker-lookup-selects select {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--cream-border);
+      color: var(--cream);
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .checker-lookup-result-wrap {
+      flex: 1.5;
+      min-width: 220px;
+    }
+    .checker-disclaimer {
+      font-size: 0.75rem;
+      color: var(--cream-dim);
+      opacity: 0.65;
+      line-height: 1.6;
+      margin-top: 1.25rem;
+      font-weight: 300;
+    }
+    @media (max-width: 768px) {
+      .checker-chart-col { display: none; }
+      .checker-lookup-selects { flex-direction: column; }
+      .checker-lookup-panel { flex-direction: column; align-items: stretch; }
+      .checker-header { padding: 2rem 1.25rem 1.75rem; }
+      .checker-body   { padding: 1.25rem; }
+    }
+
     /* ── FOOTER ──────────────────────────────────── */
     footer {
       background: var(--bg-mid);
@@ -1541,7 +1638,6 @@
     /* ── DISCLAIMER BAR ──────────────────────────── */
     .disclaimer-bar {
       background: rgba(0,0,0,0.3);
-      border-top: 1px solid var(--cream-border);
       padding: 1rem 2rem;
       text-align: center;
     }
@@ -2409,6 +2505,314 @@
     }
     
     </style>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   COMBO MODULE  — shared data + renderers used by both the
+   Assessment page embedded chart and the dedicated Checker page
+══════════════════════════════════════════════════════════════════ */
+window._combo = (function(){
+        /* ── Data ─────────────────────────────────────────────────────── */
+        const SY='sy', LO='lo', DE='de', CA='ca', UN='un', DA='da', UK='uk', SE='cs';
+        const ICONS  = {sy:'↑',lo:'⊙',de:'↓',ca:'△',un:'✕',da:'✕',uk:'?',cs:''};
+        const LABELS = {sy:'Low Risk & Synergy',lo:'Low Risk & No Synergy',de:'Low Risk & Decrease',ca:'Caution',un:'Unsafe',da:'Dangerous',uk:'Unknown / Insufficient Data'};
+
+        const substances = [
+          {id:'lsd',label:'LSD'},{id:'mushrooms',label:'Mushrooms'},{id:'dmt',label:'DMT'},
+          {id:'mescaline',label:'Mescaline'},{id:'dox',label:'DOx'},{id:'nbomes',label:'NBOMes'},
+          {id:'2cx',label:'2C-x'},{id:'2ctx',label:'2C-T-x'},{id:'5meo',label:'5-MeO-xxT'},
+          {id:'cannabis',label:'Cannabis'},{id:'ketamine',label:'Ketamine'},{id:'mxe',label:'MXE'},
+          {id:'dxm',label:'DXM'},{id:'nitrous',label:'Nitrous'},{id:'amphetamines',label:'Amphetamines'},
+          {id:'mdma',label:'MDMA'},{id:'cocaine',label:'Cocaine'},{id:'caffeine',label:'Caffeine'},
+          {id:'alcohol',label:'Alcohol'},{id:'ghb',label:'GHB/GBL'},{id:'opioids',label:'Opioids'},
+          {id:'tramadol',label:'Tramadol'},{id:'benzos',label:'Benzodiazepines'},
+          {id:'maois',label:'MAOIs'},{id:'ssris',label:'SSRIs'},
+        ];
+
+        const combos = {};
+        function s(a,b,r,n){ combos[[a,b].sort().join('|')]={rating:r,note:n}; }
+        function g(a,b){
+          if(a===b) return {rating:SE,note:''};
+          return combos[[a,b].sort().join('|')]||{rating:UK,note:'No reliable combination data available.'};
+        }
+
+        const cls=['lsd','mushrooms','dmt','mescaline','2cx'];
+        for(let i=0;i<cls.length;i++) for(let j=i+1;j<cls.length;j++)
+          s(cls[i],cls[j],SY,'Synergistic potentiation. Experience will be intensified and may be prolonged. Unpredictability increases at higher doses.');
+        for(const x of cls) s('dox',x,CA,'DOx has very long duration (16–30 hrs). Combined with other psychedelics the experience can become overwhelming and ungovernable.');
+        for(const x of cls) s('nbomes',x,CA,'NBOMes carry inherent cardiovascular toxicity risk. Combining intensifies effects and further elevates physical risk.');
+        for(const x of [...cls,'dox','nbomes']) s('2ctx',x,CA,'2C-T-x compounds have weak MAOI-like activity, raising serotonin concerns. Fatalities reported with 2C-T-7.');
+        for(const x of [...cls,'dox','nbomes','2ctx']) s('5meo',x,CA,'5-MeO-xxT compounds are extremely potent serotonergic agents. Combining creates high serotonin load and risk of medical emergency.');
+        s('dox','nbomes',CA,'Both long-duration phenethylamines. Significant cardiovascular and psychological risk.');
+        s('dox','2ctx',CA,'2C-T-x MAOI activity creates serotonin concerns. Unpredictable and prolonged.');
+        s('dox','5meo',CA,'Very high serotonin load and cardiovascular stress. Not recommended.');
+        s('nbomes','2ctx',UN,'NBOMes cardiovascular toxicity combined with 2C-T-x serotonin risk. Dangerous.');
+        s('nbomes','5meo',UN,'Both extremely potent. Risk of fatal cardiovascular and serotonin toxicity. Avoid.');
+        s('2ctx','5meo',CA,'Combined serotonin load from two potent agents. Serotonin syndrome risk.');
+        for(const x of [...cls,'dox','nbomes','2ctx','5meo']) s(x,'cannabis',CA,'Cannabis frequently potentiates and extends psychedelic experiences. Can trigger anxiety, paranoia, and thought loops.');
+        for(const x of [...cls,'dox','2cx','2ctx','5meo']){
+          s(x,'ketamine',SY,'Psychedelic-dissociative combination; synergistic. Intensified altered state; stable setting and support required.');
+          s(x,'mxe',SY,'Potentiating dissociative-psychedelic combination. Significantly intensified and unpredictable.');
+          s(x,'dxm',SY,'Strong synergy. DXM extends and amplifies psychedelic effects considerably. Both long-duration.');
+          s(x,'nitrous',SY,'Nitrous markedly intensifies psychedelic experiences, often producing profound dissociation. Anoxia risk if misused.');
+        }
+        s('nbomes','ketamine',CA,'NBOMes cardiovascular toxicity plus ketamine CNS burden. Caution.');
+        s('nbomes','mxe',CA,'Cardiovascular concerns plus dissociative load. Not recommended.');
+        s('nbomes','dxm',CA,'Serotonin and cardiovascular concerns. Avoid if possible.');
+        s('nbomes','nitrous',CA,'Cardiovascular burden of NBOMes with nitrous hypoxia risk. Caution.');
+        for(const x of cls){ s(x,'amphetamines',CA,'Stimulants increase heart rate and anxiety. Heightens risk of panic, cardiovascular strain, and destabilising thought loops.'); s(x,'cocaine',CA,'Raises cardiovascular risk. Short-acting but strongly anxiogenic; can induce panic.'); s(x,'caffeine',CA,'Can exacerbate anxiety and overstimulation. Adds to cardiovascular load.'); }
+        s('dox','amphetamines',UN,'Both stimulating phenethylamines. Combined cardiovascular strain significant.');
+        s('dox','cocaine',UN,'Serious cardiovascular risk from two simultaneously stimulating compounds.');
+        s('dox','caffeine',CA,'Adds to cardiovascular load.');
+        s('nbomes','amphetamines',DA,'NBOMes carry hypertensive crisis risk; amphetamines dramatically elevate cardiovascular danger. Potentially fatal.');
+        s('nbomes','cocaine',DA,'Extremely dangerous cardiovascular risk. Both cause vasoconstriction and cardiac events. Avoid absolutely.');
+        s('nbomes','caffeine',CA,'Adds mild cardiovascular load to already risky NBOMes.');
+        s('2ctx','amphetamines',UN,'MAOI-like 2C-T-x properties create serotonin and cardiovascular risk with amphetamines. Fatalities reported.');
+        s('2ctx','cocaine',UN,'Cardiovascular and serotonin concerns. Not recommended.');
+        s('2ctx','caffeine',CA,'Mild additive stimulation; monitor cardiovascular effects.');
+        s('5meo','amphetamines',UN,'Serotonin syndrome and cardiovascular risk. Not recommended.');
+        s('5meo','cocaine',UN,'Serious cardiovascular and serotonin risk. Avoid.');
+        s('5meo','caffeine',CA,'Mild additive stimulation. Caution.');
+        s('lsd','mdma',SY,'"Candyflipping." Strongly synergistic. Greatly extended experience; elevated cardiovascular load and serotonin considerations.');
+        s('mushrooms','mdma',SY,'"Hippyflipping." Common intentional combination. Synergistic but unpredictable; increased cardiovascular and serotonin load.');
+        s('dmt','mdma',CA,'Serotonin load; avoid with ayahuasca (MAOI). Limited data.');
+        s('mescaline','mdma',CA,'Both monoaminergic; elevated serotonin and cardiovascular risk at higher doses.');
+        s('2cx','mdma',CA,'2C-x compounds are serotonergic; combined serotonin and cardiovascular demands are notable.');
+        s('dox','mdma',CA,'Both phenethylamines; prolonged combined cardiovascular load.');
+        s('nbomes','mdma',UN,'Cardiovascular toxicity of NBOMes plus MDMA serotonin load. Not recommended.');
+        s('2ctx','mdma',UN,'2C-T-x MAOI activity raises serious serotonin syndrome risk with MDMA.');
+        s('5meo','mdma',UN,'High serotonin syndrome risk. Both powerfully serotonergic. Not recommended.');
+        for(const x of [...cls,'dox','nbomes','2ctx','5meo']) s(x,'benzos',DE,'Benzodiazepines reliably reduce psychedelic intensity and can abort a difficult experience. Valuable harm-reduction tool.');
+        for(const x of cls) s(x,'alcohol',DE,'Alcohol generally blunts psychedelic intensity. Worsens nausea and dehydration. Largely counterproductive.');
+        s('dox','alcohol',CA,'Adds nausea and cardiovascular load to an already very long experience.');
+        s('nbomes','alcohol',CA,'Adds CNS burden and nausea to already risky NBOMes. Avoid.');
+        s('2ctx','alcohol',CA,'May interact unpredictably with 2C-T-x MAOI properties. Caution.');
+        s('5meo','alcohol',CA,'Impairs ability to manage intense 5-MeO experiences safely.');
+        for(const x of cls) s(x,'opioids',CA,'Opioids and psychedelics interact unpredictably. CNS depression additive. Limited research.');
+        for(const x of ['dox','nbomes','2ctx','5meo']) s(x,'opioids',CA,'CNS depression additive. Caution.');
+        for(const x of cls) s(x,'ghb',CA,'GHB can modulate or intensify psychedelic experiences unpredictably. CNS depression risk.');
+        for(const x of ['dox','nbomes','2ctx','5meo']) s(x,'ghb',CA,'CNS depression risk added to already complex pharmacology. Caution.');
+        for(const x of cls) s(x,'tramadol',CA,'Tramadol has opioid and serotonergic activity. Combined serotonin load warrants caution.');
+        s('nbomes','tramadol',DA,'Reported as dangerous; cardiovascular and serotonin crisis risk. Avoid.');
+        s('2ctx','tramadol',DA,'Compounding MAOI effects with tramadol serotonergic activity. Serious serotonin syndrome risk.');
+        s('5meo','tramadol',DA,'High serotonin syndrome risk. Avoid.');
+        s('dox','tramadol',CA,'Serotonin load concern. Caution.');
+        for(const x of cls) s(x,'ssris',DE,'SSRIs substantially blunt psychedelic effects (often 50–80%) via serotonin receptor desensitisation. Not directly dangerous at standard doses.');
+        s('dox','ssris',CA,'Serotonin considerations with phenethylamines. Blunting effect likely.');
+        s('nbomes','ssris',CA,'SSRIs may partially blunt NBOMes. Serotonin load concern at high doses.');
+        s('2ctx','ssris',UN,'2C-T-x MAOI activity with SSRIs raises significant serotonin syndrome risk.');
+        s('5meo','ssris',UN,'Serious serotonin syndrome risk. 5-MeO is a powerful serotonergic.');
+        s('lsd','maois',CA,'MAOIs potentiate LSD significantly. Experience intensified and prolonged. Dietary restrictions essential with irreversible MAOIs.');
+        s('mushrooms','maois',CA,'MAOIs potentiate psilocybin. Harmalas used intentionally in some contexts. Irreversible MAOIs: much higher risk. Dietary restrictions required.');
+        s('dmt','maois',CA,'The pharmacological basis of ayahuasca. With irreversible MAOIs: greatly elevated risk. Strict dietary restrictions always required.');
+        s('mescaline','maois',UN,'Significant potentiation and serotonin risk. Both serotonergic phenethylamines.');
+        s('2cx','maois',UN,'Serotonin syndrome risk. Potent potentiation. Not recommended.');
+        s('dox','maois',UN,'Both phenethylamines; strong serotonin and cardiovascular risk with MAOIs.');
+        s('nbomes','maois',DA,'Cardiovascular crisis and serotonin syndrome risk. Absolutely avoid.');
+        s('2ctx','maois',DA,'Compounding MAOI effects. Severe serotonin toxicity risk.');
+        s('5meo','maois',DA,'Well-documented fatalities. One of the most dangerous known psychedelic combinations. Absolute contraindication.');
+        s('cannabis','ketamine',CA,'Potentiation of dissociation and sedation. Increased confusion possible.');
+        s('cannabis','mxe',CA,'Cannabis potentiates MXE dissociation. Increased confusion.');
+        s('cannabis','dxm',CA,'Cannabis potentiates DXM dissociation and can dramatically increase intensity.');
+        s('cannabis','nitrous',CA,'Combined perceptual effects can be very intense and disorienting.');
+        s('cannabis','amphetamines',CA,'Cannabis may exacerbate stimulant anxiety. Cardiovascular effects additive.');
+        s('cannabis','mdma',CA,'Can intensify MDMA; may heighten sensory experience but also anxiety.');
+        s('cannabis','cocaine',CA,'Cocaine anxiety may worsen with cannabis. Cardiovascular effects additive.');
+        s('cannabis','caffeine',LO,'Generally low risk. Cannabis may counteract some caffeine stimulation.');
+        s('cannabis','alcohol',CA,'"Crossfading." Risk of greening out — nausea, vomiting, anxiety. Order of consumption matters greatly.');
+        s('cannabis','ghb',CA,'Combined CNS sedation and confusion risk. GHB dosing becomes less reliable.');
+        s('cannabis','opioids',LO,'Low risk at normal doses. Cannabis may enhance opioid analgesia; monitor for increased sedation.');
+        s('cannabis','tramadol',CA,'Tramadol serotonergic activity with cannabis. Some sedation and CNS concern.');
+        s('cannabis','benzos',DE,'Benzos may blunt cannabis anxiety. Combined sedation; manageable but avoid machinery.');
+        s('cannabis','maois',CA,'MAOIs may potentiate cannabis effects. Cardiovascular considerations.');
+        s('cannabis','ssris',LO,'Generally low risk.');
+        s('ketamine','mxe',SY,'Strong dissociative synergy. "K-hole" significantly more accessible. Requires safe setting.');
+        s('ketamine','dxm',SY,'Potent dissociative combination. Very intense altered states; respiratory and motor impairment significant.');
+        s('ketamine','nitrous',SY,'Classic synergistic combination. Short but very intense dissociation. Anoxia risk with nitrous misuse.');
+        s('mxe','dxm',SY,'Strong dissociative synergy. Complex and intense altered state.');
+        s('mxe','nitrous',SY,'Synergistic dissociation. Intense but short-lived nitrous peak.');
+        s('dxm','nitrous',SY,'Potent synergy; very intense dissociation. Common pairing.');
+        s('ketamine','amphetamines',CA,'Competing CNS effects; cardiovascular strain from stimulant plus dissociation.');
+        s('ketamine','mdma',CA,'Some intentional use. Cardiovascular strain; requires care with dosing and hydration.');
+        s('ketamine','cocaine',CA,'Cardiovascular strain significant. Short but intense combined effect.');
+        s('ketamine','caffeine',LO,'Low risk. Caffeine may slightly counteract ketamine sedation.');
+        s('mxe','amphetamines',CA,'Cardiovascular considerations. MXE CNS effects may be unpredictably altered.');
+        s('mxe','mdma',CA,'Cardiovascular load and combined serotonergic-dissociative effects.');
+        s('mxe','cocaine',CA,'Cardiovascular risk. Short-acting cocaine may worsen MXE disorientation.');
+        s('mxe','caffeine',LO,'Low risk.');
+        s('dxm','amphetamines',CA,'DXM serotonergic activity combined with amphetamines increases serotonin load. Cardiovascular strain.');
+        s('dxm','mdma',DA,'High serotonin syndrome risk. Both powerfully serotonergic. Well-documented dangerous combination. Avoid.');
+        s('dxm','cocaine',UN,'Cardiovascular strain. DXM also blocks cocaine metabolism. Not recommended.');
+        s('dxm','caffeine',CA,'Mild additive stimulation. Generally manageable.');
+        s('nitrous','amphetamines',CA,'Short-acting nitrous; combined cardiovascular effects. Generally manageable.');
+        s('nitrous','mdma',CA,'Intensifies MDMA transiently. Serotonergic considerations at high MDMA doses.');
+        s('nitrous','cocaine',CA,'Cardiovascular considerations. Short-acting.');
+        s('nitrous','caffeine',LO,'Very low risk.');
+        s('ketamine','alcohol',UN,'Both CNS depressants. Respiratory depression risk; increased chance of unconsciousness and aspiration.');
+        s('ketamine','ghb',DA,'Both CNS depressants; combined respiratory depression risk is severe. Potentially life-threatening. Avoid.');
+        s('ketamine','opioids',UN,'Combined CNS and respiratory depression. Dangerous; risk of respiratory failure.');
+        s('ketamine','tramadol',UN,'CNS depression additive. Tramadol lowers seizure threshold.');
+        s('ketamine','benzos',UN,'Both CNS depressants. Combined respiratory depression. Medical supervision only.');
+        s('ketamine','maois',UN,'Cardiovascular and CNS concerns. Not recommended outside clinical contexts.');
+        s('ketamine','ssris',CA,'Used clinically alongside SSRIs. Some serotonin considerations; prescriber oversight recommended.');
+        s('mxe','alcohol',UN,'Both CNS depressants. Risk of unconsciousness and respiratory depression.');
+        s('mxe','ghb',DA,'Severe combined CNS depression. Potentially life-threatening. Avoid.');
+        s('mxe','opioids',UN,'Combined CNS and respiratory depression. Dangerous.');
+        s('mxe','tramadol',UN,'CNS depression and seizure risk. Not recommended.');
+        s('mxe','benzos',UN,'Severe CNS depression risk. Avoid.');
+        s('mxe','maois',CA,'MXE has serotonergic properties; MAOI potentiation possible. Caution.');
+        s('mxe','ssris',CA,'MXE serotonergic activity; serotonin considerations with SSRIs.');
+        s('dxm','alcohol',UN,'Both CNS depressants; DXM is also serotonergic. Nausea greatly worsened. Significant respiratory depression risk.');
+        s('dxm','ghb',DA,'Severe combined CNS depression. Avoid.');
+        s('dxm','opioids',UN,'Both CNS and respiratory depressants; DXM blocks opioid metabolism. Dangerous.');
+        s('dxm','tramadol',DA,'Both serotonergic. Significant serotonin syndrome risk. Dangerous. Avoid.');
+        s('dxm','benzos',UN,'CNS depression additive. Respiratory risk.');
+        s('dxm','maois',DA,'Severe serotonin syndrome risk. DXM is a serotonin reuptake inhibitor; MAOIs create dangerous serotonin accumulation. Avoid absolutely.');
+        s('dxm','ssris',DA,'Well-documented serotonin syndrome risk. Both block serotonin reuptake. Avoid.');
+        s('nitrous','alcohol',CA,'Combined sedation; dizziness and nausea more likely. Generally manageable in small amounts.');
+        s('nitrous','ghb',CA,'Combined CNS depression. Increased sedation risk.');
+        s('nitrous','opioids',UN,'Both CNS depressants. Combined respiratory depression risk.');
+        s('nitrous','tramadol',CA,'CNS depression additive. Monitor.');
+        s('nitrous','benzos',CA,'Combined sedation; respiratory caution.');
+        s('nitrous','maois',CA,'Limited data. Some cardiovascular concerns. Caution.');
+        s('nitrous','ssris',LO,'Low risk. No significant interaction known.');
+        s('amphetamines','mdma',UN,'Cardiovascular strain significantly elevated. Combined neurotoxicity likely increased. Dopamine and serotonin overload risk.');
+        s('amphetamines','cocaine',UN,'Extreme cardiovascular strain. Risk of cardiac events. Not recommended.');
+        s('amphetamines','caffeine',CA,'Adds to cardiovascular load. Common but increases heart rate and anxiety beyond either alone.');
+        s('mdma','cocaine',UN,'Cardiovascular strain, serotonin and dopamine overload. Both dehydrating and thermogenic.');
+        s('mdma','caffeine',CA,'Caffeine adds mild stimulation. Cardiovascular and dehydration concern at high caffeine doses.');
+        s('cocaine','caffeine',CA,'Additive cardiovascular effects. Adds heart strain.');
+        s('amphetamines','alcohol',CA,'Stimulants mask alcohol intoxication, leading to overconsumption. Both dehydrating.');
+        s('amphetamines','ghb',CA,'Stimulant and depressant effects may mask each other. GHB overdose risk underestimated. Caution.');
+        s('amphetamines','opioids',CA,'Stimulant and opioid effects mask each other; overdose risk elevated when stimulant wears off.');
+        s('amphetamines','tramadol',CA,'Amphetamines increase serotonin load alongside tramadol serotonergic activity. Caution.');
+        s('amphetamines','benzos',CA,'Benzos used to manage stimulant comedowns. Habit-forming combination; dependency risk.');
+        s('amphetamines','maois',DA,'Hypertensive crisis and serotonin syndrome. Potentially fatal. Absolute contraindication.');
+        s('amphetamines','ssris',CA,'Amphetamines increase serotonin alongside SSRI blockade; elevated serotonin load. Prescriber consultation required.');
+        s('mdma','alcohol',UN,'Alcohol masks MDMA effects leading to dangerous re-dosing. Both dehydrating and thermogenic; overheating risk.');
+        s('mdma','ghb',CA,'Unpredictable combined effects; GHB dosing more dangerous when MDMA is present. Caution.');
+        s('mdma','opioids',CA,'Combined serotonergic and opioid activity. Manageable at low doses; avoid high doses.');
+        s('mdma','tramadol',DA,'Serotonin syndrome risk. Both serotonergic. Well-documented dangerous interaction. Avoid.');
+        s('mdma','benzos',CA,'Benzos can blunt MDMA and be used for harm reduction. Generally safe at standard doses.');
+        s('mdma','maois',DA,'Serotonin syndrome. Potentially fatal. Absolute contraindication. Never combine.');
+        s('mdma','ssris',CA,'SSRIs blunt MDMA significantly; often leads users to dangerously escalate MDMA dose to compensate. Serotonin load concern.');
+        s('cocaine','alcohol',CA,'Produces cocaethylene in the liver — a toxic metabolite. Increases cardiovascular risk beyond either alone.');
+        s('cocaine','ghb',CA,'Stimulant and depressant effects mask each other. GHB overdose risk elevated. Cardiovascular strain.');
+        s('cocaine','opioids',DA,'"Speedball." Classic dangerous combination. Stimulant and respiratory depressant mask each other; responsible for many overdose deaths.');
+        s('cocaine','tramadol',CA,'Cardiovascular strain and serotonin considerations.');
+        s('cocaine','benzos',CA,'Benzos used to manage cocaine anxiety. Respiratory risk at high benzo doses. Habit-forming.');
+        s('cocaine','maois',DA,'Hypertensive crisis and cardiovascular emergency. Potentially fatal. Absolutely avoid.');
+        s('cocaine','ssris',UN,'Cocaine blocks serotonin reuptake; combined with SSRIs elevates serotonin load. Not recommended.');
+        s('caffeine','alcohol',CA,'Caffeine masks alcohol sedation, leading to overconsumption. Increased dehydration.');
+        s('caffeine','ghb',LO,'Caffeine may slightly counteract GHB sedation. Does not reliably prevent GHB overdose.');
+        s('caffeine','opioids',LO,'Low risk. No clinically significant interaction at normal caffeine doses.');
+        s('caffeine','tramadol',LO,'Low risk. No significant pharmacological interaction known.');
+        s('caffeine','benzos',LO,'Caffeine may partially counteract benzo sedation. Does not prevent respiratory depression.');
+        s('caffeine','maois',UN,'MAOIs inhibit caffeine metabolism; caffeine effects greatly prolonged and intensified. Cardiovascular concern. Avoid high caffeine intake on MAOIs.');
+        s('caffeine','ssris',LO,'Generally low risk.');
+        s('alcohol','ghb',DA,'Extreme respiratory depression risk. GHB has very narrow dosing window; alcohol dramatically elevates overdose risk. Potentially fatal. Avoid.');
+        s('alcohol','opioids',DA,'Severe combined respiratory depression. A leading cause of overdose death. Potentially fatal. Avoid.');
+        s('alcohol','tramadol',UN,'Both CNS depressants; tramadol also lowers seizure threshold. Elevated respiratory depression and seizure risk.');
+        s('alcohol','benzos',DA,'Severe respiratory depression. Both CNS depressants. Potentially fatal — a leading cause of overdose death. Avoid.');
+        s('alcohol','maois',CA,'Alcohol may contain tyramine (beer, wine); with irreversible MAOIs this can trigger hypertensive crisis. Spirits lower risk but CNS depression still additive.');
+        s('alcohol','ssris',CA,'Alcohol may worsen SSRI side effects and increase CNS depression. Manageable in small amounts for most people.');
+        s('ghb','opioids',DA,'Severe combined CNS and respiratory depression. GHB narrow therapeutic window makes this especially dangerous. Potentially fatal. Avoid.');
+        s('ghb','tramadol',DA,'Both CNS depressants; tramadol adds serotonin and seizure risk. Dangerous.');
+        s('ghb','benzos',DA,'Severe combined CNS depression. Respiratory failure risk. Potentially fatal. Avoid.');
+        s('ghb','maois',UN,'Combined CNS depression and potential cardiovascular effects. Not recommended.');
+        s('ghb','ssris',CA,'GHB has some serotonergic effects; combined with SSRIs warrants caution.');
+        s('opioids','tramadol',UN,'Tramadol has opioid and serotonergic activity. Combined opioid effect increases respiratory depression; serotonin syndrome possible.');
+        s('opioids','benzos',DA,'A leading cause of overdose deaths. Profound combined respiratory depression. Avoid in non-medical contexts. Potentially fatal.');
+        s('opioids','maois',DA,'Serotonin syndrome and severe CNS depression. Potentially fatal. Absolute contraindication.');
+        s('opioids','ssris',CA,'Standard opioids: clinically managed; monitor carefully. Tramadol or meperidine with SSRIs: serotonin syndrome risk.');
+        s('tramadol','benzos',UN,'Combined CNS and respiratory depression. Tramadol lowers seizure threshold; elevated overall risk.');
+        s('tramadol','maois',DA,'Severe serotonin syndrome risk. Tramadol is strongly serotonergic; MAOIs prevent its breakdown. Potentially fatal. Absolute contraindication.');
+        s('tramadol','ssris',DA,'Well-documented serotonin syndrome risk. Both block serotonin reuptake. Avoid. Prescriber review required.');
+        s('benzos','maois',CA,'Generally manageable under medical supervision. CNS depression additive; prescriber oversight required.');
+        s('benzos','ssris',CA,'Clinically co-prescribed for anxiety. CNS depression additive at higher doses; prescriber supervision warranted.');
+        s('maois','ssris',DA,'Severe serotonin syndrome — can be fatal. Absolute contraindication. A washout period of 2+ weeks required when switching.');
+
+  /* ── Build desktop table ─────────────────────────────────────── */
+  function buildTable(tableId){
+    const table = document.getElementById(tableId);
+    if(!table) return;
+
+    const hRow = document.createElement('tr');
+    const corner = document.createElement('th');
+    corner.className = 'combo-corner';
+    hRow.appendChild(corner);
+    substances.forEach(sub => {
+      const th = document.createElement('th');
+      th.className = 'combo-col-head';
+      th.innerHTML = `<span>${sub.label}</span>`;
+      hRow.appendChild(th);
+    });
+    table.appendChild(hRow);
+
+    substances.forEach(rS => {
+      const tr = document.createElement('tr');
+      const rh = document.createElement('td');
+      rh.className = 'combo-row-head';
+      rh.textContent = rS.label;
+      tr.appendChild(rh);
+      substances.forEach(cS => {
+        const td   = document.createElement('td');
+        const data = g(rS.id, cS.id);
+        td.className  = `cc ${data.rating}`;
+        td.textContent = ICONS[data.rating]||'';
+        if(data.rating !== SE){
+          td.addEventListener('mousemove', e => {
+            const tip = document.getElementById('comboTip');
+            const ctR = document.getElementById('ct-rating');
+            const ctP = document.getElementById('ct-pair');
+            const ctN = document.getElementById('ct-note');
+            if(!tip) return;
+            tip.classList.add('vis');
+            ctR.className   = `combo-tip-rating ${data.rating}`;
+            ctR.textContent = LABELS[data.rating]||'';
+            ctP.textContent = `${rS.label} + ${cS.label}`;
+            ctN.textContent = data.note;
+            let x=e.clientX+16, y=e.clientY+16;
+            if(x+280>window.innerWidth)  x=e.clientX-285;
+            if(y+140>window.innerHeight) y=e.clientY-140;
+            tip.style.left=x+'px'; tip.style.top=y+'px';
+          });
+          td.addEventListener('mouseleave',()=>{ const tip=document.getElementById('comboTip'); if(tip) tip.classList.remove('vis'); });
+        }
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+  }
+
+  /* ── Build mobile lookup ─────────────────────────────────────── */
+  function buildMobileLookup(selAId, selBId, resultId, ratingId, pairId, noteId){
+    const selA = document.getElementById(selAId);
+    const selB = document.getElementById(selBId);
+    if(!selA || !selB) return;
+    substances.forEach(sub => {
+      selA.appendChild(Object.assign(document.createElement('option'),{value:sub.id,textContent:sub.label}));
+      selB.appendChild(Object.assign(document.createElement('option'),{value:sub.id,textContent:sub.label}));
+    });
+    function updateResult(){
+      const a=selA.value, b=selB.value;
+      const res=document.getElementById(resultId);
+      if(!a||!b){ if(res) res.classList.remove('vis'); return; }
+      const data=g(a,b);
+      res.className=`combo-result vis ${data.rating}`;
+      document.getElementById(ratingId).textContent = LABELS[data.rating]||'';
+      const rL = substances.find(x=>x.id===a).label;
+      const cL = substances.find(x=>x.id===b).label;
+      document.getElementById(pairId).textContent = rL+' + '+cL;
+      document.getElementById(noteId).textContent = data.note;
+    }
+    selA.addEventListener('change',updateResult);
+    selB.addEventListener('change',updateResult);
+  }
+
+  return { buildTable, buildMobileLookup };
+})();
+</script>
 </head>
 <body>
 
@@ -2587,7 +2991,8 @@
   <!-- ── START HERE ─────────────────────────────────────────────── -->
   <div class="start-here">
     <div class="start-here-inner">
-      <div class="start-here-label">Where would you like to begin?</div>
+      <div class="section-label">Where would you like to begin?</div>
+      <div class="section-title">Find your<br><span class="grad-text">starting point.</span></div>
       <div class="start-here-grid">
         <div class="start-card" onclick="showPage('foundations')">
           <div class="start-card-who">01 — New to psychedelics</div>
@@ -2603,7 +3008,7 @@
         </div>
         <div class="start-card" onclick="showPage('substances')">
           <div class="start-card-who">03 — Researching a substance</div>
-          <h3>Explore Guides</h3>
+          <h3>Explore Substance Guides</h3>
           <p>In-depth profiles covering pharmacology, risks, interactions, and legal status.</p>
           <div class="start-card-cta">Substances →</div>
         </div>
@@ -2618,8 +3023,9 @@
   </div>
 
 
+  <div style="background:var(--bg); border-top:1px solid var(--cream-border); border-bottom:1px solid var(--cream-border);">
   <div class="section">
-    <div class="section-label">What's Inside</div>
+    <div class="section-label">All Topics</div>
     <div class="section-title">Everything you need to navigate<br><span class="grad-text">psychedelics safely.</span></div>
     <div class="card-grid">
       <div class="card" onclick="showPage('foundations')">
@@ -2672,11 +3078,13 @@
       </div>
     </div>
   </div>
+  </div>
 
   <!-- ── TOOLS ───────────────────────────────────────────────────── -->
+  <div style="background:var(--bg-mid); border-top:1px solid var(--cream-border); border-bottom:1px solid var(--cream-border);">
   <div class="tools-strip">
-    <div class="tools-strip-label">Interactive Tools</div>
-    <div class="tools-strip-title">Two resources built for<br><span class="grad-text">intentional practice.</span></div>
+    <div class="section-label">Interactive Tools</div>
+    <div class="section-title">Two resources built for<br><span class="grad-text">intentional practice.</span></div>
     <div class="tools-grid">
       <div class="tool-card" onclick="showPage('planner')">
         <div class="tool-card-badge">Personalised</div>
@@ -2684,13 +3092,14 @@
         <p>A guided tool that helps you assess readiness, set intentions, build a preparation timeline, and create a personalised integration plan — tailored to your substance, setting, and experience level.</p>
         <div class="tool-card-arrow">Open Planner →</div>
       </div>
-      <div class="tool-card" onclick="showPageAnchor('assessment','ass-combochart')">
+      <div class="tool-card" onclick="showPage('checker')">
         <div class="tool-card-badge">Safety Reference</div>
         <h3>Drug Interaction Checker</h3>
         <p>An interactive combination chart covering the most common and clinically significant psychedelic drug interactions — including medications, recreational substances, and harm reduction guidance for each pairing.</p>
         <div class="tool-card-arrow">Check Interactions →</div>
       </div>
     </div>
+  </div>
   </div>
 
   <div class="feature-strip">
@@ -3484,311 +3893,10 @@
         </div>
       </div>
 
-      <!-- Tooltip (shared, appended to body by JS) -->
-      <div class="combo-tip" id="comboTip">
-        <div class="combo-tip-rating" id="ct-rating"></div>
-        <div class="combo-tip-pair"   id="ct-pair"></div>
-        <div class="combo-tip-note"   id="ct-note"></div>
-      </div>
-
       <script>
       (function(){
-        /* ── Data ─────────────────────────────────────────────────────── */
-        const SY='sy', LO='lo', DE='de', CA='ca', UN='un', DA='da', UK='uk', SE='cs';
-        const ICONS  = {sy:'↑',lo:'⊙',de:'↓',ca:'△',un:'✕',da:'✕',uk:'?',cs:''};
-        const LABELS = {sy:'Low Risk & Synergy',lo:'Low Risk & No Synergy',de:'Low Risk & Decrease',ca:'Caution',un:'Unsafe',da:'Dangerous',uk:'Unknown / Insufficient Data'};
-
-        const substances = [
-          {id:'lsd',label:'LSD'},{id:'mushrooms',label:'Mushrooms'},{id:'dmt',label:'DMT'},
-          {id:'mescaline',label:'Mescaline'},{id:'dox',label:'DOx'},{id:'nbomes',label:'NBOMes'},
-          {id:'2cx',label:'2C-x'},{id:'2ctx',label:'2C-T-x'},{id:'5meo',label:'5-MeO-xxT'},
-          {id:'cannabis',label:'Cannabis'},{id:'ketamine',label:'Ketamine'},{id:'mxe',label:'MXE'},
-          {id:'dxm',label:'DXM'},{id:'nitrous',label:'Nitrous'},{id:'amphetamines',label:'Amphetamines'},
-          {id:'mdma',label:'MDMA'},{id:'cocaine',label:'Cocaine'},{id:'caffeine',label:'Caffeine'},
-          {id:'alcohol',label:'Alcohol'},{id:'ghb',label:'GHB/GBL'},{id:'opioids',label:'Opioids'},
-          {id:'tramadol',label:'Tramadol'},{id:'benzos',label:'Benzodiazepines'},
-          {id:'maois',label:'MAOIs'},{id:'ssris',label:'SSRIs'},
-        ];
-
-        const combos = {};
-        function s(a,b,r,n){ combos[[a,b].sort().join('|')]={rating:r,note:n}; }
-        function g(a,b){
-          if(a===b) return {rating:SE,note:''};
-          return combos[[a,b].sort().join('|')]||{rating:UK,note:'No reliable combination data available.'};
-        }
-
-        const cls=['lsd','mushrooms','dmt','mescaline','2cx'];
-        for(let i=0;i<cls.length;i++) for(let j=i+1;j<cls.length;j++)
-          s(cls[i],cls[j],SY,'Synergistic potentiation. Experience will be intensified and may be prolonged. Unpredictability increases at higher doses.');
-        for(const x of cls) s('dox',x,CA,'DOx has very long duration (16–30 hrs). Combined with other psychedelics the experience can become overwhelming and ungovernable.');
-        for(const x of cls) s('nbomes',x,CA,'NBOMes carry inherent cardiovascular toxicity risk. Combining intensifies effects and further elevates physical risk.');
-        for(const x of [...cls,'dox','nbomes']) s('2ctx',x,CA,'2C-T-x compounds have weak MAOI-like activity, raising serotonin concerns. Fatalities reported with 2C-T-7.');
-        for(const x of [...cls,'dox','nbomes','2ctx']) s('5meo',x,CA,'5-MeO-xxT compounds are extremely potent serotonergic agents. Combining creates high serotonin load and risk of medical emergency.');
-        s('dox','nbomes',CA,'Both long-duration phenethylamines. Significant cardiovascular and psychological risk.');
-        s('dox','2ctx',CA,'2C-T-x MAOI activity creates serotonin concerns. Unpredictable and prolonged.');
-        s('dox','5meo',CA,'Very high serotonin load and cardiovascular stress. Not recommended.');
-        s('nbomes','2ctx',UN,'NBOMes cardiovascular toxicity combined with 2C-T-x serotonin risk. Dangerous.');
-        s('nbomes','5meo',UN,'Both extremely potent. Risk of fatal cardiovascular and serotonin toxicity. Avoid.');
-        s('2ctx','5meo',CA,'Combined serotonin load from two potent agents. Serotonin syndrome risk.');
-        for(const x of [...cls,'dox','nbomes','2ctx','5meo']) s(x,'cannabis',CA,'Cannabis frequently potentiates and extends psychedelic experiences. Can trigger anxiety, paranoia, and thought loops.');
-        for(const x of [...cls,'dox','2cx','2ctx','5meo']){
-          s(x,'ketamine',SY,'Psychedelic-dissociative combination; synergistic. Intensified altered state; stable setting and support required.');
-          s(x,'mxe',SY,'Potentiating dissociative-psychedelic combination. Significantly intensified and unpredictable.');
-          s(x,'dxm',SY,'Strong synergy. DXM extends and amplifies psychedelic effects considerably. Both long-duration.');
-          s(x,'nitrous',SY,'Nitrous markedly intensifies psychedelic experiences, often producing profound dissociation. Anoxia risk if misused.');
-        }
-        s('nbomes','ketamine',CA,'NBOMes cardiovascular toxicity plus ketamine CNS burden. Caution.');
-        s('nbomes','mxe',CA,'Cardiovascular concerns plus dissociative load. Not recommended.');
-        s('nbomes','dxm',CA,'Serotonin and cardiovascular concerns. Avoid if possible.');
-        s('nbomes','nitrous',CA,'Cardiovascular burden of NBOMes with nitrous hypoxia risk. Caution.');
-        for(const x of cls){ s(x,'amphetamines',CA,'Stimulants increase heart rate and anxiety. Heightens risk of panic, cardiovascular strain, and destabilising thought loops.'); s(x,'cocaine',CA,'Raises cardiovascular risk. Short-acting but strongly anxiogenic; can induce panic.'); s(x,'caffeine',CA,'Can exacerbate anxiety and overstimulation. Adds to cardiovascular load.'); }
-        s('dox','amphetamines',UN,'Both stimulating phenethylamines. Combined cardiovascular strain significant.');
-        s('dox','cocaine',UN,'Serious cardiovascular risk from two simultaneously stimulating compounds.');
-        s('dox','caffeine',CA,'Adds to cardiovascular load.');
-        s('nbomes','amphetamines',DA,'NBOMes carry hypertensive crisis risk; amphetamines dramatically elevate cardiovascular danger. Potentially fatal.');
-        s('nbomes','cocaine',DA,'Extremely dangerous cardiovascular risk. Both cause vasoconstriction and cardiac events. Avoid absolutely.');
-        s('nbomes','caffeine',CA,'Adds mild cardiovascular load to already risky NBOMes.');
-        s('2ctx','amphetamines',UN,'MAOI-like 2C-T-x properties create serotonin and cardiovascular risk with amphetamines. Fatalities reported.');
-        s('2ctx','cocaine',UN,'Cardiovascular and serotonin concerns. Not recommended.');
-        s('2ctx','caffeine',CA,'Mild additive stimulation; monitor cardiovascular effects.');
-        s('5meo','amphetamines',UN,'Serotonin syndrome and cardiovascular risk. Not recommended.');
-        s('5meo','cocaine',UN,'Serious cardiovascular and serotonin risk. Avoid.');
-        s('5meo','caffeine',CA,'Mild additive stimulation. Caution.');
-        s('lsd','mdma',SY,'"Candyflipping." Strongly synergistic. Greatly extended experience; elevated cardiovascular load and serotonin considerations.');
-        s('mushrooms','mdma',SY,'"Hippyflipping." Common intentional combination. Synergistic but unpredictable; increased cardiovascular and serotonin load.');
-        s('dmt','mdma',CA,'Serotonin load; avoid with ayahuasca (MAOI). Limited data.');
-        s('mescaline','mdma',CA,'Both monoaminergic; elevated serotonin and cardiovascular risk at higher doses.');
-        s('2cx','mdma',CA,'2C-x compounds are serotonergic; combined serotonin and cardiovascular demands are notable.');
-        s('dox','mdma',CA,'Both phenethylamines; prolonged combined cardiovascular load.');
-        s('nbomes','mdma',UN,'Cardiovascular toxicity of NBOMes plus MDMA serotonin load. Not recommended.');
-        s('2ctx','mdma',UN,'2C-T-x MAOI activity raises serious serotonin syndrome risk with MDMA.');
-        s('5meo','mdma',UN,'High serotonin syndrome risk. Both powerfully serotonergic. Not recommended.');
-        for(const x of [...cls,'dox','nbomes','2ctx','5meo']) s(x,'benzos',DE,'Benzodiazepines reliably reduce psychedelic intensity and can abort a difficult experience. Valuable harm-reduction tool.');
-        for(const x of cls) s(x,'alcohol',DE,'Alcohol generally blunts psychedelic intensity. Worsens nausea and dehydration. Largely counterproductive.');
-        s('dox','alcohol',CA,'Adds nausea and cardiovascular load to an already very long experience.');
-        s('nbomes','alcohol',CA,'Adds CNS burden and nausea to already risky NBOMes. Avoid.');
-        s('2ctx','alcohol',CA,'May interact unpredictably with 2C-T-x MAOI properties. Caution.');
-        s('5meo','alcohol',CA,'Impairs ability to manage intense 5-MeO experiences safely.');
-        for(const x of cls) s(x,'opioids',CA,'Opioids and psychedelics interact unpredictably. CNS depression additive. Limited research.');
-        for(const x of ['dox','nbomes','2ctx','5meo']) s(x,'opioids',CA,'CNS depression additive. Caution.');
-        for(const x of cls) s(x,'ghb',CA,'GHB can modulate or intensify psychedelic experiences unpredictably. CNS depression risk.');
-        for(const x of ['dox','nbomes','2ctx','5meo']) s(x,'ghb',CA,'CNS depression risk added to already complex pharmacology. Caution.');
-        for(const x of cls) s(x,'tramadol',CA,'Tramadol has opioid and serotonergic activity. Combined serotonin load warrants caution.');
-        s('nbomes','tramadol',DA,'Reported as dangerous; cardiovascular and serotonin crisis risk. Avoid.');
-        s('2ctx','tramadol',DA,'Compounding MAOI effects with tramadol serotonergic activity. Serious serotonin syndrome risk.');
-        s('5meo','tramadol',DA,'High serotonin syndrome risk. Avoid.');
-        s('dox','tramadol',CA,'Serotonin load concern. Caution.');
-        for(const x of cls) s(x,'ssris',DE,'SSRIs substantially blunt psychedelic effects (often 50–80%) via serotonin receptor desensitisation. Not directly dangerous at standard doses.');
-        s('dox','ssris',CA,'Serotonin considerations with phenethylamines. Blunting effect likely.');
-        s('nbomes','ssris',CA,'SSRIs may partially blunt NBOMes. Serotonin load concern at high doses.');
-        s('2ctx','ssris',UN,'2C-T-x MAOI activity with SSRIs raises significant serotonin syndrome risk.');
-        s('5meo','ssris',UN,'Serious serotonin syndrome risk. 5-MeO is a powerful serotonergic.');
-        s('lsd','maois',CA,'MAOIs potentiate LSD significantly. Experience intensified and prolonged. Dietary restrictions essential with irreversible MAOIs.');
-        s('mushrooms','maois',CA,'MAOIs potentiate psilocybin. Harmalas used intentionally in some contexts. Irreversible MAOIs: much higher risk. Dietary restrictions required.');
-        s('dmt','maois',CA,'The pharmacological basis of ayahuasca. With irreversible MAOIs: greatly elevated risk. Strict dietary restrictions always required.');
-        s('mescaline','maois',UN,'Significant potentiation and serotonin risk. Both serotonergic phenethylamines.');
-        s('2cx','maois',UN,'Serotonin syndrome risk. Potent potentiation. Not recommended.');
-        s('dox','maois',UN,'Both phenethylamines; strong serotonin and cardiovascular risk with MAOIs.');
-        s('nbomes','maois',DA,'Cardiovascular crisis and serotonin syndrome risk. Absolutely avoid.');
-        s('2ctx','maois',DA,'Compounding MAOI effects. Severe serotonin toxicity risk.');
-        s('5meo','maois',DA,'Well-documented fatalities. One of the most dangerous known psychedelic combinations. Absolute contraindication.');
-        s('cannabis','ketamine',CA,'Potentiation of dissociation and sedation. Increased confusion possible.');
-        s('cannabis','mxe',CA,'Cannabis potentiates MXE dissociation. Increased confusion.');
-        s('cannabis','dxm',CA,'Cannabis potentiates DXM dissociation and can dramatically increase intensity.');
-        s('cannabis','nitrous',CA,'Combined perceptual effects can be very intense and disorienting.');
-        s('cannabis','amphetamines',CA,'Cannabis may exacerbate stimulant anxiety. Cardiovascular effects additive.');
-        s('cannabis','mdma',CA,'Can intensify MDMA; may heighten sensory experience but also anxiety.');
-        s('cannabis','cocaine',CA,'Cocaine anxiety may worsen with cannabis. Cardiovascular effects additive.');
-        s('cannabis','caffeine',LO,'Generally low risk. Cannabis may counteract some caffeine stimulation.');
-        s('cannabis','alcohol',CA,'"Crossfading." Risk of greening out — nausea, vomiting, anxiety. Order of consumption matters greatly.');
-        s('cannabis','ghb',CA,'Combined CNS sedation and confusion risk. GHB dosing becomes less reliable.');
-        s('cannabis','opioids',LO,'Low risk at normal doses. Cannabis may enhance opioid analgesia; monitor for increased sedation.');
-        s('cannabis','tramadol',CA,'Tramadol serotonergic activity with cannabis. Some sedation and CNS concern.');
-        s('cannabis','benzos',DE,'Benzos may blunt cannabis anxiety. Combined sedation; manageable but avoid machinery.');
-        s('cannabis','maois',CA,'MAOIs may potentiate cannabis effects. Cardiovascular considerations.');
-        s('cannabis','ssris',LO,'Generally low risk.');
-        s('ketamine','mxe',SY,'Strong dissociative synergy. "K-hole" significantly more accessible. Requires safe setting.');
-        s('ketamine','dxm',SY,'Potent dissociative combination. Very intense altered states; respiratory and motor impairment significant.');
-        s('ketamine','nitrous',SY,'Classic synergistic combination. Short but very intense dissociation. Anoxia risk with nitrous misuse.');
-        s('mxe','dxm',SY,'Strong dissociative synergy. Complex and intense altered state.');
-        s('mxe','nitrous',SY,'Synergistic dissociation. Intense but short-lived nitrous peak.');
-        s('dxm','nitrous',SY,'Potent synergy; very intense dissociation. Common pairing.');
-        s('ketamine','amphetamines',CA,'Competing CNS effects; cardiovascular strain from stimulant plus dissociation.');
-        s('ketamine','mdma',CA,'Some intentional use. Cardiovascular strain; requires care with dosing and hydration.');
-        s('ketamine','cocaine',CA,'Cardiovascular strain significant. Short but intense combined effect.');
-        s('ketamine','caffeine',LO,'Low risk. Caffeine may slightly counteract ketamine sedation.');
-        s('mxe','amphetamines',CA,'Cardiovascular considerations. MXE CNS effects may be unpredictably altered.');
-        s('mxe','mdma',CA,'Cardiovascular load and combined serotonergic-dissociative effects.');
-        s('mxe','cocaine',CA,'Cardiovascular risk. Short-acting cocaine may worsen MXE disorientation.');
-        s('mxe','caffeine',LO,'Low risk.');
-        s('dxm','amphetamines',CA,'DXM serotonergic activity combined with amphetamines increases serotonin load. Cardiovascular strain.');
-        s('dxm','mdma',DA,'High serotonin syndrome risk. Both powerfully serotonergic. Well-documented dangerous combination. Avoid.');
-        s('dxm','cocaine',UN,'Cardiovascular strain. DXM also blocks cocaine metabolism. Not recommended.');
-        s('dxm','caffeine',CA,'Mild additive stimulation. Generally manageable.');
-        s('nitrous','amphetamines',CA,'Short-acting nitrous; combined cardiovascular effects. Generally manageable.');
-        s('nitrous','mdma',CA,'Intensifies MDMA transiently. Serotonergic considerations at high MDMA doses.');
-        s('nitrous','cocaine',CA,'Cardiovascular considerations. Short-acting.');
-        s('nitrous','caffeine',LO,'Very low risk.');
-        s('ketamine','alcohol',UN,'Both CNS depressants. Respiratory depression risk; increased chance of unconsciousness and aspiration.');
-        s('ketamine','ghb',DA,'Both CNS depressants; combined respiratory depression risk is severe. Potentially life-threatening. Avoid.');
-        s('ketamine','opioids',UN,'Combined CNS and respiratory depression. Dangerous; risk of respiratory failure.');
-        s('ketamine','tramadol',UN,'CNS depression additive. Tramadol lowers seizure threshold.');
-        s('ketamine','benzos',UN,'Both CNS depressants. Combined respiratory depression. Medical supervision only.');
-        s('ketamine','maois',UN,'Cardiovascular and CNS concerns. Not recommended outside clinical contexts.');
-        s('ketamine','ssris',CA,'Used clinically alongside SSRIs. Some serotonin considerations; prescriber oversight recommended.');
-        s('mxe','alcohol',UN,'Both CNS depressants. Risk of unconsciousness and respiratory depression.');
-        s('mxe','ghb',DA,'Severe combined CNS depression. Potentially life-threatening. Avoid.');
-        s('mxe','opioids',UN,'Combined CNS and respiratory depression. Dangerous.');
-        s('mxe','tramadol',UN,'CNS depression and seizure risk. Not recommended.');
-        s('mxe','benzos',UN,'Severe CNS depression risk. Avoid.');
-        s('mxe','maois',CA,'MXE has serotonergic properties; MAOI potentiation possible. Caution.');
-        s('mxe','ssris',CA,'MXE serotonergic activity; serotonin considerations with SSRIs.');
-        s('dxm','alcohol',UN,'Both CNS depressants; DXM is also serotonergic. Nausea greatly worsened. Significant respiratory depression risk.');
-        s('dxm','ghb',DA,'Severe combined CNS depression. Avoid.');
-        s('dxm','opioids',UN,'Both CNS and respiratory depressants; DXM blocks opioid metabolism. Dangerous.');
-        s('dxm','tramadol',DA,'Both serotonergic. Significant serotonin syndrome risk. Dangerous. Avoid.');
-        s('dxm','benzos',UN,'CNS depression additive. Respiratory risk.');
-        s('dxm','maois',DA,'Severe serotonin syndrome risk. DXM is a serotonin reuptake inhibitor; MAOIs create dangerous serotonin accumulation. Avoid absolutely.');
-        s('dxm','ssris',DA,'Well-documented serotonin syndrome risk. Both block serotonin reuptake. Avoid.');
-        s('nitrous','alcohol',CA,'Combined sedation; dizziness and nausea more likely. Generally manageable in small amounts.');
-        s('nitrous','ghb',CA,'Combined CNS depression. Increased sedation risk.');
-        s('nitrous','opioids',UN,'Both CNS depressants. Combined respiratory depression risk.');
-        s('nitrous','tramadol',CA,'CNS depression additive. Monitor.');
-        s('nitrous','benzos',CA,'Combined sedation; respiratory caution.');
-        s('nitrous','maois',CA,'Limited data. Some cardiovascular concerns. Caution.');
-        s('nitrous','ssris',LO,'Low risk. No significant interaction known.');
-        s('amphetamines','mdma',UN,'Cardiovascular strain significantly elevated. Combined neurotoxicity likely increased. Dopamine and serotonin overload risk.');
-        s('amphetamines','cocaine',UN,'Extreme cardiovascular strain. Risk of cardiac events. Not recommended.');
-        s('amphetamines','caffeine',CA,'Adds to cardiovascular load. Common but increases heart rate and anxiety beyond either alone.');
-        s('mdma','cocaine',UN,'Cardiovascular strain, serotonin and dopamine overload. Both dehydrating and thermogenic.');
-        s('mdma','caffeine',CA,'Caffeine adds mild stimulation. Cardiovascular and dehydration concern at high caffeine doses.');
-        s('cocaine','caffeine',CA,'Additive cardiovascular effects. Adds heart strain.');
-        s('amphetamines','alcohol',CA,'Stimulants mask alcohol intoxication, leading to overconsumption. Both dehydrating.');
-        s('amphetamines','ghb',CA,'Stimulant and depressant effects may mask each other. GHB overdose risk underestimated. Caution.');
-        s('amphetamines','opioids',CA,'Stimulant and opioid effects mask each other; overdose risk elevated when stimulant wears off.');
-        s('amphetamines','tramadol',CA,'Amphetamines increase serotonin load alongside tramadol serotonergic activity. Caution.');
-        s('amphetamines','benzos',CA,'Benzos used to manage stimulant comedowns. Habit-forming combination; dependency risk.');
-        s('amphetamines','maois',DA,'Hypertensive crisis and serotonin syndrome. Potentially fatal. Absolute contraindication.');
-        s('amphetamines','ssris',CA,'Amphetamines increase serotonin alongside SSRI blockade; elevated serotonin load. Prescriber consultation required.');
-        s('mdma','alcohol',UN,'Alcohol masks MDMA effects leading to dangerous re-dosing. Both dehydrating and thermogenic; overheating risk.');
-        s('mdma','ghb',CA,'Unpredictable combined effects; GHB dosing more dangerous when MDMA is present. Caution.');
-        s('mdma','opioids',CA,'Combined serotonergic and opioid activity. Manageable at low doses; avoid high doses.');
-        s('mdma','tramadol',DA,'Serotonin syndrome risk. Both serotonergic. Well-documented dangerous interaction. Avoid.');
-        s('mdma','benzos',CA,'Benzos can blunt MDMA and be used for harm reduction. Generally safe at standard doses.');
-        s('mdma','maois',DA,'Serotonin syndrome. Potentially fatal. Absolute contraindication. Never combine.');
-        s('mdma','ssris',CA,'SSRIs blunt MDMA significantly; often leads users to dangerously escalate MDMA dose to compensate. Serotonin load concern.');
-        s('cocaine','alcohol',CA,'Produces cocaethylene in the liver — a toxic metabolite. Increases cardiovascular risk beyond either alone.');
-        s('cocaine','ghb',CA,'Stimulant and depressant effects mask each other. GHB overdose risk elevated. Cardiovascular strain.');
-        s('cocaine','opioids',DA,'"Speedball." Classic dangerous combination. Stimulant and respiratory depressant mask each other; responsible for many overdose deaths.');
-        s('cocaine','tramadol',CA,'Cardiovascular strain and serotonin considerations.');
-        s('cocaine','benzos',CA,'Benzos used to manage cocaine anxiety. Respiratory risk at high benzo doses. Habit-forming.');
-        s('cocaine','maois',DA,'Hypertensive crisis and cardiovascular emergency. Potentially fatal. Absolutely avoid.');
-        s('cocaine','ssris',UN,'Cocaine blocks serotonin reuptake; combined with SSRIs elevates serotonin load. Not recommended.');
-        s('caffeine','alcohol',CA,'Caffeine masks alcohol sedation, leading to overconsumption. Increased dehydration.');
-        s('caffeine','ghb',LO,'Caffeine may slightly counteract GHB sedation. Does not reliably prevent GHB overdose.');
-        s('caffeine','opioids',LO,'Low risk. No clinically significant interaction at normal caffeine doses.');
-        s('caffeine','tramadol',LO,'Low risk. No significant pharmacological interaction known.');
-        s('caffeine','benzos',LO,'Caffeine may partially counteract benzo sedation. Does not prevent respiratory depression.');
-        s('caffeine','maois',UN,'MAOIs inhibit caffeine metabolism; caffeine effects greatly prolonged and intensified. Cardiovascular concern. Avoid high caffeine intake on MAOIs.');
-        s('caffeine','ssris',LO,'Generally low risk.');
-        s('alcohol','ghb',DA,'Extreme respiratory depression risk. GHB has very narrow dosing window; alcohol dramatically elevates overdose risk. Potentially fatal. Avoid.');
-        s('alcohol','opioids',DA,'Severe combined respiratory depression. A leading cause of overdose death. Potentially fatal. Avoid.');
-        s('alcohol','tramadol',UN,'Both CNS depressants; tramadol also lowers seizure threshold. Elevated respiratory depression and seizure risk.');
-        s('alcohol','benzos',DA,'Severe respiratory depression. Both CNS depressants. Potentially fatal — a leading cause of overdose death. Avoid.');
-        s('alcohol','maois',CA,'Alcohol may contain tyramine (beer, wine); with irreversible MAOIs this can trigger hypertensive crisis. Spirits lower risk but CNS depression still additive.');
-        s('alcohol','ssris',CA,'Alcohol may worsen SSRI side effects and increase CNS depression. Manageable in small amounts for most people.');
-        s('ghb','opioids',DA,'Severe combined CNS and respiratory depression. GHB narrow therapeutic window makes this especially dangerous. Potentially fatal. Avoid.');
-        s('ghb','tramadol',DA,'Both CNS depressants; tramadol adds serotonin and seizure risk. Dangerous.');
-        s('ghb','benzos',DA,'Severe combined CNS depression. Respiratory failure risk. Potentially fatal. Avoid.');
-        s('ghb','maois',UN,'Combined CNS depression and potential cardiovascular effects. Not recommended.');
-        s('ghb','ssris',CA,'GHB has some serotonergic effects; combined with SSRIs warrants caution.');
-        s('opioids','tramadol',UN,'Tramadol has opioid and serotonergic activity. Combined opioid effect increases respiratory depression; serotonin syndrome possible.');
-        s('opioids','benzos',DA,'A leading cause of overdose deaths. Profound combined respiratory depression. Avoid in non-medical contexts. Potentially fatal.');
-        s('opioids','maois',DA,'Serotonin syndrome and severe CNS depression. Potentially fatal. Absolute contraindication.');
-        s('opioids','ssris',CA,'Standard opioids: clinically managed; monitor carefully. Tramadol or meperidine with SSRIs: serotonin syndrome risk.');
-        s('tramadol','benzos',UN,'Combined CNS and respiratory depression. Tramadol lowers seizure threshold; elevated overall risk.');
-        s('tramadol','maois',DA,'Severe serotonin syndrome risk. Tramadol is strongly serotonergic; MAOIs prevent its breakdown. Potentially fatal. Absolute contraindication.');
-        s('tramadol','ssris',DA,'Well-documented serotonin syndrome risk. Both block serotonin reuptake. Avoid. Prescriber review required.');
-        s('benzos','maois',CA,'Generally manageable under medical supervision. CNS depression additive; prescriber oversight required.');
-        s('benzos','ssris',CA,'Clinically co-prescribed for anxiety. CNS depression additive at higher doses; prescriber supervision warranted.');
-        s('maois','ssris',DA,'Severe serotonin syndrome — can be fatal. Absolute contraindication. A washout period of 2+ weeks required when switching.');
-
-        /* ── Build desktop table ─────────────────────────────────────────── */
-        const table = document.getElementById('comboTable');
-        if(table){
-          const tip    = document.getElementById('comboTip');
-          const ctR    = document.getElementById('ct-rating');
-          const ctP    = document.getElementById('ct-pair');
-          const ctN    = document.getElementById('ct-note');
-
-          // Header row
-          const hRow = document.createElement('tr');
-          const corner = document.createElement('th');
-          corner.className = 'combo-corner';
-          hRow.appendChild(corner);
-          substances.forEach(sub => {
-            const th = document.createElement('th');
-            th.className = 'combo-col-head';
-            th.innerHTML = `<span>${sub.label}</span>`;
-            hRow.appendChild(th);
-          });
-          table.appendChild(hRow);
-
-          // Data rows
-          substances.forEach(rS => {
-            const tr = document.createElement('tr');
-            const rh = document.createElement('td');
-            rh.className = 'combo-row-head';
-            rh.textContent = rS.label;
-            tr.appendChild(rh);
-            substances.forEach(cS => {
-              const td   = document.createElement('td');
-              const data = g(rS.id, cS.id);
-              td.className  = `cc ${data.rating}`;
-              td.textContent = ICONS[data.rating]||'';
-              if(data.rating !== SE){
-                td.addEventListener('mousemove', e => {
-                  tip.classList.add('vis');
-                  ctR.className   = `combo-tip-rating ${data.rating}`;
-                  ctR.textContent = LABELS[data.rating]||'';
-                  ctP.textContent = `${rS.label} + ${cS.label}`;
-                  ctN.textContent = data.note;
-                  let x=e.clientX+16, y=e.clientY+16;
-                  if(x+280>window.innerWidth)  x=e.clientX-285;
-                  if(y+140>window.innerHeight) y=e.clientY-140;
-                  tip.style.left=x+'px'; tip.style.top=y+'px';
-                });
-                td.addEventListener('mouseleave',()=>tip.classList.remove('vis'));
-              }
-              tr.appendChild(td);
-            });
-            table.appendChild(tr);
-          });
-        }
-
-        /* ── Build mobile lookup ─────────────────────────────────────────── */
-        const selA = document.getElementById('sub-a');
-        const selB = document.getElementById('sub-b');
-        if(selA && selB){
-          substances.forEach(sub => {
-            selA.appendChild(Object.assign(document.createElement('option'),{value:sub.id,textContent:sub.label}));
-            selB.appendChild(Object.assign(document.createElement('option'),{value:sub.id,textContent:sub.label}));
-          });
-          function updateResult(){
-            const a=selA.value, b=selB.value;
-            const res=document.getElementById('combo-result');
-            if(!a||!b){ res.classList.remove('vis'); return; }
-            const data=g(a,b);
-            res.className=`combo-result vis ${data.rating}`;
-            document.getElementById('cr-rating').textContent = LABELS[data.rating]||'';
-            const rL = substances.find(x=>x.id===a).label;
-            const cL = substances.find(x=>x.id===b).label;
-            document.getElementById('cr-pair').textContent = rL+' + '+cL;
-            document.getElementById('cr-note').textContent = data.note;
-          }
-          selA.addEventListener('change',updateResult);
-          selB.addEventListener('change',updateResult);
-        }
+        window._combo.buildTable('comboTable');
+        window._combo.buildMobileLookup('sub-a','sub-b','combo-result','cr-rating','cr-pair','cr-note');
       })();
       </script>
       <!-- ═══ END COMBINATION CHART ════════════════════════════════════════ -->
@@ -4094,7 +4202,7 @@
       <div class="breadcrumb"><span onclick="showPage('home')">Home</span><span class="breadcrumb-sep">/</span><span onclick="showPage('journeying')">Journeying</span><span class="breadcrumb-sep">/</span>Integration</div>
       <p class="page-updated">Updated · March 2025</p>
       <h1>Psychedelic Integration: Making Meaning Last</h1>
-      <p class="article-intro">Integration is the process of making meaning from a psychedelic experience and translating what arose into a changed way of living and relating. The experience loosens habitual patterns and expands what is possible to perceive — but loosening is not the same as changing. Integration is the sustained work of embodying what was encountered. It is at least as important as the experience itself, and without it, even the most profound journeys tend to fade without lasting effect.</p>
+      <p class="article-intro">Integration is the process of making meaning from a psychedelic experience and translating what arose into a changed way of living and relating. The experience loosens habitual patterns and expands what is possible to perceive — but loosening is not the same as changing. Integration is the sustained work of embodying what was encountered. It gives the psychedelic experience lasting significance, and without it, even the most profound journeys tend to fade without lasting effect.</p>
     </div>
   </div>
   <div class="article-layout">
@@ -4136,7 +4244,7 @@
       <p>The day after a significant psychedelic experience is often characterised by a distinctive quality — an <span class="tt" data-tip="The period of relative psychological openness, emotional warmth, and reflective clarity that commonly follows a psychedelic experience — lasting from days to weeks. Associated with heightened neuroplasticity and considered an important window for integration work.">afterglow</span> of openness, clarity, and receptivity that gradually softens over the following days. This afterglow is not merely a pleasant residue; it is a window. How you engage with it shapes what becomes lasting.</p>
       <p><strong>Rest and quiet.</strong> Protect the day after the experience. High stimulation — rushing back to work, social media, busy social environments — tends to close the reflective window quickly. A day that is relatively quiet and undemanding is significantly more valuable than pushing through to normal activity immediately.</p>
       <p><strong>Write while it is alive.</strong> Write as soon as you are able — that day, or the following morning. Not an edited account, but a raw capture: images, emotions, themes, specific moments, questions that arose, things you understood that you have not understood before. The phenomenological content of psychedelic experiences fades in specific ways — certain qualities evaporate within hours that may not return in full clarity. Capturing them while they are present is irreplaceable.</p>
-      <p><strong>Reduce what dulls.}</strong> Alcohol and cannabis significantly dampen the reflective clarity of the integration window. Most experienced practitioners and integration therapists recommend avoiding or substantially reducing both in at least the first two weeks after a significant experience. This is not a permanent restriction — it is protecting the window during which the work is most accessible.</p>
+      <p><strong>Reduce what dulls.</strong> Alcohol and cannabis significantly dampen the reflective clarity of the integration window. Most experienced practitioners and integration therapists recommend avoiding or substantially reducing both in at least the first two weeks after a significant experience. This is not a permanent restriction — it is protecting the window during which the work is most accessible.</p>
       <p><strong>One meaningful conversation.</strong> In the first few days, have at least one conversation with a person you trust in which you actually explore what arose — not a performance of the experience, but a genuine attempt to articulate what it meant and what it is asking of you. Being witnessed in this by a person who can hold the material without reducing or spiritually inflating it is a meaningful part of integration.</p>
       <p><strong>Return to your intentions.</strong> Go back to what you wrote before the experience — your intentions, your fears, your questions. Read them alongside your integration notes. What did the experience illuminate? Where did it go somewhere unexpected? The conversation between what you sought and what arrived is often where the most significant integration material lives.</p>
 
@@ -8035,6 +8143,75 @@
     <div id="pdf-doc" style="position:absolute;left:-9999px;top:0;width:794px;min-height:1px;background:#ffffff;box-sizing:border-box;"></div>
   </div><!-- /page-planner -->
 
+  <!-- ═══════════════════════════════════════════
+       DRUG INTERACTION CHECKER PAGE
+  ════════════════════════════════════════════ -->
+  <div id="page-checker" class="page">
+
+    <div class="checker-header">
+      <div class="checker-header-inner">
+        <div class="checker-header-text">
+          <div class="section-label">Safety Reference</div>
+          <div class="section-title" style="font-size:clamp(1.6rem,2.8vw,2.4rem);margin-bottom:0;">Drug Interaction <span class="grad-text">Checker</span></div>
+          <p>Cross-reference psychedelics, medications, and other substances. Hover any cell for detailed clinical notes. Based on TripSit's combination chart and peer-reviewed pharmacological literature.</p>
+        </div>
+        <button class="btn btn-outline" onclick="showPage('assessment')" style="white-space:nowrap;flex-shrink:0;">← Back to Safety Guide</button>
+      </div>
+    </div>
+
+    <!-- Lookup bar on top, chart below -->
+    <div class="checker-body">
+      <div class="checker-layout">
+
+        <!-- Lookup panel: dropdowns + result side by side -->
+        <div class="checker-lookup-panel">
+          <div class="checker-lookup-selects">
+            <div>
+              <label for="sub-a-c">First substance</label>
+              <select id="sub-a-c"><option value="">— select —</option></select>
+            </div>
+            <div>
+              <label for="sub-b-c">Second substance</label>
+              <select id="sub-b-c"><option value="">— select —</option></select>
+            </div>
+          </div>
+          <div class="checker-lookup-result-wrap">
+            <div class="combo-result" id="combo-result-c">
+              <div class="combo-result-rating" id="cr-rating-c"></div>
+              <div class="combo-result-pair"   id="cr-pair-c"></div>
+              <div class="combo-result-note"   id="cr-note-c"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart (hidden on mobile) -->
+        <div class="checker-chart-col">
+          <div class="combo-legend" style="margin-bottom:1rem;">
+            <div class="combo-legend-item"><div class="combo-swatch" style="background:rgba(62,201,191,0.13);border:1px solid rgba(62,201,191,0.45);color:#3ec9bf">↑</div>Low Risk &amp; Synergy</div>
+            <div class="combo-legend-item"><div class="combo-swatch" style="background:rgba(62,201,191,0.07);border:1px solid rgba(62,201,191,0.25);color:#3ec9bf;opacity:.8">⊙</div>Low Risk</div>
+            <div class="combo-legend-item"><div class="combo-swatch" style="background:rgba(92,184,74,0.12);border:1px solid rgba(92,184,74,0.40);color:#5cb84a">↓</div>Low Risk &amp; Decrease</div>
+            <div class="combo-legend-item"><div class="combo-swatch" style="background:rgba(212,180,50,0.12);border:1px solid rgba(212,180,50,0.40);color:#d4b432">△</div>Caution</div>
+            <div class="combo-legend-item"><div class="combo-swatch" style="background:rgba(212,131,74,0.14);border:1px solid rgba(212,131,74,0.45);color:#d4836a">✕</div>Unsafe</div>
+            <div class="combo-legend-item"><div class="combo-swatch" style="background:rgba(200,60,60,0.14);border:1px solid rgba(200,60,60,0.50);color:#d45252">✕</div>Dangerous</div>
+          </div>
+          <div class="checker-table-wrap">
+            <table class="combo-table" id="comboTableFull"></table>
+          </div>
+        </div>
+
+      </div>
+      <p class="checker-disclaimer"><strong style="color:var(--cream);font-style:normal;">Source &amp; limitations:</strong> Based on TripSit's combination chart and peer-reviewed pharmacological literature. Many combinations lack controlled human research. Individual factors — medications, health conditions, dose, body weight — significantly alter risk. This chart is a quick reference only. When in doubt, do not combine.</p>
+    </div>
+
+    <script>
+    (function(){
+      window._combo.buildTable('comboTableFull');
+      window._combo.buildMobileLookup('sub-a-c','sub-b-c','combo-result-c','cr-rating-c','cr-pair-c','cr-note-c');
+    })();
+    </script>
+
+  </div><!-- /page-checker -->
+
 <!-- ═══════════════════════════════════════════
      JOURNEY PLANNER — JavaScript
 ════════════════════════════════════════════ -->
@@ -8769,6 +8946,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+
+
+  <!-- Shared combo tooltip — must be at body level for both chart pages -->
+  <div class="combo-tip" id="comboTip">
+    <div class="combo-tip-rating" id="ct-rating"></div>
+    <div class="combo-tip-pair"   id="ct-pair"></div>
+    <div class="combo-tip-note"   id="ct-note"></div>
+  </div>
 
 </body>
 </html>
