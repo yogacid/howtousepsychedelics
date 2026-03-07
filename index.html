@@ -2385,7 +2385,7 @@
     .planner-page .print-note {
       border: 1px solid var(--cream-border); border-radius: 6px;
       padding: 1rem 1.25rem; font-size: 0.82rem; color: var(--cream-dim);
-      line-height: 1.65; margin-bottom: 2rem; display: flex; gap: 0.75rem; align-items: flex-start;
+      line-height: 1.65; margin-top: 1.5rem; margin-bottom: 2rem; display: flex; gap: 0.75rem; align-items: flex-start;
     }
     .planner-page .print-note-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
 
@@ -7818,7 +7818,7 @@ window._combo = (function(){
         <div class="pl-section active" id="pl-step-0">
           <div class="pl-eyebrow">Journey Planner · Step 1 of 6</div>
           <h1 class="pl-title">Plan your journey,<br><em>before it begins.</em></h1>
-          <p class="pl-intro">This planner guides you through every stage of a psychedelic experience — from honest self-assessment through preparation, intention-setting, and post-journey integration. It takes about 10 minutes and gives you a personalised plan to print or save.</p>
+          <p class="pl-intro">This planner guides you through every stage of a psychedelic experience — from honest self-assessment through preparation, intention-setting, and post-journey integration. It takes about 10 minutes and produces a personalised plan to save or print, including a <strong style="color:var(--teal)">preparation timeline</strong> and a <strong style="color:var(--teal)">set &amp; setting checklist</strong> to use on the day.</p>
 
           <div class="field-group">
             <label class="field-label">Substance you are considering</label>
@@ -7895,7 +7895,7 @@ window._combo = (function(){
                 <button class="check-btn" onclick="plSetCheck('medications','caution')">SSRIs / antidepressants</button>
                 <button class="check-btn" onclick="plSetCheck('medications','flagged')">MAOIs, lithium, or antipsychotics</button>
               </div>
-              <p style="font-size:0.8rem;color:var(--cream-dim);margin:0.75rem 0 0;">Not sure about your medications? <button class="ic-link" onclick="showPageAnchor('assessment','ass-combochart')">Check the full interaction chart →</button></p>
+              <p style="font-size:0.8rem;color:var(--cream-dim);margin:0.75rem 0 0;">Not sure about your medications? <a class="inline-link" onclick="showPageAnchor('assessment','ass-combochart')" style="cursor:pointer;">Check the full interaction chart →</a></p>
             </div>
           </div>
 
@@ -7988,7 +7988,7 @@ window._combo = (function(){
         <div class="pl-section" id="pl-step-2">
           <div class="pl-eyebrow">Journey Planner · Step 3 of 6</div>
           <h2 class="pl-title">Your preparation timeline</h2>
-          <p class="pl-intro">No concept in psychedelic practice is more consistently undersold than preparation. Below is a personalised timeline working backwards from your journey date — each phase shapes the quality of what's possible.</p>
+          <p class="pl-intro">No concept in psychedelic practice is more consistently undersold than preparation. Below is a personalised timeline working backwards from your journey date — each phase shapes the quality of what's possible. This timeline will appear in your downloadable PDF as a day-by-day prep list to return to as your date approaches.</p>
           <div class="pl-timeline" id="pl-timeline-container"></div>
           <div class="pl-nav">
             <button class="pl-btn pl-btn-back" onclick="plGoTo(1)">← Back</button>
@@ -8034,7 +8034,7 @@ window._combo = (function(){
         <div class="pl-section" id="pl-step-4">
           <div class="pl-eyebrow">Journey Planner · Step 5 of 6</div>
           <h2 class="pl-title">Set &amp; setting checklist</h2>
-          <p class="pl-intro">Set and setting are the single most important factors in determining the quality and safety of a psychedelic experience. Check off what is in place. What remains unchecked is your preparation work.</p>
+          <p class="pl-intro">Set and setting are the single most important factors in determining the quality and safety of a psychedelic experience. Check off what you already have in place — anything completed here will be marked in your downloadable PDF, so you can use it as a day-of reference with your progress already reflected.</p>
 
           <div class="checklist-section">
             <div class="checklist-head">Mindset (Set)</div>
@@ -8127,7 +8127,7 @@ window._combo = (function(){
 
           <div class="print-note">
             <div class="print-note-icon">◎</div>
-            <div>Download a PDF copy of your plan to keep. Your answers are stored only in this browser session — nothing is sent anywhere. For deeper guidance, visit the full <strong>Assessment</strong>, <strong>Preparation</strong>, and <strong>Integration</strong> guides on this site.</div>
+            <div>Your PDF includes your full plan summary, <strong style="color:var(--cream)">preparation timeline</strong>, and <strong style="color:var(--cream)">set &amp; setting checklist</strong> — everything you need to return to as your journey date approaches and to use on the day itself. Your answers are stored only in this browser session — nothing is sent anywhere. For deeper guidance, visit the full <strong>Assessment</strong>, <strong>Preparation</strong>, and <strong>Integration</strong> guides on this site.</div>
           </div>
 
           <div class="pl-nav">
@@ -8526,7 +8526,7 @@ window._combo = (function(){
       var val  = plState.checks[key];
       var meta = checkMeta[key];
       var dotClass, statusLabel, pts = 0;
-      if      (val === 'clear')   { dotClass = 'rdot-clear';   statusLabel = 'Cleared'; pts = 1; }
+      if      (val === 'clear')   { dotClass = 'rdot-clear';   statusLabel = 'Clear'; pts = 1; }
       else if (val === 'caution') { dotClass = 'rdot-caution'; statusLabel = 'Caution'; pts = 0.5; flaggedMessages.push(meta); }
       else if (val === 'flagged') { dotClass = 'rdot-flagged'; statusLabel = 'Flagged'; pts = 0;   flaggedMessages.push(meta); }
       else                        { dotClass = 'rdot-pending'; statusLabel = 'Not answered'; }
@@ -8671,7 +8671,7 @@ function plBuildPDFHTML() {
     { key:'environment',  label:'Environmental stability' },
     { key:'testing',      label:'Substance verification' }
   ];
-  const statusLabel = v => v === 'clear' ? 'Cleared' : v === 'caution' ? 'Caution' : v === 'flagged' ? 'Flagged' : 'Not answered';
+  const statusLabel = v => v === 'clear' ? 'Clear' : v === 'caution' ? 'Caution' : v === 'flagged' ? 'Flagged' : 'Not answered';
   const statusColor = v => v === 'clear' ? '#1f8c84' : v === 'caution' ? '#a67c00' : v === 'flagged' ? '#b83333' : '#999';
   const checkRows = checkDefs.map(d => {
     const v = s.checks[d.key] || '';
@@ -8955,6 +8955,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="combo-tip-pair"   id="ct-pair"></div>
     <div class="combo-tip-note"   id="ct-note"></div>
   </div>
+
 
 </body>
 </html>
