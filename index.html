@@ -2025,7 +2025,7 @@
     }
     .planner-page .timeline-item { position: relative; margin-bottom: 1.75rem; }
     .planner-page .timeline-item::before {
-      content: ''; position: absolute; left: -2.4rem; top: 0.25rem;
+      content: ''; position: absolute; left: calc(-2rem - 4.5px); top: 0.25rem;
       width: 9px; height: 9px; border-radius: 50%;
       background: var(--teal); box-shadow: 0 0 8px rgba(62,201,191,0.5);
     }
@@ -2142,16 +2142,26 @@
       margin-top: 2.5rem; gap: 1rem;
     }
     .planner-page .pl-btn {
-      padding: 0.7rem 1.5rem; border-radius: 4px;
+      display: inline-block;
+      padding: 0.75rem 2rem;
       font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600;
       letter-spacing: 0.1em; text-transform: uppercase;
-      cursor: pointer; border: none; transition: opacity 0.2s, transform 0.15s;
+      cursor: pointer; border: none; border-radius: 6px;
+      transition: background-position 0.55s ease, box-shadow 0.25s ease, border-color 0.2s, color 0.2s;
+      text-decoration: none;
     }
-    .planner-page .pl-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-    .planner-page .pl-btn:active { transform: translateY(0); }
-    .planner-page .pl-btn-primary { background: var(--grad); color: #040a05; }
+    .planner-page .pl-btn-primary {
+      background: linear-gradient(135deg, #3ec9bf 0%, #5cb84a 33%, #5cb84a 66%, #3ec9bf 100%);
+      background-size: 200% 100%;
+      background-position: 0% center;
+      color: #040a05;
+    }
+    .planner-page .pl-btn-primary:hover {
+      background-position: 100% center;
+      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+    }
     .planner-page .pl-btn-back { background: none; border: 1px solid var(--cream-border); color: var(--cream-dim); }
-    .planner-page .pl-btn-back:hover { border-color: var(--cream-dim); color: var(--cream); opacity: 1; }
+    .planner-page .pl-btn-back:hover { border-color: var(--cream-dim); color: var(--cream); }
 
     /* Readiness meter */
     .planner-page .readiness-meter-wrap { margin-bottom: 2rem; }
@@ -7726,9 +7736,9 @@
           </div>
 
           <div id="pl-psygaia-cta" style="display:none;" class="psygaia-cta">
-            <div class="psygaia-cta-head">Structured support available</div>
-            <p>Psygaia's Elemental Way programme offers guided preparation, peer support, and ecological integration — a structured container for those who want more than a solo process.</p>
-            <a href="https://psygaia.org" target="_blank">Explore The Elemental Way at psygaia.org →</a>
+            <div class="psygaia-cta-head">Professional guidance available</div>
+            <p>Your readiness profile suggests that structured support may be worth considering — before, during, or after your experience. Psygaia offers guided psychedelic journey support for those who want to work with a knowledgeable companion rather than navigate this alone.</p>
+            <a href="https://psygaia.org/guided-psychedelic-journey" target="_blank">Learn about guided support at psygaia.org →</a>
           </div>
 
           <div class="print-note">
@@ -8246,10 +8256,10 @@ function plBuildPDFHTML() {
 
   const tierWarning = tier !== 'low'
     ? `<div style="margin-bottom:14px;padding:10px 12px;background:#fff8f0;border-left:3px solid ${tierColor};border-radius:0 3px 3px 0;">
-        <div style="font-size:8pt;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${tierColor};margin-bottom:5px;">Note on your readiness profile</div>
+        <div style="font-size:8pt;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${tierColor};margin-bottom:5px;">Professional guidance available</div>
         <div style="font-size:9pt;color:#4a3e30;line-height:1.65;">${tier === 'high'
-          ? 'Your assessment indicates one or more significant safety concerns. We strongly recommend not proceeding until these have been resolved — ideally with a clinician or psychedelic-informed therapist.'
-          : 'One or more areas in your readiness profile warrant extra attention. Consider having integration support available — a therapist, guide, or peer integration circle — particularly if significant or difficult material arises.'
+          ? 'Your assessment indicates one or more significant safety concerns. We strongly recommend not proceeding until these have been resolved — ideally with a clinician or psychedelic-informed therapist. Psygaia offers guided support: psygaia.org/guided-psychedelic-journey'
+          : 'One or more areas in your readiness profile suggest that structured support may be worth considering. Psygaia offers guided psychedelic journey support for those who want a knowledgeable companion. Learn more at psygaia.org/guided-psychedelic-journey'
         }</div>
       </div>`
     : '';
