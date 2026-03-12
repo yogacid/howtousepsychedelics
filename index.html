@@ -31,6 +31,71 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
   <style>
+    /* ── EMAIL CTA BOX (inline, mid-content) ─────── */
+    .email-cta-box {
+      margin: 2.5rem 0;
+      padding: 1.75rem 2rem;
+      border-radius: 10px;
+      border: 1px solid var(--cream-border);
+      background: linear-gradient(135deg, rgba(62,201,191,0.07) 0%, rgba(92,184,74,0.04) 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .email-cta-box .email-cta-eyebrow {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    .email-cta-box-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--cream);
+      margin: 0;
+    }
+    .email-cta-box-body {
+      font-size: 0.83rem;
+      font-weight: 300;
+      color: var(--cream-dim);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0;
+    }
+    .email-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.7rem 1.6rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 33%, #5cb84a 66%, #2e9fd8 100%);
+      background-size: 200% 100%;
+      background-position: 0% center;
+      color: #040a05;
+      transition: background-position 0.55s ease, box-shadow 0.25s ease;
+      align-self: flex-start;
+      margin-top: 0.25rem;
+    }
+    .email-cta-btn:hover {
+      background-position: 100% center;
+      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+    }
+
+    [data-theme="light"] .email-cta-box {
+      background: linear-gradient(135deg, rgba(31,140,132,0.07) 0%, rgba(61,130,40,0.04) 100%);
+    }
+    [data-theme="light"] .email-cta-box-headline { color: var(--cream); }
+
+
     /* ── TOKENS — derived from logo palette ─────── */
     :root {
       /* Background scale: deep near-black */
@@ -9155,6 +9220,68 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="combo-tip-note"   id="ct-note"></div>
   </div>
 
+
+<script>
+/* ── EMAIL CTA – inject inline boxes between article sections ── */
+(function() {
+  var GUIDE_URL = 'https://psygaia.org/newsletter-sign-up-htup';
+
+  var BOX_HTML =
+    '<div class="email-cta-box">' +
+      '<div class="email-cta-eyebrow">Free Resource</div>' +
+      '<div class="email-cta-box-headline">Get the complete psychedelics guide — free.</div>' +
+      '<div class="email-cta-box-body">Evidence-based frameworks for preparation, safety, and integration. Used by thousands of readers — delivered to your inbox, no cost.</div>' +
+      '<a class="email-cta-btn" href="' + GUIDE_URL + '" target="_blank" rel="noopener">Get the Guide &rarr;</a>' +
+    '</div>';
+
+  /* Hub/tool pages that don't have long article content — skip these */
+  var SKIP = {
+    'page-home': 1, 'page-foundations': 1, 'page-substances': 1,
+    'page-journeying': 1, 'page-culture': 1, 'page-planner': 1,
+    'page-checker': 1
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var pages = document.querySelectorAll('.page');
+
+    pages.forEach(function(page) {
+      if (SKIP[page.id]) return;
+
+      /* Collect h2s that are not inside aside / nav / footer */
+      var allH2s = page.querySelectorAll('h2');
+      var h2s = [];
+      for (var i = 0; i < allH2s.length; i++) {
+        var el = allH2s[i].parentElement;
+        var skip = false;
+        while (el && el !== page) {
+          var tag = el.tagName.toLowerCase();
+          if (tag === 'aside' || tag === 'nav' || tag === 'footer') { skip = true; break; }
+          el = el.parentElement;
+        }
+        if (!skip) h2s.push(allH2s[i]);
+      }
+
+      var n = h2s.length;
+      if (n < 2) return; /* need at least two sections */
+
+      /* Pick insertion indices (insert BEFORE this h2, i.e. between sections) */
+      var idxs;
+      if (n >= 9)      idxs = [Math.round(n/4), Math.round(n/2), Math.round(3*n/4)];
+      else if (n >= 4) idxs = [Math.round(n/3), Math.round(2*n/3)];
+      else             idxs = [1];
+
+      /* Insert in reverse so earlier indices stay valid */
+      idxs.slice().reverse().forEach(function(idx) {
+        var target = h2s[idx];
+        if (!target || !target.parentNode) return;
+        var wrap = document.createElement('div');
+        wrap.innerHTML = BOX_HTML;
+        target.parentNode.insertBefore(wrap.firstChild, target);
+      });
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
