@@ -6833,10 +6833,10 @@ window._combo = (function(){
     }
   });
 
-  /* ── Initial URL routing (handles direct links & GitHub Pages 404 redirect) ── */
+  /* ── Initial URL routing (handles direct links & deep URL navigation) ── */
   (function() {
     function initFromUrl() {
-      // GitHub Pages SPA trick: 404.html stores the path in sessionStorage
+      // Legacy fallback: sessionStorage redirect (no longer used on Netlify)
       const redirect = sessionStorage.getItem('spa-redirect');
       if (redirect) {
         sessionStorage.removeItem('spa-redirect');

@@ -1,0 +1,10 @@
+[build]
+  publish = "."
+
+# SPA rewrite: serve index.html with 200 for every route.
+# This means /psilocybin, /lsd, etc. all return HTTP 200 — not a 404 redirect.
+# Critical for SEO: search crawlers see a real page, not a redirect chain.
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
