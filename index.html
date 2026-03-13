@@ -350,7 +350,22 @@
       background: transparent;
       transition: color 0.15s;
       white-space: nowrap;
+      position: relative;
     }
+    .nav-item:not(:has(.nav-dropdown)) > .nav-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0.85rem;
+      right: 0.85rem;
+      height: 2px;
+      background: var(--teal);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.22s ease;
+    }
+    .nav-item:not(:has(.nav-dropdown)) > .nav-btn:hover::after,
+    .nav-item:not(:has(.nav-dropdown)) > .nav-btn.active::after { transform: scaleX(1); }
     .nav-item > .nav-btn:hover,
     .nav-item > .nav-btn.active { color: var(--cream); }
     .nav-btn .chevron { font-size: 0.55rem; opacity: 0.5; transition: transform 0.2s; }
@@ -678,7 +693,7 @@
 
     /* ── PAGES ───────────────────────────────────── */
     .page { display: none; padding-top: var(--nav-h); }
-    .page.active { display: block; }
+    .page.active { display: block; animation: pageFadeIn 0.28s ease forwards; }
 
     /* ── HERO ────────────────────────────────────── */
     .hero {
@@ -1495,15 +1510,17 @@
       display: inline-block;
     }
     .faq-a {
-      display: none;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.32s ease, padding-bottom 0.32s ease;
       font-size: 0.9rem;
       font-weight: 300;
       color: var(--cream-dim);
       line-height: 1.8;
-      padding-bottom: 1.25rem;
+      padding-bottom: 0;
       padding-right: 2rem;
     }
-    .faq-item.open .faq-a { display: block; }
+    .faq-item.open .faq-a { max-height: 600px; padding-bottom: 1.25rem; }
 
     /* Related chips */
     .related-strip {
@@ -2605,6 +2622,23 @@
     .breadcrumb a, .related-chips a, .inline-link a, a.inline-link { color: inherit; text-decoration: none; cursor: pointer; }
     a.inline-link { text-decoration: underline; text-decoration-color: inherit; }
     .breadcrumb a:hover  { opacity: 0.75; }
+
+    /* ── SCROLL FADE-IN ───────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.52s ease, transform 0.52s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── PAGE FADE-IN ─────────────────────────────── */
+    @keyframes pageFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
     </style>
 
 <script>
@@ -6328,6 +6362,8 @@ window._combo = (function(){
     updateTocFab();
     // Re-init desktop sidebar scroll-spy for new page
     if (window._initScrollSpy) window._initScrollSpy();
+    // Re-observe reveal elements on new page
+    if (window._initReveal) window._initReveal();
   }
 
   /* ── FAQ ── */
@@ -9284,6 +9320,36 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+})();
+</script>
+
+<script>
+/* ── SCROLL REVEAL ── */
+(function() {
+  var SELECTOR = [
+    '.article-body h2', '.article-body h3',
+    '.article-body > p', '.article-body > ul', '.article-body > ol', '.article-body > blockquote',
+    '.email-cta-box',
+    '.start-card', '.tool-card', '.pillar-item', '.card'
+  ].join(',');
+
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  window._initReveal = function() {
+    document.querySelectorAll(SELECTOR).forEach(function(el) {
+      if (!el.classList.contains('reveal')) el.classList.add('reveal');
+      if (!el.classList.contains('visible')) obs.observe(el);
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', window._initReveal);
 })();
 </script>
 
