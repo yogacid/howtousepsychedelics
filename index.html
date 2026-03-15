@@ -964,7 +964,10 @@
       color: var(--cream); margin-bottom: 2rem;
     }
     .tools-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    @media (max-width: 860px) {
+      .tools-grid { grid-template-columns: 1fr 1fr; }
     }
     .tool-card {
       background: var(--bg-mid);
@@ -997,6 +1000,205 @@
     }
     @media (max-width: 640px) {
       .tools-grid { grid-template-columns: 1fr; }
+    }
+    /* ── READINESS ASSESSMENT ── */
+    .ra-page-wrap { padding: 0 0 5rem; }
+    .ra-section-inner { max-width: 700px; margin: 0 auto; padding: 0 24px; }
+    .ra-section-header { text-align: center; margin-bottom: 52px; }
+    .ra-eyebrow {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem;
+    }
+    .ra-section-sub {
+      font-size: 0.95rem; color: var(--cream-dim); line-height: 1.65;
+      max-width: 500px; margin: 0 auto;
+    }
+    .ra-card {
+      background: var(--bg-mid); border: 1px solid rgba(62,201,191,0.14);
+      border-radius: 18px; padding: 52px 52px 48px;
+      position: relative; overflow: hidden;
+    }
+    .ra-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(62,201,191,0.35), transparent);
+    }
+    .ra-intro-headline {
+      font-family: 'Cormorant Garamond', serif; font-size: 36px;
+      font-weight: 300; font-style: italic; color: var(--cream);
+      line-height: 1.2; margin-bottom: 16px;
+    }
+    .ra-intro-body {
+      font-size: 14px; color: var(--cream-dim); line-height: 1.72; margin-bottom: 26px;
+    }
+    .ra-intro-meta { display: flex; gap: 26px; margin-bottom: 34px; flex-wrap: wrap; }
+    .ra-meta-pill {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; color: rgba(232,237,233,0.34);
+    }
+    .ra-meta-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--teal); opacity: 0.55; flex-shrink: 0;
+    }
+    .ra-intro-disclaimer {
+      font-size: 11px; color: rgba(232,237,233,0.22); line-height: 1.62;
+      border-top: 1px solid rgba(232,237,233,0.07); padding-top: 18px; margin-top: 6px;
+    }
+    .ra-btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.02em;
+      color: #040a05;
+      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+      background-size: 200%; border: none; border-radius: 9px;
+      padding: 13px 26px; cursor: pointer;
+      transition: background-position 0.4s ease, transform 0.15s;
+      margin-bottom: 24px;
+    }
+    .ra-btn-primary:hover { background-position: 100% center; transform: translateY(-1px); }
+    .ra-progress-wrap { margin-bottom: 42px; }
+    .ra-progress-track {
+      height: 2px; background: rgba(255,255,255,0.07);
+      border-radius: 2px; overflow: hidden; margin-bottom: 10px;
+    }
+    .ra-progress-fill {
+      height: 100%; background: var(--teal); border-radius: 2px;
+      transition: width 0.4s cubic-bezier(0.4,0,0.2,1); width: 0%;
+    }
+    .ra-progress-labels { display: flex; justify-content: space-between; }
+    .ra-progress-labels span {
+      font-size: 10px; letter-spacing: 0.08em; color: rgba(232,237,233,0.27);
+    }
+    .ra-q-category {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 13px;
+    }
+    .ra-q-text {
+      font-family: 'Cormorant Garamond', serif; font-size: 29px;
+      font-weight: 400; color: var(--cream); line-height: 1.3; margin-bottom: 10px;
+    }
+    .ra-q-hint {
+      font-size: 12px; color: rgba(232,237,233,0.36);
+      line-height: 1.55; margin-bottom: 28px;
+    }
+    .ra-options { display: flex; flex-direction: column; gap: 9px; margin-bottom: 38px; }
+    .ra-option {
+      display: flex; align-items: center; gap: 13px;
+      padding: 15px 17px; border: 1px solid rgba(232,237,233,0.1);
+      border-radius: 10px; cursor: pointer; background: transparent;
+      width: 100%; text-align: left;
+      transition: border-color 0.15s, background 0.15s;
+      color: inherit; font-family: inherit;
+    }
+    .ra-option:hover { border-color: rgba(62,201,191,0.38); background: rgba(62,201,191,0.04); }
+    .ra-option.is-selected { border-color: var(--teal); background: rgba(62,201,191,0.09); }
+    .ra-radio {
+      width: 17px; height: 17px; border-radius: 50%;
+      border: 1.5px solid rgba(232,237,233,0.2); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .ra-option.is-selected .ra-radio { border-color: var(--teal); background: var(--teal); }
+    .ra-radio-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--bg); display: none;
+    }
+    .ra-option.is-selected .ra-radio-dot { display: block; }
+    .ra-option-label {
+      font-size: 14px; color: rgba(232,237,233,0.7);
+      line-height: 1.4; transition: color 0.15s;
+    }
+    .ra-option.is-selected .ra-option-label { color: var(--cream); }
+    .ra-nav { display: flex; align-items: center; justify-content: space-between; }
+    .ra-btn-back {
+      font-size: 12px; color: rgba(232,237,233,0.3);
+      background: none; border: none; cursor: pointer;
+      padding: 8px 0; transition: color 0.2s;
+    }
+    .ra-btn-back:hover { color: rgba(232,237,233,0.58); }
+    .ra-btn-back:disabled { opacity: 0; pointer-events: none; }
+    .ra-btn-next {
+      font-size: 13px; font-weight: 500; color: #040a05;
+      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+      background-size: 200%; border: none; border-radius: 9px;
+      padding: 12px 24px; cursor: pointer;
+      transition: background-position 0.4s ease, opacity 0.15s;
+    }
+    .ra-btn-next:hover:not(:disabled) { background-position: 100% center; }
+    .ra-btn-next:disabled {
+      background: rgba(62,201,191,0.2); color: rgba(232,237,233,0.27); cursor: not-allowed;
+    }
+    .ra-result-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; padding: 5px 14px;
+      border-radius: 30px; margin-bottom: 22px;
+    }
+    .ra-result-badge.tier-pause {
+      color: #c9943a; background: rgba(201,148,58,0.1); border: 1px solid rgba(201,148,58,0.22);
+    }
+    .ra-result-badge.tier-prepare {
+      color: #4aafc4; background: rgba(74,175,196,0.1); border: 1px solid rgba(74,175,196,0.22);
+    }
+    .ra-result-badge.tier-ready {
+      color: var(--green); background: rgba(92,184,74,0.1); border: 1px solid rgba(92,184,74,0.22);
+    }
+    .ra-result-headline {
+      font-family: 'Cormorant Garamond', serif; font-size: 34px;
+      font-weight: 400; color: var(--cream); line-height: 1.2; margin-bottom: 12px;
+    }
+    .ra-result-sub {
+      font-size: 14px; color: var(--cream-dim); line-height: 1.72;
+      margin-bottom: 34px; padding-bottom: 30px;
+      border-bottom: 1px solid rgba(232,237,233,0.07);
+    }
+    .ra-result-items { margin-bottom: 34px; }
+    .ra-result-item {
+      padding: 20px 0; border-bottom: 1px solid rgba(232,237,233,0.06);
+    }
+    .ra-result-item:last-child { border-bottom: none; }
+    .ra-item-header { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+    .ra-item-icon { font-size: 13px; flex-shrink: 0; width: 18px; text-align: center; }
+    .ra-item-icon.warn { color: #c9943a; }
+    .ra-item-icon.check { color: var(--green); }
+    .ra-item-icon.info { color: var(--teal); }
+    .ra-item-title { font-size: 13px; font-weight: 500; color: rgba(232,237,233,0.82); }
+    .ra-item-body {
+      font-size: 13px; color: rgba(232,237,233,0.44);
+      line-height: 1.7; padding-left: 28px;
+    }
+    .ra-next-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(232,237,233,0.27); margin-bottom: 12px;
+    }
+    .ra-next-steps { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 26px; }
+    .ra-next-btn {
+      display: inline-flex; align-items: center;
+      font-size: 12px; font-weight: 500; color: var(--teal);
+      background: rgba(62,201,191,0.08); border: 1px solid rgba(62,201,191,0.2);
+      border-radius: 8px; padding: 9px 16px; cursor: pointer;
+      text-decoration: none; transition: background 0.15s, border-color 0.15s;
+    }
+    .ra-next-btn:hover {
+      background: rgba(62,201,191,0.15); border-color: rgba(62,201,191,0.42);
+      color: var(--teal); text-decoration: none;
+    }
+    .ra-restart {
+      font-size: 11px; color: rgba(232,237,233,0.26);
+      background: none; border: none; cursor: pointer;
+      padding: 0; transition: color 0.2s; display: block;
+    }
+    .ra-restart:hover { color: rgba(232,237,233,0.48); }
+    .ra-result-disclaimer {
+      margin-top: 26px; padding-top: 20px;
+      border-top: 1px solid rgba(232,237,233,0.06);
+      font-size: 11px; color: rgba(232,237,233,0.21); line-height: 1.62;
+    }
+    .ra-q-fade-out { transition: opacity 0.2s ease; opacity: 0; }
+    .ra-q-fade-in  { transition: opacity 0.2s ease; opacity: 1; }
+    @media (max-width: 640px) {
+      .ra-card { padding: 36px 26px 32px; }
+      .ra-intro-headline { font-size: 28px; }
+      .ra-q-text { font-size: 24px; }
+      .ra-result-headline { font-size: 27px; }
     }
 
     /* ── INTERACTION CALLOUT (inline, substance pages + planner) ── */
@@ -3282,8 +3484,14 @@ window._combo = (function(){
   <div style="background:var(--bg-mid); border-top:1px solid var(--cream-border); border-bottom:1px solid var(--cream-border);">
   <div class="tools-strip">
     <div class="section-label">Interactive Tools</div>
-    <div class="section-title">Two resources built for<br><span class="grad-text">intentional practice.</span></div>
+    <div class="section-title">Three tools built for<br><span class="grad-text">intentional practice.</span></div>
     <div class="tools-grid">
+      <a href="/readiness" class="tool-card">
+        <div class="tool-card-badge">Self-Assessment</div>
+        <h3>Readiness Assessment</h3>
+        <p>A ten-question self-assessment covering intention, psychological safety, set and setting, and integration readiness — so you can understand where you are before moving forward.</p>
+        <div class="tool-card-arrow">Begin Assessment →</div>
+      </a>
       <a href="/planner" class="tool-card">
         <div class="tool-card-badge">Personalised</div>
         <h3>Journey Planner</h3>
@@ -6763,6 +6971,7 @@ window._combo = (function(){
     dmt:         ['DMT (N,N-DMT) — Effects, Entity Encounters, Dosage & Research | How to Use Psychedelics', 'Comprehensive guide to N,N-dimethyltryptamine: pharmacology, endogenous DMT, breakthrough experiences, entity encounters, routes of administration, and harm reduction.'],
     fivemedmt:   ['5-MeO-DMT — Effects, Risks, Toad Conservation & Research | How to Use Psychedelics', 'Complete guide to 5-MeO-DMT: the toad vs. synthetic debate, complete ego dissolution, cardiac and MAOI risks, reactivations, and what the clinical research shows.'],
     cannabis:    ['Cannabis — Effects, Risks, Psychedelic Combinations & Research | How to Use Psychedelics', 'Cannabis as a psychedelic-adjacent substance: endocannabinoid pharmacology, high-dose effects, combinations with psilocybin and LSD, psychosis risk, and addiction.'],
+    readiness:   ['Readiness Assessment — Are You Ready? | How to Use Psychedelics', 'A ten-question self-assessment covering intention, psychological safety, set and setting, and integration readiness. Understand where you are before moving forward with a psychedelic experience.'],
     planner:     ['Journey Planner — Prepare for Your Psychedelic Experience | How to Use Psychedelics', 'A step-by-step interactive planner for preparing for a psychedelic experience: readiness assessment, preparation timeline, intention setting, set and setting checklist, and your personalised plan.'],
     salvia:      ['Salvia Divinorum — Salvinorin A, Effects, Safety & Mazatec Roots | How to Use Psychedelics', 'Complete guide to salvia divinorum: kappa-opioid pharmacology, Mazatec ceremonial tradition, extract potency, physical safety, and what the experience is actually like.']
   };
@@ -6776,7 +6985,7 @@ window._combo = (function(){
     mdma:        'substances',  cannabis:  'substances',  twocb:      'substances',  salvia:      'substances',
     assessment:  'journeying',  microdosing:'journeying', preparation:'journeying',
     navigation:  'journeying',  integration:'journeying', facilitation:'journeying',
-    planner:     null,          checker:    null
+    readiness:   null,          planner:    null,          checker:    null
   };
 
   // Short display names used in breadcrumb schema items
@@ -6788,7 +6997,7 @@ window._combo = (function(){
     mdma: 'MDMA', cannabis: 'Cannabis', twocb: '2C-B', salvia: 'Salvia Divinorum',
     assessment: 'Safety Assessment', microdosing: 'Microdosing', preparation: 'Preparation',
     navigation: 'Navigation', integration: 'Integration', facilitation: 'Facilitation',
-    planner: 'Journey Planner', checker: 'Interaction Checker'
+    readiness: 'Readiness Assessment', planner: 'Journey Planner', checker: 'Interaction Checker'
   };
 
   /* ══════════════════════════════════════════════════════
@@ -8578,6 +8787,362 @@ window._combo = (function(){
     </script>
 
   </div><!-- /page-checker -->
+
+<!-- ═══════════════════════════════════════════
+     READINESS ASSESSMENT PAGE
+════════════════════════════════════════════ -->
+  <div id="page-readiness" class="page">
+    <div class="ra-page-wrap">
+      <div class="ra-section-inner">
+
+        <div class="breadcrumb" style="padding-top:1.5rem; margin-bottom:0;">
+          <a href="/">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>Readiness Assessment</span>
+        </div>
+
+        <div class="ra-section-header" style="margin-top:2.5rem;">
+          <div class="ra-eyebrow">Safety &amp; Readiness</div>
+          <div class="section-title">Are You <span class="grad-text">Ready?</span></div>
+          <p class="ra-section-sub">A short self-assessment to help you understand where you are — and what you might need — before moving forward.</p>
+        </div>
+
+        <div class="ra-card" id="ra-root">
+
+          <!-- INTRO VIEW -->
+          <div id="ra-view-intro">
+            <p class="ra-intro-headline">Before you begin, pause.</p>
+            <p class="ra-intro-body">Preparation is not a formality — it is part of the experience itself. This ten-question assessment covers intention, psychological safety, set and setting, and integration readiness. It takes about five minutes. Your answers are completely private and are not stored anywhere.</p>
+            <div class="ra-intro-meta">
+              <span class="ra-meta-pill"><span class="ra-meta-dot"></span>10 questions</span>
+              <span class="ra-meta-pill"><span class="ra-meta-dot"></span>5 minutes</span>
+              <span class="ra-meta-pill"><span class="ra-meta-dot"></span>Completely private</span>
+            </div>
+            <button class="ra-btn-primary" id="ra-start">Begin Assessment &rarr;</button>
+            <p class="ra-intro-disclaimer">This is an educational tool, not a medical or clinical assessment. It does not substitute for professional consultation. If you are managing a significant mental health condition, please speak with a qualified clinician before considering a psychedelic experience.</p>
+          </div>
+
+          <!-- QUIZ VIEW -->
+          <div id="ra-view-quiz" style="display:none;">
+            <div class="ra-progress-wrap">
+              <div class="ra-progress-track">
+                <div class="ra-progress-fill" id="ra-fill"></div>
+              </div>
+              <div class="ra-progress-labels">
+                <span id="ra-q-counter">Question 1 of 10</span>
+                <span id="ra-q-pct">0%</span>
+              </div>
+            </div>
+            <div id="ra-question-block">
+              <div class="ra-q-category" id="ra-q-cat"></div>
+              <div class="ra-q-text"      id="ra-q-text"></div>
+              <div class="ra-q-hint"      id="ra-q-hint"></div>
+              <div class="ra-options"     id="ra-opts"></div>
+            </div>
+            <div class="ra-nav">
+              <button class="ra-btn-back" id="ra-back" disabled>&larr; Back</button>
+              <button class="ra-btn-next" id="ra-next" disabled>Continue &rarr;</button>
+            </div>
+          </div>
+
+          <!-- RESULT VIEW -->
+          <div id="ra-view-result" style="display:none;"></div>
+
+        </div>
+      </div>
+    </div>
+  </div><!-- /page-readiness -->
+
+<script>
+(function() {
+  var QS = [
+    { id:'intention', cat:'Motivation & Intention',
+      q:'What is drawing you toward this experience?',
+      hint:'Choose the answer that feels most honest right now.',
+      opts:[
+        { t:'Curiosity and personal growth',                 v:'growth',    flag:null },
+        { t:'Healing from specific pain, trauma, or grief',  v:'healing',   flag:null },
+        { t:'Spiritual exploration or deepening',            v:'spiritual', flag:null },
+        { t:'Relief from or escape from my current life',    v:'escape',    flag:'soft' },
+        { t:'I\u2019m not yet sure',                         v:'unsure',    flag:'soft' }
+      ]
+    },
+    { id:'mh_history', cat:'Psychological Safety',
+      q:'Have you, or a close family member, ever experienced psychosis, schizophrenia, or bipolar\u00a0I\u00a0disorder?',
+      hint:'This is a key safety question. There are no wrong answers here.',
+      opts:[
+        { t:'No, not to my knowledge', v:'no',  flag:null },
+        { t:'Yes, or I\u2019m unsure',  v:'yes', flag:'hard', hk:'mh_history' }
+      ]
+    },
+    { id:'current_state', cat:'Psychological Safety',
+      q:'How would you describe your current emotional and mental state?',
+      hint:'Be as honest as you can \u2014 this shapes everything that follows.',
+      opts:[
+        { t:'Stable and relatively grounded',                  v:'stable',    flag:null },
+        { t:'Managing some stress, but functional',            v:'stressed',  flag:null },
+        { t:'Going through significant difficulty or upheaval',v:'difficult', flag:'soft' },
+        { t:'In acute crisis or overwhelm',                    v:'crisis',    flag:'hard', hk:'crisis' }
+      ]
+    },
+    { id:'medications', cat:'Physical Health',
+      q:'Are you currently taking any psychiatric or cardiovascular medications?',
+      hint:'SSRIs, SNRIs, MAOIs, antipsychotics, lithium, heart medications, or blood thinners.',
+      opts:[
+        { t:'No',                                        v:'no',     flag:null },
+        { t:'Yes',                                       v:'yes',    flag:'hard', hk:'medications' },
+        { t:'I\u2019m not certain what I\u2019m taking', v:'unsure', flag:'hard', hk:'medications' }
+      ]
+    },
+    { id:'setting', cat:'Set & Setting',
+      q:'Do you have access to a safe, comfortable, and private space for the experience?',
+      hint:'Where you are shapes what you encounter.',
+      opts:[
+        { t:'Yes \u2014 I have a clear space in mind', v:'yes',     flag:null },
+        { t:'I\u2019m still working this out',          v:'working', flag:'soft' },
+        { t:'No, not yet',                              v:'no',      flag:'soft' }
+      ]
+    },
+    { id:'sitter', cat:'Set & Setting',
+      q:'Will you have a trusted, sober person present or reachable during the experience?',
+      hint:'A sitter is one of the most meaningful harm reduction factors available to you.',
+      opts:[
+        { t:'Yes \u2014 an experienced guide or facilitator', v:'experienced', flag:null },
+        { t:'Yes \u2014 a trusted friend or partner',         v:'trusted',     flag:null },
+        { t:'No \u2014 I would be alone',                     v:'no',          flag:'soft' }
+      ]
+    },
+    { id:'substance', cat:'Set & Setting',
+      q:'Do you know exactly what substance you plan to use, and do you trust its source?',
+      hint:'Knowing what you\u2019re taking is foundational to safety.',
+      opts:[
+        { t:'Yes \u2014 tested it or obtained from a fully trusted source', v:'verified', flag:null },
+        { t:'Mostly \u2014 I have a reasonable level of trust in the source',v:'trusted',  flag:null },
+        { t:'Not yet \u2014 I\u2019m still figuring this out',              v:'unsure',   flag:'soft' }
+      ]
+    },
+    { id:'int_time', cat:'Integration Capacity',
+      q:'Do you have 1\u20133 days free after the experience for rest and reflection?',
+      hint:'What happens after the experience matters as much as the experience itself.',
+      opts:[
+        { t:'Yes \u2014 I\u2019ve intentionally protected this time',     v:'yes',     flag:null },
+        { t:'Partially \u2014 I have one day, maybe two',                 v:'partial', flag:null },
+        { t:'No \u2014 I\u2019d need to return to regular life quickly',  v:'no',      flag:'soft' }
+      ]
+    },
+    { id:'support', cat:'Integration Capacity',
+      q:'Do you have at least one person you can speak to openly about this experience?',
+      hint:'Integration is rarely a solo process.',
+      opts:[
+        { t:'Yes \u2014 someone I trust deeply',            v:'yes',      flag:null },
+        { t:'Somewhat \u2014 someone who might understand', v:'somewhat', flag:null },
+        { t:'No \u2014 I\u2019d be navigating this alone',  v:'no',       flag:'soft' }
+      ]
+    },
+    { id:'preparation', cat:'Preparation',
+      q:'Have you done any intentional preparation for this experience?',
+      hint:'Reading, journaling, meditation, setting intentions, or working with a guide.',
+      opts:[
+        { t:'Yes \u2014 I\u2019ve been actively preparing',      v:'yes',  flag:null },
+        { t:'Some \u2014 I\u2019ve begun but could go deeper',   v:'some', flag:null },
+        { t:'Not yet',                                            v:'no',   flag:'soft' }
+      ]
+    }
+  ];
+
+  function buildResultHTML(hard, soft) {
+    var tier = (hard.length > 0 || soft.length >= 5) ? 'pause'
+             : (soft.length >= 2) ? 'prepare' : 'ready';
+    var hks = hard.map(function(h){ return h.hk; });
+    var badges    = { pause:'Pause & Prepare', prepare:'Almost Ready', ready:'Well-Positioned' };
+    var headlines = {
+      pause:   'Now may not be the right moment.',
+      prepare: 'You\u2019re on the right path.',
+      ready:   'You appear well-positioned to move forward.'
+    };
+    var subs = {
+      pause:   'This is not a closed door \u2014 it is an invitation to build the foundation that will make this experience genuinely worthwhile. Please read on carefully.',
+      prepare: 'A few areas of preparation would meaningfully strengthen your foundation. Addressing these before moving forward will shape the quality of what you encounter.',
+      ready:   'Your answers reflect a foundation of intention, care, and preparation. That doesn\u2019t remove all uncertainty \u2014 it never does. But it puts you in a strong position to meet what arises.'
+    };
+    var items = [];
+    if (tier === 'pause') {
+      if (hks.indexOf('mh_history') > -1) {
+        items.push({ ic:'warn', ico:'\u26A0', t:'Investigate your family mental health history',
+          b:'Personal or family histories of psychosis, schizophrenia, or bipolar\u00a0I disorder are significant risk factors. If you\u2019re unsure, speak with family members, review any medical records, or ask your family doctor. Once you have a clearer picture, we recommend consulting a mental health clinician experienced in psychedelic medicine before moving forward.' });
+      }
+      if (hks.indexOf('crisis') > -1) {
+        items.push({ ic:'warn', ico:'\u26A0', t:'Current acute distress or crisis',
+          b:'Psychedelics tend to amplify and intensify whatever is present \u2014 including emotional states. Entering an experience during acute crisis can deepen distress rather than resolve it. Please reach out to a mental health professional or trusted support person first.' });
+      }
+      if (hks.indexOf('medications') > -1) {
+        items.push({ ic:'warn', ico:'\u26A0', t:'Current medications',
+          b:'Certain medications \u2014 particularly SSRIs, MAOIs, antipsychotics, and lithium \u2014 can interact significantly with serotonergic psychedelics, ranging from blunted effects to serious physiological risk. Please consult a physician experienced in psychedelic medicine before proceeding.' });
+      }
+      if (hard.length === 0) {
+        items.push({ ic:'info', ico:'\u25CE', t:'Several areas of preparation need attention',
+          b:'Your answers suggest a number of areas \u2014 setting, support, integration time, and preparation \u2014 that would benefit from more attention before moving forward.' });
+      }
+    }
+    var softLabels = {
+      intention:   { ico:'\u25CE', t:'Clarifying your intention',
+        b:'Your intention appears oriented toward relief or escape rather than exploration. Psychedelics amplify what is present, and an escape-oriented intention can intensify rather than dissolve difficulty. Spend more time with your \u2018why\u2019 before moving forward.' },
+      setting:     { ico:'\u25CE', t:'Securing your setting',
+        b:'Before you proceed, identify a space that feels genuinely safe, comfortable, and private \u2014 somewhere you can move freely and be fully yourself.' },
+      sitter:      { ico:'\u25CE', t:'Finding a trusted sitter',
+        b:'Having a calm, sober, trusted presence available during your experience is one of the most meaningful harm reduction factors available to you. Even if that person isn\u2019t in the room, knowing they\u2019re reachable can significantly stabilise the experience.' },
+      substance:   { ico:'\u25CE', t:'Knowing your substance',
+        b:'Clarity about what you\u2019re taking \u2014 and confidence in its source \u2014 is foundational. Consider using a reagent testing kit, or take the time to establish a fully trusted source before proceeding.' },
+      int_time:    { ico:'\u25CE', t:'Protecting integration time',
+        b:'If at all possible, protect 1\u20133 days of relative stillness and space afterward \u2014 without major obligations or demands.' },
+      support:     { ico:'\u25CE', t:'Building integration support',
+        b:'Integration is rarely a solo process. Consider identifying one trusted person you can debrief with openly, or joining an integration circle or community.' },
+      preparation: { ico:'\u25CE', t:'Deepening your preparation',
+        b:'Intentional preparation can make a significant difference. Setting clear intentions, journaling, and learning from others\u2019 experiences are among the most valuable things you can do before the day arrives.' }
+    };
+    if (tier === 'prepare') {
+      soft.forEach(function(s) {
+        if (softLabels[s]) items.push({ ic:'info', ico:softLabels[s].ico, t:softLabels[s].t, b:softLabels[s].b });
+      });
+    }
+    if (tier === 'ready') {
+      items = [
+        { ic:'check', ico:'\u2713', t:'Stay in relationship with your intention',
+          b:'Even with strong preparation, returning to your intention throughout \u2014 before, during, and after \u2014 deepens what becomes possible.' },
+        { ic:'check', ico:'\u2713', t:'Integration begins now',
+          b:'The integration process starts before the experience, not after. The attention you bring to preparation, setting, and relationship will shape what you carry forward.' },
+        { ic:'check', ico:'\u2713', t:'Hold the experience lightly',
+          b:'Whatever arises \u2014 whether profound, difficult, or quietly ordinary \u2014 is information. Resist the urge to fix its meaning too quickly. Let it continue to speak in the days and weeks that follow.' }
+      ];
+    }
+    var steps = (tier === 'ready')
+      ? [ { t:'Explore integration practices', h:'/integration' },
+          { t:'Open the Journey Planner',      h:'/planner' },
+          { t:'Join Psygaia\u2019s community', h:'https://psygaia.circle.so', ext:true } ]
+      : [ { t:'Read the preparation guide',    h:'/preparation' },
+          { t:'Open the Journey Planner',      h:'/planner' },
+          { t:'Join Psygaia\u2019s community', h:'https://psygaia.circle.so', ext:true } ];
+    var itemsHTML = items.map(function(item) {
+      return '<div class="ra-result-item">'
+        + '<div class="ra-item-header">'
+        + '<span class="ra-item-icon ' + item.ic + '">' + item.ico + '</span>'
+        + '<span class="ra-item-title">' + item.t + '</span>'
+        + '</div><p class="ra-item-body">' + item.b + '</p></div>';
+    }).join('');
+    var stepsHTML = steps.map(function(s) {
+      var ext = s.ext ? ' target="_blank" rel="noopener"' : '';
+      return '<a class="ra-next-btn" href="' + s.h + '"' + ext + '>' + s.t + '</a>';
+    }).join('');
+    return '<div class="ra-result-badge tier-' + tier + '">' + badges[tier] + '</div>'
+      + '<h3 class="ra-result-headline">' + headlines[tier] + '</h3>'
+      + '<p class="ra-result-sub">' + subs[tier] + '</p>'
+      + '<div class="ra-result-items">' + itemsHTML + '</div>'
+      + '<p class="ra-next-label">Where to go from here</p>'
+      + '<div class="ra-next-steps">' + stepsHTML + '</div>'
+      + '<button class="ra-restart" id="ra-restart">Start over</button>'
+      + '<p class="ra-result-disclaimer">This assessment is for educational purposes only. It does not constitute medical or clinical advice and is not a substitute for professional consultation. If you are managing a mental health condition, taking psychiatric medications, or have concerns about your readiness, please speak with a qualified clinician before proceeding.</p>';
+  }
+
+  var current = 0;
+  var answers = {};
+  var viewIntro  = document.getElementById('ra-view-intro');
+  var viewQuiz   = document.getElementById('ra-view-quiz');
+  var viewResult = document.getElementById('ra-view-result');
+  var fillEl     = document.getElementById('ra-fill');
+  var counterEl  = document.getElementById('ra-q-counter');
+  var pctEl      = document.getElementById('ra-q-pct');
+  var catEl      = document.getElementById('ra-q-cat');
+  var qEl        = document.getElementById('ra-q-text');
+  var hintEl     = document.getElementById('ra-q-hint');
+  var optsEl     = document.getElementById('ra-opts');
+  var qBlock     = document.getElementById('ra-question-block');
+  var backBtn    = document.getElementById('ra-back');
+  var nextBtn    = document.getElementById('ra-next');
+
+  function renderQ(idx, instant) {
+    var q   = QS[idx];
+    var pct = Math.round((idx / QS.length) * 100);
+    fillEl.style.width    = pct + '%';
+    counterEl.textContent = 'Question ' + (idx + 1) + ' of ' + QS.length;
+    pctEl.textContent     = pct + '%';
+    function populate() {
+      catEl.textContent  = q.cat;
+      qEl.textContent    = q.q;
+      hintEl.textContent = q.hint;
+      var html = '';
+      q.opts.forEach(function(opt) {
+        var sel = answers[q.id] === opt.v ? ' is-selected' : '';
+        html += '<button class="ra-option' + sel + '" data-val="' + opt.v + '">'
+          + '<span class="ra-radio"><span class="ra-radio-dot"></span></span>'
+          + '<span class="ra-option-label">' + opt.t + '</span></button>';
+      });
+      optsEl.innerHTML = html;
+      optsEl.querySelectorAll('.ra-option').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          answers[q.id] = btn.getAttribute('data-val');
+          optsEl.querySelectorAll('.ra-option').forEach(function(b){ b.classList.remove('is-selected'); });
+          btn.classList.add('is-selected');
+          nextBtn.disabled = false;
+        });
+      });
+      nextBtn.disabled = !answers[q.id];
+      backBtn.disabled = (idx === 0);
+      if (!instant) {
+        qBlock.classList.remove('ra-q-fade-out');
+        qBlock.classList.add('ra-q-fade-in');
+      }
+    }
+    if (instant) { populate(); }
+    else {
+      qBlock.classList.remove('ra-q-fade-in');
+      qBlock.classList.add('ra-q-fade-out');
+      setTimeout(populate, 210);
+    }
+  }
+
+  function showResult() {
+    var hard = [], soft = [];
+    QS.forEach(function(q) {
+      var val = answers[q.id];
+      if (!val) return;
+      var opt = null;
+      for (var i = 0; i < q.opts.length; i++) { if (q.opts[i].v === val) { opt = q.opts[i]; break; } }
+      if (!opt) return;
+      if (opt.flag === 'hard') hard.push({ qid:q.id, hk:opt.hk });
+      else if (opt.flag === 'soft') soft.push(q.id);
+    });
+    fillEl.style.width       = '100%';
+    pctEl.textContent        = '100%';
+    viewQuiz.style.display   = 'none';
+    viewResult.innerHTML     = buildResultHTML(hard, soft);
+    viewResult.style.display = 'block';
+    document.getElementById('ra-restart').addEventListener('click', function() {
+      answers = {}; current = 0;
+      viewResult.style.display = 'none';
+      viewResult.innerHTML     = '';
+      fillEl.style.width       = '0%';
+      viewIntro.style.display  = 'block';
+    });
+  }
+
+  document.getElementById('ra-start').addEventListener('click', function() {
+    viewIntro.style.display = 'none';
+    viewQuiz.style.display  = 'block';
+    renderQ(0, true);
+  });
+  nextBtn.addEventListener('click', function() {
+    if (!answers[QS[current].id]) return;
+    current++;
+    if (current >= QS.length) { showResult(); return; }
+    renderQ(current, false);
+  });
+  backBtn.addEventListener('click', function() {
+    if (current === 0) return;
+    current--;
+    renderQ(current, false);
+  });
+})();
+</script>
 
 <!-- ═══════════════════════════════════════════
      JOURNEY PLANNER — JavaScript
