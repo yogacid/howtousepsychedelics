@@ -507,6 +507,7 @@
       min-height: 100vh;
       display: grid;
       grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr auto;
       padding-top: var(--nav-h);
       background: var(--bg);
       overflow: hidden;
@@ -590,16 +591,17 @@
       padding: 0.35rem 0.8rem; border-radius: 999px;
     }
     .hero-image {
-      display: flex; flex-direction: column; overflow: hidden; z-index: 1;
+      position: relative; overflow: hidden; z-index: 1;
     }
     .hero-image-inner {
-      flex: 1;
+      position: absolute; inset: 0;
       background:
         linear-gradient(to right, rgba(8,13,11,0.55) 0%, transparent 35%),
         linear-gradient(to top, rgba(8,13,11,0.4) 0%, transparent 40%),
         url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1d41bed5-05d2-4245-8d3e-d50320a37e2e/tempImagejiAYk2.jpg') center 28%/cover no-repeat;
     }
     .hero-stats {
+      grid-column: 1 / -1;
       display: flex; gap: 0; padding: 0; flex-wrap: nowrap;
       background: var(--bg-mid); border-top: 1px solid var(--cream-border);
     }
@@ -1428,9 +1430,8 @@
 
     /* ── RESPONSIVE ─────────────────────────────────────────────── */
     @media (max-width: 960px) {
-      .hero { grid-template-columns: 1fr; }
-      .hero-image { display: flex; flex-direction: column; overflow: visible; min-height: 0; }
-      .hero-image-inner { flex: none; position: relative; height: 340px; }
+      .hero { grid-template-columns: 1fr; grid-template-rows: auto 340px auto; }
+      .hero-image { height: 340px; }
       .for-you { grid-template-columns: 1fr; gap: 40px; }
       .for-you-intro { position: static; }
       .testimonials-grid { grid-template-columns: 1fr; }
@@ -1456,9 +1457,7 @@
         padding: 14px 5% calc(14px + env(safe-area-inset-bottom));
         justify-content: center; align-items: center;
       }
-      .hero-stats { display: flex; gap: 0; padding: 0; background: var(--bg-mid); border-top: 1px solid var(--cream-border); }
-      .stat-pill { flex: 1; background: none; backdrop-filter: none; border: none; border-right: 1px solid var(--cream-border); border-radius: 0; padding: 14px 8px; }
-      .stat-pill:last-child { border-right: none; }
+      .stat-pill { padding: 14px 8px; }
       .stat-num { font-size: 1.5rem; }
       .stat-label { font-size: 0.55rem; }
       .week-tab { flex: 1; }
@@ -1659,23 +1658,23 @@
 
   <div class="hero-image">
     <div class="hero-image-inner"></div>
-    <div class="hero-stats">
-      <div class="stat-pill">
-        <span class="stat-num">20</span>
-        <span class="stat-label">Videos</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-num">15</span>
-        <span class="stat-label">Lessons</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-num">25</span>
-        <span class="stat-label">Min / Day</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-num">8</span>
-        <span class="stat-label">Worksheets</span>
-      </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-pill">
+      <span class="stat-num">20</span>
+      <span class="stat-label">Videos</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-num">15</span>
+      <span class="stat-label">Lessons</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-num">25</span>
+      <span class="stat-label">Min / Day</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-num">8</span>
+      <span class="stat-label">Worksheets</span>
     </div>
   </div>
 </header>
