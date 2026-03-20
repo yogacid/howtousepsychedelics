@@ -503,14 +503,21 @@
     }
 
     /* ── STICKY CTA BAR ─────────────────────────────────────────── */
-    .sticky-cta {
+    /* Wrapper owns position:fixed and bottom — no transform here to avoid
+       the iOS Safari bug where transform on a fixed element loses its
+       viewport anchor after reload / compositor restore. */
+    .sticky-cta-wrap {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
+      pointer-events: none;
+    }
+    .sticky-cta {
       background: var(--bg-mid);
       border-top: 1px solid var(--accent-border);
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 5%;
       transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), bottom 0.1s linear;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: auto;
     }
     .sticky-cta.visible { transform: translateY(0); }
     .sticky-cta-text {
@@ -1527,8 +1534,7 @@
       .footer-support-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
       .footer-support-btn { align-self: stretch; text-align: center; }
       .sticky-cta {
-        flex-direction: column; gap: 8px; text-align: center;
-        padding: 14px 5%;
+        flex-direction: column; gap: 8px; text-align: center; padding: 14px 5%;
         justify-content: center; align-items: center;
       }
       .stat-pill { padding: 14px 8px; }
@@ -1690,12 +1696,14 @@
 </div>
 
 <!-- ── STICKY CTA ──────────────────────────────────────────────── -->
-<div id="stickyCta" class="sticky-cta">
-  <div>
-    <div class="sticky-cta-text">Ready to begin? <em>Microdosing Mindfully</em></div>
-    <div class="sticky-cta-note">14-day money-back guarantee</div>
+<div id="stickyCtaWrap" class="sticky-cta-wrap">
+  <div id="stickyCta" class="sticky-cta">
+    <div>
+      <div class="sticky-cta-text">Ready to begin? <em>Microdosing Mindfully</em></div>
+      <div class="sticky-cta-note">14-day money-back guarantee</div>
+    </div>
+    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enroll Now →</a>
   </div>
-  <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enroll Now →</a>
 </div>
 
 <!-- ── HERO ──────────────────────────────────────────────────────── -->
@@ -2427,8 +2435,9 @@
     btn.classList.add('active');
   }
 
-  // Sticky CTA
+  // Sticky CTA — wrapper owns position:fixed+bottom, inner owns transform animation
   const stickyCta = document.getElementById('stickyCta');
+  const stickyWrap = document.getElementById('stickyCtaWrap');
   const hero = document.querySelector('.hero');
   const heroObserver = new IntersectionObserver(([e]) => {
     stickyCta.classList.toggle('visible', !e.isIntersecting);
@@ -2510,13 +2519,13 @@
     }
   });
 
-  // iOS Safari: actively reset bottom on every viewport resize so the CTA
-  // re-anchors correctly when the toolbar shows or hides.
+  // iOS Safari: set bottom on the wrapper (no transform on wrapper, so no
+  // compositor bug). The inner .sticky-cta animates via transform only.
   if (window.visualViewport) {
-    var cta = document.getElementById('stickyCta');
+    var wrap = document.getElementById('stickyCtaWrap');
     function updateCtaBottom() {
       var offset = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
-      cta.style.bottom = Math.max(0, offset) + 'px';
+      wrap.style.bottom = Math.max(0, offset) + 'px';
     }
     window.visualViewport.addEventListener('resize', updateCtaBottom);
     window.visualViewport.addEventListener('scroll', updateCtaBottom);
