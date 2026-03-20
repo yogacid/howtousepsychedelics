@@ -2442,8 +2442,12 @@
   // Fix sticky CTA position in Safari (visual viewport API)
   if (window.visualViewport) {
     var cta = document.getElementById('stickyCta');
+    // Sensor div: offsetHeight resolves env(safe-area-inset-bottom) to actual pixels
+    var sabSensor = document.createElement('div');
+    sabSensor.style.cssText = 'position:fixed;bottom:0;left:-9999px;width:1px;height:0;padding-bottom:env(safe-area-inset-bottom,0px);pointer-events:none;visibility:hidden;';
+    document.body.appendChild(sabSensor);
     function updateCtaBottom() {
-      var sab = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sab')) || 0;
+      var sab = sabSensor.offsetHeight;
       var offset = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
       cta.style.bottom = Math.max(0, offset - sab) + 'px';
     }
