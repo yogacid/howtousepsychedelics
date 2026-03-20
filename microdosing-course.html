@@ -1457,7 +1457,8 @@
         padding: 14px 5% calc(14px + env(safe-area-inset-bottom));
         justify-content: center; align-items: center;
       }
-      .hero-stats { justify-content: center; bottom: auto; top: 50%; transform: translateY(-50%); }
+      .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 20px; bottom: auto; top: 50%; transform: translateY(-50%); }
+      .stat-pill { width: 100%; }
       .week-tab { flex: 1; }
       .enrol-steps-left { margin-top: 1.5rem; }
     }
