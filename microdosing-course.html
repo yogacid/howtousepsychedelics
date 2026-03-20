@@ -2510,8 +2510,18 @@
     }
   });
 
-  // iOS Safari adjusts window.innerHeight to exclude the toolbar, so
-  // position:fixed; bottom:0 works correctly without JS adjustment.
+  // iOS Safari: actively reset bottom on every viewport resize so the CTA
+  // re-anchors correctly when the toolbar shows or hides.
+  if (window.visualViewport) {
+    var cta = document.getElementById('stickyCta');
+    function updateCtaBottom() {
+      var offset = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
+      cta.style.bottom = Math.max(0, offset) + 'px';
+    }
+    window.visualViewport.addEventListener('resize', updateCtaBottom);
+    window.visualViewport.addEventListener('scroll', updateCtaBottom);
+    updateCtaBottom();
+  }
 </script>
 
 <!-- ── Search overlay ───────────────────────────────────────── -->
