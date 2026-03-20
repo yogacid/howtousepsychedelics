@@ -1430,8 +1430,8 @@
     /* ── RESPONSIVE ─────────────────────────────────────────────── */
     @media (max-width: 960px) {
       .hero { grid-template-columns: 1fr; }
-      .hero-image { min-height: 340px; display: block; position: relative; }
-      .hero-image-inner { position: absolute; inset: 0; }
+      .hero-image { display: flex; flex-direction: column; overflow: visible; min-height: 0; }
+      .hero-image-inner { position: relative; height: 340px; flex-shrink: 0; }
       .for-you { grid-template-columns: 1fr; gap: 40px; }
       .for-you-intro { position: static; }
       .testimonials-grid { grid-template-columns: 1fr; }
@@ -1457,7 +1457,8 @@
         padding: 14px 5% calc(14px + env(safe-area-inset-bottom));
         justify-content: center; align-items: center;
       }
-      .hero-stats { justify-content: center; bottom: auto; top: 50%; transform: translateY(-50%); }
+      .hero-stats { position: static; top: auto; bottom: auto; transform: none; background: var(--bg-mid); border-top: 1px solid var(--cream-border); padding: 20px 5%; justify-content: center; gap: 12px; }
+      .stat-pill { background: transparent; backdrop-filter: none; border-color: var(--cream-border); }
       .week-tab { flex: 1; }
       .enrol-steps-left { margin-top: 1.5rem; }
     }
