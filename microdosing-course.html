@@ -43,6 +43,7 @@
       --grad:         linear-gradient(135deg, #3ec9bf 0%, #5cb84a 100%);
       --nav-h:        75px;
       --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 20px;
+      --sab: env(safe-area-inset-bottom, 0px);
     }
 
     [data-theme="light"] {
@@ -2442,11 +2443,13 @@
   if (window.visualViewport) {
     var cta = document.getElementById('stickyCta');
     function updateCtaBottom() {
+      var sab = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sab')) || 0;
       var offset = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
-      cta.style.bottom = Math.max(0, offset) + 'px';
+      cta.style.bottom = Math.max(0, offset - sab) + 'px';
     }
     window.visualViewport.addEventListener('resize', updateCtaBottom);
     window.visualViewport.addEventListener('scroll', updateCtaBottom);
+    updateCtaBottom();
   }
 </script>
 
