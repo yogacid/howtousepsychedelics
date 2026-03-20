@@ -194,6 +194,20 @@
       background: #ede4d4;
       border-bottom-color: rgba(44,31,14,0.14);
     }
+    [data-theme="light"] .nav-dropdown {
+      background: #ede4d4;
+      border-color: rgba(44,31,14,0.14);
+      border-top-color: #1f8c84;
+      box-shadow: 0 12px 40px rgba(44,31,14,0.12);
+    }
+    [data-theme="light"] .nav-dropdown li > .nav-btn {
+      color: #6b5640;
+    }
+    [data-theme="light"] .nav-dropdown li > .nav-btn:hover {
+      color: #1f8c84;
+      background: rgba(31,140,132,0.08);
+      border-left-color: #1f8c84;
+    }
 
 
     /* Card / article backgrounds */
@@ -410,6 +424,7 @@
       border: none;
       border-left: 2px solid transparent;
       cursor: pointer;
+      text-decoration: none;
       transition: color 0.15s, background 0.15s, border-color 0.15s;
       white-space: nowrap;
     }
@@ -3267,7 +3282,11 @@ window._combo = (function(){
         </ul>
       </li>
       <li class="nav-item">
-        <a href="/microdosing" class="nav-btn">Microdosing</a>
+        <a href="/microdosing" class="nav-btn">Microdosing <span class="chevron">▾</span></a>
+        <ul class="nav-dropdown">
+          <li><a href="/microdosing" class="nav-btn">Overview</a></li>
+          <li><a href="/microdosing-course" class="nav-btn">Course</a></li>
+        </ul>
       </li>
       <li class="nav-item">
         <a href="/journeying" class="nav-btn">
@@ -3351,7 +3370,14 @@ window._combo = (function(){
       </ul>
     </li>
     <li class="drawer-item">
-      <button class="drawer-btn" onclick="drawerNav('microdosing', event)">Microdosing</button>
+      <button class="drawer-btn" onclick="drawerNav('microdosing', event)" data-has-sub="true">
+        Microdosing
+        <svg class="drawer-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <ul class="drawer-sub">
+        <li><button class="drawer-btn" onclick="drawerNav('microdosing', event)">Overview</button></li>
+        <li><a href="/microdosing-course" class="drawer-btn">Course</a></li>
+      </ul>
     </li>
     <li class="drawer-item">
       <button class="drawer-btn" onclick="drawerNav('journeying', event)" data-has-sub="true">
