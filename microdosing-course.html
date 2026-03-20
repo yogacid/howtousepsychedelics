@@ -2510,15 +2510,27 @@
     }
   });
 
-  // Fix sticky CTA position in iOS Safari
-  // With viewport-fit=cover: innerHeight = full screen including safe areas.
-  // visualViewport.height shrinks by toolbar+home-indicator when toolbar shows.
-  // Setting bottom = offset places CTA flush against the toolbar's top edge.
+  // DEBUG: show actual viewport values on device
+  var _dbg = document.createElement('div');
+  _dbg.id = 'vp-debug';
+  _dbg.style.cssText = 'position:fixed;top:90px;left:10px;right:10px;z-index:99999;background:rgba(0,0,0,0.85);color:#0f0;font:11px/1.6 monospace;padding:10px 12px;border-radius:8px;pointer-events:none;';
+  document.body.appendChild(_dbg);
+
   if (window.visualViewport) {
     var cta = document.getElementById('stickyCta');
     function updateCtaBottom() {
-      var offset = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
-      cta.style.bottom = Math.max(0, offset) + 'px';
+      var wih = window.innerHeight;
+      var vvh = window.visualViewport.height;
+      var vvot = window.visualViewport.offsetTop;
+      var offset = wih - vvh - vvot;
+      var bottom = Math.max(0, offset);
+      cta.style.bottom = bottom + 'px';
+      _dbg.innerHTML =
+        'innerHeight: ' + wih +
+        '<br>vv.height: ' + vvh +
+        '<br>vv.offsetTop: ' + vvot +
+        '<br>offset: ' + offset +
+        '<br>→ bottom: ' + bottom;
     }
     window.visualViewport.addEventListener('resize', updateCtaBottom);
     window.visualViewport.addEventListener('scroll', updateCtaBottom);
