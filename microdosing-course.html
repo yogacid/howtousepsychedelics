@@ -2437,6 +2437,17 @@
       swapFooterLogos(true);
     }
   });
+
+  // Fix sticky CTA position in Safari (visual viewport API)
+  if (window.visualViewport) {
+    var cta = document.getElementById('stickyCta');
+    function updateCtaBottom() {
+      var offset = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
+      cta.style.bottom = Math.max(0, offset) + 'px';
+    }
+    window.visualViewport.addEventListener('resize', updateCtaBottom);
+    window.visualViewport.addEventListener('scroll', updateCtaBottom);
+  }
 </script>
 
 </body>
