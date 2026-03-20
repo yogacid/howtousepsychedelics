@@ -316,6 +316,81 @@
     }
     .nav-search-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }
     .nav-search-btn svg { width: 18px; height: 18px; }
+    /* ── Search overlay ── */
+    .search-overlay {
+      display: none; position: fixed; inset: 0; z-index: 900;
+      background: rgba(8,13,11,0.82); backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: flex-start; justify-content: center;
+      padding-top: 80px;
+    }
+    .search-overlay.open { display: flex; }
+    [data-theme="light"] .search-overlay { background: rgba(214,200,180,0.88); }
+    .search-box {
+      width: min(680px, 92vw); background: var(--card-bg);
+      border-radius: 12px; overflow: hidden;
+    }
+    [data-theme="light"] .search-box {
+      background: #f0e8d8; border: 1px solid rgba(31,140,132,0.4);
+      box-shadow: 0 8px 40px rgba(44,31,14,0.18);
+    }
+    .search-input-row {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0 1.25rem;
+      border-bottom: 1px solid var(--cream-border);
+    }
+    .search-input-row svg { color: var(--teal); flex-shrink: 0; width: 18px; height: 18px; }
+    .search-input {
+      flex: 1; background: none; border: none; outline: none;
+      font-family: var(--sans); font-size: 1rem; color: var(--cream);
+      padding: 1rem 0;
+    }
+    .search-input::placeholder { color: var(--cream-muted); }
+    .search-close-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--cream-muted); font-size: 1.4rem; line-height: 1;
+      padding: 0.5rem; transition: color 0.15s;
+    }
+    .search-close-btn:hover { color: var(--cream); }
+    .search-results { max-height: min(60vh, 480px); overflow-y: auto; }
+    .search-results:empty::after {
+      content: attr(data-empty); display: block;
+      padding: 2rem 1.5rem; text-align: center;
+      font-family: var(--sans); font-size: 0.9rem; color: var(--cream-muted);
+    }
+    [data-theme="light"] .search-results:empty::after { color: var(--cream-dim); }
+    .search-result {
+      display: block; padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--cream-border);
+      cursor: pointer; transition: background 0.15s;
+    }
+    .search-result:last-child { border-bottom: none; }
+    .search-result:hover { background: rgba(255,255,255,0.04); }
+    [data-theme="light"] .search-result:hover { background: rgba(44,31,14,0.05); }
+    .search-result-page {
+      font-family: var(--sans); font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--teal); margin-bottom: 0.2rem;
+    }
+    .search-result-heading {
+      font-family: var(--serif); font-size: 1.05rem;
+      color: var(--cream); margin-bottom: 0.25rem;
+    }
+    .search-result-snippet {
+      font-family: var(--sans); font-size: 0.82rem;
+      color: var(--cream-muted); line-height: 1.4;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .search-result mark {
+      background: rgba(74,166,140,0.25); color: var(--teal);
+      border-radius: 2px; padding: 0 1px;
+    }
+    .search-hint {
+      font-family: var(--sans); font-size: 0.78rem;
+      color: var(--cream-muted); padding: 1rem 1.5rem;
+      text-align: center; border-top: 1px solid var(--cream-border);
+    }
     .theme-toggle {
       background: none; border: none; cursor: pointer;
       color: var(--cream-dim); padding: 0.35rem;
@@ -1524,7 +1599,7 @@
     </ul>
 
     <div class="nav-right">
-      <button class="nav-search-btn" onclick="window.location='/'" aria-label="Search">
+      <button class="nav-search-btn" onclick="openSearch()" aria-label="Search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
       <a href="/planner" class="nav-cta-outline">Journey Planner</a>
@@ -2452,6 +2527,131 @@
     window.visualViewport.addEventListener('scroll', updateCtaBottom);
     updateCtaBottom();
   }
+</script>
+
+<!-- ── Search overlay ───────────────────────────────────────── -->
+<div class="search-overlay" id="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
+  <div class="search-box">
+    <div class="search-input-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="search-input" type="text" placeholder="Search topics, substances, practices…" autocomplete="off" spellcheck="false">
+      <button class="search-close-btn" onclick="closeSearch()" aria-label="Close search">×</button>
+    </div>
+    <div class="search-results" id="search-results" data-empty=""></div>
+    <div class="search-hint" id="search-hint">Type to search across all pages</div>
+  </div>
+</div>
+
+<script>
+/* ── Search (static index for standalone page) ── */
+var SEARCH_INDEX = [
+  {id:'home',title:'How to Use Psychedelics',desc:'The most trusted evidence-informed guide to psychedelics — psilocybin, ayahuasca, LSD, MDMA, ketamine, mescaline, and 2C-B. Harm reduction, preparation, integration, microdosing, and facilitation.'},
+  {id:'psilocybin',title:'Psilocybin Mushrooms',desc:'Complete guide to psilocybin mushrooms: effects, dosage, what the research shows, risks, contraindications, and how to prepare. Evidence-informed and harm-reduction focused.'},
+  {id:'ayahuasca',title:'Ayahuasca',desc:'Complete guide to ayahuasca: pharmacology, ceremony and cultural context, critical MAOI drug interactions, risks, research, and ethics for non-Indigenous participants.'},
+  {id:'lsd',title:'LSD',desc:'Complete guide to LSD: pharmacology, effects, dosage, how it differs from psilocybin, HPPD risk, volumetric dosing, and harm reduction.'},
+  {id:'mdma',title:'MDMA',desc:'Complete guide to MDMA: pharmacology, empathogen effects, PTSD-assisted therapy research, neurotoxicity, cardiovascular risks, and comprehensive harm reduction.'},
+  {id:'mescaline',title:'Mescaline',desc:'Complete guide to mescaline: peyote vs. San Pedro, effects, dosage, research, Indigenous sovereignty, and ecological dimensions.'},
+  {id:'ketamine',title:'Ketamine',desc:'Complete guide to ketamine: NMDA mechanism, dissociative effects, ketamine therapy for depression, esketamine, dependence risk, bladder toxicity, and harm reduction.'},
+  {id:'twocb',title:'2C-B',desc:"Complete guide to 2C-B: Shulgin's phenethylamine psychedelic, steep dose-response curve, effects, dosage, comparison with LSD and MDMA, and essential harm reduction."},
+  {id:'microdosing',title:'Microdosing',desc:'Honest guide to microdosing psilocybin and LSD: what the evidence actually shows, Fadiman and Stamets protocols, risks, and an ecological perspective.'},
+  {id:'microdosing-course',title:'Microdosing Mindfully — Course',desc:'A structured 3-week guided course on microdosing mindfully. 20 videos, 15 lessons, worksheets, and a framework grounded in mindfulness and harm reduction.'},
+  {id:'science',title:'The Science of Psychedelics',desc:'Evidence-based guide to psychedelic science: REBUS model, effects on the brain, clinical trial landscape, nature-relatedness research, and honest assessment of the evidence.'},
+  {id:'culture',title:'Psychedelic History & Culture',desc:'The cultural history of psychedelics: Indigenous ceremonial traditions, 1960s counterculture, prohibition, the modern renaissance, commercialisation, and Canadian context.'},
+  {id:'law',title:'Psychedelic Law in Canada',desc:'Guide to Canadian and international psychedelic law: decriminalisation vs. legalisation, Health Canada exemptions, Special Access Program, BC pilot, and facilitation legality.'},
+  {id:'assessment',title:'Safety Assessment',desc:'Complete safety assessment guide: medical contraindications, drug interactions table, psychological readiness, substance testing, and crisis resources.'},
+  {id:'preparation',title:'Preparation — Set & Setting',desc:'Comprehensive guide to set and setting: what it really means, why context shapes experience so profoundly, how to prepare mindset, environment, and social context.'},
+  {id:'navigation',title:'Navigating a Psychedelic Experience',desc:'How to navigate a psychedelic experience: the journey arc, surrender vs. resistance, working with difficult material, ego dissolution, and when to seek help.'},
+  {id:'integration',title:'Integration',desc:'Complete integration guide: what integration means, ecological and clinical approaches, practical practices, integration as lifeway, and where to find support.'},
+  {id:'nature',title:'Psychedelics & Nature',desc:'Why ecological themes arise so consistently in psychedelic experience, what the research shows, and what it means.'},
+  {id:'ibogaine',title:'Ibogaine',desc:'The complete guide to ibogaine: Bwiti roots, opioid addiction research, multi-receptor pharmacology, cardiac safety screening, legal status, and how to access treatment safely.'},
+  {id:'dmt',title:'DMT',desc:'Comprehensive guide to N,N-dimethyltryptamine: pharmacology, endogenous DMT, breakthrough experiences, entity encounters, routes of administration, and harm reduction.'},
+  {id:'fivemedmt',title:'5-MeO-DMT',desc:'Complete guide to 5-MeO-DMT: the toad vs. synthetic debate, complete ego dissolution, cardiac and MAOI risks, reactivations, and what the clinical research shows.'},
+  {id:'cannabis',title:'Cannabis',desc:'Cannabis as a psychedelic-adjacent substance: endocannabinoid pharmacology, high-dose effects, combinations with psilocybin and LSD, psychosis risk, and addiction.'},
+  {id:'salvia',title:'Salvia Divinorum',desc:'Complete guide to salvia divinorum: kappa-opioid pharmacology, Mazatec ceremonial tradition, extract potency, physical safety, and what the experience is actually like.'},
+  {id:'readiness',title:'Readiness Assessment',desc:'A ten-question self-assessment covering intention, psychological safety, set and setting, and integration readiness.'},
+  {id:'planner',title:'Journey Planner',desc:'A step-by-step interactive planner for preparing for a psychedelic experience: readiness assessment, preparation timeline, intention setting, and personalised plan.'}
+];
+
+function _highlight(text, q) {
+  if (!q) return text;
+  var escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp('(' + escaped + ')', 'gi'), '<mark>$1</mark>');
+}
+function _snippet(text, q) {
+  var idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if (idx === -1) return text.slice(0, 140);
+  var start = Math.max(0, idx - 55);
+  return (start > 0 ? '…' : '') + text.slice(start, idx + q.length + 90) + '…';
+}
+function _performSearch(query) {
+  var q = query.trim();
+  if (q.length < 2) return [];
+  var ql = q.toLowerCase();
+  var results = [];
+  SEARCH_INDEX.forEach(function(page) {
+    var inTitle = page.title.toLowerCase().includes(ql);
+    var inDesc  = page.desc.toLowerCase().includes(ql);
+    if (inTitle || inDesc) {
+      results.push({
+        id: page.id, pageTitle: page.title,
+        snippet: _snippet(page.desc, q),
+        score: (inTitle ? 3 : 0) + (inDesc ? 1 : 0)
+      });
+    }
+  });
+  results.sort(function(a, b) { return b.score - a.score; });
+  return results.slice(0, 12);
+}
+function _renderSearch(query) {
+  var container = document.getElementById('search-results');
+  var hint = document.getElementById('search-hint');
+  var q = query.trim();
+  if (q.length < 2) {
+    container.innerHTML = '';
+    container.setAttribute('data-empty', '');
+    hint.textContent = 'Type to search across all pages';
+    return;
+  }
+  var results = _performSearch(q);
+  hint.textContent = results.length ? results.length + ' result' + (results.length !== 1 ? 's' : '') : '';
+  if (!results.length) {
+    container.innerHTML = '';
+    container.setAttribute('data-empty', 'No results for "' + q + '"');
+    return;
+  }
+  container.removeAttribute('data-empty');
+  container.innerHTML = results.map(function(r) {
+    return '<div class="search-result" onclick="searchGoTo(\'' + r.id + '\')">' +
+      '<div class="search-result-page">' + _highlight(r.pageTitle, q) + '</div>' +
+      '<div class="search-result-snippet">' + _highlight(r.snippet, q) + '</div>' +
+      '</div>';
+  }).join('');
+}
+function openSearch() {
+  var overlay = document.getElementById('search-overlay');
+  overlay.classList.add('open');
+  setTimeout(function() { document.getElementById('search-input').focus(); }, 50);
+  document.getElementById('search-input').addEventListener('input', function() {
+    _renderSearch(this.value);
+  });
+}
+function closeSearch() {
+  document.getElementById('search-overlay').classList.remove('open');
+}
+function searchGoTo(id) {
+  closeSearch();
+  window.location = id === 'home' ? '/' : '/' + id;
+}
+document.addEventListener('keydown', function(e) {
+  if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || e.key === '/') {
+    var overlay = document.getElementById('search-overlay');
+    if (!overlay.classList.contains('open')) { e.preventDefault(); openSearch(); }
+  }
+  if (e.key === 'Escape') closeSearch();
+});
+document.getElementById('search-overlay').addEventListener('click', function(e) {
+  if (e.target.id === 'search-overlay') closeSearch();
+});
 </script>
 
 </body>
