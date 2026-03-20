@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Microdosing Mindfully — A 3-Week Course · How to Use Psychedelics</title>
   <meta name="description" content="A structured 3-week course on mindful microdosing — evidence-informed, trauma-aware, and grounded in the Psygaia Framework. For sensitive, reflective people who want structure, not just inspiration."/>
   <link rel="canonical" href="https://www.howtousepsychedelics.com/microdosing-course"/>
@@ -371,10 +371,14 @@
       transition: color 0.15s;
     }
     .drawer-btn:hover { color: var(--cream); }
-    .drawer-chevron { width: 16px; height: 16px; transition: transform 0.2s; flex-shrink: 0; }
-    .drawer-sub { display: none; background: rgba(0,0,0,0.2); }
-    .drawer-sub.open { display: block; }
-    .drawer-sub .drawer-btn { padding-left: 2rem; font-size: 0.75rem; }
+    .drawer-chevron { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.45; transition: transform 0.25s ease; }
+    .drawer-item.expanded .drawer-chevron { transform: rotate(180deg); }
+    .drawer-sub { list-style: none; overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: rgba(255,255,255,0.02); }
+    .drawer-item.expanded .drawer-sub { max-height: 600px; }
+    .drawer-sub li { border-top: 1px solid rgba(242,242,239,0.04); }
+    .drawer-sub .drawer-btn { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; padding: 0.75rem 1.25rem 0.75rem 1.75rem; color: var(--cream-dim); border-left: 2px solid transparent; text-decoration: none !important; display: block; }
+    .drawer-sub .drawer-btn:hover { border-left-color: var(--teal); color: var(--cream); }
+    .drawer-sub .drawer-btn.active-page { color: var(--teal); border-left-color: var(--teal); }
     .drawer-footer {
       padding: 1rem 1.25rem; border-top: 1px solid var(--cream-border); flex-shrink: 0;
     }
@@ -429,7 +433,7 @@
       background: var(--bg-mid);
       border-top: 1px solid var(--accent-border);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 5%;
+      padding: 14px 5% calc(14px + env(safe-area-inset-bottom));
       transform: translateY(100%);
       transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
     }
@@ -1450,7 +1454,7 @@
       .footer-support-btn { align-self: stretch; text-align: center; }
       .sticky-cta {
         flex-direction: column; gap: 8px; text-align: center;
-        padding: 14px 5% max(14px, env(safe-area-inset-bottom));
+        padding: 14px 5% calc(14px + env(safe-area-inset-bottom));
         justify-content: center; align-items: center;
       }
       .hero-stats { justify-content: center; }
@@ -1544,12 +1548,63 @@
     </button>
   </div>
   <ul class="drawer-nav">
-    <li class="drawer-item"><a href="/foundations" class="drawer-btn">Foundations</a></li>
-    <li class="drawer-item"><a href="/substances" class="drawer-btn">Substances</a></li>
-    <li class="drawer-item"><a href="/microdosing" class="drawer-btn">Microdosing — Overview</a></li>
-    <li class="drawer-item"><a href="/microdosing-course" class="drawer-btn">Microdosing — Course</a></li>
-    <li class="drawer-item"><a href="/journeying" class="drawer-btn">Journeying</a></li>
-    <li class="drawer-item"><a href="/facilitation" class="drawer-btn">Facilitation</a></li>
+    <li class="drawer-item">
+      <button class="drawer-btn" onclick="drawerNav('/foundations', event)" data-has-sub="true">
+        Foundations
+        <svg class="drawer-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <ul class="drawer-sub">
+        <li><a href="/culture" class="drawer-btn">Culture</a></li>
+        <li><a href="/law" class="drawer-btn">Law</a></li>
+        <li><a href="/science" class="drawer-btn">Science</a></li>
+        <li><a href="/nature" class="drawer-btn">Nature</a></li>
+      </ul>
+    </li>
+    <li class="drawer-item">
+      <button class="drawer-btn" onclick="drawerNav('/substances', event)" data-has-sub="true">
+        Substances
+        <svg class="drawer-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <ul class="drawer-sub">
+        <li><a href="/psilocybin" class="drawer-btn">Psilocybin</a></li>
+        <li><a href="/ayahuasca" class="drawer-btn">Ayahuasca</a></li>
+        <li><a href="/dmt" class="drawer-btn">DMT (N,N-DMT)</a></li>
+        <li><a href="/fivemedmt" class="drawer-btn">5-MeO-DMT</a></li>
+        <li><a href="/mescaline" class="drawer-btn">Mescaline</a></li>
+        <li><a href="/lsd" class="drawer-btn">LSD</a></li>
+        <li><a href="/ibogaine" class="drawer-btn">Ibogaine</a></li>
+        <li><a href="/ketamine" class="drawer-btn">Ketamine</a></li>
+        <li><a href="/mdma" class="drawer-btn">MDMA</a></li>
+        <li><a href="/cannabis" class="drawer-btn">Cannabis</a></li>
+        <li><a href="/twocb" class="drawer-btn">2C-B</a></li>
+        <li><a href="/salvia" class="drawer-btn">Salvia</a></li>
+      </ul>
+    </li>
+    <li class="drawer-item">
+      <button class="drawer-btn" onclick="drawerNav('/microdosing', event)" data-has-sub="true">
+        Microdosing
+        <svg class="drawer-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <ul class="drawer-sub">
+        <li><a href="/microdosing" class="drawer-btn">Overview</a></li>
+        <li><a href="/microdosing-course" class="drawer-btn active-page">Course</a></li>
+      </ul>
+    </li>
+    <li class="drawer-item">
+      <button class="drawer-btn" onclick="drawerNav('/journeying', event)" data-has-sub="true">
+        Journeying
+        <svg class="drawer-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <ul class="drawer-sub">
+        <li><a href="/assessment" class="drawer-btn">Assessment</a></li>
+        <li><a href="/preparation" class="drawer-btn">Preparation</a></li>
+        <li><a href="/navigation" class="drawer-btn">Navigation</a></li>
+        <li><a href="/integration" class="drawer-btn">Integration</a></li>
+      </ul>
+    </li>
+    <li class="drawer-item">
+      <a href="/facilitation" class="drawer-btn">Facilitation</a>
+    </li>
   </ul>
   <div class="drawer-footer">
     <a href="/planner" class="drawer-donate" onclick="closeMobileMenu()">Journey Planner</a>
@@ -2322,6 +2377,20 @@
     const overlay = document.getElementById('mobile-overlay');
     overlay.classList.remove('open');
     setTimeout(() => { overlay.style.display = 'none'; }, 300);
+  }
+  function drawerNav(path, event) {
+    const btn = event.currentTarget;
+    const item = btn.closest('.drawer-item');
+    const sub = item ? item.querySelector('.drawer-sub') : null;
+    if (sub && btn.dataset.hasSub) {
+      const isOpen = item.classList.contains('expanded');
+      document.querySelectorAll('.drawer-item.expanded').forEach(el => el.classList.remove('expanded'));
+      if (!isOpen) item.classList.add('expanded');
+      if (isOpen) { closeMobileMenu(); window.location = path; }
+    } else {
+      closeMobileMenu();
+      window.location = path;
+    }
   }
 
   // FAQ accordion
