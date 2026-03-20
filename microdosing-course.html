@@ -508,9 +508,9 @@
       background: var(--bg-mid);
       border-top: 1px solid var(--accent-border);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 5% calc(14px + env(safe-area-inset-bottom));
+      padding: 14px 5%;
       transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), bottom 0.1s linear;
     }
     .sticky-cta.visible { transform: translateY(0); }
     .sticky-cta-text {
@@ -1528,7 +1528,7 @@
       .footer-support-btn { align-self: stretch; text-align: center; }
       .sticky-cta {
         flex-direction: column; gap: 8px; text-align: center;
-        padding: 14px 5% calc(14px + env(safe-area-inset-bottom));
+        padding: 14px 5%;
         justify-content: center; align-items: center;
       }
       .stat-pill { padding: 14px 8px; }
@@ -2510,17 +2510,15 @@
     }
   });
 
-  // Fix sticky CTA position in Safari (visual viewport API)
+  // Fix sticky CTA position in iOS Safari
+  // With viewport-fit=cover: innerHeight = full screen including safe areas.
+  // visualViewport.height shrinks by toolbar+home-indicator when toolbar shows.
+  // Setting bottom = offset places CTA flush against the toolbar's top edge.
   if (window.visualViewport) {
     var cta = document.getElementById('stickyCta');
-    // Sensor div: offsetHeight resolves env(safe-area-inset-bottom) to actual pixels
-    var sabSensor = document.createElement('div');
-    sabSensor.style.cssText = 'position:fixed;bottom:0;left:-9999px;width:1px;height:0;padding-bottom:env(safe-area-inset-bottom,0px);pointer-events:none;visibility:hidden;';
-    document.body.appendChild(sabSensor);
     function updateCtaBottom() {
-      var sab = sabSensor.offsetHeight;
       var offset = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
-      cta.style.bottom = Math.max(0, offset - sab) + 'px';
+      cta.style.bottom = Math.max(0, offset) + 'px';
     }
     window.visualViewport.addEventListener('resize', updateCtaBottom);
     window.visualViewport.addEventListener('scroll', updateCtaBottom);
