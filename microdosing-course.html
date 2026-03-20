@@ -1430,8 +1430,8 @@
     /* ── RESPONSIVE ─────────────────────────────────────────────── */
     @media (max-width: 960px) {
       .hero { grid-template-columns: 1fr; }
-      .hero-image { min-height: 340px; display: block; position: relative; }
-      .hero-image-inner { position: absolute; inset: 0; }
+      .hero-image { display: flex; flex-direction: column; overflow: visible; min-height: 0; }
+      .hero-image-inner { position: relative; height: 340px; flex-shrink: 0; }
       .for-you { grid-template-columns: 1fr; gap: 40px; }
       .for-you-intro { position: static; }
       .testimonials-grid { grid-template-columns: 1fr; }
@@ -1457,8 +1457,11 @@
         padding: 14px 5% calc(14px + env(safe-area-inset-bottom));
         justify-content: center; align-items: center;
       }
-      .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 20px; bottom: auto; top: 20px; transform: none; }
-      .stat-pill { width: 100%; }
+      .hero-stats { position: static; top: auto; bottom: auto; transform: none; display: flex; gap: 0; padding: 0; background: var(--bg-mid); border-top: 1px solid var(--cream-border); }
+      .stat-pill { flex: 1; background: none; backdrop-filter: none; border: none; border-right: 1px solid var(--cream-border); border-radius: 0; padding: 14px 8px; }
+      .stat-pill:last-child { border-right: none; }
+      .stat-num { font-size: 1.5rem; }
+      .stat-label { font-size: 0.55rem; }
       .week-tab { flex: 1; }
       .enrol-steps-left { margin-top: 1.5rem; }
     }
