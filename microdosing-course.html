@@ -625,7 +625,7 @@
     /* ── FOR YOU ────────────────────────────────────────────────── */
     /* ── SECTION DIVIDERS (all sections except hero) ────────────── */
     .for-you, .testimonials, .outcomes, .history, .approach,
-    .curriculum, .community, .enrol-steps, .instructor, .pricing,
+    .curriculum, .community, .enroll-steps, .instructor, .pricing,
     .fallback, .faq, .disclaimer {
       border-top: 1px solid var(--cream-border);
     }
@@ -1287,23 +1287,23 @@
       font-size: 0.82rem; font-weight: 300; color: var(--cream-dim); line-height: 1.6;
     }
 
-    /* ── ENROL STEPS ────────────────────────────────────────────── */
-    .enrol-steps {
+    /* ── ENROLL STEPS ────────────────────────────────────────────── */
+    .enroll-steps {
       padding: 100px 5%; background: var(--bg);
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 80px; align-items: stretch;
     }
-    .enrol-steps > div { display: flex; flex-direction: column; }
-    .enrol-steps-left { display: flex; flex-direction: column; gap: 14px; margin-top: 3rem; }
-    .enrol-steps-header { margin-bottom: 0; }
-    .enrol-step {
+    .enroll-steps > div { display: flex; flex-direction: column; }
+    .enroll-steps-left { display: flex; flex-direction: column; gap: 14px; margin-top: 3rem; }
+    .enroll-steps-header { margin-bottom: 0; }
+    .enroll-step {
       background: var(--bg-card); border-radius: var(--r-lg);
       border: 1px solid var(--cream-border);
       padding: 22px 24px;
       display: grid; grid-template-columns: 40px 1fr;
       gap: 16px; align-items: start;
     }
-    .enrol-step-num {
+    .enroll-step-num {
       width: 40px; height: 40px; border-radius: 50%;
       background: var(--accent-dim); border: 1px solid var(--accent-border);
       display: flex; align-items: center; justify-content: center;
@@ -1311,42 +1311,42 @@
       font-size: 1.3rem; font-weight: 300; color: var(--teal); line-height: 1;
       flex-shrink: 0;
     }
-    .enrol-step-content { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; }
-    .enrol-step-title {
+    .enroll-step-content { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; }
+    .enroll-step-title {
       font-size: 0.9rem; font-weight: 600; color: var(--cream);
       letter-spacing: 0.03em;
     }
-    .enrol-step-body {
+    .enroll-step-body {
       font-size: 0.85rem; font-weight: 300; color: var(--cream-dim);
       line-height: 1.7;
     }
-    .enrol-cta-panel {
+    .enroll-cta-panel {
       background: var(--bg-card); border-radius: var(--r-xl);
       border: 1px solid var(--accent-border);
       padding: 40px 36px; margin-top: 3rem; flex: 1;
       display: flex; flex-direction: column; gap: 20px;
     }
-    .enrol-cta-label {
+    .enroll-cta-label {
       font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em;
       text-transform: uppercase; color: var(--teal);
     }
-    .enrol-cta-heading {
+    .enroll-cta-heading {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(1.6rem, 3vw, 2.2rem);
       font-weight: 300; line-height: 1.15; color: var(--cream);
     }
-    .enrol-cta-includes {
+    .enroll-cta-includes {
       list-style: none; display: flex; flex-direction: column; gap: 8px;
     }
-    .enrol-cta-includes li {
+    .enroll-cta-includes li {
       display: flex; align-items: flex-start; gap: 10px;
       font-size: 0.85rem; font-weight: 300; color: var(--cream-dim); line-height: 1.5;
     }
-    .enrol-cta-includes li::before {
+    .enroll-cta-includes li::before {
       content: '✓'; color: var(--teal); font-weight: 700;
       font-size: 0.8rem; flex-shrink: 0; margin-top: 1px;
     }
-    .enrol-cta-btn {
+    .enroll-cta-btn {
       display: block; width: 100%; text-align: center;
       padding: 0.9rem 1.75rem;
       background: linear-gradient(135deg, #3ec9bf 0%, #7dde55 40%, #3ec9bf 70%, #5cb84a 100%);
@@ -1356,24 +1356,24 @@
       text-transform: uppercase; border-radius: 6px; text-decoration: none;
       transition: background-position 0.55s ease, box-shadow 0.25s ease;
     }
-    .enrol-cta-btn:hover {
+    .enroll-cta-btn:hover {
       animation: accentShimmer 4s ease-in-out infinite;
       box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
     }
-    .enrol-cta-guarantee {
+    .enroll-cta-guarantee {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 14px 16px;
       background: rgba(62,201,191,0.04);
       border: 1px solid rgba(62,201,191,0.2);
       border-radius: var(--r-lg);
     }
-    .enrol-cta-guarantee-icon { color: var(--teal); flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
-    .enrol-cta-guarantee p {
+    .enroll-cta-guarantee-icon { color: var(--teal); flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
+    .enroll-cta-guarantee p {
       font-size: 0.8rem; font-weight: 300; color: var(--cream-dim); line-height: 1.6;
     }
     @media (max-width: 768px) {
-      .enrol-steps { grid-template-columns: 1fr; gap: 40px; }
-      .enrol-steps-left, .enrol-cta-panel { margin-top: 0; }
+      .enroll-steps { grid-template-columns: 1fr; gap: 40px; }
+      .enroll-steps-left, .enroll-cta-panel { margin-top: 0; }
     }
 
     /* ── FAQ + TESTIMONIALS ─────────────────────────────────────── */
@@ -1461,7 +1461,7 @@
       .stat-num { font-size: 1.5rem; }
       .stat-label { font-size: 0.55rem; }
       .week-tab { flex: 1; }
-      .enrol-steps-left { margin-top: 1.5rem; }
+      .enroll-steps-left { margin-top: 1.5rem; }
     }
   </style>
 </head>
@@ -1621,7 +1621,7 @@
     <div class="sticky-cta-text">Ready to begin? <em>Microdosing Mindfully</em></div>
     <div class="sticky-cta-note">14-day money-back guarantee</div>
   </div>
-  <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enrol Now →</a>
+  <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enroll Now →</a>
 </div>
 
 <!-- ── HERO ──────────────────────────────────────────────────────── -->
@@ -1644,7 +1644,7 @@
     </p>
 
     <div class="hero-actions">
-      <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enrol Now →</a>
+      <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enroll Now →</a>
       <a href="#curriculum" class="btn-outline">See Curriculum</a>
     </div>
 
@@ -1842,7 +1842,7 @@
 
       <div class="bonus-card">
         <span class="bonus-label">Bonus</span>
-        <p>Access to <strong>monthly integration and breathwork circles</strong> held by members of our team of experienced and educated guides — included with your enrolment.</p>
+        <p>Access to <strong>monthly integration and breathwork circles</strong> held by members of our team of experienced and educated guides — included with your enrollment.</p>
       </div>
     </div>
   </div>
@@ -2005,7 +2005,7 @@
     <span class="section-eyebrow">Included: Psygaia's Circle</span>
     <h2 class="community-title">A place to belong<br>while you learn.</h2>
     <p class="community-body">
-      Enrolment includes lifetime access to Psygaia's Circle — a moderated
+      Enrollment includes lifetime access to Psygaia's Circle — a moderated
       community space for those navigating psychedelic experiences with
       intention. There is never pressure to share. Your presence is enough.
     </p>
@@ -2031,50 +2031,50 @@
   </div>
 </section>
 
-<!-- ── ENROL STEPS ──────────────────────────────────────────────── -->
-<section class="enrol-steps">
+<!-- ── ENROLL STEPS ──────────────────────────────────────────────── -->
+<section class="enroll-steps">
   <div>
-    <div class="enrol-steps-header">
+    <div class="enroll-steps-header">
       <span class="section-eyebrow">What Happens Next</span>
       <h2 class="section-title">Simple to begin.</h2>
     </div>
-    <div class="enrol-steps-left">
-      <div class="enrol-step">
-        <div class="enrol-step-num">1</div>
-        <div class="enrol-step-content">
-          <div class="enrol-step-title">Enrol</div>
-          <p class="enrol-step-body">Complete your enrolment via Psygaia's Circle. Instant access — no waiting, no onboarding calls.</p>
+    <div class="enroll-steps-left">
+      <div class="enroll-step">
+        <div class="enroll-step-num">1</div>
+        <div class="enroll-step-content">
+          <div class="enroll-step-title">Enroll</div>
+          <p class="enroll-step-body">Complete your enrollment via Psygaia's Circle. Instant access — no waiting, no onboarding calls.</p>
         </div>
       </div>
-      <div class="enrol-step">
-        <div class="enrol-step-num">2</div>
-        <div class="enrol-step-content">
-          <div class="enrol-step-title">Access the course</div>
-          <p class="enrol-step-body">All 15 lessons are available immediately. Work at your own pace — the structure is there when you need it.</p>
+      <div class="enroll-step">
+        <div class="enroll-step-num">2</div>
+        <div class="enroll-step-content">
+          <div class="enroll-step-title">Access the course</div>
+          <p class="enroll-step-body">All 15 lessons are available immediately. Work at your own pace — the structure is there when you need it.</p>
         </div>
       </div>
-      <div class="enrol-step">
-        <div class="enrol-step-num">3</div>
-        <div class="enrol-step-content">
-          <div class="enrol-step-title">Join the community</div>
-          <p class="enrol-step-body">Your enrolment includes lifetime access to Psygaia's Circle and monthly integration circles with our guides.</p>
+      <div class="enroll-step">
+        <div class="enroll-step-num">3</div>
+        <div class="enroll-step-content">
+          <div class="enroll-step-title">Join the community</div>
+          <p class="enroll-step-body">Your enrollment includes lifetime access to Psygaia's Circle and monthly integration circles with our guides.</p>
         </div>
       </div>
     </div>
   </div>
-  <div class="enrol-cta-panel">
-    <span class="enrol-cta-label">Ready to begin?</span>
-    <h3 class="enrol-cta-heading">Start your practice.<br><em>Mindfully.</em></h3>
-    <ul class="enrol-cta-includes">
+  <div class="enroll-cta-panel">
+    <span class="enroll-cta-label">Ready to begin?</span>
+    <h3 class="enroll-cta-heading">Start your practice.<br><em>Mindfully.</em></h3>
+    <ul class="enroll-cta-includes">
       <li>15 lessons across 3 structured weeks</li>
       <li>Lifetime access — learn at your own pace</li>
       <li>Psygaia's Circle community membership</li>
       <li>Monthly integration &amp; breathwork circles</li>
       <li>Developed by an independent nonprofit</li>
     </ul>
-    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="enrol-cta-btn" target="_blank" rel="noopener">Enrol Now →</a>
-    <div class="enrol-cta-guarantee">
-      <span class="enrol-cta-guarantee-icon">✦</span>
+    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="enroll-cta-btn" target="_blank" rel="noopener">Enroll Now →</a>
+    <div class="enroll-cta-guarantee">
+      <span class="enroll-cta-guarantee-icon">✦</span>
       <p>14-day money-back guarantee. If you're not satisfied, email us for a full refund — no questions asked.</p>
     </div>
   </div>
@@ -2123,7 +2123,7 @@
 
 <!-- ── PRICING ───────────────────────────────────────────────────── -->
 <section class="pricing">
-  <span class="section-eyebrow">Enrolment</span>
+  <span class="section-eyebrow">Enrollment</span>
   <h2 class="section-title">Start mindful microdosing.</h2>
 
   <div class="pricing-inner">
@@ -2160,7 +2160,7 @@
       </ul>
 
       <div class="pricing-cta-stack">
-        <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary-full" target="_blank" rel="noopener">Enrol Now →</a>
+        <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary-full" target="_blank" rel="noopener">Enroll Now →</a>
       </div>
     </div>
 
@@ -2185,7 +2185,7 @@
 
 <!-- ── FALLBACK / NOT READY ──────────────────────────────────────── -->
 <section class="fallback">
-  <span class="section-eyebrow">Not ready to enrol yet?</span>
+  <span class="section-eyebrow">Not ready to enroll yet?</span>
   <h2>Start with the free guide.</h2>
   <p>Our free introduction to microdosing covers the essentials — protocol basics, safety considerations, and what to expect. No pressure, no pitch. Just a place to begin.</p>
   <a class="fallback-btn" href="https://psygaia.org/newsletter-sign-up-htup" target="_blank" rel="noopener">Get the Guide</a>
