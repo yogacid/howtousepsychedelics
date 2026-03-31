@@ -1,0 +1,1770 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Microdosing Mindfully — A 3-Week Course · How to Use Psychedelics"
+  description="A structured 3-week course on mindful microdosing — evidence-informed, trauma-aware, and grounded in the Psygaia Framework."
+  canonicalPath="/microdosing-course"
+  hideProgress={true}
+>
+
+<style is:global>
+    /* ── DESIGN TOKENS ──────────────────────────────────────────── */
+    .mdc-page {
+      --bg:           #080d0b;
+      --bg-mid:       #0d1410;
+      --bg-light:     #121a14;
+      --bg-card:      #0f1612;
+      --bg-card-alt:  #131c15;
+      --cream:        #f2f2ef;
+      --cream-dim:    #a8b0a4;
+      --cream-faint:  rgba(242,242,239,0.06);
+      --cream-border: rgba(242,242,239,0.12);
+      --teal:         #3ec9bf;
+      --green:        #5cb84a;
+      --accent:       #3ec9bf;
+      --accent-dim:   rgba(62,201,191,0.15);
+      --accent-border:rgba(62,201,191,0.25);
+      --grad:         linear-gradient(135deg, #3ec9bf 0%, #5cb84a 100%);
+      --nav-h:        75px;
+      --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 20px;
+      --sab: env(safe-area-inset-bottom, 0px);
+    }
+
+    [data-theme="light"] .mdc-page {
+      --bg:           #f4ede0;
+      --bg-mid:       #ede4d4;
+      --bg-light:     #e8ddc8;
+      --bg-card:      #efe7d8;
+      --bg-card-alt:  #e9e0cf;
+
+      --cream:        #2c1f0e;
+      --cream-dim:    #6b5640;
+      --cream-faint:  rgba(44,31,14,0.06);
+      --cream-border: rgba(44,31,14,0.14);
+
+      --teal:         #1f8c84;
+      --green:        #3d8228;
+      --accent:       #1f8c84;
+      --accent-dim:   rgba(31,140,132,0.12);
+      --accent-border:rgba(31,140,132,0.22);
+
+      --grad: linear-gradient(135deg, #1f8c84 0%, #3d8228 100%);
+
+      --danger:   #b83333;
+      --warn:     #a67c00;
+      --teal-dim: rgba(31,140,132,0.08);
+    }
+
+    .mdc-page {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--cream);
+      font-size: 16px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .mdc-page p { text-wrap: pretty; }
+    .mdc-page h1, .mdc-page h2, .mdc-page h3, .mdc-page h4 { text-wrap: balance; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes accentShimmer {
+      0%   { background-position: 0% center; }
+      50%  { background-position: 100% center; }
+      100% { background-position: 0% center; }
+    }
+
+    /* ── SHARED PRIMITIVES ──────────────────────────────────────── */
+    .section-eyebrow {
+      display: block;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+      font-weight: 300; line-height: 1.1;
+      color: var(--cream); letter-spacing: -0.01em;
+    }
+    .section-title em { font-style: italic; color: var(--teal); }
+    .section-body {
+      font-size: 0.97rem; color: var(--cream-dim); line-height: 1.8;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      font-family: 'Jost', sans-serif; font-size: 0.75rem;
+      font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; border-radius: 6px; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+      background-size: 300% 100%;
+      background-position: 0% center;
+      color: #040a05;
+      transition: background-position 0.55s ease, box-shadow 0.25s ease;
+      white-space: nowrap;
+    }
+    .btn-primary:hover {
+      animation: accentShimmer 4s ease-in-out infinite;
+      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+    }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      font-family: 'Jost', sans-serif; font-size: 0.75rem;
+      font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; border-radius: 6px; border: none; cursor: pointer;
+      background: transparent; color: var(--cream);
+      border: 1px solid var(--cream-border);
+      transition: border-color 0.2s;
+    }
+    .btn-outline:hover {
+      border-color: var(--teal);
+      background: linear-gradient(135deg, #3ec9bf 0%, #7dde55 40%, #3ec9bf 70%, #5cb84a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── HERO ───────────────────────────────────────────────────── */
+    .mdc-page .hero {
+      min-height: 100vh;
+      display: grid !important;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr auto;
+      padding: var(--nav-h) 0 0 0 !important;
+      background: var(--bg);
+      overflow: hidden;
+      position: relative;
+      max-width: none !important;
+      margin: 0 !important;
+      text-align: left;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 65% 55% at 15% 55%, rgba(62,201,191,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 60% at 80% 20%, rgba(92,184,74,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 35% 45% at 55% 90%, rgba(62,201,191,0.06) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 5% 80px 5%;
+    }
+    .hero-breadcrumb {
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(168,176,164,0.4);
+      margin-bottom: 2rem; display: flex; align-items: center; gap: 0.6rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s; }
+    .hero-breadcrumb a:hover { color: var(--cream-dim); }
+    [data-theme="light"] .hero-breadcrumb { color: rgba(44,60,50,0.55); }
+    [data-theme="light"] .hero-breadcrumb a:hover { color: rgba(44,60,50,0.9); }
+    [data-theme="light"] .hero::before {
+      background:
+        radial-gradient(ellipse 65% 55% at 15% 55%, rgba(31,140,132,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 60% at 80% 20%, rgba(61,130,40,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse 35% 45% at 55% 90%, rgba(31,140,132,0.04) 0%, transparent 55%);
+    }
+    [data-theme="light"] .hero-image-inner {
+      background:
+        linear-gradient(to right, rgba(244,237,224,0.55) 0%, transparent 35%),
+        linear-gradient(to top, rgba(244,237,224,0.4) 0%, transparent 40%),
+        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1d41bed5-05d2-4245-8d3e-d50320a37e2e/tempImagejiAYk2.jpg') center 28%/cover no-repeat;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--teal);
+      background: rgba(62,201,191,0.1); padding: 0.45rem 1rem;
+      border-radius: 999px; border: 1px solid rgba(62,201,191,0.2);
+      width: fit-content; margin-bottom: 1.5rem;
+      animation: fadeUp 0.7s ease 0.05s both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 5.5vw, 5.2rem);
+      font-weight: 300; line-height: 1.0;
+      color: var(--cream); letter-spacing: -0.015em;
+      margin-bottom: 1.75rem;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+    .hero h1 em {
+      font-style: italic;
+      background: linear-gradient(135deg, #3ec9bf 0%, #7dde55 40%, #3ec9bf 70%, #5cb84a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 300% auto;
+      animation: accentShimmer 4s ease-in-out infinite;
+      padding-right: 0.05em;
+    }
+    .hero-tagline {
+      font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+      font-weight: 300; color: var(--cream-dim);
+      line-height: 1.78; max-width: 440px; margin-bottom: 2.5rem;
+      animation: fadeUp 0.7s ease 0.15s both;
+    }
+    .hero-actions {
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap; margin-bottom: 2.75rem;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+    .hero-trust {
+      display: flex; align-items: center; gap: 0.75rem;
+      flex-wrap: wrap; border-top: none;
+      animation: fadeUp 0.7s ease 0.25s both;
+    }
+    .trust-pill {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--cream-dim);
+      background: var(--cream-faint);
+      border: 1px solid var(--cream-border);
+      padding: 0.35rem 0.8rem; border-radius: 999px;
+    }
+    .hero-image {
+      position: relative; overflow: hidden; z-index: 1;
+    }
+    .hero-image-inner {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to right, rgba(8,13,11,0.55) 0%, transparent 35%),
+        linear-gradient(to top, rgba(8,13,11,0.4) 0%, transparent 40%),
+        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1d41bed5-05d2-4245-8d3e-d50320a37e2e/tempImagejiAYk2.jpg') center 28%/cover no-repeat;
+    }
+    .hero-stats {
+      grid-column: 1 / -1;
+      display: flex; gap: 0; padding: 0; flex-wrap: nowrap;
+      background: var(--bg-mid); border-top: 1px solid var(--cream-border);
+    }
+    .stat-pill {
+      flex: 1; background: none; backdrop-filter: none;
+      border: none; border-right: 1px solid var(--cream-border);
+      border-radius: 0; padding: 18px 16px; text-align: center;
+    }
+    .stat-pill:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.9rem; font-weight: 300;
+      color: var(--teal); line-height: 1; display: block;
+    }
+    .stat-label {
+      font-size: 0.6rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--cream-dim);
+      display: block; margin-top: 4px;
+    }
+
+    /* ── FOR YOU ────────────────────────────────────────────────── */
+    /* ── SECTION DIVIDERS (all sections except hero) ────────────── */
+    .for-you, .testimonials, .outcomes, .history, .approach,
+    .curriculum, .community, .enroll-steps, .instructor, .pricing,
+    .fallback, .faq, .disclaimer {
+      border-top: 1px solid var(--cream-border);
+    }
+
+    .for-you {
+      padding: 100px 5%;
+      background: var(--bg-mid);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start;
+    }
+    .for-you-intro { position: sticky; top: calc(var(--nav-h) + 24px); }
+    .for-you-intro-body {
+      font-size: 0.95rem; color: var(--cream-dim);
+      line-height: 1.8; margin-top: 1.5rem; margin-bottom: 2rem;
+    }
+    .for-you-list {
+      list-style: none; display: flex; flex-direction: column; gap: 10px;
+    }
+    .for-you-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 18px 20px;
+      background: var(--bg-card); border-radius: var(--r-lg);
+      border: 1px solid var(--cream-border);
+      transition: border-color 0.2s;
+    }
+    .for-you-item:hover { border-color: var(--accent-border); }
+    .for-you-marker {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--teal); flex-shrink: 0; margin-top: 9px;
+    }
+    .for-you-item p {
+      font-size: 0.92rem; line-height: 1.7; color: var(--cream-dim);
+    }
+    .for-you-item strong { color: var(--cream); font-weight: 500; }
+    .not-for-you {
+      margin-top: 12px; padding: 20px 22px;
+      background: rgba(212,82,82,0.06);
+      border: 1px solid rgba(212,82,82,0.18);
+      border-radius: var(--r-lg);
+    }
+    .not-for-you-label {
+      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: #c97070;
+      display: block; margin-bottom: 0.6rem;
+    }
+    .not-for-you p { font-size: 0.9rem; color: var(--cream-dim); line-height: 1.7; }
+
+    /* ── TESTIMONIALS ───────────────────────────────────────────── */
+    .testimonials {
+      padding: 100px 5%;
+      background: var(--bg);
+    }
+    .testimonials-header { margin-bottom: 3rem; }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px; margin-top: 3rem;
+    }
+    .testimonial {
+      background: var(--bg-card); border-radius: var(--r-xl);
+      padding: 32px 28px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      border: 1px solid var(--cream-border);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .testimonial:hover { transform: translateY(-3px); border-color: var(--accent-border); }
+    .testimonial-stars {
+      color: var(--teal); font-size: 11px; letter-spacing: 4px; margin-bottom: 1rem;
+    }
+    .testimonial-quote {
+      font-size: 0.92rem; font-weight: 300;
+      line-height: 1.75; color: var(--cream-dim); flex: 1; margin-bottom: 1.5rem;
+    }
+    .testimonial-author {
+      border-top: 1px solid var(--cream-border); padding-top: 1rem;
+    }
+    .testimonial-name {
+      font-size: 0.88rem; font-weight: 500; color: var(--cream); margin-bottom: 2px;
+    }
+    .testimonial-role {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--cream-dim);
+    }
+    .testimonial-featured {
+      background: var(--bg-light);
+      border-color: var(--accent-border);
+    }
+    .testimonial-featured .testimonial-stars { color: var(--green); }
+    .rating-card {
+      background: var(--bg-mid);
+      border-radius: var(--r-xl); border-color: var(--accent-border);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 40px;
+    }
+    .rating-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 4rem; font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .rating-label {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--cream-dim); margin-top: 0.5rem;
+    }
+    .rating-stars { color: var(--teal); font-size: 13px; letter-spacing: 3px; margin-top: 0.75rem; }
+
+    /* ── OUTCOMES ───────────────────────────────────────────────── */
+    .outcomes {
+      padding: 100px 5%; background: var(--bg-mid);
+    }
+    .outcomes-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start; margin-top: 3rem;
+    }
+    .outcomes-list {
+      list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 2.5rem;
+    }
+    .outcomes-inner > div { margin-top: 2.5rem; }
+    .outcome-item {
+      display: grid; grid-template-columns: 44px 1fr;
+      gap: 14px; padding: 18px 20px;
+      background: var(--bg-card); border-radius: var(--r-lg);
+      border: 1px solid var(--cream-border); align-items: start;
+    }
+    .outcome-num {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--teal); padding-top: 2px;
+    }
+    .outcome-text { font-size: 0.92rem; line-height: 1.7; color: var(--cream-dim); }
+    .outcome-text strong { color: var(--cream); font-weight: 500; }
+    .outcomes-promise {
+      background: rgba(62,201,191,0.04); border-radius: var(--r-xl);
+      padding: 36px 32px; margin-bottom: 14px;
+      border: 1px solid rgba(62,201,191,0.35);
+      border-left: 3px solid var(--teal);
+    }
+    .outcomes-promise-label {
+      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--teal); display: block; margin-bottom: 1rem;
+    }
+    .outcomes-promise p {
+      font-size: 0.9rem; line-height: 1.75; color: var(--cream-dim);
+    }
+    .bonus-card {
+      background: var(--bg-card); border-radius: var(--r-lg);
+      padding: 24px 26px; border: 1px solid var(--cream-border);
+    }
+    .bonus-label {
+      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--green);
+      display: block; margin-bottom: 0.75rem;
+    }
+    .bonus-card p { font-size: 0.9rem; line-height: 1.75; color: var(--cream-dim); }
+    .bonus-card strong { color: var(--cream); font-weight: 500; }
+
+    /* ── HISTORY ────────────────────────────────────────────────── */
+    .history {
+      padding: 100px 5%; background: var(--bg);
+      position: relative; overflow: hidden;
+    }
+    .history::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 55% 55% at 80% 50%, rgba(62,201,191,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 40% at 15% 80%, rgba(92,184,74,0.05) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .history-header { margin-bottom: 3rem; position: relative; z-index: 1; }
+    .history-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; position: relative; z-index: 1;
+    }
+    .history-item {
+      background: var(--bg-card);
+      border: 1px solid var(--cream-border);
+      border-radius: var(--r-xl); padding: 40px 32px;
+    }
+    .history-item-label {
+      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--teal);
+      display: block; margin-bottom: 0.9rem;
+    }
+    .history-item-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.35rem; font-weight: 500;
+      color: var(--cream); margin-bottom: 0.9rem; line-height: 1.3;
+    }
+    .history-item p {
+      font-size: 0.9rem; line-height: 1.85; color: var(--cream-dim);
+    }
+
+    /* ── APPROACH ───────────────────────────────────────────────── */
+    .approach { padding: 100px 5%; background: var(--bg-mid); }
+    .approach-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start;
+    }
+    .approach-principles {
+      display: flex; flex-direction: column; gap: 10px; margin-top: 3rem;
+    }
+    .approach-inner > div { margin-top: 3rem; }
+    .principle {
+      display: grid; grid-template-columns: 40px 1fr;
+      gap: 14px; padding: 18px 20px;
+      background: var(--bg-card); border-radius: var(--r-lg);
+      border: 1px solid var(--cream-border); align-items: start;
+      transition: border-color 0.2s;
+    }
+    .principle:hover { border-color: var(--accent-border); }
+    .principle-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; color: var(--teal);
+      border: 1px solid var(--accent-border); flex-shrink: 0;
+    }
+    .principle-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 500;
+      color: var(--cream); margin-bottom: 4px;
+    }
+    .principle-desc {
+      font-size: 0.87rem; line-height: 1.7; color: var(--cream-dim);
+    }
+    .approach-right { }
+    .contrast-box {
+      background: var(--bg-card); border-radius: var(--r-xl);
+      padding: 32px; border: 1px solid var(--cream-border);
+    }
+    .contrast-box-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem; font-weight: 500;
+      color: var(--cream); margin-bottom: 1.5rem;
+    }
+    .contrast-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; margin-bottom: 8px;
+    }
+    .contrast-cell {
+      border-radius: var(--r-sm); padding: 10px 14px;
+      font-size: 0.83rem; line-height: 1.5;
+      border: 1px solid var(--cream-border);
+      background: var(--bg-light);
+    }
+    .contrast-cell.no {
+      color: var(--cream-dim);
+    }
+    .contrast-cell.yes {
+      color: var(--cream); font-weight: 500;
+      background: rgba(62,201,191,0.07);
+      border-color: rgba(62,201,191,0.2);
+    }
+    .contrast-header .contrast-cell {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--cream-dim);
+      background: var(--bg-mid); text-decoration: none;
+      border-color: var(--cream-border); font-weight: 400;
+    }
+    .contrast-header .contrast-cell.teal-header {
+      border-color: rgba(62,201,191,0.5); color: var(--teal);
+    }
+
+    /* ── CURRICULUM ─────────────────────────────────────────────── */
+    .curriculum { padding: 100px 5%; background: var(--bg); }
+    .curriculum-inner {
+      display: grid; grid-template-columns: 240px 1fr;
+      gap: 28px; align-items: start; margin-top: 3rem;
+    }
+    .curriculum-nav {
+      position: sticky; top: calc(var(--nav-h) + 24px);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .week-tab {
+      padding: 18px 20px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--cream-border);
+      border-radius: var(--r-lg); text-align: left;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .week-tab:hover { border-color: var(--accent-border); }
+    .week-tab.active {
+      background: var(--bg-light);
+      border-color: var(--teal);
+    }
+    .week-tab-num {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--cream-dim);
+      display: block; margin-bottom: 4px; transition: color 0.2s;
+    }
+    .week-tab.active .week-tab-num { color: var(--teal); }
+    .week-tab-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 500;
+      color: var(--cream-dim); transition: color 0.2s;
+    }
+    .week-tab.active .week-tab-title { color: var(--cream); }
+    .week-panel { display: none; }
+    .week-panel.active { display: block; }
+    .week-intro {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem; font-style: italic;
+      color: var(--cream-dim); margin-bottom: 1.5rem; line-height: 1.65;
+    }
+    .days-list { display: flex; flex-direction: column; gap: 8px; }
+    .day-item {
+      display: grid; grid-template-columns: 64px 1fr;
+      align-items: stretch;
+      background: var(--bg-card); border-radius: var(--r-lg);
+      border: 1px solid var(--cream-border); overflow: hidden;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .day-item:hover { border-color: var(--accent-border); transform: translateX(3px); }
+    .day-num {
+      background: var(--bg-light);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; padding: 16px 12px; gap: 2px;
+      border-right: 1px solid var(--cream-border);
+    }
+    .day-num-label {
+      font-size: 0.55rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--cream-dim);
+    }
+    .day-num-n {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.65rem; font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .day-content {
+      padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; gap: 3px;
+    }
+    .day-title { font-size: 0.95rem; color: var(--cream); line-height: 1.4; }
+    .day-desc { font-size: 0.78rem; color: var(--cream-dim); line-height: 1.5; opacity: 0.8; }
+
+    /* ── COMMUNITY ──────────────────────────────────────────────── */
+    .community {
+      background: var(--bg-mid);
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 560px; position: relative; overflow: hidden;
+    }
+    .community::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 45% 65% at 20% 50%, rgba(62,201,191,0.07) 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+    .community-image { position: relative; overflow: hidden; z-index: 1; }
+    .community-image-inner {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to right, rgba(13,20,16,0.2) 0%, transparent 40%),
+        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1738800715661-9MZXEIJSK5EEEE6QSZLM/Microdosing+reflections') center/cover no-repeat;
+    }
+    .community-content {
+      padding: 80px 5% 80px 6%;
+      display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+      position: relative; z-index: 1;
+    }
+    .community-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.75rem, 3.5vw, 2.8rem);
+      font-weight: 300; line-height: 1.15;
+      color: var(--cream); margin-bottom: 1.5rem; letter-spacing: -0.01em;
+    }
+    .community-body {
+      font-size: 0.92rem; line-height: 1.85;
+      color: var(--cream-dim); margin-bottom: 2rem; max-width: 380px;
+    }
+    .community-features {
+      list-style: none; display: flex; flex-direction: column;
+      gap: 10px; margin-bottom: 2.5rem;
+    }
+    .community-feature {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 16px;
+      background: var(--cream-faint); border: 1px solid var(--cream-border);
+      border-radius: var(--r-md); font-size: 0.88rem;
+      color: var(--cream-dim); line-height: 1.55;
+    }
+    .community-feature-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--teal); flex-shrink: 0; margin-top: 7px;
+    }
+
+    /* ── PRICING ────────────────────────────────────────────────── */
+    .pricing { padding: 100px 5%; background: var(--bg); }
+    .pricing-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 24px; align-items: start; margin-top: 3rem;
+    }
+    .pricing-card {
+      background: var(--bg-card); border-radius: var(--r-xl);
+      border: 1.5px solid var(--accent-border);
+      padding: 44px 40px;
+      box-shadow: 0 8px 40px rgba(62,201,191,0.08);
+    }
+    .pricing-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-dim); border: 1px solid var(--accent-border);
+      border-radius: 999px; padding: 5px 14px;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 1.25rem;
+    }
+    .pricing-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.85rem; font-weight: 400;
+      color: var(--cream); margin-bottom: 4px;
+    }
+    .pricing-card-subtitle {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--cream-dim); margin-bottom: 2.25rem;
+    }
+    .pricing-includes {
+      list-style: none; display: flex; flex-direction: column;
+      gap: 10px; margin-bottom: 2.5rem;
+    }
+    .pricing-include {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 0.92rem; line-height: 1.55; color: var(--cream-dim);
+    }
+    .include-check {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 0.6rem; color: var(--teal);
+      border: 1px solid var(--accent-border); margin-top: 1px;
+    }
+    .pricing-include a { color: var(--teal); text-decoration: none; border-bottom: 1px solid rgba(62,201,191,0.3); }
+    .pricing-cta-stack { display: flex; flex-direction: column; gap: 10px; }
+    .btn-primary-full {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.9rem 1.75rem;
+      font-family: 'Jost', sans-serif; font-size: 0.75rem;
+      font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; border-radius: 6px; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+      background-size: 300% 100%;
+      background-position: 0% center;
+      color: #040a05;
+      transition: background-position 0.55s ease, box-shadow 0.25s ease;
+    }
+    .btn-primary-full:hover {
+      animation: accentShimmer 4s ease-in-out infinite;
+      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+    }
+    .guarantee-note {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--cream-dim); text-align: center;
+    }
+    .pricing-sidebar { display: flex; flex-direction: column; gap: 12px; }
+    .sidebar-card {
+      background: var(--bg-card); border-radius: var(--r-xl);
+      border: 1px solid var(--cream-border); padding: 26px 26px;
+    }
+    .sidebar-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem; font-weight: 500;
+      color: var(--cream); margin-bottom: 0.6rem;
+    }
+    .sidebar-card p { font-size: 0.88rem; line-height: 1.75; color: var(--cream-dim); }
+    .sidebar-card-dark {
+      background: var(--bg-light);
+      border-color: var(--accent-border);
+    }
+    .sidebar-card-label {
+      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--teal);
+      display: block; margin-bottom: 0.75rem;
+    }
+    .sidebar-card-dark a { color: var(--teal); text-decoration: none; }
+
+    /* ── INSTRUCTOR ─────────────────────────────────────────────── */
+    .instructor {
+      padding: 72px 5%; background: var(--bg-mid);
+      display: grid; grid-template-columns: 1fr 1.35fr;
+      gap: 52px; align-items: center;
+    }
+    .instructor-image {
+      position: relative; aspect-ratio: 4/5; overflow: hidden;
+      border-radius: var(--r-xl); max-width: 360px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .instructor-image-inner {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to top, rgba(8,13,11,0.65) 0%, transparent 50%),
+        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/c5cf712c-1b6b-4d23-b45b-c8f073c17c9c/Screenshot+2025-03-30+at+10.42.28%E2%80%AFPM.jpg') center 35%/cover no-repeat;
+    }
+    .instructor-image-caption {
+      position: absolute; bottom: 24px; left: 24px; right: 24px;
+    }
+    .instructor-name-overlay {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem; font-weight: 300; color: var(--cream);
+    }
+    .instructor-role-overlay {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--teal);
+    }
+    .instructor-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.75rem, 3vw, 2.6rem);
+      font-weight: 300; line-height: 1.15;
+      color: var(--cream); margin-bottom: 4px;
+    }
+    .instructor-credentials {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 1.75rem;
+    }
+    .instructor-bio {
+      font-size: 0.94rem; line-height: 1.85;
+      color: var(--cream-dim); margin-bottom: 1.1rem;
+    }
+    .credential-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.5rem; }
+    .credential-tag {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--teal);
+      border: 1px solid var(--accent-border); border-radius: 999px;
+      padding: 5px 13px; background: var(--accent-dim);
+    }
+
+    /* ── FALLBACK / NOT READY ───────────────────────────────────── */
+    .fallback {
+      padding: 80px 5%;
+      background: var(--bg);
+      text-align: center;
+    }
+    .fallback h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 400;
+      color: var(--cream); margin-bottom: 0.75rem; text-wrap: balance;
+    }
+    .fallback p {
+      font-size: 0.9rem; font-weight: 300; color: var(--cream-dim);
+      line-height: 1.75; max-width: 480px; margin: 0 auto 2rem;
+    }
+    .fallback-btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border: 1px solid var(--accent-border);
+      border-radius: 4px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; text-decoration: none;
+      color: var(--teal);
+      transition: background 0.2s, color 0.2s;
+    }
+    .fallback-btn:hover {
+      background: rgba(62,201,191,0.08);
+    }
+
+    /* ── DISCLAIMER ─────────────────────────────────────────────── */
+    .disclaimer {
+      padding: 44px 5%;
+      background: var(--bg);
+      text-align: center;
+    }
+    .disclaimer p {
+      font-size: 0.78rem; letter-spacing: 0.06em;
+      color: var(--cream-dim); line-height: 1.9;
+      max-width: 600px; margin: 0 auto;
+    }
+    .disclaimer strong { color: var(--cream); font-weight: 500; }
+
+    /* ── FOOTER SUPPORT (in-page banner) ──────────────────────── */
+    .footer-support {
+      background: linear-gradient(135deg, rgba(62,201,191,0.07) 0%, rgba(92,184,74,0.03) 100%);
+      border-top: 1px solid rgba(62,201,191,0.15);
+      border-bottom: 1px solid rgba(62,201,191,0.15);
+    }
+    [data-theme="light"] .footer-support { background: linear-gradient(135deg, rgba(62,201,191,0.06) 0%, rgba(92,184,74,0.02) 100%); }
+    .footer-support-inner {
+      max-width: 1100px; margin: 0 auto; padding: 2rem 2rem;
+      display: flex; align-items: center; gap: 2.5rem; justify-content: space-between;
+    }
+    .footer-support-text { flex: 1; }
+    .footer-support-label {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 0.35rem;
+    }
+    .footer-support-headline {
+      font-size: 1rem; font-weight: 600; color: var(--cream);
+      margin-bottom: 0.35rem; line-height: 1.4;
+    }
+    .footer-support-body {
+      font-size: 0.8rem; font-weight: 300; color: var(--cream-dim);
+      line-height: 1.65; max-width: 600px;
+    }
+    .footer-support-btn {
+      display: inline-block; flex-shrink: 0; padding: 0.7rem 1.6rem;
+      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+      background-size: 300% 100%; background-position: 0% center;
+      color: #0a120d; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-radius: 6px; text-decoration: none;
+      transition: box-shadow 0.25s ease; white-space: nowrap;
+    }
+    .footer-support-btn:hover {
+      animation: accentShimmer 4s ease-in-out infinite;
+      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+    }
+
+    /* ── NONPROFIT PILL ─────────────────────────────────────────── */
+    .trust-pill.nonprofit-pill {
+      border-color: var(--accent-border);
+      color: var(--teal);
+    }
+
+    /* ── GUARANTEE BLOCK ────────────────────────────────────────── */
+    .guarantee-block {
+      display: flex; align-items: flex-start; gap: 14px;
+      margin-top: 1.25rem; padding: 18px 20px;
+      background: rgba(62,201,191,0.04);
+      border: 1px solid rgba(62,201,191,0.2);
+      border-radius: var(--r-lg);
+      text-align: left;
+    }
+    .guarantee-icon {
+      color: var(--teal); font-size: 1rem; flex-shrink: 0; margin-top: 2px;
+    }
+    .guarantee-title {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--cream); margin-bottom: 4px;
+    }
+    .guarantee-body {
+      font-size: 0.82rem; font-weight: 300; color: var(--cream-dim); line-height: 1.6;
+    }
+
+    /* ── ENROLL STEPS ────────────────────────────────────────────── */
+    .enroll-steps {
+      padding: 100px 5%; background: var(--bg);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: stretch;
+    }
+    .enroll-steps > div { display: flex; flex-direction: column; }
+    .enroll-steps-left { display: flex; flex-direction: column; gap: 14px; margin-top: 3rem; }
+    .enroll-steps-header { margin-bottom: 0; }
+    .enroll-step {
+      background: var(--bg-card); border-radius: var(--r-lg);
+      border: 1px solid var(--cream-border);
+      padding: 22px 24px;
+      display: grid; grid-template-columns: 40px 1fr;
+      gap: 16px; align-items: start;
+    }
+    .enroll-step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--accent-dim); border: 1px solid var(--accent-border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem; font-weight: 300; color: var(--teal); line-height: 1;
+      flex-shrink: 0;
+    }
+    .enroll-step-content { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; }
+    .enroll-step-title {
+      font-size: 0.9rem; font-weight: 600; color: var(--cream);
+      letter-spacing: 0.03em;
+    }
+    .enroll-step-body {
+      font-size: 0.85rem; font-weight: 300; color: var(--cream-dim);
+      line-height: 1.7;
+    }
+    .enroll-cta-panel {
+      background: var(--bg-card); border-radius: var(--r-xl);
+      border: 1px solid var(--accent-border);
+      padding: 40px 36px; margin-top: 3rem; flex: 1;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .enroll-cta-label {
+      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--teal);
+    }
+    .enroll-cta-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 300; line-height: 1.15; color: var(--cream);
+    }
+    .enroll-cta-includes {
+      list-style: none; display: flex; flex-direction: column; gap: 8px;
+    }
+    .enroll-cta-includes li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.85rem; font-weight: 300; color: var(--cream-dim); line-height: 1.5;
+    }
+    .enroll-cta-includes li::before {
+      content: '\2713'; color: var(--teal); font-weight: 700;
+      font-size: 0.8rem; flex-shrink: 0; margin-top: 1px;
+    }
+    .enroll-cta-btn {
+      display: block; width: 100%; text-align: center;
+      padding: 0.9rem 1.75rem;
+      background: linear-gradient(135deg, #3ec9bf 0%, #7dde55 40%, #3ec9bf 70%, #5cb84a 100%);
+      background-size: 300% auto; background-position: 0% center;
+      color: #0a120d; font-family: 'Jost', sans-serif;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; border-radius: 6px; text-decoration: none;
+      transition: background-position 0.55s ease, box-shadow 0.25s ease;
+    }
+    .enroll-cta-btn:hover {
+      animation: accentShimmer 4s ease-in-out infinite;
+      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+    }
+    .enroll-cta-guarantee {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 14px 16px;
+      background: rgba(62,201,191,0.04);
+      border: 1px solid rgba(62,201,191,0.2);
+      border-radius: var(--r-lg);
+    }
+    .enroll-cta-guarantee-icon { color: var(--teal); flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
+    .enroll-cta-guarantee p {
+      font-size: 0.8rem; font-weight: 300; color: var(--cream-dim); line-height: 1.6;
+    }
+    @media (max-width: 768px) {
+      .enroll-steps { grid-template-columns: 1fr; gap: 40px; }
+      .enroll-steps-left, .enroll-cta-panel { margin-top: 0; }
+    }
+
+    /* ── FAQ + TESTIMONIALS ─────────────────────────────────────── */
+    .faq {
+      padding: 100px 5%; background: var(--bg-mid);
+      display: grid; grid-template-columns: 1.4fr 1fr;
+      gap: 80px; align-items: stretch;
+    }
+    .faq-left { display: flex; flex-direction: column; }
+    .faq-list { margin-top: 3rem; display: flex; flex-direction: column; gap: 2px; }
+    .faq-item { border-bottom: 1px solid var(--cream-border); }
+    .faq-item:first-child { border-top: 1px solid var(--cream-border); }
+    .faq-right { display: flex; flex-direction: column; margin-top: 3rem; align-self: stretch; }
+    .faq-quotes { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+    .faq-quote-card {
+      background: var(--bg-card); border-radius: var(--r-lg);
+      padding: 26px 28px; border: 1px solid var(--cream-border);
+      display: flex; flex-direction: column; justify-content: space-between;
+      flex: 1;
+    }
+    .faq-quote-text {
+      font-size: 0.9rem; font-weight: 300; line-height: 1.75;
+      color: var(--cream-dim); margin-bottom: 1rem; flex: 1;
+    }
+    .faq-quote-name {
+      font-size: 0.75rem; font-weight: 600; color: var(--cream);
+      letter-spacing: 0.06em; padding-top: 0.75rem;
+      border-top: 1px solid var(--cream-border);
+    }
+    .faq-q {
+      width: 100%; background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 0; gap: 1rem;
+      font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 500;
+      color: var(--cream); text-align: left; transition: color 0.15s;
+    }
+    .faq-q:hover { color: var(--teal); }
+    .faq-chevron {
+      font-size: 0.75rem; color: var(--teal); flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-a {
+      display: none; padding-bottom: 1.1rem;
+      font-size: 0.88rem; font-weight: 300; color: var(--cream-dim); line-height: 1.8;
+    }
+    .faq-item.open .faq-a { display: block; }
+    .faq-a a { color: var(--teal); text-decoration: none; }
+    @media (max-width: 960px) {
+      .faq { grid-template-columns: 1fr; gap: 40px; }
+      .faq-right { margin-top: 0; flex: none; }
+      .faq-quote-card { flex: none; }
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .mdc-page .hero { grid-template-columns: 1fr !important; grid-template-rows: auto 340px auto !important; }
+      .hero-image { height: 340px; }
+      .for-you { grid-template-columns: 1fr; gap: 40px; }
+      .for-you-intro { position: static; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .outcomes-inner { grid-template-columns: 1fr; gap: 40px; }
+      .history-grid { grid-template-columns: 1fr; }
+      .approach-inner { grid-template-columns: 1fr; gap: 40px; }
+      .approach-right { margin-top: 0; }
+      .curriculum-inner { grid-template-columns: 1fr; }
+      .curriculum-nav { position: static; flex-direction: row; flex-wrap: wrap; }
+      .community { grid-template-columns: 1fr; }
+      .community-image { min-height: 260px; }
+      .pricing-inner { grid-template-columns: 1fr; }
+      .instructor { grid-template-columns: 1fr; gap: 40px; }
+      .instructor-image { max-width: 100%; aspect-ratio: 4/3; }
+      .instructor-image-inner { background-position: center 40%; }
+      .footer-support-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+      .footer-support-btn { align-self: stretch; text-align: center; }
+      .stat-pill { padding: 14px 8px; }
+      .stat-num { font-size: 1.5rem; }
+      .stat-label { font-size: 0.55rem; }
+      .week-tab { flex: 1; }
+      .enroll-steps-left { margin-top: 1.5rem; }
+    }
+</style>
+
+<div class="mdc-page">
+
+<!-- ── HERO ──────────────────────────────────────────────────────── -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-breadcrumb">
+      <a href="/">Home</a>
+      <span>&rarr;</span>
+      <a href="/microdosing">Microdosing</a>
+      <span>&rarr;</span>
+      <span>Course</span>
+    </div>
+
+    <div class="hero-badge">Microdosing Mindfully</div>
+
+    <h1>Learn to<br>microdose <em>intentionally</em></h1>
+
+    <p class="hero-tagline">
+      For people who are drawn to microdosing but want to approach it carefully — with structure, honesty, and a framework grounded in mindfulness and harm reduction.
+    </p>
+
+    <div class="hero-actions">
+      <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enroll Now &rarr;</a>
+      <a href="#curriculum" class="btn-outline">See Curriculum</a>
+    </div>
+
+    <div class="hero-trust">
+      <span class="trust-pill">Evidence-informed</span>
+      <span class="trust-pill">Mindfulness-based</span>
+      <span class="trust-pill">14-day guarantee</span>
+      <span class="trust-pill nonprofit-pill">Nonprofit</span>
+    </div>
+  </div>
+
+  <div class="hero-image">
+    <div class="hero-image-inner"></div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-pill">
+      <span class="stat-num">20</span>
+      <span class="stat-label">Videos</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-num">15</span>
+      <span class="stat-label">Lessons</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-num">25</span>
+      <span class="stat-label">Min / Day</span>
+    </div>
+    <div class="stat-pill">
+      <span class="stat-num">8</span>
+      <span class="stat-label">Worksheets</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── FOR YOU ────────────────────────────────────────────────────── -->
+<section class="for-you">
+  <div class="for-you-intro">
+    <span class="section-eyebrow">Is This For You?</span>
+    <h2 class="section-title">Designed for<br><em>you</em> if you...</h2>
+    <p class="for-you-intro-body">
+      Whether you are navigating anxiety or low mood, beginning or deepening a
+      spiritual practice, or simply curious about psychedelics with enough
+      self-awareness to want a careful approach — this is where to start.
+    </p>
+  </div>
+
+  <div>
+    <ul class="for-you-list">
+      <li class="for-you-item">
+        <div class="for-you-marker"></div>
+        <p>Feel drawn to psychedelics as tools, teachers, or allies for <strong>self-understanding, healing, personal growth, or spiritual inquiry</strong> — and want to approach them thoughtfully.</p>
+      </li>
+      <li class="for-you-item">
+        <div class="for-you-marker"></div>
+        <p>Experience <strong>anxiety, emotional sensitivity, or periods of low mood</strong> and want a careful, contained approach rather than a generic protocol.</p>
+      </li>
+      <li class="for-you-item">
+        <div class="for-you-marker"></div>
+        <p>Want <strong>structure, reflection, and integration</strong> — not rigid protocols or vague spiritual inspiration without grounding.</p>
+      </li>
+      <li class="for-you-item">
+        <div class="for-you-marker"></div>
+        <p>Prefer learning within <strong>clear ethical and safety boundaries</strong>, and want to understand the risks as clearly as the possibilities.</p>
+      </li>
+      <li class="for-you-item">
+        <div class="for-you-marker"></div>
+        <p>Value <strong>community and mindful reflection</strong> — and have no interest in performative spirituality, productivity optimization, or biohacking.</p>
+      </li>
+    </ul>
+
+    <div class="not-for-you">
+      <span class="not-for-you-label">This course is not for you if</span>
+      <p>You are looking for the largest possible dose, the most intense experience, or a shortcut to self-transformation. This course promises discernment, structure, and psychological safety — not outcomes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ───────────────────────────────────────────────── -->
+<section class="testimonials">
+  <div class="testimonials-header">
+    <span class="section-eyebrow">Reviews</span>
+    <h2 class="section-title">What students say.</h2>
+  </div>
+
+  <div class="testimonials-grid">
+    <div class="testimonial testimonial-featured">
+      <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testimonial-quote">
+        "I loved this microdosing course. Not only did it provide practical
+        instructions on how to microdose, but it gave me a lot of tools for
+        how to process emotions, negative beliefs, and anything else that
+        might come up. It's a really well-rounded course created with a lot
+        of forethought and care."
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-name">Anna Khandrueva</div>
+        <div class="testimonial-role">Trauma Therapist</div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testimonial-quote">
+        "This course and community helped me slow down and notice how subtle
+        my responses actually were. I stopped trying to 'get something' from
+        microdosing and started listening."
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-name">Leya Sukhwender</div>
+        <div class="testimonial-role">Graduate Student</div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testimonial-quote">
+        "As someone with anxiety, the emphasis on safety and reflection made
+        all the difference. I felt contained rather than pushed. I'm grateful
+        for this course and its mindful, intentional approach."
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-name">Lauren Charriere</div>
+        <div class="testimonial-role">Climate Researcher</div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testimonial-quote">
+        "This is the course I wish I'd had when I started microdosing a year ago."
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-name">Richard Ventham</div>
+        <div class="testimonial-role">Entrepreneur</div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testimonial-quote">
+        "The most comprehensive microdosing course I've taken. Also, Psygaia's
+        Circle is a special community to be a part of. I recommend it to
+        anyone interested in microdosing."
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-name">Erik Zablotny</div>
+        <div class="testimonial-role">Graphic Designer</div>
+      </div>
+    </div>
+
+    <div class="testimonial rating-card">
+      <div>
+        <div class="rating-num">5.0</div>
+        <div class="rating-label">Average Rating</div>
+        <div class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── OUTCOMES ──────────────────────────────────────────────────── -->
+<section class="outcomes">
+  <span class="section-eyebrow">What You'll Gain</span>
+  <h2 class="section-title">By the end of three weeks.</h2>
+
+  <div class="outcomes-inner">
+    <ul class="outcomes-list">
+      <li class="outcome-item">
+        <span class="outcome-num">01</span>
+        <p class="outcome-text">Stop second-guessing yourself and begin — <strong>carefully, clearly, and on your own terms.</strong></p>
+      </li>
+      <li class="outcome-item">
+        <span class="outcome-num">02</span>
+        <p class="outcome-text">Understand how microdosing interacts with <strong>mood, anxiety, attention, and emotional regulation.</strong></p>
+      </li>
+      <li class="outcome-item">
+        <span class="outcome-num">03</span>
+        <p class="outcome-text">Apply <strong>daily reflective and grounding practices</strong> that reduce reactivity and increase self-awareness on and off microdosing.</p>
+      </li>
+      <li class="outcome-item">
+        <span class="outcome-num">04</span>
+        <p class="outcome-text">Track your experience meaningfully, without over-interpretation or projection.</p>
+      </li>
+      <li class="outcome-item">
+        <span class="outcome-num">05</span>
+        <p class="outcome-text">Know, with real clarity, <strong>whether microdosing is right for you</strong> — and feel confident in that answer either way.</p>
+      </li>
+    </ul>
+
+    <div>
+      <div class="outcomes-promise">
+        <span class="outcomes-promise-label">Our Promise</span>
+        <p>This course does not promise self-transformation. It promises discernment, structure, and psychological safety — the foundations from which genuine transformation becomes possible.</p>
+      </div>
+
+      <div class="bonus-card">
+        <span class="bonus-label">Bonus</span>
+        <p>Access to <strong>monthly integration and breathwork circles</strong> held by members of our team of experienced and educated guides — included with your enrollment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HISTORY ───────────────────────────────────────────────────── -->
+<section class="history">
+  <div class="history-header">
+    <span class="section-eyebrow">Historical Context</span>
+    <h2 class="section-title">A practice with deep roots.</h2>
+  </div>
+
+  <div class="history-grid">
+    <div class="history-item">
+      <span class="history-item-label">Western Origins</span>
+      <div class="history-item-title">Hofmann, Grof & the pioneers</div>
+      <p>Albert Hofmann — who first synthesized LSD — explored microdosing in his later years to enhance clarity, creativity, and connection to nature, viewing it not as a scientific curiosity but as a sacred tool for consciousness exploration. Stanislav Grof found that sub-perceptual doses could help people access deeper layers of the psyche while remaining emotionally grounded, facilitating healing and insight without the intensity of a full experience.</p>
+    </div>
+
+    <div class="history-item">
+      <span class="history-item-label">Indigenous Traditions</span>
+      <div class="history-item-title">Low-dose practices in the Amazon and beyond</div>
+      <p>Long before the term "microdosing" emerged, Indigenous communities — particularly in the Amazon — used low doses of plant medicines as part of ongoing spiritual, relational, and medicinal practices. These doses served subtle purposes: enhancing connection to the natural world, maintaining energetic balance, and deepening participation in the living community of species. These traditions reflect a long-standing understanding of how to engage with psychoactive plants in non-visionary, relational ways.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── APPROACH ──────────────────────────────────────────────────── -->
+<section class="approach">
+  <span class="section-eyebrow">The Psygaia Approach</span>
+  <h2 class="section-title">Both grounded and whole.</h2>
+  <div class="approach-inner">
+    <div class="approach-principles">
+        <div class="principle">
+          <div class="principle-icon">&#9678;</div>
+          <div>
+            <div class="principle-title">Evidence-informed</div>
+            <p class="principle-desc">Drawing on peer-reviewed research, harm-reduction principles, and benefit-maximization practices — without overclaiming what the science does and doesn't support.</p>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="principle-icon">&#9680;</div>
+          <div>
+            <div class="principle-title">Mindfulness-based</div>
+            <p class="principle-desc">Emphasizing awareness over outcome chasing. The aim is not to optimize yourself but to observe yourself — clearly, honestly, and with compassion.</p>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="principle-icon">&#9681;</div>
+          <div>
+            <div class="principle-title">Ecologically grounded</div>
+            <p class="principle-desc">Framing microdosing as a natural relationship with living organisms — not a productivity tool, a hack, or a wonder drug. You are entering a relationship, not purchasing an upgrade.</p>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="principle-icon">&#9679;</div>
+          <div>
+            <div class="principle-title">Trauma-informed</div>
+            <p class="principle-desc">Prioritizing nervous-system stability, pacing, and psychological safety throughout. The course is designed to contain, not push.</p>
+          </div>
+        </div>
+    </div>
+
+    <div class="approach-right">
+      <div class="contrast-box">
+        <div class="contrast-box-title">How most content fails. How this differs.</div>
+        <div class="contrast-row contrast-header">
+          <div class="contrast-cell">Common approaches</div>
+          <div class="contrast-cell teal-header">Microdosing Mindfully</div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-cell no">Protocol-focused without inner work</div>
+          <div class="contrast-cell yes">Structured approaches to inner work</div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-cell no">Spiritual language without grounding</div>
+          <div class="contrast-cell yes">Spirituality with containment</div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-cell no">Productivity optimization</div>
+          <div class="contrast-cell yes">Relational, reflective practice</div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-cell no">Promises transformation</div>
+          <div class="contrast-cell yes">Promises discernment & safety</div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-cell no">Individual, isolated</div>
+          <div class="contrast-cell yes">Community-supported</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CURRICULUM ────────────────────────────────────────────────── -->
+<section class="curriculum" id="curriculum">
+  <span class="section-eyebrow">Course Structure</span>
+  <h2 class="section-title">Three weeks. Fifteen lessons.</h2>
+
+  <div class="curriculum-inner">
+    <div class="curriculum-nav">
+      <button class="week-tab active" onclick="showWeek(1, this)">
+        <span class="week-tab-num">Week 01</span>
+        <span class="week-tab-title">Foundations</span>
+      </button>
+      <button class="week-tab" onclick="showWeek(2, this)">
+        <span class="week-tab-num">Week 02</span>
+        <span class="week-tab-title">Practice</span>
+      </button>
+      <button class="week-tab" onclick="showWeek(3, this)">
+        <span class="week-tab-num">Week 03</span>
+        <span class="week-tab-title">Integration</span>
+      </button>
+    </div>
+
+    <div class="curriculum-weeks">
+      <div class="week-panel active" id="week1">
+        <p class="week-intro">Establishing the essential knowledge and safety foundations before beginning your practice.</p>
+        <div class="days-list">
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">1</span></div><div class="day-content"><span class="day-title">The Basics of Microdosing</span><span class="day-desc">What microdosing is, how it works, and what to realistically expect from a sub-perceptual dose.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">2</span></div><div class="day-content"><span class="day-title">Intentions & Rituals</span><span class="day-desc">Setting clear intentions and designing a simple ritual framework to anchor your practice.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">3</span></div><div class="day-content"><span class="day-title">Contraindications & Safety</span><span class="day-desc">Who should exercise caution, what to watch for, and how to practise informed harm reduction.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">4</span></div><div class="day-content"><span class="day-title">Navigating the Effects</span><span class="day-desc">Understanding the range of physical, cognitive, and emotional responses you may encounter.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">5</span></div><div class="day-content"><span class="day-title">Self-Care & Microdosing</span><span class="day-desc">Rest, nutrition, and lifestyle factors that shape how your nervous system responds to the practice.</span></div></div>
+        </div>
+      </div>
+
+      <div class="week-panel" id="week2">
+        <p class="week-intro">Deepening through contemplative and somatic practices that amplify and ground your experience.</p>
+        <div class="days-list">
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">1</span></div><div class="day-content"><span class="day-title">Meditation & Microdosing</span><span class="day-desc">Using stillness and present-moment awareness to observe and deepen what the practice surfaces.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">2</span></div><div class="day-content"><span class="day-title">Flow States & Creativity</span><span class="day-desc">Recognising heightened creative states and working with them without forcing or chasing outcomes.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">3</span></div><div class="day-content"><span class="day-title">Yoga & Mind-Body Exercises</span><span class="day-desc">Somatic practices that help you stay grounded and embodied throughout your microdosing protocol.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">4</span></div><div class="day-content"><span class="day-title">Mental Health & Microdosing</span><span class="day-desc">Navigating mood, anxiety, and emotional sensitivity with care, realism, and appropriate boundaries.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">5</span></div><div class="day-content"><span class="day-title">Spirituality & Microdosing</span><span class="day-desc">Exploring meaning, connection, and the contemplative dimensions of a mindful microdosing practice.</span></div></div>
+        </div>
+      </div>
+
+      <div class="week-panel" id="week3">
+        <p class="week-intro">Weaving the experience into life — ecological awareness, ongoing practice, and what comes next.</p>
+        <div class="days-list">
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">1</span></div><div class="day-content"><span class="day-title">Consciousness Explorations</span><span class="day-desc">Expanding your understanding of perception, awareness, and the nature of altered states of mind.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">2</span></div><div class="day-content"><span class="day-title">Self-Inquiry Practices</span><span class="day-desc">Structured journaling and reflection tools for making meaning from what emerges during practice.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">3</span></div><div class="day-content"><span class="day-title">Connecting to Nature</span><span class="day-desc">Deepening your relationship with the natural world as a living dimension of your ongoing practice.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">4</span></div><div class="day-content"><span class="day-title">Ongoing Integration</span><span class="day-desc">How to carry insights forward and decide — with clarity — whether to continue, pause, or stop.</span></div></div>
+          <div class="day-item"><div class="day-num"><span class="day-num-label">Day</span><span class="day-num-n">5</span></div><div class="day-content"><span class="day-title">Further Resources</span><span class="day-desc">Curated books, research, and community pathways to support your journey beyond the course.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMMUNITY ─────────────────────────────────────────────────── -->
+<section class="community">
+  <div class="community-image">
+    <div class="community-image-inner"></div>
+  </div>
+  <div class="community-content">
+    <span class="section-eyebrow">Included: Psygaia's Circle</span>
+    <h2 class="community-title">A place to belong<br>while you learn.</h2>
+    <p class="community-body">
+      Enrollment includes lifetime access to Psygaia's Circle — a moderated
+      community space for those navigating psychedelic experiences with
+      intention. There is never pressure to share. Your presence is enough.
+    </p>
+    <ul class="community-features">
+      <li class="community-feature">
+        <div class="community-feature-dot"></div>
+        Ask questions and receive trustworthy answers from our team of interdisciplinary professionals.
+      </li>
+      <li class="community-feature">
+        <div class="community-feature-dot"></div>
+        Share reflections optionally — learn from others navigating similar experiences.
+      </li>
+      <li class="community-feature">
+        <div class="community-feature-dot"></div>
+        Access expertly curated and regularly updated resources relevant to your practice.
+      </li>
+      <li class="community-feature">
+        <div class="community-feature-dot"></div>
+        Participate in carefully-held monthly integration and breathwork circles.
+      </li>
+    </ul>
+    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Join the Circle &rarr;</a>
+  </div>
+</section>
+
+<!-- ── ENROLL STEPS ──────────────────────────────────────────────── -->
+<section class="enroll-steps">
+  <div>
+    <div class="enroll-steps-header">
+      <span class="section-eyebrow">What Happens Next</span>
+      <h2 class="section-title">Simple to begin.</h2>
+    </div>
+    <div class="enroll-steps-left">
+      <div class="enroll-step">
+        <div class="enroll-step-num">1</div>
+        <div class="enroll-step-content">
+          <div class="enroll-step-title">Enroll</div>
+          <p class="enroll-step-body">Complete your enrollment via Psygaia's Circle. Instant access — no waiting, no onboarding calls.</p>
+        </div>
+      </div>
+      <div class="enroll-step">
+        <div class="enroll-step-num">2</div>
+        <div class="enroll-step-content">
+          <div class="enroll-step-title">Access the course</div>
+          <p class="enroll-step-body">All 15 lessons are available immediately. Work at your own pace — the structure is there when you need it.</p>
+        </div>
+      </div>
+      <div class="enroll-step">
+        <div class="enroll-step-num">3</div>
+        <div class="enroll-step-content">
+          <div class="enroll-step-title">Join the community</div>
+          <p class="enroll-step-body">Your enrollment includes lifetime access to Psygaia's Circle and monthly integration circles with our guides.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="enroll-cta-panel">
+    <span class="enroll-cta-label">Ready to begin?</span>
+    <h3 class="enroll-cta-heading">Start your practice.<br><em>Mindfully.</em></h3>
+    <ul class="enroll-cta-includes">
+      <li>15 lessons across 3 structured weeks</li>
+      <li>Lifetime access — learn at your own pace</li>
+      <li>Psygaia's Circle community membership</li>
+      <li>Monthly integration &amp; breathwork circles</li>
+      <li>Developed by an independent nonprofit</li>
+    </ul>
+    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="enroll-cta-btn" target="_blank" rel="noopener">Enroll Now &rarr;</a>
+    <div class="enroll-cta-guarantee">
+      <span class="enroll-cta-guarantee-icon">&#10022;</span>
+      <p>14-day money-back guarantee. If you're not satisfied, email us for a full refund — no questions asked.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── INSTRUCTOR ────────────────────────────────────────────────── -->
+<section class="instructor">
+  <div class="instructor-image">
+    <div class="instructor-image-inner"></div>
+    <div class="instructor-image-caption">
+      <div class="instructor-role-overlay">M.A. &middot; Psychedelics & Consciousness Studies &middot; University of Ottawa</div>
+    </div>
+  </div>
+
+  <div class="instructor-content">
+    <span class="section-eyebrow">Course Creator</span>
+    <h2 class="instructor-name">Louis Belleau</h2>
+    <div class="instructor-credentials">M.A. Psychedelics & Consciousness Studies &middot; University of Ottawa</div>
+
+    <p class="instructor-bio">
+      Louis is the founder and director of Psygaia, and a psychedelic
+      researcher and guide with an MA in Psychedelics & Consciousness
+      Studies from the University of Ottawa. He holds an interdisciplinary
+      background in Psychology, Philosophy, and Religious Studies from
+      McGill University, and is a certified yoga and breathwork teacher.
+    </p>
+
+    <p class="instructor-bio">
+      Louis created this course in response to a gap he observed in
+      contemporary psychedelic education — where the technical outweighs
+      the spiritual and practical, and productivity overshadows ethical
+      meaning-making and ecological reconnection. His approach emphasizes
+      microdosing as a reflective and relational practice rather than a
+      performance tool.
+    </p>
+
+    <div class="credential-tags">
+      <span class="credential-tag">Yoga Teacher</span>
+      <span class="credential-tag">Breathwork</span>
+      <span class="credential-tag">Psychedelic Research</span>
+      <span class="credential-tag">McGill University</span>
+      <span class="credential-tag">University of Ottawa</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ───────────────────────────────────────────────────── -->
+<section class="pricing">
+  <span class="section-eyebrow">Enrollment</span>
+  <h2 class="section-title">Start mindful microdosing.</h2>
+
+  <div class="pricing-inner">
+    <div class="pricing-card">
+      <div class="pricing-badge">Complete Course</div>
+      <div class="pricing-card-title">Microdosing Mindfully</div>
+      <div class="pricing-card-subtitle">Full access &middot; Self-paced &middot; Lifetime updates</div>
+
+      <ul class="pricing-includes">
+        <li class="pricing-include">
+          <div class="include-check">&#10003;</div>
+          Full course access — 20 videos, 15 lessons (+ future updates)
+        </li>
+        <li class="pricing-include">
+          <div class="include-check">&#10003;</div>
+          Guided practices and daily reflections
+        </li>
+        <li class="pricing-include">
+          <div class="include-check">&#10003;</div>
+          8 weekly worksheets to guide your practice
+        </li>
+        <li class="pricing-include">
+          <div class="include-check">&#10003;</div>
+          Lifetime access to Psygaia's Circle community
+        </li>
+        <li class="pricing-include">
+          <div class="include-check">&#10003;</div>
+          Monthly integration and breathwork circles
+        </li>
+        <li class="pricing-include">
+          <div class="include-check">&#10003;</div>
+          Access to trusted guides via Psygaia's Network
+        </li>
+      </ul>
+
+      <div class="pricing-cta-stack">
+        <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary-full" target="_blank" rel="noopener">Enroll Now &rarr;</a>
+      </div>
+    </div>
+
+    <div class="pricing-sidebar">
+      <div class="sidebar-card" style="border-color: rgba(62,201,191,0.35); border-left: 3px solid var(--teal); background: rgba(62,201,191,0.04);">
+        <span class="sidebar-card-label">&#10022; 14-Day Satisfaction Guarantee</span>
+        <p>If you are not satisfied with the course, email us within 14 days of purchase and we will issue a full refund. No questions asked.</p>
+      </div>
+
+      <div class="sidebar-card sidebar-card-dark">
+        <span class="sidebar-card-label">Why This Matters</span>
+        <p>Proceeds go directly to support Psygaia's nonprofit mission — making psychedelic education and support accessible and ethical for those who need it.</p>
+      </div>
+
+      <div class="sidebar-card">
+        <span class="sidebar-card-label">Next Steps</span>
+        <p>This course sets the foundations for our upcoming cohort-based program — a more immersive, supported experience for those ready to go deeper.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FALLBACK / NOT READY ──────────────────────────────────────── -->
+<section class="fallback">
+  <span class="section-eyebrow">Not ready to enroll yet?</span>
+  <h2>Start with the free guide.</h2>
+  <p>Our free introduction to microdosing covers the essentials — protocol basics, safety considerations, and what to expect. No pressure, no pitch. Just a place to begin.</p>
+  <a class="fallback-btn" href="https://psygaia.org/newsletter-sign-up-htup" target="_blank" rel="noopener">Get the Guide</a>
+</section>
+
+<!-- ── FAQ ──────────────────────────────────────────────────────── -->
+<section class="faq">
+  <div class="faq-left">
+    <span class="section-eyebrow">Common Questions</span>
+    <h2 class="section-title">Honest answers.</h2>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-q">
+          Is microdosing legal?
+          <span class="faq-chevron">&#9662;</span>
+        </button>
+        <div class="faq-a">
+          <p>In most countries, the substances typically used for microdosing — psilocybin mushrooms and LSD — remain controlled. This course does not encourage illegal activity. It provides education so that if you choose to engage with these substances, you do so with as much knowledge and care as possible. You are always responsible for understanding the laws in your jurisdiction.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          What substances does the course cover?
+          <span class="faq-chevron">&#9662;</span>
+        </button>
+        <div class="faq-a">
+          <p>The course focuses primarily on psilocybin (magic mushrooms) and LSD as the most researched and commonly used microdosing substances. The principles, practices, and safety frameworks taught apply broadly across sub-perceptual psychedelic use.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          Do I need prior experience with psychedelics?
+          <span class="faq-chevron">&#9662;</span>
+        </button>
+        <div class="faq-a">
+          <p>No. The course is designed for people at all levels of familiarity, including those who have never used psychedelics at all. Week 1 begins with the absolute foundations. Curiosity and a willingness to reflect are the only prerequisites.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          How much time does it require each day?
+          <span class="faq-chevron">&#9662;</span>
+        </button>
+        <div class="faq-a">
+          <p>Each lesson is designed to be completed in 20–40 minutes. The reflective practices that accompany each week can be integrated into your existing morning or evening routine. There is no live attendance required — you work entirely at your own pace.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          What if I decide not to microdose after completing the course?
+          <span class="faq-chevron">&#9662;</span>
+        </button>
+        <div class="faq-a">
+          <p>That is a completely valid outcome — and one the course is designed to support. One of the stated outcomes is helping you decide with clarity whether microdosing is right for you at this stage of life. Arriving at a confident "not yet" or "not for me" is as valuable as beginning a practice.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          Is this course affiliated with any particular religion or spiritual tradition?
+          <span class="faq-chevron">&#9662;</span>
+        </button>
+        <div class="faq-a">
+          <p>No. The course is spiritually inclusive but not spiritually prescriptive. It draws on mindfulness traditions, ecopsychology, and contemplative practices without aligning with any specific religion or belief system. You bring your own relationship to meaning.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          Who is behind this course?
+          <span class="faq-chevron">&#9662;</span>
+        </button>
+        <div class="faq-a">
+          <p>This course was developed by Psygaia, an independent nonprofit organisation dedicated to evidence-informed psychedelic education. Psygaia operates without advertising, corporate sponsorship, or profit motive. <a href="https://psygaia.org" target="_blank">Learn more about Psygaia &rarr;</a></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="faq-right">
+    <div class="faq-quotes">
+      <div class="faq-quote-card">
+        <p class="faq-quote-text">"I loved this microdosing course. Not only did it provide practical instructions on how to microdose, but it gave me a lot of tools for how to process emotions, negative beliefs, and anything else that might come up. It's a really well-rounded course created with a lot of forethought and care."</p>
+        <div class="faq-quote-name">Anna Khandrueva &middot; Trauma Therapist</div>
+      </div>
+      <div class="faq-quote-card">
+        <p class="faq-quote-text">"This is the course I wish I'd had when I started microdosing a year ago."</p>
+        <div class="faq-quote-name">Richard Ventham &middot; Entrepreneur</div>
+      </div>
+      <div class="faq-quote-card">
+        <p class="faq-quote-text">"This course and community helped me slow down and notice how subtle my responses actually were. I stopped trying to 'get something' from microdosing and started listening."</p>
+        <div class="faq-quote-name">Leya Sukhwender &middot; Graduate Student</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DISCLAIMER ────────────────────────────────────────────────── -->
+<div class="disclaimer">
+  <p>
+    This course is for <strong>educational purposes only.</strong>
+    It does not provide medical advice, psychotherapy, or legal guidance.
+    You are always responsible for your own choices.
+    This course exists to help you make those choices
+    <strong>more informed and more conscious.</strong>
+  </p>
+</div>
+
+<!-- ── FOOTER SUPPORT BANNER ─────────────────────────────────────── -->
+<div class="footer-support">
+  <div class="footer-support-inner">
+    <div class="footer-support-text">
+      <p class="footer-support-label">Support Psychedelic Research &amp; Education</p>
+      <p class="footer-support-headline">This work exists because people like you care.</p>
+      <p class="footer-support-body">Psygaia is an independent nonprofit — no ads, no corporate sponsors. Just rigorous, freely available education in service of safer psychedelic practice and planetary health. Your support keeps this work alive.</p>
+    </div>
+    <a class="footer-support-btn" href="https://buy.stripe.com/bIYcMX3W893Z4o04gg" target="_blank" rel="noopener">Support This Work &rarr;</a>
+  </div>
+</div>
+
+<script is:inline>
+  // Week curriculum tabs
+  function showWeek(n, btn) {
+    document.querySelectorAll('.week-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.week-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.getElementById('week' + n).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+
+</div><!-- .mdc-page -->
+
+</BaseLayout>

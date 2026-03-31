@@ -1,0 +1,500 @@
+---
+import Nav from '../components/Nav.astro';
+import SearchOverlay from '../components/SearchOverlay.astro';
+import MobileDrawer from '../components/MobileDrawer.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  ogImage?: string;
+  hideProgress?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonicalPath = '/',
+  ogImage = '/og-image.png',
+  hideProgress = false,
+} = Astro.props;
+
+const baseUrl = 'https://www.howtousepsychedelics.com';
+const canonicalUrl = `${baseUrl}${canonicalPath}`;
+const ogImageUrl = `${baseUrl}${ogImage}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{title}</title>
+  <meta name="description" content={description}/>
+  <link rel="canonical" href={canonicalUrl}/>
+  <meta property="og:site_name" content="How to Use Psychedelics"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content={canonicalUrl}/>
+  <meta property="og:title" content={title}/>
+  <meta property="og:description" content={description}/>
+  <meta property="og:image" content={ogImageUrl}/>
+  <meta property="og:image:width" content="2048"/>
+  <meta property="og:image:height" content="1072"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=block" rel="stylesheet"/>
+
+  <!-- Theme detection before first paint -->
+  <script is:inline>
+    (function(){var t=localStorage.getItem('htup-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})()
+  </script>
+
+  <slot name="head" />
+</head>
+<body>
+
+  <!-- Scroll Progress -->
+  {!hideProgress && <div class="scroll-progress" id="scrollProgress"></div>}
+
+  <!-- Nav -->
+  <Nav />
+
+  <!-- Search Overlay -->
+  <SearchOverlay />
+
+  <!-- Mobile Drawer -->
+  <MobileDrawer />
+
+  <!-- Page Content -->
+  <slot />
+
+  <!-- Mobile TOC FAB -->
+  <button class="toc-fab" id="tocFab" aria-label="Table of contents">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>
+  </button>
+
+  <!-- Mobile TOC Modal -->
+  <div class="toc-modal" id="tocModal">
+    <div class="toc-modal-inner">
+      <div class="toc-modal-header">
+        <span class="toc-modal-title">Contents</span>
+        <button class="toc-modal-close" id="tocModalClose" aria-label="Close">&times;</button>
+      </div>
+      <ul class="toc-modal-list" id="tocModalList"></ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <Footer />
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <p>This site provides harm reduction education only. Psychedelics are controlled substances in most jurisdictions.<br>Nothing here constitutes medical or legal advice. In crisis, contact a healthcare provider or crisis line immediately.</p>
+  </div>
+
+  <!-- Shared Scripts -->
+  <script is:inline>
+    // Theme toggle
+    const toggle = document.querySelector('.theme-toggle');
+    toggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      html.classList.add('theme-switching');
+      const current = html.getAttribute('data-theme');
+      const next = current === 'light' ? '' : 'light';
+      if (next) {
+        html.setAttribute('data-theme', 'light');
+        localStorage.setItem('htup-theme', 'light');
+      } else {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('htup-theme', 'dark');
+      }
+      setTimeout(() => html.classList.remove('theme-switching'), 350);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Scroll progress bar
+    const progressBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = progress + '%';
+    }, { passive: true });
+
+    // ── Search ──
+    const searchPages = [
+      { title: 'Foundations', desc: 'Culture, law, science, and nature — the context you need.', url: '/foundations' },
+      { title: 'Culture', desc: 'The cultural history of psychedelic use across civilisations.', url: '/culture' },
+      { title: 'Law', desc: 'Legal status of psychedelics by jurisdiction.', url: '/law' },
+      { title: 'Science', desc: 'The neuroscience and pharmacology of psychedelics.', url: '/science' },
+      { title: 'Nature', desc: 'Ecology, fungi, and the natural world of psychedelics.', url: '/nature' },
+      { title: 'Psilocybin', desc: 'Magic mushrooms — effects, dosage, risks, and research.', url: '/psilocybin' },
+      { title: 'Ayahuasca', desc: 'The Amazonian brew — DMT, MAOIs, ceremony, and safety.', url: '/ayahuasca' },
+      { title: 'DMT (N,N-DMT)', desc: 'The spirit molecule — vaporised, injected, or in ayahuasca.', url: '/dmt' },
+      { title: '5-MeO-DMT', desc: 'The toad molecule — effects, risks, and sourcing ethics.', url: '/fivemedmt' },
+      { title: 'Mescaline', desc: 'Peyote and San Pedro — traditional use and pharmacology.', url: '/mescaline' },
+      { title: 'LSD', desc: 'Lysergic acid diethylamide — history, effects, and harm reduction.', url: '/lsd' },
+      { title: 'Ibogaine', desc: 'Addiction interruption, cardiac risks, and clinical use.', url: '/ibogaine' },
+      { title: 'Ketamine', desc: 'Dissociative therapy — clinical and personal use.', url: '/ketamine' },
+      { title: 'MDMA', desc: 'Empathogen — therapeutic use, neurotoxicity, and safety.', url: '/mdma' },
+      { title: 'Cannabis', desc: 'Psychedelic properties at high doses — risks and interactions.', url: '/cannabis' },
+      { title: '2C-B', desc: 'Phenethylamine — effects, dosing, and harm reduction.', url: '/twocb' },
+      { title: 'Salvia', desc: 'Salvinorin A — unique mechanism, intense effects, and caution.', url: '/salvia' },
+      { title: 'Microdosing', desc: 'Sub-perceptual dosing — protocols, evidence, and risks.', url: '/microdosing' },
+      { title: 'Microdosing Course', desc: 'Structured course on mindful microdosing practice.', url: '/microdosing-course' },
+      { title: 'Assessment', desc: 'Readiness screening and honest self-assessment.', url: '/assessment' },
+      { title: 'Preparation', desc: 'Set and setting — how to prepare for a journey.', url: '/preparation' },
+      { title: 'Navigation', desc: 'Tools for working with difficult experiences.', url: '/navigation' },
+      { title: 'Integration', desc: 'Making meaning and translating insight into change.', url: '/integration' },
+      { title: 'Facilitation', desc: 'Ethics and guidance for those supporting others.', url: '/facilitation' },
+      { title: 'Journey Planner', desc: 'Personalised preparation and integration planning tool.', url: '/planner' },
+      { title: 'Readiness Assessment', desc: 'Ten-question self-assessment for journey readiness.', url: '/readiness' },
+      { title: 'Interaction Checker', desc: 'Drug interaction chart for psychedelics.', url: '/checker' },
+      { title: 'Journeying', desc: 'The complete guide to psychedelic journeying.', url: '/journeying' },
+      { title: 'Substances', desc: 'Comprehensive guides to all major psychedelic substances.', url: '/substances' },
+    ];
+
+    function openSearch() {
+      document.getElementById('searchOverlay').classList.add('open');
+      setTimeout(() => document.getElementById('searchInput').focus(), 100);
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSearch() {
+      document.getElementById('searchOverlay').classList.remove('open');
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchResults').innerHTML = '<div class="search-hint">Type to search across all pages</div>';
+      document.body.style.overflow = '';
+    }
+
+    // Search overlay close on backdrop click
+    document.getElementById('searchOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeSearch();
+    });
+
+    // Search close button
+    document.getElementById('searchCloseBtn').addEventListener('click', closeSearch);
+
+    // Search open button
+    document.querySelector('.search-open-btn').addEventListener('click', openSearch);
+
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const q = e.target.value.toLowerCase().trim();
+      const container = document.getElementById('searchResults');
+      if (!q) {
+        container.innerHTML = '<div class="search-hint">Type to search across all pages</div>';
+        return;
+      }
+      const results = searchPages.filter(p => p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
+      if (!results.length) {
+        container.innerHTML = '<div class="search-no-results">No results found</div>';
+        return;
+      }
+      container.innerHTML = results.map(r =>
+        '<a class="search-result" href="' + r.url + '"><div class="search-result-title">' + r.title + '</div><div class="search-result-desc">' + r.desc + '</div></a>'
+      ).join('');
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeSearch();
+        closeDrawer();
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        openSearch();
+      }
+    });
+
+    // ── Mobile Drawer ──
+    function toggleDrawer() {
+      const drawer = document.getElementById('mobileDrawer');
+      const backdrop = document.getElementById('drawerBackdrop');
+      const hamburger = document.querySelector('.nav-hamburger');
+      const isOpen = drawer.classList.contains('open');
+      if (isOpen) {
+        closeDrawer();
+      } else {
+        drawer.classList.add('open');
+        backdrop.classList.add('open');
+        hamburger.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeDrawer() {
+      document.getElementById('mobileDrawer').classList.remove('open');
+      document.getElementById('drawerBackdrop').classList.remove('open');
+      document.querySelector('.nav-hamburger').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function toggleSection(btn) {
+      btn.parentElement.classList.toggle('expanded');
+    }
+
+    // Hamburger button
+    document.querySelector('.nav-hamburger').addEventListener('click', toggleDrawer);
+
+    // Drawer backdrop close
+    document.getElementById('drawerBackdrop').addEventListener('click', closeDrawer);
+
+    // Drawer close button
+    document.getElementById('drawerCloseBtn').addEventListener('click', closeDrawer);
+
+    // Drawer section accordion toggles
+    document.querySelectorAll('.drawer-section-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        toggleSection(this);
+      });
+    });
+
+    // Drawer link close on click
+    document.querySelectorAll('.mobile-drawer .drawer-section-links a, .mobile-drawer .drawer-link, .mobile-drawer .drawer-cta').forEach(function(link) {
+      link.addEventListener('click', closeDrawer);
+    });
+
+    // ══════════════════════════════════════════════
+    // DESKTOP SIDEBAR TOC — click to scroll with nav offset
+    // ══════════════════════════════════════════════
+    function getNavHeight() {
+      var nav = document.querySelector('nav');
+      return nav ? nav.offsetHeight : 72;
+    }
+
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest('.sidebar-nav a');
+      if (!a) return;
+      e.preventDefault();
+      var id = a.getAttribute('href').replace('#', '');
+      var target = document.getElementById(id);
+      if (!target) return;
+      var navH = getNavHeight();
+      var top = target.getBoundingClientRect().top + window.scrollY - navH - 12;
+      // Immediately highlight clicked link
+      var sidebar = a.closest('.sidebar-nav');
+      if (sidebar) {
+        sidebar.querySelectorAll('a').forEach(function(l) { l.classList.remove('active'); });
+        a.classList.add('active');
+      }
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+
+    // ══════════════════════════════════════════════
+    // SCROLL SPY — highlight active section in sidebar
+    // ══════════════════════════════════════════════
+    (function() {
+      var spyTargets = [];
+      var spyLinkMap = {};
+      var rafPending = false;
+
+      function runSpy() {
+        rafPending = false;
+        if (!spyTargets.length) return;
+        var trigger = getNavHeight() + 20;
+        var activeId = null;
+        for (var i = 0; i < spyTargets.length; i++) {
+          if (spyTargets[i].el.getBoundingClientRect().top <= trigger) {
+            activeId = spyTargets[i].id;
+          } else {
+            break;
+          }
+        }
+        if (!activeId && spyTargets.length) activeId = spyTargets[0].id;
+        Object.keys(spyLinkMap).forEach(function(k) { spyLinkMap[k].classList.remove('active'); });
+        if (spyLinkMap[activeId]) spyLinkMap[activeId].classList.add('active');
+      }
+
+      function onScroll() {
+        if (rafPending) return;
+        rafPending = true;
+        requestAnimationFrame(runSpy);
+      }
+
+      function initScrollSpy() {
+        spyTargets = [];
+        spyLinkMap = {};
+        var sidebar = document.querySelector('.sidebar-nav');
+        if (!sidebar) return;
+        sidebar.querySelectorAll('a[href]').forEach(function(a) {
+          var hash = a.getAttribute('href').replace(/^.*#/, '');
+          if (hash) spyLinkMap[hash] = a;
+        });
+        var ids = Object.keys(spyLinkMap);
+        if (!ids.length) return;
+        ids.forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) spyTargets.push({ el: el, id: id });
+        });
+        spyTargets.sort(function(a, b) {
+          return (a.el.getBoundingClientRect().top + window.scrollY) - (b.el.getBoundingClientRect().top + window.scrollY);
+        });
+        window.addEventListener('scroll', onScroll, { passive: true });
+        runSpy();
+      }
+
+      initScrollSpy();
+    })();
+
+    // ══════════════════════════════════════════════
+    // MOBILE TOC FAB + MODAL
+    // ══════════════════════════════════════════════
+    (function() {
+      var fab = document.getElementById('tocFab');
+      var modal = document.getElementById('tocModal');
+      var modalList = document.getElementById('tocModalList');
+      var modalClose = document.getElementById('tocModalClose');
+      if (!fab) return;
+
+      // Only show FAB if page has a sidebar-nav (TOC content)
+      var sidebarNav = document.querySelector('.sidebar-nav');
+      if (!sidebarNav) {
+        fab.style.display = 'none';
+        return;
+      }
+
+      // Show/hide FAB on scroll
+      window.addEventListener('scroll', function() {
+        if (window.innerWidth > 900) return;
+        if (window.scrollY > 200) {
+          fab.classList.add('visible');
+        } else {
+          fab.classList.remove('visible');
+        }
+      }, { passive: true });
+
+      // Open modal
+      fab.addEventListener('click', function() {
+        // Populate modal list from sidebar nav
+        var links = sidebarNav.querySelectorAll('a');
+        modalList.innerHTML = '';
+        links.forEach(function(a) {
+          var li = document.createElement('li');
+          var link = document.createElement('a');
+          link.href = a.getAttribute('href');
+          link.textContent = a.textContent.trim();
+          if (a.classList.contains('active')) link.classList.add('active');
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+            var id = this.getAttribute('href').replace('#', '');
+            var target = document.getElementById(id);
+            if (target) {
+              var navH = getNavHeight();
+              var top = target.getBoundingClientRect().top + window.scrollY - navH - 12;
+              setTimeout(function() {
+                window.scrollTo({ top: top, behavior: 'smooth' });
+              }, 50);
+            }
+          });
+          li.appendChild(link);
+          modalList.appendChild(li);
+        });
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+
+      // Close modal
+      modalClose.addEventListener('click', function() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+
+      // Close on backdrop click
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('open')) {
+          modal.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+    })();
+
+    // ══════════════════════════════════════════════
+    // AUTO-INJECT "GET THE GUIDE" CTA CARDS
+    // ══════════════════════════════════════════════
+    (function() {
+      var body = document.querySelector('.article-body');
+      if (!body) return;
+      var h2s = body.querySelectorAll('h2');
+      if (!h2s.length) return;
+
+      var positions = [];
+      var count = h2s.length;
+      if (count >= 9) {
+        positions = [Math.floor(count * 0.25), Math.floor(count * 0.5), Math.floor(count * 0.75)];
+      } else if (count >= 4) {
+        positions = [Math.floor(count * 0.33), Math.floor(count * 0.66)];
+      } else {
+        positions = [Math.min(1, count - 1)];
+      }
+
+      var html = '<div class="email-cta-box">'
+        + '<div class="email-cta-box-label">Free Resource</div>'
+        + '<div class="email-cta-box-title">Get the complete psychedelics guide — free.</div>'
+        + '<div class="email-cta-box-desc">Research and mindfulness-based frameworks for preparation, safety, and integration. Used by thousands of readers — delivered to your inbox, no cost.</div>'
+        + '<a class="email-cta-btn" href="https://psygaia.org/newsletter-sign-up-htup" target="_blank" rel="noopener">Get the Guide →</a>'
+        + '</div>';
+
+      for (var i = positions.length - 1; i >= 0; i--) {
+        var target = h2s[positions[i]];
+        if (target && target.closest('.content-section')) {
+          target.closest('.content-section').insertAdjacentHTML('beforebegin', html);
+        } else if (target) {
+          target.insertAdjacentHTML('beforebegin', html);
+        }
+      }
+    })();
+
+    // ── FAQ Accordion (global handler for all article pages) ──
+    document.addEventListener('click', function(e) {
+      var question = e.target.closest('.faq-question, .faq-q');
+      if (!question) return;
+      var item = question.closest('.faq-item');
+      if (!item) return;
+      var isOpen = item.classList.contains('open');
+      // Close all siblings (accordion behavior)
+      var parent = item.parentElement;
+      if (parent) {
+        parent.querySelectorAll('.faq-item.open').forEach(function(faq) {
+          if (faq !== item) {
+            faq.classList.remove('open');
+            var tog = faq.querySelector('.tog, .faq-icon');
+            if (tog && tog.tagName !== 'svg') tog.textContent = '+';
+          }
+        });
+      }
+      // Toggle current
+      item.classList.toggle('open');
+      var tog = question.querySelector('.tog, .faq-icon');
+      if (tog && tog.tagName !== 'svg') {
+        tog.textContent = item.classList.contains('open') ? '−' : '+';
+      }
+    });
+  </script>
+
+</body>
+</html>

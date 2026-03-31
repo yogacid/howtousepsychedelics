@@ -1,0 +1,420 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Drug Interaction Checker — How to Use Psychedelics"
+  description="Check interactions between psychedelics and other substances. Based on TripSit combination data and peer-reviewed pharmacological literature. Completely private — nothing stored."
+  canonicalPath="/checker"
+  hideProgress={true}
+>
+
+  <div class="ic-page-wrap">
+    <div class="ic-section-inner">
+
+      <div class="breadcrumb" style="padding-top:1.5rem; margin-bottom:0;">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Interaction Checker</span>
+      </div>
+
+      <div class="ic-section-header">
+        <div class="ic-eyebrow">Safety Reference</div>
+        <h1 class="ic-page-title">Drug Interaction <span class="accent-word">Checker</span></h1>
+        <p class="ic-section-sub">Select two substances to check their interaction profile. Based on TripSit combination data and peer-reviewed pharmacological literature.</p>
+      </div>
+
+      <!-- QUICK LOOKUP -->
+      <div class="ic-card" id="ic-lookup-card">
+        <div class="ic-card-label">Quick Lookup</div>
+        <p class="ic-card-desc">Choose two substances to see their interaction rating, risk level, and clinical notes.</p>
+
+        <div class="ic-selects">
+          <div class="ic-select-col">
+            <label for="chk-a">First substance</label>
+            <div class="ic-select-wrap">
+              <select id="chk-a"><option value="">Select a substance&hellip;</option></select>
+            </div>
+          </div>
+          <div class="ic-select-plus">+</div>
+          <div class="ic-select-col">
+            <label for="chk-b">Second substance</label>
+            <div class="ic-select-wrap">
+              <select id="chk-b"><option value="">Select a substance&hellip;</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="ic-result" id="chk-result">
+          <div class="ic-result-top">
+            <span class="ic-result-badge" id="chk-rating"></span>
+            <span class="ic-result-pair" id="chk-pair"></span>
+          </div>
+          <p class="ic-result-note" id="chk-note"></p>
+        </div>
+
+        <div class="ic-empty" id="chk-empty">
+          <span class="ic-empty-icon">&#x21C6;</span>
+          <span>Select two substances above to check their interaction</span>
+        </div>
+      </div>
+
+      <!-- DISCLAIMER -->
+      <div class="ic-disclaimer-card">
+        <div class="ic-disclaimer-icon">&#x26A0;</div>
+        <div>
+          <strong>This is not medical advice.</strong> Interaction charts reflect generalised pharmacological knowledge. They cannot account for your specific dose, body weight, metabolism, genetics, tolerance, or concurrent medical conditions. A combination rated &ldquo;Low Risk&rdquo; is not the same as &ldquo;safe.&rdquo; If you are taking any prescription medication, consult your prescriber before combining with any psychoactive substance.
+        </div>
+      </div>
+
+      <!-- FULL CHART -->
+      <div class="ic-card ic-chart-card">
+        <div class="ic-card-label">Full Interaction Chart</div>
+        <p class="ic-card-desc">Tap any cell for details. Scroll horizontally on mobile.</p>
+
+        <div class="ic-legend">
+          <div class="ic-legend-item"><span class="ic-swatch" style="background:rgba(62,201,191,0.18);color:#3ec9bf">&uarr;</span>Synergy</div>
+          <div class="ic-legend-item"><span class="ic-swatch" style="background:rgba(62,201,191,0.09);color:#3ec9bf">&odot;</span>Low Risk</div>
+          <div class="ic-legend-item"><span class="ic-swatch" style="background:rgba(92,184,74,0.15);color:#5cb84a">&darr;</span>Decrease</div>
+          <div class="ic-legend-item"><span class="ic-swatch" style="background:rgba(212,180,50,0.15);color:#d4b432">&triangle;</span>Caution</div>
+          <div class="ic-legend-item"><span class="ic-swatch" style="background:rgba(212,131,74,0.18);color:#d4836a">&times;</span>Unsafe</div>
+          <div class="ic-legend-item"><span class="ic-swatch" style="background:rgba(200,60,60,0.18);color:#d45252">&times;</span>Dangerous</div>
+        </div>
+
+        <div class="ic-grid-wrap">
+          <table class="ic-grid" id="chk-grid"></table>
+        </div>
+        <div class="ic-tooltip" id="ic-tooltip">
+          <div class="ic-tooltip-pair" id="ic-tip-pair"></div>
+          <div class="ic-tooltip-badge" id="ic-tip-badge"></div>
+          <div class="ic-tooltip-note" id="ic-tip-note"></div>
+        </div>
+      </div>
+
+      <!-- RISK CATEGORIES -->
+      <div class="ic-card">
+        <div class="ic-card-label">Understanding Risk Categories</div>
+        <div class="ic-categories">
+          <div class="ic-cat-item">
+            <span class="ic-cat-badge" style="color:#3ec9bf;background:rgba(62,201,191,0.12);border-color:rgba(62,201,191,0.3)">Low Risk &amp; Synergy</span>
+            <p>These substances tend to enhance each other&rsquo;s effects in generally predictable ways. Standard harm reduction practices apply, but the combination does not introduce novel dangers beyond those of each substance alone.</p>
+          </div>
+          <div class="ic-cat-item">
+            <span class="ic-cat-badge" style="color:#3ec9bf;background:rgba(62,201,191,0.07);border-color:rgba(62,201,191,0.2)">Low Risk</span>
+            <p>No significant interaction expected at typical doses. The combination is not known to produce dangerous effects, though individual variation always applies.</p>
+          </div>
+          <div class="ic-cat-item">
+            <span class="ic-cat-badge" style="color:#5cb84a;background:rgba(92,184,74,0.1);border-color:rgba(92,184,74,0.3)">Low Risk &amp; Decrease</span>
+            <p>One substance reduces or blocks the effects of the other. Not typically dangerous, but may result in a diminished or unpredictable experience.</p>
+          </div>
+          <div class="ic-cat-item">
+            <span class="ic-cat-badge" style="color:#d4b432;background:rgba(212,180,50,0.1);border-color:rgba(212,180,50,0.3)">Caution</span>
+            <p>The combination carries moderate risk or produces unpredictable interactions. Additional research, dose reduction, and careful monitoring are advisable.</p>
+          </div>
+          <div class="ic-cat-item">
+            <span class="ic-cat-badge" style="color:#d4836a;background:rgba(212,131,74,0.1);border-color:rgba(212,131,74,0.3)">Unsafe</span>
+            <p>The combination carries significant risk. Serious adverse effects &mdash; cardiovascular strain, extreme psychological distress, serotonin toxicity, or respiratory depression &mdash; are possible.</p>
+          </div>
+          <div class="ic-cat-item">
+            <span class="ic-cat-badge" style="color:#d45252;background:rgba(200,60,60,0.1);border-color:rgba(200,60,60,0.3)">Dangerous</span>
+            <p>The combination carries life-threatening risk. Serotonin syndrome, seizures, cardiac events, or respiratory failure are documented possibilities. <strong>Do not combine.</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RELATED -->
+      <div class="ic-related">
+        <a href="/readiness" class="ic-related-link">Readiness Assessment &rarr;</a>
+        <a href="/planner" class="ic-related-link">Journey Planner &rarr;</a>
+        <a href="/assessment" class="ic-related-link">Safety Guide &rarr;</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script is:inline>
+  (function() {
+    var substances = [
+      'Psilocybin','LSD','DMT','Mescaline','5-MeO-DMT','2C-B',
+      'MDMA','Ketamine','Cannabis','Alcohol',
+      'SSRIs','MAOIs','Lithium','Benzodiazepines',
+      'Amphetamines','Cocaine','Opioids','Ibogaine'
+    ];
+
+    var data = {
+      'DMT+LSD': {r:'Low Risk & Synergy', n:'Both are serotonergic psychedelics. Effects are strongly potentiated. Reduce doses significantly if combining.'},
+      'DMT+Psilocybin': {r:'Low Risk & Synergy', n:'Both are tryptamine psychedelics acting on 5-HT2A. Effects are additive. Reduce doses.'},
+      'LSD+Psilocybin': {r:'Low Risk & Synergy', n:'Cross-tolerance exists. Effects are potentiated. Reduce doses of both substances.'},
+      'LSD+Mescaline': {r:'Low Risk & Synergy', n:'Effects are potentiated. Cross-tolerance applies. Reduce doses.'},
+      'DMT+Mescaline': {r:'Low Risk & Synergy', n:'Effects are potentiated. Reduce doses.'},
+      'Mescaline+Psilocybin': {r:'Low Risk & Synergy', n:'Effects are potentiated. Cross-tolerance applies. Reduce doses.'},
+      '2C-B+LSD': {r:'Low Risk & Synergy', n:'2C-B potentiates LSD effects. Commonly combined but doses should be reduced.'},
+      '2C-B+Psilocybin': {r:'Low Risk & Synergy', n:'Effects are potentiated. Reduce doses of both.'},
+      '2C-B+DMT': {r:'Low Risk & Synergy', n:'Effects are potentiated. Reduce doses.'},
+      '2C-B+Mescaline': {r:'Low Risk & Synergy', n:'Both are phenethylamines. Effects strongly potentiated. Reduce doses significantly.'},
+      '5-MeO-DMT+LSD': {r:'Caution', n:'5-MeO-DMT is significantly more intense than N,N-DMT. Combination can be overwhelming. Not recommended without extensive experience.'},
+      '5-MeO-DMT+Psilocybin': {r:'Caution', n:'Can be extremely intense. 5-MeO-DMT produces qualitatively different effects. Not recommended for most users.'},
+      '5-MeO-DMT+DMT': {r:'Caution', n:'Both are tryptamines but produce very different experiences. Combination is unpredictable and potentially overwhelming.'},
+      '5-MeO-DMT+Mescaline': {r:'Caution', n:'Limited data. The combination is unpredictable. Exercise extreme caution.'},
+      '2C-B+5-MeO-DMT': {r:'Caution', n:'Limited data. Both are potent serotonergic substances. Exercise caution.'},
+      'LSD+MDMA': {r:'Caution', n:'Known as "candy flipping." Effects are strongly potentiated. Increased serotonergic load. Reduce doses of both, especially MDMA. Stay hydrated but do not overhydrate.'},
+      'MDMA+Psilocybin': {r:'Caution', n:'Known as "hippie flipping." Potentiated effects. Increased serotonergic activity. Reduce doses. Monitor temperature and hydration.'},
+      'DMT+MDMA': {r:'Caution', n:'Increased serotonergic load. Potentiated effects. Reduce doses.'},
+      'MDMA+Mescaline': {r:'Caution', n:'Both are serotonergic. Increased cardiovascular strain and serotonin load. Reduce doses significantly.'},
+      '2C-B+MDMA': {r:'Caution', n:'Known as "nexus flipping." Potentiated effects. 2C-B often taken on the MDMA comedown. Reduce 2C-B dose.'},
+      '5-MeO-DMT+MDMA': {r:'Unsafe', n:'Significantly increased serotonergic load. Risk of serotonin toxicity. Not recommended.'},
+      'Ketamine+LSD': {r:'Caution', n:'Ketamine can intensify psychedelic effects significantly. Dissociation combined with psychedelia can be disorienting. Reduce ketamine dose.'},
+      'Ketamine+Psilocybin': {r:'Caution', n:'Ketamine intensifies and alters the psychedelic experience. Can be disorienting. Reduce doses.'},
+      'DMT+Ketamine': {r:'Caution', n:'Both are short-acting but the combination can be extremely intense and disorienting.'},
+      'Ketamine+Mescaline': {r:'Caution', n:'Limited data. Ketamine may intensify and alter the mescaline experience unpredictably.'},
+      '2C-B+Ketamine': {r:'Caution', n:'Can be intensely disorienting. Reduce ketamine dose.'},
+      '5-MeO-DMT+Ketamine': {r:'Unsafe', n:'Both produce ego dissolution. Combination can be extremely dangerous and disorienting. Respiratory depression risk.'},
+      'Ketamine+MDMA': {r:'Caution', n:'Ketamine can blunt MDMA empathogenic effects. Combined cardiovascular effects. Commonly used on MDMA comedown at low doses.'},
+      'Cannabis+LSD': {r:'Caution', n:'Cannabis strongly potentiates psychedelic effects, often unpredictably. Frequently triggers anxiety, paranoia, and thought loops. Major contributor to difficult experiences.'},
+      'Cannabis+Psilocybin': {r:'Caution', n:'Cannabis significantly intensifies psilocybin effects. Common trigger for anxiety and difficult experiences. Avoid during peak.'},
+      'Cannabis+DMT': {r:'Caution', n:'Cannabis can intensify and prolong residual DMT effects. May increase anxiety.'},
+      'Cannabis+Mescaline': {r:'Caution', n:'Cannabis potentiates mescaline effects. May increase anxiety and confusion.'},
+      '2C-B+Cannabis': {r:'Caution', n:'Cannabis potentiates 2C-B effects, sometimes dramatically. Can trigger anxiety.'},
+      '5-MeO-DMT+Cannabis': {r:'Caution', n:'Cannabis may intensify residual effects. Limited data. Exercise caution.'},
+      'Cannabis+MDMA': {r:'Low Risk', n:'Cannabis may slightly intensify MDMA effects. Generally low risk at typical doses.'},
+      'Cannabis+Ketamine': {r:'Low Risk', n:'Cannabis may intensify dissociative effects. Generally well-tolerated but can increase disorientation.'},
+      'Alcohol+LSD': {r:'Low Risk & Decrease', n:'Alcohol dulls psychedelic effects. May increase nausea. Dehydration concern.'},
+      'Alcohol+Psilocybin': {r:'Low Risk & Decrease', n:'Alcohol blunts psilocybin effects and increases nausea. Dehydration concern.'},
+      'Alcohol+DMT': {r:'Low Risk & Decrease', n:'Alcohol may blunt effects. Nausea risk.'},
+      'Alcohol+Mescaline': {r:'Caution', n:'Both cause significant nausea. Combined dehydration risk.'},
+      '2C-B+Alcohol': {r:'Low Risk & Decrease', n:'Alcohol blunts 2C-B effects. Increased nausea risk.'},
+      '5-MeO-DMT+Alcohol': {r:'Caution', n:'Alcohol impairs the reflective capacity needed for 5-MeO-DMT experiences.'},
+      'Alcohol+MDMA': {r:'Caution', n:'Alcohol masks MDMA-induced dehydration. Combined hepatotoxicity. Impaired thermoregulation.'},
+      'Alcohol+Ketamine': {r:'Unsafe', n:'Both are CNS depressants. Combined respiratory depression risk. Risk of vomiting while incapacitated.'},
+      'Alcohol+Cannabis': {r:'Caution', n:'Cannabis intensifies alcohol effects and vice versa. "Crossfading" frequently produces unpleasant effects.'},
+      'LSD+SSRIs': {r:'Low Risk & Decrease', n:'SSRIs blunt or block psychedelic effects via 5-HT2A downregulation. Do not stop SSRIs to take psychedelics without medical supervision.'},
+      'Psilocybin+SSRIs': {r:'Low Risk & Decrease', n:'SSRIs significantly reduce psilocybin effects. Do not discontinue SSRIs without medical guidance.'},
+      'DMT+SSRIs': {r:'Low Risk & Decrease', n:'SSRIs reduce DMT effects. With MAOIs (ayahuasca), SSRIs create serotonin syndrome risk.'},
+      'Mescaline+SSRIs': {r:'Low Risk & Decrease', n:'SSRIs reduce mescaline effects. Low risk at typical doses.'},
+      '2C-B+SSRIs': {r:'Low Risk & Decrease', n:'SSRIs reduce 2C-B effects. Low risk.'},
+      '5-MeO-DMT+SSRIs': {r:'Unsafe', n:'5-MeO-DMT has stronger serotonergic activity. Risk of serotonin toxicity with SSRIs. Avoid.'},
+      'MDMA+SSRIs': {r:'Unsafe', n:'SSRIs block MDMA effects and increase serotonergic load. Risk of serotonin syndrome. Do not combine.'},
+      'Ketamine+SSRIs': {r:'Low Risk', n:'No significant interaction. Ketamine acts on NMDA receptors, not serotonin.'},
+      'Cannabis+SSRIs': {r:'Low Risk', n:'No significant pharmacological interaction.'},
+      'Alcohol+SSRIs': {r:'Caution', n:'SSRIs can intensify alcohol effects. Impaired judgement.'},
+      'Ibogaine+SSRIs': {r:'Dangerous', n:'Risk of serious cardiac events and serotonin toxicity. Must be fully discontinued before ibogaine.'},
+      'LSD+MAOIs': {r:'Unsafe', n:'MAOIs dramatically potentiate LSD. Risk of serotonin toxicity. Do not combine without expert guidance.'},
+      'MAOIs+Psilocybin': {r:'Unsafe', n:'MAOIs potentiate psilocybin significantly. Risk of serotonin toxicity.'},
+      'DMT+MAOIs': {r:'Caution', n:'This IS ayahuasca. Traditional use with safety protocols. Dietary restrictions critical. Dangerous with SSRIs, stimulants.'},
+      'MAOIs+Mescaline': {r:'Unsafe', n:'MAOIs potentiate mescaline significantly. Cardiovascular risk.'},
+      '2C-B+MAOIs': {r:'Unsafe', n:'MAOIs potentiate 2C-B unpredictably. Serotonin toxicity risk.'},
+      '5-MeO-DMT+MAOIs': {r:'Dangerous', n:'Extremely dangerous. Multiple fatalities reported. DO NOT COMBINE.'},
+      'MAOIs+MDMA': {r:'Dangerous', n:'Life-threatening serotonin syndrome risk. Multiple fatalities documented. NEVER combine.'},
+      'Ketamine+MAOIs': {r:'Low Risk', n:'Ketamine acts on NMDA receptors. No significant serotonergic interaction.'},
+      'Cannabis+MAOIs': {r:'Low Risk', n:'No significant pharmacological interaction.'},
+      'Alcohol+MAOIs': {r:'Caution', n:'Tyramine in some alcoholic beverages can cause hypertensive crisis with MAOIs.'},
+      'Ibogaine+MAOIs': {r:'Dangerous', n:'Extremely dangerous. Combined cardiac and serotonergic risk.'},
+      'MAOIs+SSRIs': {r:'Dangerous', n:'Life-threatening serotonin syndrome. NEVER combine. Requires washout period.'},
+      'LSD+Lithium': {r:'Dangerous', n:'Multiple case reports of seizures and cardiac events. DO NOT COMBINE.'},
+      'Lithium+Psilocybin': {r:'Dangerous', n:'Seizure risk. Unpredictable potentiation. Do not combine.'},
+      'DMT+Lithium': {r:'Dangerous', n:'Seizure risk documented. Do not combine.'},
+      'Lithium+Mescaline': {r:'Dangerous', n:'Seizure risk. Do not combine.'},
+      '2C-B+Lithium': {r:'Dangerous', n:'Seizure risk. Do not combine.'},
+      '5-MeO-DMT+Lithium': {r:'Dangerous', n:'Seizure and cardiac risk. Do not combine.'},
+      'Lithium+MDMA': {r:'Dangerous', n:'Seizure risk. Serotonergic interaction. Do not combine.'},
+      'Ketamine+Lithium': {r:'Caution', n:'Limited data. Potential for unpredictable interactions.'},
+      'Cannabis+Lithium': {r:'Low Risk', n:'No significant known interaction.'},
+      'Alcohol+Lithium': {r:'Caution', n:'Alcohol can alter lithium levels. Dehydration affects lithium toxicity threshold.'},
+      'Ibogaine+Lithium': {r:'Dangerous', n:'Combined cardiac risk. Do not combine.'},
+      'Lithium+MAOIs': {r:'Unsafe', n:'Risk of serotonin syndrome and other interactions.'},
+      'Lithium+SSRIs': {r:'Caution', n:'Sometimes prescribed together under supervision. Serotonin syndrome risk exists.'},
+      'Benzodiazepines+LSD': {r:'Low Risk & Decrease', n:'Benzodiazepines reduce psychedelic effects. Used as emergency "trip killer." Not dangerous.'},
+      'Benzodiazepines+Psilocybin': {r:'Low Risk & Decrease', n:'Benzodiazepines can abort or reduce psilocybin effects. Useful as emergency intervention.'},
+      'Benzodiazepines+DMT': {r:'Low Risk & Decrease', n:'May reduce anxiety but DMT duration is too short for meaningful interaction.'},
+      'Benzodiazepines+Mescaline': {r:'Low Risk & Decrease', n:'Reduces mescaline effects. Can be used as emergency intervention.'},
+      '2C-B+Benzodiazepines': {r:'Low Risk & Decrease', n:'Benzodiazepines reduce 2C-B effects. Low risk.'},
+      '5-MeO-DMT+Benzodiazepines': {r:'Low Risk & Decrease', n:'May reduce anxiety. Can be used as emergency intervention.'},
+      'Benzodiazepines+MDMA': {r:'Low Risk & Decrease', n:'Benzodiazepines reduce MDMA stimulation. Sometimes used for comedown.'},
+      'Benzodiazepines+Ketamine': {r:'Caution', n:'Both are CNS depressants. Combined respiratory depression risk at high doses.'},
+      'Benzodiazepines+Cannabis': {r:'Low Risk', n:'Both are sedating. Increased drowsiness. Generally low risk.'},
+      'Alcohol+Benzodiazepines': {r:'Dangerous', n:'Combined GABAergic respiratory depression. Multiple fatalities. DO NOT COMBINE.'},
+      'Benzodiazepines+MAOIs': {r:'Low Risk', n:'No significant serotonergic interaction.'},
+      'Benzodiazepines+SSRIs': {r:'Low Risk', n:'Commonly prescribed together. No dangerous interaction.'},
+      'Benzodiazepines+Lithium': {r:'Low Risk', n:'Sometimes prescribed together. No significant interaction.'},
+      'Benzodiazepines+Ibogaine': {r:'Caution', n:'Both affect CNS. Exercise caution.'},
+      'Amphetamines+LSD': {r:'Caution', n:'Amphetamines increase anxiety and cardiovascular strain during psychedelic experiences.'},
+      'Amphetamines+Psilocybin': {r:'Caution', n:'Increased anxiety and cardiovascular load.'},
+      'Amphetamines+DMT': {r:'Caution', n:'Increased cardiovascular strain. May increase anxiety.'},
+      'Amphetamines+Mescaline': {r:'Unsafe', n:'Both are phenethylamines with cardiovascular effects. Combined stimulant load is dangerous.'},
+      '2C-B+Amphetamines': {r:'Unsafe', n:'Both are phenethylamines. Combined cardiovascular and serotonergic load.'},
+      '5-MeO-DMT+Amphetamines': {r:'Unsafe', n:'Combined serotonergic and cardiovascular risk.'},
+      'Amphetamines+MDMA': {r:'Unsafe', n:'Both are stimulants and serotonin releasers. Increased cardiovascular strain, hyperthermia, and neurotoxicity.'},
+      'Amphetamines+Ketamine': {r:'Caution', n:'Opposing pharmacological effects. Increased cardiovascular load.'},
+      'Amphetamines+Cannabis': {r:'Low Risk', n:'Cannabis may partially counteract stimulant effects. Increased heart rate.'},
+      'Alcohol+Amphetamines': {r:'Caution', n:'Amphetamines mask alcohol intoxication, leading to overconsumption.'},
+      'Amphetamines+MAOIs': {r:'Dangerous', n:'Hypertensive crisis risk. Life-threatening. NEVER combine.'},
+      'Amphetamines+SSRIs': {r:'Caution', n:'Increased serotonergic load. Some combinations prescribed therapeutically.'},
+      'Amphetamines+Lithium': {r:'Caution', n:'Amphetamines may reduce lithium efficacy.'},
+      'Amphetamines+Benzodiazepines': {r:'Low Risk', n:'Opposing effects. Benzodiazepines reduce stimulation.'},
+      'Amphetamines+Ibogaine': {r:'Dangerous', n:'Combined cardiac risk. Ibogaine affects QT interval.'},
+      'Cocaine+LSD': {r:'Caution', n:'Cocaine may blunt psychedelic effects. Increased cardiovascular strain.'},
+      'Cocaine+Psilocybin': {r:'Caution', n:'Cocaine blunts psychedelic effects. Cardiovascular strain.'},
+      'Cocaine+DMT': {r:'Caution', n:'Increased cardiovascular load. Limited data.'},
+      'Cocaine+Mescaline': {r:'Unsafe', n:'Combined cardiovascular strain. Both are stimulating.'},
+      '2C-B+Cocaine': {r:'Unsafe', n:'Combined cardiovascular and stimulant load.'},
+      '5-MeO-DMT+Cocaine': {r:'Unsafe', n:'Combined cardiovascular risk.'},
+      'Cocaine+MDMA': {r:'Unsafe', n:'Both are stimulants. Dramatically increased cardiovascular risk, hyperthermia, and cardiac events.'},
+      'Cocaine+Ketamine': {r:'Caution', n:'Commonly combined ("Calvin Klein") but increased cardiovascular strain.'},
+      'Cannabis+Cocaine': {r:'Caution', n:'Cannabis increases heart rate. Combined cardiovascular load.'},
+      'Alcohol+Cocaine': {r:'Unsafe', n:'Produces cocaethylene, a cardiotoxic metabolite. Significantly increased cardiac risk.'},
+      'Cocaine+MAOIs': {r:'Dangerous', n:'Hypertensive crisis risk. NEVER combine.'},
+      'Cocaine+SSRIs': {r:'Unsafe', n:'Increased serotonergic load. Cardiovascular risk.'},
+      'Cocaine+Lithium': {r:'Caution', n:'Limited data. Potential for unpredictable interactions.'},
+      'Benzodiazepines+Cocaine': {r:'Caution', n:'Benzodiazepines counteract stimulant effects. Masks intoxication level.'},
+      'Amphetamines+Cocaine': {r:'Unsafe', n:'Combined stimulant load. Dramatically increased cardiovascular risk.'},
+      'Cocaine+Ibogaine': {r:'Dangerous', n:'Combined cardiac risk. Do not combine.'},
+      'LSD+Opioids': {r:'Low Risk & Decrease', n:'Opioids may blunt psychedelic effects. No significant pharmacological danger at typical psychedelic doses.'},
+      'Opioids+Psilocybin': {r:'Low Risk & Decrease', n:'Opioids blunt psychedelic effects. No additional danger beyond standard opioid risks.'},
+      'DMT+Opioids': {r:'Low Risk', n:'No significant interaction. Standard opioid risks apply.'},
+      'Mescaline+Opioids': {r:'Low Risk', n:'No significant interaction beyond nausea.'},
+      '2C-B+Opioids': {r:'Low Risk', n:'No significant interaction.'},
+      '5-MeO-DMT+Opioids': {r:'Caution', n:'Limited data. Both can affect respiratory function.'},
+      'MDMA+Opioids': {r:'Caution', n:'Tramadol specifically is dangerous with MDMA (serotonin syndrome). Other opioids have less interaction.'},
+      'Ketamine+Opioids': {r:'Unsafe', n:'Both cause respiratory depression. Combined use significantly increases overdose risk.'},
+      'Cannabis+Opioids': {r:'Low Risk', n:'Cannabis may enhance pain relief. May increase sedation.'},
+      'Alcohol+Opioids': {r:'Dangerous', n:'Combined CNS depression and respiratory depression. Multiple fatalities. NEVER combine.'},
+      'MAOIs+Opioids': {r:'Dangerous', n:'Tramadol, meperidine, dextromethorphan are extremely dangerous with MAOIs. Other opioids potentiated.'},
+      'Opioids+SSRIs': {r:'Caution', n:'Tramadol has serotonin syndrome risk with SSRIs. Other opioids: minimal interaction.'},
+      'Lithium+Opioids': {r:'Low Risk', n:'No significant interaction at typical doses.'},
+      'Benzodiazepines+Opioids': {r:'Dangerous', n:'Combined respiratory depression. Leading cause of overdose death. NEVER combine without medical supervision.'},
+      'Amphetamines+Opioids': {r:'Caution', n:'Stimulants mask opioid CNS depression. Risk of taking more opioid than intended.'},
+      'Cocaine+Opioids': {r:'Unsafe', n:'"Speedballing." Cocaine masks opioid respiratory depression. Extremely dangerous.'},
+      'Ibogaine+Opioids': {r:'Dangerous', n:'Used for opioid detox ONLY under strict medical supervision. Combined cardiac and respiratory risk.'},
+      'Ibogaine+LSD': {r:'Caution', n:'Limited data. Ibogaine has complex pharmacology. Exercise extreme caution.'},
+      'Ibogaine+Psilocybin': {r:'Caution', n:'Limited data. Both are serotonergic. Exercise extreme caution.'},
+      'DMT+Ibogaine': {r:'Caution', n:'Limited data. Both are serotonergic. Exercise extreme caution.'},
+      'Ibogaine+Mescaline': {r:'Unsafe', n:'Combined serotonergic and cardiovascular effects.'},
+      '2C-B+Ibogaine': {r:'Unsafe', n:'Combined serotonergic effects.'},
+      '5-MeO-DMT+Ibogaine': {r:'Dangerous', n:'Both have complex pharmacology. Combined cardiac and serotonergic risk.'},
+      'Ibogaine+MDMA': {r:'Dangerous', n:'Combined cardiac and serotonergic risk. Do not combine.'},
+      'Ibogaine+Ketamine': {r:'Caution', n:'Both affect cardiac function. Limited data.'},
+      'Cannabis+Ibogaine': {r:'Caution', n:'Cannabis increases heart rate. Ibogaine affects cardiac conduction.'},
+      'Alcohol+Ibogaine': {r:'Unsafe', n:'Combined CNS depression and cardiac risk.'}
+    };
+
+    function getKey(a, b) { return [a, b].sort().join('+'); }
+
+    function getInteraction(a, b) {
+      if (a === b) return {r:'\u2014', n:'Same substance.'};
+      var key = getKey(a, b);
+      return data[key] || {r:'Low Risk', n:'No specific interaction data available for this pair. This does not mean the combination is safe. Research independently and exercise caution.'};
+    }
+
+    var ratingStyles = {
+      'Low Risk & Synergy': {bg:'rgba(62,201,191,0.13)', border:'rgba(62,201,191,0.45)', color:'#3ec9bf', sym:'\u2191'},
+      'Low Risk': {bg:'rgba(62,201,191,0.07)', border:'rgba(62,201,191,0.25)', color:'#3ec9bf', sym:'\u25CB'},
+      'Low Risk & Decrease': {bg:'rgba(92,184,74,0.12)', border:'rgba(92,184,74,0.40)', color:'#5cb84a', sym:'\u2193'},
+      'Caution': {bg:'rgba(212,180,50,0.12)', border:'rgba(212,180,50,0.40)', color:'#d4b432', sym:'\u25B3'},
+      'Unsafe': {bg:'rgba(212,131,74,0.14)', border:'rgba(212,131,74,0.45)', color:'#d4836a', sym:'\u2715'},
+      'Dangerous': {bg:'rgba(200,60,60,0.14)', border:'rgba(200,60,60,0.50)', color:'#d45252', sym:'\u2715'},
+      '\u2014': {bg:'rgba(255,255,255,0.03)', border:'rgba(255,255,255,0.08)', color:'#787878', sym:'\u2014'}
+    };
+
+    var selA = document.getElementById('chk-a');
+    var selB = document.getElementById('chk-b');
+    substances.forEach(function(s) {
+      selA.innerHTML += '<option value="' + s + '">' + s + '</option>';
+      selB.innerHTML += '<option value="' + s + '">' + s + '</option>';
+    });
+
+    function updateResult() {
+      var a = selA.value, b = selB.value;
+      var el = document.getElementById('chk-result');
+      var empty = document.getElementById('chk-empty');
+      if (!a || !b) { el.style.display = 'none'; empty.style.display = 'flex'; return; }
+      var info = getInteraction(a, b);
+      var s = ratingStyles[info.r] || ratingStyles['Low Risk'];
+      document.getElementById('chk-rating').textContent = info.r;
+      document.getElementById('chk-rating').style.cssText = 'background:' + s.bg + ';border:1px solid ' + s.border + ';color:' + s.color;
+      document.getElementById('chk-pair').textContent = a + ' + ' + b;
+      document.getElementById('chk-note').textContent = info.n;
+      el.style.display = 'block';
+      empty.style.display = 'none';
+    }
+
+    selA.addEventListener('change', updateResult);
+    selB.addEventListener('change', updateResult);
+
+    // Build grid
+    var grid = document.getElementById('chk-grid');
+    var h = '<tr><th></th>';
+    substances.forEach(function(s) {
+      h += '<th><span>' + s + '</span></th>';
+    });
+    h += '</tr>';
+    var rows = '';
+    substances.forEach(function(rs) {
+      var r = '<tr><td class="ic-row-label">' + rs + '</td>';
+      substances.forEach(function(cs) {
+        var info = getInteraction(rs, cs);
+        var st = ratingStyles[info.r] || ratingStyles['Low Risk'];
+        r += '<td style="background:' + st.bg + ';border-color:' + st.border + ';color:' + st.color + '" data-row="' + rs + '" data-col="' + cs + '">' + st.sym + '</td>';
+      });
+      r += '</tr>';
+      rows += r;
+    });
+    grid.innerHTML = h + rows;
+
+    // Tooltip system
+    var tip = document.getElementById('ic-tooltip');
+    var tipPair = document.getElementById('ic-tip-pair');
+    var tipBadge = document.getElementById('ic-tip-badge');
+    var tipNote = document.getElementById('ic-tip-note');
+
+    grid.addEventListener('mouseover', function(e) {
+      var cell = e.target.closest('td[data-row]');
+      if (!cell) return;
+      var rs = cell.getAttribute('data-row');
+      var cs = cell.getAttribute('data-col');
+      var info = getInteraction(rs, cs);
+      var st = ratingStyles[info.r] || ratingStyles['Low Risk'];
+      tipPair.textContent = rs + ' + ' + cs;
+      tipBadge.textContent = info.r;
+      tipBadge.style.cssText = 'background:' + st.bg + ';border-color:' + st.border + ';color:' + st.color;
+      tipNote.textContent = info.n;
+      tip.classList.add('is-visible');
+    });
+
+    grid.addEventListener('mousemove', function(e) {
+      if (!tip.classList.contains('is-visible')) return;
+      var x = e.clientX + 16;
+      var y = e.clientY + 16;
+      // Keep tooltip on screen
+      var tw = tip.offsetWidth;
+      var th = tip.offsetHeight;
+      if (x + tw > window.innerWidth - 12) x = e.clientX - tw - 12;
+      if (y + th > window.innerHeight - 12) y = e.clientY - th - 12;
+      tip.style.left = x + 'px';
+      tip.style.top = y + 'px';
+    });
+
+    grid.addEventListener('mouseout', function(e) {
+      var cell = e.target.closest('td[data-row]');
+      if (!cell) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('td[data-row]')) return;
+      tip.classList.remove('is-visible');
+    });
+
+    // Tap support for mobile
+    grid.addEventListener('click', function(e) {
+      var cell = e.target.closest('td[data-row]');
+      if (!cell) return;
+      var rs = cell.getAttribute('data-row');
+      var cs = cell.getAttribute('data-col');
+      // Populate the quick lookup selects
+      selA.value = rs;
+      selB.value = cs;
+      updateResult();
+      // Scroll to result
+      document.getElementById('ic-lookup-card').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  })();
+  </script>
+
+</BaseLayout>

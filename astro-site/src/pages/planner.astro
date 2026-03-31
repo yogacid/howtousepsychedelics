@@ -1,0 +1,521 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Journey Planner — How to Use Psychedelics"
+  description="Build a personalised preparation plan for your psychedelic experience. Walk through substance, intention, setting, safety, and integration — then generate a summary. Completely private."
+  canonicalPath="/planner"
+  hideProgress={true}
+>
+
+  <div class="jp-page-wrap">
+    <div class="jp-section-inner">
+
+      <div class="breadcrumb" style="padding-top:1.5rem; margin-bottom:0;">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Journey Planner</span>
+      </div>
+
+      <div class="jp-section-header">
+        <div class="jp-eyebrow">Interactive Tool</div>
+        <h1 class="jp-page-title">Journey <span class="accent-word">Planner</span></h1>
+        <p class="jp-section-sub">Walk through the key preparation dimensions &mdash; substance, intention, set and setting, safety, and integration &mdash; then generate a plan you can save.</p>
+      </div>
+
+      <!-- INTRO CARD -->
+      <div class="jp-card" id="jp-intro">
+        <p class="jp-intro-headline">Preparation is the practice.</p>
+        <p class="jp-intro-body">This planner walks you through the key preparation dimensions that experienced practitioners, clinical researchers, and harm reduction frameworks consistently identify as important. It covers substance and dose, intention setting, set and setting, safety planning, and integration. At the end, you can generate a summary to save and refer back to.</p>
+        <div class="ra-intro-meta">
+          <span class="ra-meta-pill"><span class="ra-meta-dot"></span>5 steps</span>
+          <span class="ra-meta-pill"><span class="ra-meta-dot"></span>10&ndash;15 minutes</span>
+          <span class="ra-meta-pill"><span class="ra-meta-dot"></span>Completely private</span>
+        </div>
+        <div class="jp-intro-prereqs">
+          <span class="jp-prereq-label">Before you begin:</span>
+          <a href="/readiness" class="jp-prereq-link">Complete Readiness Assessment</a>
+          <a href="/checker" class="jp-prereq-link">Check Drug Interactions</a>
+        </div>
+        <button class="ra-btn-primary" id="jp-start">Begin Planning &rarr;</button>
+        <p class="ra-intro-disclaimer">This tool is for educational and personal reflection purposes only. It does not constitute medical or clinical advice. If you have medical concerns or are taking medications, consult a qualified clinician before proceeding.</p>
+      </div>
+
+      <!-- STEP NAVIGATION (hidden until started) -->
+      <div class="jp-steps-nav" id="jp-nav" style="display:none;">
+        <button class="jp-step-tab is-active" data-step="0"><span class="jp-tab-num">1</span><span class="jp-tab-label">Substance</span></button>
+        <button class="jp-step-tab" data-step="1"><span class="jp-tab-num">2</span><span class="jp-tab-label">Intention</span></button>
+        <button class="jp-step-tab" data-step="2"><span class="jp-tab-num">3</span><span class="jp-tab-label">Setting</span></button>
+        <button class="jp-step-tab" data-step="3"><span class="jp-tab-num">4</span><span class="jp-tab-label">Safety</span></button>
+        <button class="jp-step-tab" data-step="4"><span class="jp-tab-num">5</span><span class="jp-tab-label">Integration</span></button>
+      </div>
+
+      <!-- STEP 1: SUBSTANCE -->
+      <div class="jp-card jp-step-panel" data-panel="0">
+        <div class="jp-card-label">Step 1 &mdash; Substance &amp; Dose</div>
+        <p class="jp-card-desc">What are you planning to work with, and at what level? This shapes every other preparation decision.</p>
+
+        <div class="jp-field">
+          <label>Which substance are you planning to use?</label>
+          <div class="jp-select-wrap">
+            <select id="pl-sub">
+              <option value="">Select a substance&hellip;</option>
+              <option value="Psilocybin mushrooms">Psilocybin mushrooms</option>
+              <option value="LSD">LSD</option>
+              <option value="DMT (smoked/vaporised)">DMT (smoked/vaporised)</option>
+              <option value="Ayahuasca">Ayahuasca</option>
+              <option value="Mescaline (cactus)">Mescaline (cactus)</option>
+              <option value="5-MeO-DMT">5-MeO-DMT</option>
+              <option value="MDMA">MDMA</option>
+              <option value="Ketamine">Ketamine</option>
+              <option value="2C-B">2C-B</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="jp-inline-note" id="jp-sub-note" style="display:none;"></div>
+
+        <div class="jp-field">
+          <label>Planned dose level</label>
+          <div class="jp-select-wrap">
+            <select id="pl-dose">
+              <option value="">Select dose level&hellip;</option>
+              <option value="Microdose (sub-perceptual)">Microdose (sub-perceptual)</option>
+              <option value="Low dose (threshold to mild)">Low dose (threshold to mild)</option>
+              <option value="Moderate dose (standard)">Moderate dose (standard)</option>
+              <option value="High dose (strong)">High dose (strong)</option>
+              <option value="Heroic dose (very high)">Heroic dose (very high)</option>
+              <option value="Unsure">Unsure &mdash; need guidance</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="jp-field-row">
+          <div class="jp-field">
+            <label>Your experience level</label>
+            <div class="jp-select-wrap">
+              <select id="pl-exp">
+                <option value="">Select&hellip;</option>
+                <option value="First time ever">First time ever</option>
+                <option value="First time with this substance">First time with this substance</option>
+                <option value="A few times">A few times</option>
+                <option value="Experienced">Experienced (10+ times)</option>
+              </select>
+            </div>
+          </div>
+          <div class="jp-field">
+            <label>Substance verification</label>
+            <div class="jp-select-wrap">
+              <select id="pl-source">
+                <option value="">Select&hellip;</option>
+                <option value="Reagent-tested">Reagent-tested</option>
+                <option value="Trusted known source">Trusted source (not tested)</option>
+                <option value="Unverified">Unverified</option>
+                <option value="Legal/regulated source">Legal/regulated source</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="jp-step-footer">
+          <span></span>
+          <button class="jp-btn-next" data-to="1">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: INTENTION -->
+      <div class="jp-card jp-step-panel" data-panel="1">
+        <div class="jp-card-label">Step 2 &mdash; Intention Setting</div>
+        <p class="jp-card-desc">An intention is not a wish or a demand &mdash; it is an orientation. It gives the experience a direction without trying to control the outcome. Take your time with this step &mdash; the clarity you bring here shapes the quality of everything that follows.</p>
+
+        <div class="jp-field">
+          <label>What is drawing you toward this experience right now?</label>
+          <textarea id="pl-intent-text" rows="4" placeholder="Be as honest and specific as you can. There are no wrong answers. Examples: 'I want to understand why I keep avoiding intimacy.' 'I'm curious about what's underneath my anxiety.' 'I feel called to reconnect with something I've lost.'"></textarea>
+        </div>
+
+        <div class="jp-field">
+          <label>What are you hoping to explore, understand, or open yourself to?</label>
+          <textarea id="pl-explore" rows="3" placeholder="This is different from your motivation above. What specific inner territory do you want to investigate? What questions are you carrying?"></textarea>
+        </div>
+
+        <div class="jp-field">
+          <label>What are you afraid might happen? <span class="jp-optional">(be specific)</span></label>
+          <textarea id="pl-fears" rows="3" placeholder="Naming fears reduces their power. Are you afraid of losing control? Of seeing something you don't want to see? Of the experience being meaningless? Of not coming back the same?"></textarea>
+        </div>
+
+        <div class="jp-field">
+          <label>What does &ldquo;a good outcome&rdquo; look like for you? <span class="jp-optional">(hold this lightly)</span></label>
+          <textarea id="pl-outcome" rows="3" placeholder="If this experience goes well, what might shift in your life? How might you feel or act differently? Note: the experience may have its own agenda — let this be a direction, not a demand."></textarea>
+        </div>
+
+        <div class="jp-field">
+          <label>Is there anything you want to let go of during this experience? <span class="jp-optional">(optional)</span></label>
+          <textarea id="pl-release" rows="2" placeholder="A belief, a pattern, a grudge, a fear. Name it here if you can."></textarea>
+        </div>
+
+        <div class="jp-inline-note" style="display:block;">Writing your intention is one of the most important preparation steps. Consider revisiting and refining it in the days leading up to your experience. Many people find it helpful to read their intention aloud before beginning.</div>
+
+        <div class="jp-step-footer">
+          <button class="jp-btn-back" data-to="0">&larr; Back</button>
+          <button class="jp-btn-next" data-to="2">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: SET & SETTING -->
+      <div class="jp-card jp-step-panel" data-panel="2">
+        <div class="jp-card-label">Step 3 &mdash; Set &amp; Setting</div>
+        <p class="jp-card-desc">Where you are shapes what you encounter. The outer environment reflects and amplifies your inner landscape.</p>
+
+        <div class="jp-field-row">
+          <div class="jp-field">
+            <label>Location</label>
+            <div class="jp-select-wrap">
+              <select id="pl-location">
+                <option value="">Select location&hellip;</option>
+                <option value="My home">My home</option>
+                <option value="A trusted friend's home">A trusted friend's home</option>
+                <option value="Nature (private)">Nature (private, safe outdoor setting)</option>
+                <option value="Retreat/ceremony">Retreat or ceremony setting</option>
+                <option value="Clinical setting">Clinical or therapeutic setting</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="jp-field">
+            <label>Sitter or companion</label>
+            <div class="jp-select-wrap">
+              <select id="pl-sitter">
+                <option value="">Select&hellip;</option>
+                <option value="Yes — experienced sitter">Yes &mdash; experienced sitter</option>
+                <option value="Yes — trusted friend">Yes &mdash; trusted friend</option>
+                <option value="Yes — professional facilitator">Yes &mdash; professional facilitator</option>
+                <option value="No — solo">No &mdash; solo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="jp-field">
+          <label>Planned date <span class="jp-optional">(optional)</span></label>
+          <input type="date" id="pl-date" />
+          <div class="jp-date-note" id="jp-date-note" style="display:none;"></div>
+        </div>
+
+        <div class="jp-checklist-label">Setting Checklist</div>
+        <div class="jp-checklist" id="jp-setting-list">
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Safe, comfortable, private space secured</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>No obligations for the full duration (plus next morning)</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Phone on do-not-disturb, no expected interruptions</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Water and light snacks prepared</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Comfortable place to lie down, blankets available</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Music playlist prepared and tested</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Journal and pen available</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Bathroom accessible without obstacles</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Warm, dimmable lighting (no harsh overhead)</span></label>
+        </div>
+        <div class="jp-check-counter" id="jp-setting-counter">0 of 9</div>
+
+        <div class="jp-step-footer">
+          <button class="jp-btn-back" data-to="1">&larr; Back</button>
+          <button class="jp-btn-next" data-to="3">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: SAFETY -->
+      <div class="jp-card jp-step-panel" data-panel="3">
+        <div class="jp-card-label">Step 4 &mdash; Safety Planning</div>
+        <p class="jp-card-desc">Safety is not an obstacle to the experience &mdash; it is part of what makes genuine surrender possible. These are the most important items to address before your session.</p>
+
+        <div class="jp-checklist" id="jp-safety-list">
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>No medical contraindications &mdash; reviewed <a href="/readiness">Readiness Assessment</a></span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>No dangerous medication interactions &mdash; checked <a href="/checker">Interaction Checker</a></span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Substance has been verified (reagent-tested or trusted source)</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Dose has been carefully measured, not estimated</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Sitter knows the substance, dose, and expected duration</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Sitter knows what to do if things become difficult</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Emergency contact identified (if sitter is not present)</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Benzodiazepine or similar available as emergency intervention</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Not combining with other substances (cannabis, alcohol, medications)</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Fasted or eaten lightly (3&ndash;4 hours before, if applicable)</span></label>
+        </div>
+        <div class="jp-check-counter" id="jp-safety-counter">0 of 10</div>
+
+        <div class="jp-step-footer">
+          <button class="jp-btn-back" data-to="2">&larr; Back</button>
+          <button class="jp-btn-next" data-to="4">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: INTEGRATION -->
+      <div class="jp-card jp-step-panel" data-panel="4">
+        <div class="jp-card-label">Step 5 &mdash; Integration Planning</div>
+        <p class="jp-card-desc">The experience itself is only half the work. How you process and integrate what emerges determines whether insight becomes lasting change. Integration begins before the experience, not after.</p>
+
+        <div class="jp-checklist" id="jp-integration-list">
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Journal and pen ready for reflection afterward</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>No high-stakes obligations for 1&ndash;3 days after</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Trusted person available to talk to openly afterward</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Therapist or integration coach identified &mdash; <a href="https://psygaia.org/guided-psychedelic-journey" target="_blank" rel="noopener">connect with one</a></span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Time in nature planned for the days following</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Reviewed the <a href="/integration">Integration Guide</a></span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Clear of alcohol and cannabis for 1+ week after (recommended)</span></label>
+          <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>Gentler exercise, meditation, or breathwork practice planned</span></label>
+        </div>
+        <div class="jp-check-counter" id="jp-integration-counter">0 of 8</div>
+
+        <div class="jp-step-footer">
+          <button class="jp-btn-back" data-to="3">&larr; Back</button>
+          <button class="jp-btn-generate" id="jp-generate">Generate Plan Summary &rarr;</button>
+        </div>
+      </div>
+
+      <!-- PLAN OUTPUT -->
+      <div class="jp-card jp-step-panel" data-panel="5" id="jp-output-panel">
+        <div class="jp-card-label">Your Journey Preparation Plan</div>
+        <div id="jp-output"></div>
+        <div class="jp-output-actions">
+          <button class="jp-btn-copy" id="jp-copy">Copy to Clipboard</button>
+          <button class="jp-btn-back" id="jp-edit-back">&larr; Edit Plan</button>
+        </div>
+        <p class="jp-output-disclaimer">This plan is for personal reference only. It does not constitute medical or clinical advice. If you have medical concerns, consult a qualified clinician before proceeding.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script is:inline>
+  (function() {
+    var introCard = document.getElementById('jp-intro');
+    var navBar = document.getElementById('jp-nav');
+    var panels = document.querySelectorAll('.jp-step-panel');
+    var tabs = document.querySelectorAll('.jp-step-tab');
+    var current = -1;
+
+    function showPanel(idx) {
+      introCard.style.display = 'none';
+      navBar.style.display = 'flex';
+      panels.forEach(function(p){ p.classList.remove('is-active'); });
+      tabs.forEach(function(t){ t.classList.remove('is-active'); });
+      var panel = document.querySelector('[data-panel="' + idx + '"]');
+      if (panel) panel.classList.add('is-active');
+      if (idx < 5) tabs[idx].classList.add('is-active');
+      current = idx;
+      window.scrollTo({ top: navBar.offsetTop - 100, behavior: 'smooth' });
+    }
+
+    document.getElementById('jp-start').addEventListener('click', function() {
+      showPanel(0);
+    });
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() { showPanel(parseInt(tab.getAttribute('data-step'))); });
+    });
+
+    document.querySelectorAll('.jp-btn-next, .jp-btn-back').forEach(function(btn) {
+      btn.addEventListener('click', function() { showPanel(parseInt(btn.getAttribute('data-to'))); });
+    });
+
+    // Checklist counters
+    function setupCounter(listId, counterId) {
+      var list = document.getElementById(listId);
+      var counter = document.getElementById(counterId);
+      if (!list || !counter) return;
+      var boxes = list.querySelectorAll('input[type="checkbox"]');
+      var total = boxes.length;
+      function update() {
+        var checked = list.querySelectorAll('input[type="checkbox"]:checked').length;
+        counter.textContent = checked + ' of ' + total;
+        counter.classList.toggle('is-complete', checked === total);
+      }
+      boxes.forEach(function(cb) { cb.addEventListener('change', update); });
+      update();
+    }
+    setupCounter('jp-setting-list', 'jp-setting-counter');
+    setupCounter('jp-safety-list', 'jp-safety-counter');
+    setupCounter('jp-integration-list', 'jp-integration-counter');
+
+    // Substance-specific notes
+    var subNotes = {
+      'Psilocybin mushrooms': 'Duration: 4\u20136 hours. Onset: 20\u201360 minutes. Nausea common on come-up. Empty stomach recommended. Lemon tek can accelerate onset. Read the full guide: /psilocybin',
+      'LSD': 'Duration: 8\u201312 hours. Onset: 30\u201390 minutes. Very long duration \u2014 ensure your schedule is clear for the full day and evening. Read the full guide: /lsd',
+      'DMT (smoked/vaporised)': 'Duration: 5\u201320 minutes (intense). Onset: seconds. Extremely powerful. Sitter strongly recommended. Have a safe place to lie down immediately. Read the full guide: /dmt',
+      'Ayahuasca': 'Duration: 4\u20136 hours. Onset: 20\u201360 minutes. Purging is common and expected. Dietary restrictions (no tyramine) are critical for at least 24 hours before. MAOI interactions are life-threatening. Read the full guide: /ayahuasca',
+      'Mescaline (cactus)': 'Duration: 8\u201312 hours. Onset: 45\u2013120 minutes. Nausea is common and sometimes intense. Very long experience \u2014 plan accordingly. Read the full guide: /mescaline',
+      '5-MeO-DMT': 'Duration: 15\u201345 minutes. Onset: seconds. One of the most powerful psychedelics known. Experienced sitter is essential \u2014 non-negotiable. Multiple fatalities when combined with MAOIs. Read the full guide: /fivemedmt',
+      'MDMA': 'Duration: 3\u20135 hours. Onset: 30\u201360 minutes. Stay hydrated but don\u2019t overhydrate. Monitor body temperature. Do not redose more than once. 3-month minimum between uses. Read the full guide: /mdma',
+      'Ketamine': 'Duration: 45\u201390 minutes. Onset: minutes. Dissociative, not classical psychedelic. Do not combine with alcohol or opioids (respiratory depression risk). Read the full guide: /ketamine',
+      '2C-B': 'Duration: 4\u20136 hours. Onset: 45\u201375 minutes (oral). Effects are strongly dose-dependent \u2014 small dose changes produce large effect changes. Start low. Read the full guide: /twocb'
+    };
+    var subSelect = document.getElementById('pl-sub');
+    var subNote = document.getElementById('jp-sub-note');
+    subSelect.addEventListener('change', function() {
+      var note = subNotes[subSelect.value];
+      if (note) { subNote.textContent = note; subNote.style.display = 'block'; }
+      else { subNote.style.display = 'none'; }
+    });
+
+    // Date preparation note
+    var dateInput = document.getElementById('pl-date');
+    var dateNote = document.getElementById('jp-date-note');
+    dateInput.addEventListener('change', function() {
+      if (!dateInput.value) { dateNote.style.display = 'none'; return; }
+      var chosen = new Date(dateInput.value);
+      var today = new Date();
+      today.setHours(0,0,0,0);
+      var diffMs = chosen - today;
+      var diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+      if (diffDays < 0) {
+        dateNote.textContent = 'This date is in the past.';
+        dateNote.className = 'jp-date-note jp-date-warn';
+      } else if (diffDays === 0) {
+        dateNote.textContent = 'That\u2019s today. If you haven\u2019t already completed your preparation, consider postponing.';
+        dateNote.className = 'jp-date-note jp-date-warn';
+      } else if (diffDays <= 2) {
+        dateNote.textContent = diffDays + ' day' + (diffDays === 1 ? '' : 's') + ' away. This is a short preparation window. Ensure all safety and setting items are already in place.';
+        dateNote.className = 'jp-date-note jp-date-warn';
+      } else if (diffDays <= 7) {
+        dateNote.textContent = diffDays + ' days away. A reasonable preparation window. Use this time to finalise your setting, refine your intention, and complete your safety checklist.';
+        dateNote.className = 'jp-date-note jp-date-ok';
+      } else if (diffDays <= 30) {
+        dateNote.textContent = diffDays + ' days away. A good amount of preparation time. Consider journaling, meditation, and reading about your chosen substance in the weeks ahead.';
+        dateNote.className = 'jp-date-note jp-date-good';
+      } else {
+        dateNote.textContent = diffDays + ' days away. Plenty of time to prepare thoroughly. Use the weeks ahead for intentional preparation \u2014 reading, journaling, meditation, and lifestyle adjustments.';
+        dateNote.className = 'jp-date-note jp-date-good';
+      }
+      dateNote.style.display = 'block';
+    });
+
+    // Generate plan
+    function val(id) { var el = document.getElementById(id); return el ? (el.value || '') : ''; }
+    function countChecked(id) {
+      var el = document.getElementById(id);
+      if (!el) return { c: 0, t: 0 };
+      return { c: el.querySelectorAll('input:checked').length, t: el.querySelectorAll('input[type="checkbox"]').length };
+    }
+
+    document.getElementById('jp-generate').addEventListener('click', function() {
+      var sub = val('pl-sub'), dose = val('pl-dose'), exp = val('pl-exp'), source = val('pl-source');
+      var intention = val('pl-intent-text'), explore = val('pl-explore'), fears = val('pl-fears'), outcome = val('pl-outcome'), release = val('pl-release');
+      var location = val('pl-location'), sitter = val('pl-sitter'), date = val('pl-date');
+      var sc = countChecked('jp-setting-list'), saf = countChecked('jp-safety-list'), intg = countChecked('jp-integration-list');
+      var totalC = sc.c + saf.c + intg.c, totalT = sc.t + saf.t + intg.t;
+      var pct = totalT > 0 ? Math.round((totalC / totalT) * 100) : 0;
+
+      var warnings = [];
+      if (source === 'Unverified') warnings.push('Your substance is unverified. Reagent testing is strongly recommended before use.');
+      if (exp === 'First time ever' && (dose === 'High dose (strong)' || dose === 'Heroic dose (very high)')) warnings.push('A high or heroic dose for a first experience carries significantly elevated risk. Consider starting with a low or moderate dose.');
+      if (sitter === 'No \u2014 solo' && exp === 'First time ever') warnings.push('Solo use for a first experience is strongly discouraged. A trusted sitter significantly reduces risk.');
+      if (saf.c < saf.t) warnings.push((saf.t - saf.c) + ' safety checklist items remain unchecked. Review these before proceeding.');
+      if (sub === '5-MeO-DMT' && sitter === 'No \u2014 solo') warnings.push('5-MeO-DMT should never be taken without an experienced sitter present.');
+      if (sub === 'Ayahuasca' && sitter === 'No \u2014 solo') warnings.push('Ayahuasca should be taken in a supported setting with experienced facilitation.');
+      if (!intention && !explore) warnings.push('No intention has been written. Consider returning to Step 2 to clarify your intention before proceeding.');
+      if (dose === 'Unsure') warnings.push('You\u2019re unsure about your dose. Research your chosen substance thoroughly and start conservatively.');
+
+      var tier = (warnings.length === 0 && pct >= 80) ? 'ready' : (warnings.length <= 1 && pct >= 50) ? 'prepare' : 'review';
+      var tierLabels = { ready: 'Well-Prepared', prepare: 'Nearly Ready', review: 'Needs Attention' };
+
+      var html = '';
+      html += '<div class="jp-out-badge tier-' + tier + '">' + tierLabels[tier] + ' \u2014 ' + pct + '% complete</div>';
+
+      if (warnings.length > 0) {
+        html += '<div class="jp-out-section jp-out-warnings">';
+        html += '<div class="jp-out-label">\u26A0 Attention</div>';
+        warnings.forEach(function(w) { html += '<div class="jp-out-warn">' + w + '</div>'; });
+        html += '</div>';
+      }
+
+      // Substance
+      html += '<div class="jp-out-section"><div class="jp-out-label">Substance &amp; Dose</div><div class="jp-out-value">';
+      html += sub ? '<strong>' + sub + '</strong>' : '<em>Not selected</em>';
+      if (dose) html += ' \u2014 ' + dose;
+      if (exp) html += '<br>Experience level: ' + exp;
+      if (source) html += '<br>Verification: ' + source;
+      html += '</div></div>';
+
+      // Intention (combined)
+      var hasIntention = intention || explore || outcome || release;
+      if (hasIntention) {
+        html += '<div class="jp-out-section"><div class="jp-out-label">Intention &amp; Inner Work</div><div class="jp-out-value">';
+        if (intention) html += '<strong>Motivation:</strong> ' + intention.replace(/\n/g, '<br>') + '<br><br>';
+        if (explore) html += '<strong>Exploring:</strong> ' + explore.replace(/\n/g, '<br>') + '<br><br>';
+        if (outcome) html += '<strong>Hoped-for outcome:</strong> ' + outcome.replace(/\n/g, '<br>') + '<br><br>';
+        if (release) html += '<strong>Letting go of:</strong> ' + release.replace(/\n/g, '<br>');
+        html += '</div></div>';
+      }
+
+      if (fears) {
+        html += '<div class="jp-out-section"><div class="jp-out-label">Fears &amp; Concerns</div><div class="jp-out-value">' + fears.replace(/\n/g, '<br>') + '</div></div>';
+      }
+
+      // Set & Setting
+      html += '<div class="jp-out-section"><div class="jp-out-label">Set &amp; Setting</div><div class="jp-out-value">';
+      if (location) html += '<strong>Location:</strong> ' + location + '<br>';
+      if (sitter) html += '<strong>Sitter:</strong> ' + sitter + '<br>';
+      if (date) {
+        var d = new Date(date);
+        var dateStr = d.toLocaleDateString('en-GB', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+        html += '<strong>Date:</strong> ' + dateStr + '<br>';
+        var today2 = new Date(); today2.setHours(0,0,0,0);
+        var diff2 = Math.ceil((d - today2) / (1000*60*60*24));
+        if (diff2 > 0) html += '<strong>Preparation time remaining:</strong> ' + diff2 + ' day' + (diff2===1?'':'s') + '<br>';
+      }
+      html += '<strong>Setting preparation:</strong> ' + sc.c + ' of ' + sc.t + ' items complete';
+      if (sc.c < sc.t) html += ' \u2014 <em>' + (sc.t - sc.c) + ' remaining</em>';
+      html += '</div></div>';
+
+      // Safety
+      html += '<div class="jp-out-section"><div class="jp-out-label">Safety</div><div class="jp-out-value">';
+      html += '<strong>Safety checklist:</strong> ' + saf.c + ' of ' + saf.t + ' items complete';
+      if (saf.c < saf.t) html += ' \u2014 <em style="color:#c9943a;">' + (saf.t - saf.c) + ' items need attention</em>';
+      else html += ' \u2014 <em style="color:#6dd456;">All safety items addressed</em>';
+      html += '</div></div>';
+
+      // Integration
+      html += '<div class="jp-out-section"><div class="jp-out-label">Integration</div><div class="jp-out-value">';
+      html += '<strong>Integration checklist:</strong> ' + intg.c + ' of ' + intg.t + ' items complete';
+      if (intg.c < intg.t) html += ' \u2014 <em>' + (intg.t - intg.c) + ' remaining</em>';
+      html += '</div></div>';
+
+      // Overall
+      html += '<div class="jp-out-section"><div class="jp-out-label">Overall Preparation</div><div class="jp-out-value">';
+      html += '<strong>' + pct + '%</strong> of all checklist items completed (' + totalC + ' of ' + totalT + ')';
+      html += '</div></div>';
+
+      html += '<div class="jp-out-bar"><div class="jp-out-bar-fill" style="width:' + pct + '%"></div></div>';
+
+      // Next steps
+      html += '<div class="jp-out-section"><div class="jp-out-label">Next Steps</div><div class="jp-out-value">';
+      if (tier === 'review') {
+        html += 'Review the warnings above and address outstanding items before proceeding. Return to the relevant steps to complete your preparation.';
+      } else if (tier === 'prepare') {
+        html += 'You\u2019re nearly there. Address any remaining checklist items and spend time with your intention in the days ahead.';
+      } else {
+        html += 'Your preparation looks strong. In the days ahead, continue to sit with your intention, finalise your setting, and take care of your body and mind. Trust what you\u2019ve built here.';
+      }
+      html += '</div></div>';
+
+      document.getElementById('jp-output').innerHTML = html;
+      showPanel(5);
+    });
+
+    // Copy
+    document.getElementById('jp-copy').addEventListener('click', function() {
+      var el = document.getElementById('jp-output');
+      var text = el.innerText || el.textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function() {
+          var btn = document.getElementById('jp-copy');
+          btn.textContent = 'Copied!';
+          setTimeout(function() { btn.textContent = 'Copy to Clipboard'; }, 2000);
+        });
+      }
+    });
+
+    document.getElementById('jp-edit-back').addEventListener('click', function() { showPanel(4); });
+  })();
+  </script>
+
+</BaseLayout>
