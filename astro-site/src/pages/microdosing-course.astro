@@ -178,9 +178,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
     [data-theme="light"] .hero-image-inner {
       background:
-        linear-gradient(to right, rgba(244,237,224,0.55) 0%, transparent 35%),
-        linear-gradient(to top, rgba(244,237,224,0.4) 0%, transparent 40%),
-        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1d41bed5-05d2-4245-8d3e-d50320a37e2e/tempImagejiAYk2.jpg') center 28%/cover no-repeat;
+        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1d41bed5-05d2-4245-8d3e-d50320a37e2e/tempImagejiAYk2.jpg') center center/cover no-repeat;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 0.6rem;
@@ -242,9 +240,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     .hero-image-inner {
       position: absolute; inset: 0;
       background:
-        linear-gradient(to right, rgba(8,13,11,0.55) 0%, transparent 35%),
-        linear-gradient(to top, rgba(8,13,11,0.4) 0%, transparent 40%),
-        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1d41bed5-05d2-4245-8d3e-d50320a37e2e/tempImagejiAYk2.jpg') center 28%/cover no-repeat;
+        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1d41bed5-05d2-4245-8d3e-d50320a37e2e/tempImagejiAYk2.jpg') center center/cover no-repeat;
     }
     .hero-stats {
       grid-column: 1 / -1;
@@ -617,8 +613,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     .community-image-inner {
       position: absolute; inset: 0;
       background:
-        linear-gradient(to right, rgba(13,20,16,0.2) 0%, transparent 40%),
-        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1738800715661-9MZXEIJSK5EEEE6QSZLM/Microdosing+reflections') center/cover no-repeat;
+        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/1738800715661-9MZXEIJSK5EEEE6QSZLM/Microdosing+reflections') center center/cover no-repeat;
     }
     .community-content {
       padding: 80px 5% 80px 6%;
@@ -752,8 +747,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     .instructor-image-inner {
       position: absolute; inset: 0;
       background:
-        linear-gradient(to top, rgba(8,13,11,0.65) 0%, transparent 50%),
-        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/c5cf712c-1b6b-4d23-b45b-c8f073c17c9c/Screenshot+2025-03-30+at+10.42.28%E2%80%AFPM.jpg') center 35%/cover no-repeat;
+        url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/c5cf712c-1b6b-4d23-b45b-c8f073c17c9c/Screenshot+2025-03-30+at+10.42.28%E2%80%AFPM.jpg') center center/cover no-repeat;
     }
     .instructor-image-caption {
       position: absolute; bottom: 24px; left: 24px; right: 24px;
@@ -1054,7 +1048,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       .pricing-inner { grid-template-columns: 1fr; }
       .instructor { grid-template-columns: 1fr; gap: 40px; }
       .instructor-image { max-width: 100%; aspect-ratio: 4/3; }
-      .instructor-image-inner { background-position: center 40%; }
+      .instructor-image-inner { background-position: center center; }
       .footer-support-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
       .footer-support-btn { align-self: stretch; text-align: center; }
       .stat-pill { padding: 14px 8px; }
