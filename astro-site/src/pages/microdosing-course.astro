@@ -64,7 +64,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       font-size: 16px;
       line-height: 1.75;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+      overflow-x: clip;
     }
     .mdc-page p { text-wrap: pretty; }
     .mdc-page h1, .mdc-page h2, .mdc-page h3, .mdc-page h4 { text-wrap: balance; }
@@ -203,8 +203,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       margin-bottom: 1.75rem;
       animation: fadeUp 0.7s ease 0.1s both;
     }
-    .hero h1 em {
-      font-style: italic;
+    .hero h1 .accent {
+      font-style: normal;
       background: linear-gradient(135deg, #3ec9bf 0%, #7dde55 40%, #3ec9bf 70%, #5cb84a 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -1080,7 +1080,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <div class="hero-badge">Microdosing Mindfully</div>
 
-    <h1>Learn to<br>microdose <em>intentionally</em></h1>
+    <h1>Learn to<br>microdose <span class="accent">intentionally</span></h1>
 
     <p class="hero-tagline">
       For people who are drawn to microdosing but want to approach it carefully — with structure, honesty, and a framework grounded in mindfulness and harm reduction.
