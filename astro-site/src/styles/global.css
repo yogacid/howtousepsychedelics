@@ -1347,9 +1347,9 @@ nav {
 }
 
 .footer-support-inner {
-  max-width: 1100px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2.5rem 2rem;
+  padding: 2.5rem;
   display: flex;
   align-items: center;
   gap: 2.5rem;
