@@ -33,28 +33,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     [data-theme="light"] .mdc-page {
-      --bg:           #f4ede0;
-      --bg-mid:       #ede4d4;
-      --bg-light:     #e8ddc8;
-      --bg-card:      #efe7d8;
-      --bg-card-alt:  #e9e0cf;
+      --bg:           #faf8f4;
+      --bg-mid:       #f2efe8;
+      --bg-light:     #ede9e0;
+      --bg-card:      #ffffff;
+      --bg-card-alt:  #f7f5f0;
 
-      --cream:        #2c1f0e;
-      --cream-dim:    #6b5640;
-      --cream-faint:  rgba(44,31,14,0.06);
-      --cream-border: rgba(44,31,14,0.14);
+      --cream:        #1a1a1a;
+      --cream-dim:    #555555;
+      --cream-faint:  rgba(0,0,0,0.04);
+      --cream-border: rgba(0,0,0,0.08);
 
-      --teal:         #1f8c84;
-      --green:        #3d8228;
-      --accent:       #1f8c84;
-      --accent-dim:   rgba(31,140,132,0.12);
-      --accent-border:rgba(31,140,132,0.22);
+      --teal:         #1a9e94;
+      --green:        #3a8f28;
+      --accent:       #1a9e94;
+      --accent-dim:   rgba(26,158,148,0.10);
+      --accent-border:rgba(26,158,148,0.18);
 
-      --grad: linear-gradient(135deg, #1f8c84 0%, #3d8228 100%);
+      --grad: linear-gradient(135deg, #1a9e94 0%, #3a8f28 100%);
 
       --danger:   #b83333;
       --warn:     #a67c00;
-      --teal-dim: rgba(31,140,132,0.08);
+      --teal-dim: rgba(26,158,148,0.08);
     }
 
     .mdc-page {
@@ -102,7 +102,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       padding: 0.85rem 1.75rem;
       font-family: 'Jost', sans-serif; font-size: 0.75rem;
       font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-      text-decoration: none; border-radius: 6px; border: none; cursor: pointer;
+      text-decoration: none; border-radius: 100px; border: none; cursor: pointer;
       background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
       background-size: 300% 100%;
       background-position: 0% center;
@@ -119,7 +119,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       padding: 0.85rem 1.75rem;
       font-family: 'Jost', sans-serif; font-size: 0.75rem;
       font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-      text-decoration: none; border-radius: 6px; border: none; cursor: pointer;
+      text-decoration: none; border-radius: 100px; border: none; cursor: pointer;
       background: transparent; color: var(--cream);
       border: 1px solid var(--cream-border);
       transition: border-color 0.2s;
@@ -172,9 +172,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     [data-theme="light"] .hero-breadcrumb a:hover { color: rgba(44,60,50,0.9); }
     [data-theme="light"] .hero::before {
       background:
-        radial-gradient(ellipse 65% 55% at 15% 55%, rgba(31,140,132,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 45% 60% at 80% 20%, rgba(61,130,40,0.06) 0%, transparent 55%),
-        radial-gradient(ellipse 35% 45% at 55% 90%, rgba(31,140,132,0.04) 0%, transparent 55%);
+        radial-gradient(ellipse 65% 55% at 15% 55%, rgba(26,158,148,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 60% at 80% 20%, rgba(58,143,40,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse 35% 45% at 55% 90%, rgba(26,158,148,0.04) 0%, transparent 55%);
     }
     [data-theme="light"] .hero-image-inner {
       background:
@@ -696,7 +696,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       padding: 0.9rem 1.75rem;
       font-family: 'Jost', sans-serif; font-size: 0.75rem;
       font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-      text-decoration: none; border-radius: 6px; border: none; cursor: pointer;
+      text-decoration: none; border-radius: 100px; border: none; cursor: pointer;
       background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
       background-size: 300% 100%;
       background-position: 0% center;
@@ -748,17 +748,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       position: absolute; inset: 0;
       background:
         url('https://images.squarespace-cdn.com/content/v1/5e8f54792fe6fb48837ae53e/c5cf712c-1b6b-4d23-b45b-c8f073c17c9c/Screenshot+2025-03-30+at+10.42.28%E2%80%AFPM.jpg') center center/cover no-repeat;
-    }
-    .instructor-image-caption {
-      position: absolute; bottom: 24px; left: 24px; right: 24px;
-    }
-    .instructor-name-overlay {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.6rem; font-weight: 300; color: var(--cream);
-    }
-    .instructor-role-overlay {
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--teal);
     }
     .instructor-name {
       font-family: 'Space Grotesk', sans-serif;
@@ -855,7 +844,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       background-size: 300% 100%; background-position: 0% center;
       color: #0a120d; font-size: 0.72rem; font-weight: 700;
       letter-spacing: 0.1em; text-transform: uppercase;
-      border-radius: 6px; text-decoration: none;
+      border-radius: 100px; text-decoration: none;
       transition: box-shadow 0.25s ease; white-space: nowrap;
     }
     .footer-support-btn:hover {
@@ -955,7 +944,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       background-size: 300% auto; background-position: 0% center;
       color: #0a120d; font-family: 'Jost', sans-serif;
       font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; border-radius: 6px; text-decoration: none;
+      text-transform: uppercase; border-radius: 100px; text-decoration: none;
       transition: background-position 0.55s ease, box-shadow 0.25s ease;
     }
     .enroll-cta-btn:hover {
@@ -1521,14 +1510,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <section class="instructor">
   <div class="instructor-image">
     <div class="instructor-image-inner"></div>
-    <div class="instructor-image-caption">
-      <div class="instructor-role-overlay">M.A. &middot; Psychedelics & Consciousness Studies &middot; University of Ottawa</div>
-    </div>
   </div>
 
   <div class="instructor-content">
     <span class="section-eyebrow">Course Creator</span>
-    <h2 class="instructor-name">Louis Belleau</h2>
+    <h2 class="instructor-name">Louis Belleau, M.A.</h2>
     <div class="instructor-credentials">M.A. Psychedelics & Consciousness Studies &middot; University of Ottawa</div>
 
     <p class="instructor-bio">

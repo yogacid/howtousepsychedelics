@@ -50,7 +50,7 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
 
   <!-- Theme detection before first paint -->
   <script is:inline>
-    (function(){var t=localStorage.getItem('htup-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})()
+    (function(){var t=localStorage.getItem('htup-theme');if(t!=='dark')document.documentElement.setAttribute('data-theme','light');})()
   </script>
 
   <slot name="head" />
@@ -104,13 +104,12 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
       const html = document.documentElement;
       html.classList.add('theme-switching');
       const current = html.getAttribute('data-theme');
-      const next = current === 'light' ? '' : 'light';
-      if (next) {
-        html.setAttribute('data-theme', 'light');
-        localStorage.setItem('htup-theme', 'light');
-      } else {
+      if (current === 'light') {
         html.removeAttribute('data-theme');
         localStorage.setItem('htup-theme', 'dark');
+      } else {
+        html.setAttribute('data-theme', 'light');
+        localStorage.setItem('htup-theme', 'light');
       }
       setTimeout(() => html.classList.remove('theme-switching'), 350);
     });
