@@ -1677,6 +1677,15 @@ footer {
   .tools-grid {
     grid-template-columns: 1fr;
   }
+  .nav-inner {
+    padding: 0 1.25rem;
+  }
+  footer {
+    padding: 3rem 1.25rem 2rem;
+  }
+  .footer-support-inner {
+    padding: 2.5rem 1.25rem;
+  }
   .footer-nav {
     gap: 2rem;
   }
