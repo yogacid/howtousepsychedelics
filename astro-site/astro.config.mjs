@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: 'https://www.howtousepsychedelics.com',
+  site: 'https://howtousepsychedelics.com',
   adapter: netlify(),
   integrations: [sitemap()],
   build: {

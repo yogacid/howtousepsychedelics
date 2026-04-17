@@ -3,6 +3,13 @@
   command = "npm run build"
   publish = "astro-site/dist"
 
+# Force www → non-www (permanent)
+[[redirects]]
+  from = "https://www.howtousepsychedelics.com/*"
+  to = "https://howtousepsychedelics.com/:splat"
+  status = 301
+  force = true
+
 # Custom 404
 [[redirects]]
   from = "/*"
