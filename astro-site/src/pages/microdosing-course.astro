@@ -1046,6 +1046,37 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       .week-tab { flex: 1; }
       .enroll-steps-left { margin-top: 1.5rem; }
     }
+
+    /* ── STICKY CTA BAR ─────────────────────────────────────────── */
+    .sticky-cta-wrap {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
+      pointer-events: none;
+    }
+    .sticky-cta {
+      background: var(--bg-mid);
+      border-top: 1px solid var(--accent-border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 5%;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: auto;
+    }
+    .sticky-cta.visible { transform: translateY(0); }
+    .sticky-cta-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem; font-weight: 300; color: var(--cream);
+    }
+    .sticky-cta-text em { font-style: italic; color: var(--teal); }
+    .sticky-cta-note {
+      font-size: 0.72rem; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--cream-dim);
+    }
+    @media (max-width: 640px) {
+      .sticky-cta {
+        flex-direction: column; gap: 8px; text-align: center;
+        padding: 14px 5%; justify-content: center; align-items: center;
+      }
+    }
 </style>
 
 <div class="mdc-page">
@@ -1735,6 +1766,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 </div>
 
+<!-- ── STICKY CTA ──────────────────────────────────────────────── -->
+<div id="stickyCtaWrap" class="sticky-cta-wrap">
+  <div id="stickyCta" class="sticky-cta">
+    <div>
+      <div class="sticky-cta-text">Ready to begin? <em>Microdosing Mindfully</em></div>
+      <div class="sticky-cta-note">14-day money-back guarantee</div>
+    </div>
+    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enroll Now &rarr;</a>
+  </div>
+</div>
+
 <script is:inline>
   // Week curriculum tabs
   function showWeek(n, btn) {
@@ -1743,6 +1785,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     document.getElementById('week' + n).classList.add('active');
     btn.classList.add('active');
   }
+
+  // Sticky CTA — shows after hero scrolls out of view
+  (function() {
+    var stickyCta = document.getElementById('stickyCta');
+    var hero = document.querySelector('.hero');
+    if (!stickyCta || !hero) return;
+    var heroObserver = new IntersectionObserver(function(entries) {
+      stickyCta.classList.toggle('visible', !entries[0].isIntersecting);
+    }, { threshold: 0.1 });
+    heroObserver.observe(hero);
+
+    // iOS Safari: adjust bottom for keyboard/viewport changes
+    if (window.visualViewport) {
+      var wrap = document.getElementById('stickyCtaWrap');
+      function updateCtaBottom() {
+        var offset = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
+        wrap.style.bottom = Math.max(0, offset) + 'px';
+      }
+      window.visualViewport.addEventListener('resize', updateCtaBottom);
+    }
+  })();
 </script>
 
 </div><!-- .mdc-page -->
