@@ -50,7 +50,7 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
 
   <!-- Theme detection before first paint -->
   <script is:inline>
-    (function(){var t=localStorage.getItem('htup-theme');if(t!=='dark')document.documentElement.setAttribute('data-theme','light');})()
+    (function(){var t=localStorage.getItem('htup-theme');var theme=t?t:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',theme);})()
   </script>
 
   <slot name="head" />
