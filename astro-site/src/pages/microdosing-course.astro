@@ -195,7 +195,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3rem, 5.5vw, 5.2rem);
+      font-size: clamp(2.4rem, 4.2vw, 4rem);
       font-weight: 300; line-height: 1.0;
       color: var(--cream); letter-spacing: -0.015em;
       margin-bottom: 1.75rem;
@@ -223,7 +223,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       animation: fadeUp 0.7s ease 0.2s both;
     }
     .hero-trust {
-      display: flex; align-items: center; gap: 0.75rem;
+      display: flex; align-items: center; column-gap: 0.75rem; row-gap: 1rem;
       flex-wrap: wrap; border-top: none;
       animation: fadeUp 0.7s ease 0.25s both;
     }
@@ -1094,7 +1094,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <div class="hero-badge">Microdosing Mindfully</div>
 
-    <h1>Microdosing &amp; <span class="accent">Mindfulness</span></h1>
+    <h1>Microdosing<br>with <span class="accent">Mindfulness</span></h1>
 
     <p class="hero-tagline">
       Not a protocol. Not a productivity hack. A structured invitation to pay closer attention — to your inner life, your patterns, and your place in the living world. Three weeks. Fifteen lessons. A practice of inquiry and integration.
