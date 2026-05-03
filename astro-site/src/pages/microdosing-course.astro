@@ -700,6 +700,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       border: 1px solid var(--accent-border); margin-top: 1px;
     }
     .pricing-include a { color: var(--teal); text-decoration: none; border-bottom: 1px solid rgba(62,201,191,0.3); }
+    .pricing-founding-note {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+      color: var(--teal); margin-top: 3px; opacity: 0.85;
+    }
     .pricing-cta-stack { display: flex; flex-direction: column; gap: 10px; }
     .btn-primary-full {
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
@@ -1239,7 +1243,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         "I really enjoyed this microdosing course. It helped me learn how to combine microdosing with meditation to facilitate awareness, healing, and deeper focus. The course felt comprehensive and the community is great."
       </p>
       <div class="testimonial-author">
-        <div class="testimonial-name">Matthew C.</div>
+        <div class="testimonial-name">Matthew Cote</div>
         <div class="testimonial-role">Programmer</div>
       </div>
     </div>
@@ -1608,7 +1612,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </li>
         <li class="pricing-include">
           <div class="include-check">&#10003;</div>
-          Lifetime access to Psygaia's Circle community
+          <div>
+            Lifetime access to Psygaia's Circle community
+            <div class="pricing-founding-note">&#9733; Founding offer — won't always be included</div>
+          </div>
         </li>
         <li class="pricing-include">
           <div class="include-check">&#10003;</div>
@@ -1760,7 +1767,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
       <div class="faq-quote-card">
         <p class="faq-quote-text">"I really enjoyed this microdosing course. It helped me learn how to combine microdosing with meditation to facilitate awareness, healing, and deeper focus. The course felt comprehensive and the community is great."</p>
-        <div class="faq-quote-name">Matthew C. &middot; Programmer</div>
+        <div class="faq-quote-name">Matthew Cote &middot; Programmer</div>
       </div>
       <div class="faq-quote-card">
         <p class="faq-quote-text">"This course and community helped me slow down and notice how subtle my responses actually were. I stopped trying to 'get something' from microdosing and started listening."</p>
@@ -1798,7 +1805,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div id="stickyCta" class="sticky-cta">
     <div>
       <div class="sticky-cta-text">Ready to begin? <em>Microdosing Mindfully</em></div>
-      <div class="sticky-cta-note">$149 USD &middot; 14-day money-back guarantee</div>
+      <div class="sticky-cta-note">$149 USD &middot; Founding offer: lifetime Circle access included</div>
     </div>
     <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enrol Now &rarr;</a>
   </div>
