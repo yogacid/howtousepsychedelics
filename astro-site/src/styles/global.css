@@ -871,6 +871,15 @@ nav {
   position: relative;
 }
 
+@media (max-width: 768px) {
+  .hero h1 .accent-word {
+    display: block;
+  }
+}
+
+.mobile-br { display: none; }
+@media (max-width: 768px) { .mobile-br { display: inline; } }
+
 .accent-word .word {
   display: inline-block;
   opacity: 0;
