@@ -21,8 +21,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="hero-trust-item">
         <svg class="hero-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
         <div class="hero-trust-text">
-          <span class="hero-trust-label">Free &amp; Open</span>
-          <span class="hero-trust-desc">No paywalls, no ads, no sponsors</span>
+          <span class="hero-trust-label">Ad-Free</span>
+          <span class="hero-trust-desc">No ads, no sponsors</span>
         </div>
       </div>
       <div class="hero-trust-item">
@@ -47,7 +47,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="section">
       <div class="section-header reveal">
         <div class="section-label">Where to begin</div>
-        <div class="section-title">Find your <span class="grad-text">starting point.</span></div>
+        <div class="section-title">Find your <span class="grad-text">starting point</span></div>
       </div>
       <div class="start-grid reveal">
         <a href="/foundations" class="start-card start-card-1">
@@ -78,7 +78,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div class="section">
     <div class="section-header reveal">
       <div class="section-label">All Topics</div>
-      <div class="section-title">Everything you need to navigate<br><span class="grad-text">psychedelics safely.</span></div>
+      <div class="section-title">Everything you need to navigate<br><span class="grad-text">psychedelics safely</span></div>
     </div>
     <div class="topics-grid reveal">
       <a href="/foundations" class="topic-card">
@@ -161,7 +161,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="section">
       <div class="section-header reveal">
         <div class="section-label">Interactive Tools</div>
-        <div class="section-title">Built for <span class="grad-text">intentional practice.</span></div>
+        <div class="section-title">Built for <span class="grad-text">intentional practice</span></div>
       </div>
       <div class="tools-grid reveal">
         <a href="/readiness" class="tool-card">
@@ -186,12 +186,58 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </div>
 
+  <!-- ── COURSE PROMO ─────────────────────────────────────────── -->
+  <div class="course-promo">
+    <div class="course-promo-inner reveal">
+      <div class="course-promo-content">
+        <div class="section-label">Dive into Psygaia</div>
+        <h2 class="course-promo-title">Microdose with <span class="grad-text">Mindfulness</span></h2>
+        <p class="course-promo-body">
+          Not a protocol. Not a productivity hack. A structured 3-week course for those who want to engage with microdosing as a genuine practice — fifteen evidence-informed lessons on preparation, reflection, and integration.
+        </p>
+        <div class="course-promo-pills">
+          <div class="course-promo-pills-row">
+            <span class="course-pill">3 weeks · 15 lessons</span>
+            <span class="course-pill">Evidence-informed</span>
+          </div>
+          <div class="course-promo-pills-row">
+            <span class="course-pill">Community included</span>
+            <span class="course-pill">14-day guarantee</span>
+          </div>
+        </div>
+        <a href="/microdosing-course" class="btn btn-primary">Explore the Course &rarr;</a>
+      </div>
+      <div class="course-promo-aside">
+        <div class="course-promo-card">
+          <div class="course-promo-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <div>
+            <div class="course-promo-card-title">Microdosing with Mindfulness</div>
+            <p class="course-promo-card-body">Self-paced lessons on preparation, reflection, and integration. Work through the material in your own time, at your own rhythm.</p>
+          </div>
+        </div>
+        <div class="course-promo-card">
+          <div class="course-promo-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div>
+            <div class="course-promo-card-title">Psygaia's Circle — Included</div>
+            <p class="course-promo-card-body">Lifetime access to a moderated community for intentional practice. Monthly integration and breathwork circles with our guides.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── PSYGAIA STRIP ───────────────────────────────────────── -->
-  <div class="feature-strip reveal">
-    <div class="section-label">The Psygaia Framework</div>
-    <div class="section-title">An <span class="grad-text">ecological</span> theory of psychedelics.</div>
-    <p>Why do psychedelic experiences so consistently produce a felt sense of connection with a living world? The Psygaia Framework offers a rigorous, systems-based account.</p>
-    <a class="btn btn-outline" href="https://psygaia.org/psygaia-hypothesis" target="_blank" rel="noopener">Read the Research &rarr;</a>
+  <div class="feature-strip-section">
+    <div class="feature-strip reveal">
+      <div class="section-label">The Psygaia Framework</div>
+      <div class="section-title">An <span class="grad-text">ecological</span> theory of psychedelics</div>
+      <p>Why do psychedelic experiences so consistently produce a felt sense of connection with a living world? The Psygaia Framework offers a rigorous, systems-based account.</p>
+      <a class="btn btn-outline" href="https://psygaia.org/psygaia-hypothesis" target="_blank" rel="noopener">Read the Research &rarr;</a>
+    </div>
   </div>
 
   <!-- ── SUPPORT BANNER ──────────────────────────────────────── -->
