@@ -190,8 +190,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       animation: fadeUp 0.7s ease 0.05s both;
     }
     .hero-badge::before {
-      content: '';
-      width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
+      display: none;
     }
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
@@ -674,7 +673,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
     .pricing-card-subtitle {
       font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--cream-dim); margin-bottom: 2.25rem;
+      text-transform: uppercase; color: var(--cream-dim); margin-bottom: 1.25rem;
+    }
+    .pricing-price {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.8rem; font-weight: 600; color: var(--cream);
+      line-height: 1; margin-bottom: 2rem;
+    }
+    .pricing-currency {
+      font-size: 1rem; font-weight: 400; color: var(--cream-dim);
+      vertical-align: middle; margin-left: 4px;
     }
     .pricing-includes {
       list-style: none; display: flex; flex-direction: column;
@@ -792,7 +800,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       display: inline-block;
       padding: 0.75rem 2rem;
       border: 1px solid var(--accent-border);
-      border-radius: 4px;
+      border-radius: 100px;
       font-family: 'Jost', sans-serif;
       font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em;
       text-transform: uppercase; text-decoration: none;
@@ -1094,22 +1102,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <span>Course</span>
     </div>
 
-    <div class="hero-badge">Microdosing Mindfully</div>
+    <div class="hero-badge">Psilocybin &middot; LSD &middot; Cannabis</div>
 
     <h1>Microdosing<br>with <span class="accent">Mindfulness</span></h1>
 
     <p class="hero-tagline">
-      Not a protocol. Not a productivity hack. A structured invitation to pay closer attention — to your inner life, your patterns, and your place in the living world. Three weeks. Fifteen lessons. A practice of inquiry and integration.
+      Whether you're navigating low mood, seeking sharper focus, or simply wanting to feel more present — microdosing has real potential. This course gives you the structure to realise it.
     </p>
 
     <div class="hero-actions">
-      <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enroll Now &rarr;</a>
+      <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enrol Now &rarr;</a>
       <a href="#curriculum" class="btn-outline">See Curriculum</a>
     </div>
 
     <div class="hero-trust">
       <span class="trust-pill">Evidence-informed</span>
-      <span class="trust-pill">Mindfulness-based</span>
+      <span class="trust-pill">Self-paced</span>
       <span class="trust-pill">14-day guarantee</span>
       <span class="trust-pill nonprofit-pill">Nonprofit</span>
     </div>
@@ -1142,41 +1150,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <section class="for-you">
   <div class="for-you-intro">
     <span class="section-eyebrow">Is This For You?</span>
-    <h2 class="section-title">Designed for<br><em>you</em> if you...</h2>
-    <p class="for-you-intro-body">
-      Whether you are navigating anxiety or low mood, beginning or deepening a
-      spiritual practice, or simply curious about psychedelics with enough
-      self-awareness to want a careful approach — this is where to start.
-    </p>
+    <h2 class="section-title">This course is<br>for you if...</h2>
   </div>
 
   <div>
     <ul class="for-you-list">
       <li class="for-you-item">
         <div class="for-you-marker"></div>
-        <p>Feel drawn to psychedelics as tools, teachers, or allies for <strong>self-understanding, healing, personal growth, or spiritual inquiry</strong> — and want to approach them thoughtfully.</p>
+        <p>You're exploring microdosing for <strong>mental health</strong> — managing anxiety, low mood, or burnout — and want a careful, evidence-informed approach rather than a generic protocol.</p>
       </li>
       <li class="for-you-item">
         <div class="for-you-marker"></div>
-        <p>Experience <strong>anxiety, emotional sensitivity, or periods of low mood</strong> and want a careful, contained approach rather than a generic protocol.</p>
+        <p>You're drawn to microdosing for <strong>focus, creativity, or cognitive clarity</strong>, and want to understand how to work with it rather than just optimise with it.</p>
       </li>
       <li class="for-you-item">
         <div class="for-you-marker"></div>
-        <p>Want <strong>structure, reflection, and integration</strong> — not rigid protocols or vague spiritual inspiration without grounding.</p>
+        <p>You're drawn to microdosing as a path toward <strong>self-understanding, spiritual growth, or a deeper sense of connection</strong> — and want to approach it with the care it deserves.</p>
       </li>
       <li class="for-you-item">
         <div class="for-you-marker"></div>
-        <p>Prefer learning within <strong>clear ethical and safety boundaries</strong>, and want to understand the risks as clearly as the possibilities.</p>
+        <p>You want <strong>structure, reflection, and honest science</strong> — not just dosing instructions — and you're willing to do the inner work that makes microdosing meaningful.</p>
       </li>
       <li class="for-you-item">
         <div class="for-you-marker"></div>
-        <p>Value <strong>community and mindful reflection</strong> — and have no interest in performative spirituality, productivity optimization, or biohacking.</p>
+        <p>You're looking for <strong>community</strong> — people navigating this with the same level of care and intention.</p>
       </li>
     </ul>
 
     <div class="not-for-you">
       <span class="not-for-you-label">This course is not for you if</span>
-      <p>You are looking for the largest possible dose, the most intense experience, or a shortcut to self-transformation. This course promises discernment, structure, and psychological safety — not outcomes.</p>
+      <p>You're looking for a quick protocol, a guaranteed outcome, or a shortcut. This course is structured, reflective, and asks something of you.</p>
     </div>
   </div>
 </section>
@@ -1185,7 +1188,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <section class="testimonials">
   <div class="testimonials-header">
     <span class="section-eyebrow">Reviews</span>
-    <h2 class="section-title">What students say.</h2>
+    <h2 class="section-title">In their own words.</h2>
   </div>
 
   <div class="testimonials-grid">
@@ -1233,11 +1236,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="testimonial">
       <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="testimonial-quote">
-        "This is the course I wish I'd had when I started microdosing a year ago."
+        "I really enjoyed this microdosing course. It helped me learn how to combine microdosing with meditation to facilitate awareness, healing, and deeper focus. The course felt comprehensive and the community is great."
       </p>
       <div class="testimonial-author">
-        <div class="testimonial-name">Richard Ventham</div>
-        <div class="testimonial-role">Entrepreneur</div>
+        <div class="testimonial-name">Matthew C.</div>
+        <div class="testimonial-role">Programmer</div>
       </div>
     </div>
 
@@ -1245,8 +1248,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="testimonial-quote">
         "The most comprehensive microdosing course I've taken. Also, Psygaia's
-        Circle is a special community to be a part of. I recommend it to
-        anyone interested in microdosing."
+        Circle is a special community to be a part of."
       </p>
       <div class="testimonial-author">
         <div class="testimonial-name">Erik Zablotny</div>
@@ -1273,7 +1275,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <ul class="outcomes-list">
       <li class="outcome-item">
         <span class="outcome-num">01</span>
-        <p class="outcome-text">Stop second-guessing yourself and begin — <strong>carefully, clearly, and on your own terms.</strong></p>
+        <p class="outcome-text">Develop a practice that supports <strong>focus, emotional balance, and daily presence</strong> — tailored to your own patterns and goals.</p>
       </li>
       <li class="outcome-item">
         <span class="outcome-num">02</span>
@@ -1285,7 +1287,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </li>
       <li class="outcome-item">
         <span class="outcome-num">04</span>
-        <p class="outcome-text">Track your experience meaningfully, without over-interpretation or projection.</p>
+        <p class="outcome-text">Build a <strong>personal tracking practice</strong> that surfaces patterns over time and tells you what's actually working.</p>
       </li>
       <li class="outcome-item">
         <span class="outcome-num">05</span>
@@ -1301,7 +1303,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="bonus-card">
         <span class="bonus-label">Bonus</span>
-        <p>Access to <strong>monthly integration and breathwork circles</strong> held by members of our team of experienced and educated guides — included with your enrollment.</p>
+        <p>Access to <strong>monthly integration and breathwork circles</strong> held by members of our team of experienced and educated guides — included with your enrolment.</p>
       </div>
     </div>
   </div>
@@ -1318,13 +1320,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="history-item">
       <span class="history-item-label">Western Origins</span>
       <div class="history-item-title">Hofmann, Grof & the pioneers</div>
-      <p>Albert Hofmann — who first synthesized LSD — explored microdosing in his later years to enhance clarity, creativity, and connection to nature, viewing it not as a scientific curiosity but as a sacred tool for consciousness exploration. Stanislav Grof found that sub-perceptual doses could help people access deeper layers of the psyche while remaining emotionally grounded, facilitating healing and insight without the intensity of a full experience.</p>
+      <p>Albert Hofmann — who first synthesized LSD — used microdosing in his later years to enhance clarity, creativity, and connection to nature, viewing it as a sacred tool for consciousness exploration rather than a scientific curiosity. Stanislav Grof found that sub-perceptual doses could reach deeper layers of the psyche while keeping people emotionally grounded — insight and healing without the intensity of a full experience.</p>
     </div>
 
     <div class="history-item">
       <span class="history-item-label">Indigenous Traditions</span>
       <div class="history-item-title">Low-dose practices in the Amazon and beyond</div>
-      <p>Long before the term "microdosing" emerged, Indigenous communities — particularly in the Amazon — used low doses of plant medicines as part of ongoing spiritual, relational, and medicinal practices. These doses served subtle purposes: enhancing connection to the natural world, maintaining energetic balance, and deepening participation in the living community of species. These traditions reflect a long-standing understanding of how to engage with psychoactive plants in non-visionary, relational ways.</p>
+      <p>Long before the term emerged, Indigenous communities — particularly in the Amazon — used low doses of plant medicines as part of ongoing spiritual, relational, and medicinal practice: enhancing connection to the natural world, maintaining energetic balance, and deepening participation in the living community of species. These traditions represent a long-standing understanding of non-visionary, relational engagement with plant medicines.</p>
     </div>
   </div>
 </section>
@@ -1332,7 +1334,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <!-- ── APPROACH ──────────────────────────────────────────────────── -->
 <section class="approach">
   <span class="section-eyebrow">The Psygaia Approach</span>
-  <h2 class="section-title">Both grounded and whole.</h2>
+  <h2 class="section-title">Four principles. One coherent approach.</h2>
   <div class="approach-inner">
     <div class="approach-principles">
         <div class="principle">
@@ -1353,7 +1355,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div class="principle-icon">&#9681;</div>
           <div>
             <div class="principle-title">Ecologically grounded</div>
-            <p class="principle-desc">Framing microdosing as a natural relationship with living organisms — not a productivity tool, a hack, or a wonder drug. You are entering a relationship, not purchasing an upgrade.</p>
+            <p class="principle-desc">Framing microdosing as a relationship with living organisms — one that asks for attention and reciprocity, not just a desired outcome.</p>
           </div>
         </div>
         <div class="principle">
@@ -1378,15 +1380,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
         <div class="contrast-row">
           <div class="contrast-cell no">Spiritual language without grounding</div>
-          <div class="contrast-cell yes">Spirituality with containment</div>
+          <div class="contrast-cell yes">Grounded spirituality</div>
         </div>
         <div class="contrast-row">
-          <div class="contrast-cell no">Productivity optimization</div>
-          <div class="contrast-cell yes">Relational, reflective practice</div>
+          <div class="contrast-cell no">Protocol-driven, outcome-fixed</div>
+          <div class="contrast-cell yes">Reflective, practice-based</div>
         </div>
         <div class="contrast-row">
-          <div class="contrast-cell no">Promises transformation</div>
-          <div class="contrast-cell yes">Promises discernment & safety</div>
+          <div class="contrast-cell no">Makes bold promises</div>
+          <div class="contrast-cell yes">Makes honest ones</div>
         </div>
         <div class="contrast-row">
           <div class="contrast-cell no">Individual, isolated</div>
@@ -1461,12 +1463,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="community-image-inner"></div>
   </div>
   <div class="community-content">
-    <span class="section-eyebrow">Included: Psygaia's Circle</span>
+    <span class="section-eyebrow">Psygaia's Circle Included</span>
     <h2 class="community-title">A place to belong<br>while you learn.</h2>
     <p class="community-body">
-      Enrollment includes lifetime access to Psygaia's Circle — a moderated
-      community space for those navigating psychedelic experiences with
-      intention. There is never pressure to share. Your presence is enough.
+      There is never pressure to share. Your presence is enough. Enrolment
+      includes lifetime access to Psygaia's Circle — a moderated community
+      for those navigating psychedelic experiences with intention.
     </p>
     <ul class="community-features">
       <li class="community-feature">
@@ -1479,7 +1481,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </li>
       <li class="community-feature">
         <div class="community-feature-dot"></div>
-        Access expertly curated and regularly updated resources relevant to your practice.
+        A regularly updated library of resources relevant to your practice.
       </li>
       <li class="community-feature">
         <div class="community-feature-dot"></div>
@@ -1501,8 +1503,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="enroll-step">
         <div class="enroll-step-num">1</div>
         <div class="enroll-step-content">
-          <div class="enroll-step-title">Enroll</div>
-          <p class="enroll-step-body">Complete your enrollment via Psygaia's Circle. Instant access — no waiting, no onboarding calls.</p>
+          <div class="enroll-step-title">Enrol</div>
+          <p class="enroll-step-body">Complete your enrolment via Psygaia's Circle. Instant access — no waiting, no onboarding calls.</p>
         </div>
       </div>
       <div class="enroll-step">
@@ -1516,14 +1518,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="enroll-step-num">3</div>
         <div class="enroll-step-content">
           <div class="enroll-step-title">Join the community</div>
-          <p class="enroll-step-body">Your enrollment includes lifetime access to Psygaia's Circle and monthly integration circles with our guides.</p>
+          <p class="enroll-step-body">Your enrolment includes lifetime access to Psygaia's Circle and monthly integration circles with our guides.</p>
         </div>
       </div>
     </div>
   </div>
   <div class="enroll-cta-panel">
     <span class="enroll-cta-label">Ready to begin?</span>
-    <h3 class="enroll-cta-heading">Start your practice.<br><em>Mindfully.</em></h3>
+    <h3 class="enroll-cta-heading">Start your practice.<br><em>On your terms.</em></h3>
     <ul class="enroll-cta-includes">
       <li>15 lessons across 3 structured weeks</li>
       <li>Lifetime access — learn at your own pace</li>
@@ -1531,7 +1533,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <li>Monthly integration &amp; breathwork circles</li>
       <li>Developed by an independent nonprofit</li>
     </ul>
-    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="enroll-cta-btn" target="_blank" rel="noopener">Enroll Now &rarr;</a>
+    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="enroll-cta-btn" target="_blank" rel="noopener">Enrol Now &rarr;</a>
     <div class="enroll-cta-guarantee">
       <span class="enroll-cta-guarantee-icon">&#10022;</span>
       <p>14-day money-back guarantee. If you're not satisfied, email us for a full refund — no questions asked.</p>
@@ -1551,20 +1553,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="instructor-credentials">M.A. Psychedelics & Consciousness Studies &middot; University of Ottawa</div>
 
     <p class="instructor-bio">
-      Louis is the founder and director of Psygaia, and a psychedelic
-      researcher and guide with an MA in Psychedelics & Consciousness
-      Studies from the University of Ottawa. He holds an interdisciplinary
-      background in Psychology, Philosophy, and Religious Studies from
-      McGill University, and is a certified yoga and breathwork teacher.
+      As founder of Psygaia, Louis has spent years working directly with
+      people navigating psychedelic experiences — building this course
+      around what he observed them genuinely needing, not just what the
+      literature recommends. He holds an MA in Psychedelics &amp;
+      Consciousness Studies from the University of Ottawa, an
+      interdisciplinary background in Psychology, Philosophy, and Religious
+      Studies from McGill, and is a certified yoga and breathwork teacher.
     </p>
 
     <p class="instructor-bio">
       Louis created this course in response to a gap he observed in
-      contemporary psychedelic education — where the technical outweighs
-      the spiritual and practical, and productivity overshadows ethical
-      meaning-making and ecological reconnection. His approach emphasizes
-      microdosing as a reflective and relational practice rather than a
-      performance tool.
+      psychedelic education — where technical protocols dominate, and the
+      inner, reflective work that makes microdosing genuinely meaningful
+      gets lost. His approach frames microdosing as a reflective and
+      relational practice, grounded in ethics, ecology, and honest
+      self-inquiry.
     </p>
 
     <div class="credential-tags">
@@ -1579,14 +1583,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <!-- ── PRICING ───────────────────────────────────────────────────── -->
 <section class="pricing">
-  <span class="section-eyebrow">Enrollment</span>
-  <h2 class="section-title">Start mindful microdosing.</h2>
+  <span class="section-eyebrow">Enrolment</span>
+  <h2 class="section-title">One course. A practice for life.</h2>
 
   <div class="pricing-inner">
     <div class="pricing-card">
       <div class="pricing-badge">Complete Course</div>
       <div class="pricing-card-title">Microdosing Mindfully</div>
       <div class="pricing-card-subtitle">Full access &middot; Self-paced &middot; Lifetime updates</div>
+      <div class="pricing-price">$149 <span class="pricing-currency">USD</span></div>
 
       <ul class="pricing-includes">
         <li class="pricing-include">
@@ -1616,7 +1621,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </ul>
 
       <div class="pricing-cta-stack">
-        <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary-full" target="_blank" rel="noopener">Enroll Now &rarr;</a>
+        <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary-full" target="_blank" rel="noopener">Enrol Now &rarr;</a>
       </div>
     </div>
 
@@ -1632,8 +1637,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <div class="sidebar-card">
-        <span class="sidebar-card-label">Next Steps</span>
-        <p>This course sets the foundations for our upcoming cohort-based program — a more immersive, supported experience for those ready to go deeper.</p>
+        <span class="sidebar-card-label">A Complete Practice</span>
+        <p>This course is the foundation — and a complete practice in itself. It also prepares you well for deeper work when you're ready.</p>
       </div>
     </div>
   </div>
@@ -1641,7 +1646,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <!-- ── FALLBACK / NOT READY ──────────────────────────────────────── -->
 <section class="fallback">
-  <span class="section-eyebrow">Not ready to enroll yet?</span>
+  <span class="section-eyebrow">Not ready to enrol yet?</span>
   <h2>Start with the free guide.</h2>
   <p>Our free introduction to microdosing covers the essentials — protocol basics, safety considerations, and what to expect. No pressure, no pitch. Just a place to begin.</p>
   <a class="fallback-btn" href="https://psygaia.org/newsletter-sign-up-htup" target="_blank" rel="noopener">Get the Guide</a>
@@ -1670,7 +1675,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <span class="faq-chevron">&#9662;</span>
         </button>
         <div class="faq-a">
-          <p>The course focuses primarily on psilocybin (magic mushrooms) and LSD as the most researched and commonly used microdosing substances. The principles, practices, and safety frameworks taught apply broadly across sub-perceptual psychedelic use.</p>
+          <p>The course focuses primarily on psilocybin (magic mushrooms), LSD, and cannabis as the most commonly used microdosing substances. The principles, practices, and safety frameworks taught apply broadly across sub-perceptual psychedelic use.</p>
         </div>
       </div>
 
@@ -1706,6 +1711,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="faq-item">
         <button class="faq-q">
+          Will this help with anxiety or depression?
+          <span class="faq-chevron">&#9662;</span>
+        </button>
+        <div class="faq-a">
+          <p>This course isn't therapy and doesn't replace professional mental health support. That said, it was built with these experiences in mind — with a trauma-informed approach, a strong emphasis on psychological safety, and content that directly addresses how microdosing interacts with mood and emotional regulation. Many students come to the course navigating anxiety or low mood, and find the structure and community genuinely supportive.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          What if I'm on medication, including SSRIs?
+          <span class="faq-chevron">&#9662;</span>
+        </button>
+        <div class="faq-a">
+          <p>This is covered in the course. SSRIs and other psychiatric medications can interact with psychedelics in complex ways — in some cases reducing or blocking their effects, in others creating unpredictable responses. The course provides honest, evidence-informed guidance on these interactions and helps you make an informed decision about whether microdosing is appropriate given your current situation. We always recommend consulting a healthcare provider before making any changes to your medication or adding a new practice.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
           Is this course affiliated with any particular religion or spiritual tradition?
           <span class="faq-chevron">&#9662;</span>
         </button>
@@ -1734,8 +1759,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="faq-quote-name">Anna Khandrueva &middot; Trauma Therapist</div>
       </div>
       <div class="faq-quote-card">
-        <p class="faq-quote-text">"This is the course I wish I'd had when I started microdosing a year ago."</p>
-        <div class="faq-quote-name">Richard Ventham &middot; Entrepreneur</div>
+        <p class="faq-quote-text">"I really enjoyed this microdosing course. It helped me learn how to combine microdosing with meditation to facilitate awareness, healing, and deeper focus. The course felt comprehensive and the community is great."</p>
+        <div class="faq-quote-name">Matthew C. &middot; Programmer</div>
       </div>
       <div class="faq-quote-card">
         <p class="faq-quote-text">"This course and community helped me slow down and notice how subtle my responses actually were. I stopped trying to 'get something' from microdosing and started listening."</p>
@@ -1773,9 +1798,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div id="stickyCta" class="sticky-cta">
     <div>
       <div class="sticky-cta-text">Ready to begin? <em>Microdosing Mindfully</em></div>
-      <div class="sticky-cta-note">14-day money-back guarantee</div>
+      <div class="sticky-cta-note">$149 USD &middot; 14-day money-back guarantee</div>
     </div>
-    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enroll Now &rarr;</a>
+    <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enrol Now &rarr;</a>
   </div>
 </div>
 
