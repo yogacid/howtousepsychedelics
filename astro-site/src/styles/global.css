@@ -1332,6 +1332,13 @@ nav {
   max-width: 480px;
 }
 
+.course-promo-price-note {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  margin-top: 0.6rem;
+}
+
 .course-promo-pills {
   display: flex;
   flex-direction: column;

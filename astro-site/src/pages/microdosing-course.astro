@@ -218,8 +218,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
     .hero-actions {
       display: flex; align-items: center; gap: 1rem;
-      flex-wrap: wrap; margin-bottom: 2.75rem;
+      flex-wrap: wrap; margin-bottom: 0.75rem;
       animation: fadeUp 0.7s ease 0.2s both;
+    }
+    .hero-price-note {
+      font-size: 0.78rem; color: var(--cream-dim); opacity: 0.55;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.7s ease 0.22s both;
     }
     .hero-trust {
       display: flex; align-items: center;
@@ -965,6 +970,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       animation: accentShimmer 4s ease-in-out infinite;
       box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
     }
+    .enroll-cta-price {
+      text-align: center; font-size: 0.78rem;
+      color: var(--text-muted); opacity: 0.7; margin: 8px 0 0;
+    }
     .enroll-cta-guarantee {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 14px 16px;
@@ -1118,6 +1127,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="btn-primary" target="_blank" rel="noopener">Enrol Now &rarr;</a>
       <a href="#curriculum" class="btn-outline">See Curriculum</a>
     </div>
+    <p class="hero-price-note">$99 USD &middot; 14-day money-back guarantee</p>
 
     <div class="hero-trust">
       <span class="trust-pill">Evidence-informed</span>
@@ -1538,6 +1548,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <li>Developed by an independent nonprofit</li>
     </ul>
     <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="enroll-cta-btn" target="_blank" rel="noopener">Enrol Now &rarr;</a>
+    <p class="enroll-cta-price">$99 USD</p>
     <div class="enroll-cta-guarantee">
       <span class="enroll-cta-guarantee-icon">&#10022;</span>
       <p>14-day money-back guarantee. If you're not satisfied, email us for a full refund — no questions asked.</p>
