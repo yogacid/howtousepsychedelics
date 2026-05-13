@@ -1274,7 +1274,6 @@ nav {
    ══════════════════════════════════════════════ */
 .feature-strip-section {
   background: var(--bg-surface);
-  border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
 
@@ -1431,7 +1430,6 @@ nav {
    ══════════════════════════════════════════════ */
 .support-banner {
   background: linear-gradient(135deg, rgba(64,217,204,0.12) 0%, rgba(109,212,86,0.08) 100%);
-  border-top: 1px solid rgba(64,217,204,0.2);
   border-bottom: 1px solid rgba(64,217,204,0.2);
   position: relative;
   overflow: hidden;
