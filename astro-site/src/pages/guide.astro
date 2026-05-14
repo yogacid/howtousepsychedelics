@@ -1,0 +1,324 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="The Psygaia Guide — Free Psychedelics Education"
+  description="A practical, evidence-informed guide to psychedelics — preparation, navigation, integration, and harm reduction. Free from Psygaia."
+  canonicalPath="/guide"
+  hideProgress={true}
+>
+
+<style is:global>
+  .guide-page {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--nav-h) + 4rem) 1.5rem 6rem;
+  }
+
+  .guide-inner {
+    width: 100%;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .guide-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  .guide-heading .grad-text {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .guide-body {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    max-width: 480px;
+  }
+
+  .guide-what {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .guide-what li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .guide-what li::before {
+    content: '';
+    flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 0.55em;
+  }
+
+  .guide-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border-hover);
+    margin-bottom: 2.5rem;
+  }
+
+  .guide-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .guide-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .guide-field label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .guide-field input {
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-hover);
+    border-radius: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .guide-field input::placeholder {
+    color: var(--text-tertiary, rgba(255,255,255,0.25));
+  }
+
+  [data-theme="light"] .guide-field input::placeholder {
+    color: rgba(0,0,0,0.25);
+  }
+
+  .guide-field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+  }
+
+  .guide-submit {
+    margin-top: 0.25rem;
+    width: 100%;
+    justify-content: center;
+    font-size: 0.88rem;
+  }
+
+  .guide-trust {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: -0.25rem;
+    margin-top: 1rem;
+  }
+
+  .guide-trust-item {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary, rgba(255,255,255,0.3));
+    margin: 0.25rem 0.6rem 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  [data-theme="light"] .guide-trust-item {
+    color: rgba(0,0,0,0.3);
+  }
+
+  .guide-trust-item:not(:last-child)::after {
+    content: '·';
+    margin-left: 0.6rem;
+    opacity: 0.4;
+  }
+
+  .guide-success {
+    display: none;
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+  }
+
+  .guide-success-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .guide-success h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-success p {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .guide-error {
+    display: none;
+    font-size: 0.82rem;
+    color: #f87171;
+    margin-top: 0.25rem;
+  }
+</style>
+
+<div class="guide-page">
+  <div class="guide-inner">
+
+    <div class="guide-label">Free Resource</div>
+
+    <h1 class="guide-heading">
+      The guide we wish<br>we had <span class="grad-text">at the start.</span>
+    </h1>
+
+    <p class="guide-body">
+      One place for everything that matters — before, during, and after a psychedelic experience. Written without agenda. Grounded in harm reduction and the Psygaia Framework.
+    </p>
+
+    <ul class="guide-what">
+      <li>How to prepare — set, setting, intention, and the practical details most people overlook</li>
+      <li>What to expect during an experience, and how to navigate difficulty</li>
+      <li>Integration: how to make meaning of what happened</li>
+      <li>Substances, risks, interactions, and harm reduction — the things worth knowing</li>
+    </ul>
+
+    <div class="guide-divider"></div>
+
+    <div class="guide-form-wrap">
+      <form class="guide-form" id="guide-form" novalidate>
+        <div class="guide-field">
+          <label for="guide-name">First name</label>
+          <input
+            type="text"
+            id="guide-name"
+            name="first_name"
+            placeholder="Your first name"
+            autocomplete="given-name"
+            required
+          />
+        </div>
+        <div class="guide-field">
+          <label for="guide-email">Email</label>
+          <input
+            type="email"
+            id="guide-email"
+            name="email"
+            placeholder="your@email.com"
+            autocomplete="email"
+            required
+          />
+          <span class="guide-error" id="guide-error">Please enter a valid email address.</span>
+        </div>
+        <button type="submit" class="btn btn-primary guide-submit">
+          Send me the guide →
+        </button>
+      </form>
+
+      <div class="guide-success" id="guide-success">
+        <div class="guide-success-icon">✦</div>
+        <h3>You're in.</h3>
+        <p>Check your inbox — the guide is on its way.<br>Welcome to the Psygaia community.</p>
+      </div>
+
+      <div class="guide-trust">
+        <span class="guide-trust-item">Free</span>
+        <span class="guide-trust-item">No spam</span>
+        <span class="guide-trust-item">Unsubscribe anytime</span>
+        <span class="guide-trust-item">Independent nonprofit</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var form = document.getElementById('guide-form');
+    var success = document.getElementById('guide-success');
+    var error = document.getElementById('guide-error');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      error.style.display = 'none';
+
+      var name = document.getElementById('guide-name').value.trim();
+      var email = document.getElementById('guide-email').value.trim();
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        error.style.display = 'block';
+        return;
+      }
+
+      var btn = form.querySelector('button[type="submit"]');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+
+      try {
+        // TODO: replace with Beehiiv API call
+        // var res = await fetch('...', { method: 'POST', body: JSON.stringify({ email, name }) });
+        await new Promise(function(r) { setTimeout(r, 800); }); // placeholder
+
+        form.style.display = 'none';
+        success.style.display = 'block';
+      } catch (err) {
+        btn.textContent = 'Send me the guide →';
+        btn.disabled = false;
+        error.textContent = 'Something went wrong. Please try again.';
+        error.style.display = 'block';
+      }
+    });
+  })();
+</script>
+
+</BaseLayout>
