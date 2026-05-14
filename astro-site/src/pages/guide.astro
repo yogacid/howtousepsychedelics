@@ -3,27 +3,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
-  title="The Psygaia Guide — Free Psychedelics Education"
-  description="A practical, evidence-informed guide to psychedelics — preparation, navigation, integration, and harm reduction. Free from Psygaia."
+  title="The Essential Guide to Psychedelic Journeying — Free from Psygaia"
+  description="An ecological and systems-based guide to intentional psychedelic exploration — preparation, navigation, integration, and the Psygaia Framework. Free."
   canonicalPath="/guide"
   hideProgress={true}
 >
 
 <style is:global>
   .guide-page {
-    min-height: 80vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
     padding: calc(var(--nav-h) + 4rem) 1.5rem 6rem;
   }
 
   .guide-inner {
     width: 100%;
-    max-width: 580px;
+    max-width: var(--max-w);
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 6rem;
+    align-items: center;
   }
 
+  /* ── LEFT COLUMN ── */
   .guide-label {
     font-size: 0.68rem;
     font-weight: 700;
@@ -35,12 +39,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .guide-heading {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
     font-weight: 300;
-    line-height: 1.08;
+    line-height: 1.1;
     letter-spacing: -0.02em;
     color: var(--text-primary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
   }
 
   .guide-heading .grad-text {
@@ -52,45 +56,74 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .guide-body {
     font-size: 1rem;
-    line-height: 1.75;
+    line-height: 1.8;
     color: var(--text-secondary);
     margin-bottom: 2.5rem;
-    max-width: 480px;
+    max-width: 540px;
+  }
+
+  .guide-what-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
   }
 
   .guide-what {
     list-style: none;
     padding: 0;
-    margin: 0 0 2.5rem;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.9rem;
   }
 
   .guide-what li {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    font-size: 0.92rem;
+    gap: 0.9rem;
+    font-size: 0.93rem;
     color: var(--text-secondary);
-    line-height: 1.5;
+    line-height: 1.55;
   }
 
-  .guide-what li::before {
-    content: '';
+  .guide-what li strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .guide-what-dot {
     flex-shrink: 0;
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--accent);
-    margin-top: 0.55em;
+    margin-top: 0.52em;
   }
 
-  .guide-divider {
-    width: 40px;
-    height: 1px;
-    background: var(--border-hover);
-    margin-bottom: 2.5rem;
+  /* ── RIGHT COLUMN ── */
+  .guide-form-col {
+    background: var(--bg-card);
+    border: 1px solid var(--border-hover);
+    border-radius: 20px;
+    padding: 2.5rem;
+  }
+
+  .guide-form-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+  }
+
+  .guide-form-sub {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
   }
 
   .guide-form {
@@ -116,7 +149,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .guide-field input {
     width: 100%;
     padding: 0.85rem 1.1rem;
-    background: var(--bg-card);
+    background: var(--bg);
     border: 1px solid var(--border-hover);
     border-radius: 10px;
     font-family: 'Jost', sans-serif;
@@ -151,20 +184,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    margin: -0.25rem;
-    margin-top: 1rem;
+    margin: 1.25rem -0.25rem 0;
   }
 
   .guide-trust-item {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-tertiary, rgba(255,255,255,0.3));
-    margin: 0.25rem 0.6rem 0.25rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    margin: 0.25rem 0.5rem 0.25rem 0;
   }
 
   [data-theme="light"] .guide-trust-item {
@@ -173,22 +202,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .guide-trust-item:not(:last-child)::after {
     content: '·';
-    margin-left: 0.6rem;
+    margin-left: 0.5rem;
     opacity: 0.4;
   }
 
   .guide-success {
     display: none;
     text-align: center;
-    padding: 2.5rem 1.5rem;
-    background: var(--accent-dim);
-    border: 1px solid var(--accent);
-    border-radius: 16px;
+    padding: 2rem 1rem;
   }
 
   .guide-success-icon {
     font-size: 2rem;
     margin-bottom: 1rem;
+    color: var(--accent);
   }
 
   .guide-success h3 {
@@ -211,71 +238,111 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: #f87171;
     margin-top: 0.25rem;
   }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .guide-inner {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .guide-form-col {
+      padding: 2rem 1.5rem;
+    }
+  }
 </style>
 
 <div class="guide-page">
   <div class="guide-inner">
 
-    <div class="guide-label">Free Resource</div>
+    <!-- LEFT: content -->
+    <div class="guide-left">
+      <div class="guide-label">Free from Psygaia</div>
 
-    <h1 class="guide-heading">
-      The guide we wish<br>we had <span class="grad-text">at the start.</span>
-    </h1>
+      <h1 class="guide-heading">
+        The Essential Guide to<br><span class="grad-text">Psychedelic Journeying</span>
+      </h1>
 
-    <p class="guide-body">
-      One place for everything that matters — before, during, and after a psychedelic experience. Written without agenda. Grounded in harm reduction and the Psygaia Framework.
-    </p>
+      <p class="guide-body">
+        An ecological and systems-based framework for intentional psychedelic exploration — from ancient Indigenous wisdom to modern neuroscience. Everything you need to know before, during, and after a journey.
+      </p>
 
-    <ul class="guide-what">
-      <li>How to prepare — set, setting, intention, and the practical details most people overlook</li>
-      <li>What to expect during an experience, and how to navigate difficulty</li>
-      <li>Integration: how to make meaning of what happened</li>
-      <li>Substances, risks, interactions, and harm reduction — the things worth knowing</li>
-    </ul>
+      <div class="guide-what-title">What's inside</div>
+      <ul class="guide-what">
+        <li>
+          <span class="guide-what-dot"></span>
+          <span><strong>The Psygaia Framework</strong> — an emerging theory of cognitive symbiosis, ecological attunement, and why psychedelics consistently produce a felt sense of connection with the living world</span>
+        </li>
+        <li>
+          <span class="guide-what-dot"></span>
+          <span><strong>Substance profiles</strong> — psilocybin, LSD, DMT, ketamine, San Pedro, Peyote, and more: their unique qualities, histories, and what to expect</span>
+        </li>
+        <li>
+          <span class="guide-what-dot"></span>
+          <span><strong>Preparation</strong> — assessing emotional readiness, setting intention, choosing your environment, and the details most people overlook</span>
+        </li>
+        <li>
+          <span class="guide-what-dot"></span>
+          <span><strong>Navigation</strong> — how to stay grounded during a journey, work with breathwork, release the need for control, and trust the process</span>
+        </li>
+        <li>
+          <span class="guide-what-dot"></span>
+          <span><strong>Integration</strong> — journaling, mindfulness, nature immersion, and community practices for carrying insights into everyday life</span>
+        </li>
+        <li>
+          <span class="guide-what-dot"></span>
+          <span><strong>Reciprocity and stewardship</strong> — why individual healing and planetary health are inseparable, and how to give back</span>
+        </li>
+      </ul>
+    </div>
 
-    <div class="guide-divider"></div>
+    <!-- RIGHT: form -->
+    <div class="guide-form-col">
+      <div class="guide-form-heading">Get the guide — free</div>
+      <p class="guide-form-sub">Enter your name and email and we'll send it straight to your inbox.</p>
 
-    <div class="guide-form-wrap">
-      <form class="guide-form" id="guide-form" novalidate>
-        <div class="guide-field">
-          <label for="guide-name">First name</label>
-          <input
-            type="text"
-            id="guide-name"
-            name="first_name"
-            placeholder="Your first name"
-            autocomplete="given-name"
-            required
-          />
+      <div id="guide-form-wrap">
+        <form class="guide-form" id="guide-form" novalidate>
+          <div class="guide-field">
+            <label for="guide-name">First name</label>
+            <input
+              type="text"
+              id="guide-name"
+              name="first_name"
+              placeholder="Your first name"
+              autocomplete="given-name"
+              required
+            />
+          </div>
+          <div class="guide-field">
+            <label for="guide-email">Email</label>
+            <input
+              type="email"
+              id="guide-email"
+              name="email"
+              placeholder="your@email.com"
+              autocomplete="email"
+              required
+            />
+            <span class="guide-error" id="guide-error">Please enter a valid email address.</span>
+          </div>
+          <button type="submit" class="btn btn-primary guide-submit">
+            Send me the guide →
+          </button>
+        </form>
+
+        <div class="guide-success" id="guide-success">
+          <div class="guide-success-icon">✦</div>
+          <h3>You're in.</h3>
+          <p>Check your inbox — the guide is on its way.<br>Welcome to the Psygaia community.</p>
         </div>
-        <div class="guide-field">
-          <label for="guide-email">Email</label>
-          <input
-            type="email"
-            id="guide-email"
-            name="email"
-            placeholder="your@email.com"
-            autocomplete="email"
-            required
-          />
-          <span class="guide-error" id="guide-error">Please enter a valid email address.</span>
+
+        <div class="guide-trust">
+          <span class="guide-trust-item">Free</span>
+          <span class="guide-trust-item">No spam</span>
+          <span class="guide-trust-item">Unsubscribe anytime</span>
+          <span class="guide-trust-item">Nonprofit</span>
         </div>
-        <button type="submit" class="btn btn-primary guide-submit">
-          Send me the guide →
-        </button>
-      </form>
-
-      <div class="guide-success" id="guide-success">
-        <div class="guide-success-icon">✦</div>
-        <h3>You're in.</h3>
-        <p>Check your inbox — the guide is on its way.<br>Welcome to the Psygaia community.</p>
-      </div>
-
-      <div class="guide-trust">
-        <span class="guide-trust-item">Free</span>
-        <span class="guide-trust-item">No spam</span>
-        <span class="guide-trust-item">Unsubscribe anytime</span>
-        <span class="guide-trust-item">Independent nonprofit</span>
       </div>
     </div>
 
@@ -286,17 +353,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   (function () {
     var form = document.getElementById('guide-form');
     var success = document.getElementById('guide-success');
-    var error = document.getElementById('guide-error');
+    var errorEl = document.getElementById('guide-error');
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      error.style.display = 'none';
+      errorEl.style.display = 'none';
 
       var name = document.getElementById('guide-name').value.trim();
       var email = document.getElementById('guide-email').value.trim();
 
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        error.style.display = 'block';
+        errorEl.style.display = 'block';
         return;
       }
 
@@ -306,7 +373,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       try {
         // TODO: replace with Beehiiv API call
-        // var res = await fetch('...', { method: 'POST', body: JSON.stringify({ email, name }) });
+        // var res = await fetch('...', { method: 'POST', body: JSON.stringify({ email, first_name: name }) });
         await new Promise(function(r) { setTimeout(r, 800); }); // placeholder
 
         form.style.display = 'none';
@@ -314,8 +381,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       } catch (err) {
         btn.textContent = 'Send me the guide →';
         btn.disabled = false;
-        error.textContent = 'Something went wrong. Please try again.';
-        error.style.display = 'block';
+        errorEl.textContent = 'Something went wrong. Please try again.';
+        errorEl.style.display = 'block';
       }
     });
   })();
