@@ -487,6 +487,15 @@ nav {
   background: var(--accent-dim);
 }
 
+.search-result-page {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.1rem;
+}
+
 .search-result-title {
   font-family: 'Jost', sans-serif;
   font-size: 0.9rem;
@@ -498,6 +507,14 @@ nav {
   font-size: 0.78rem;
   color: var(--text-muted);
   margin-top: 0.15rem;
+  line-height: 1.45;
+}
+
+.search-result-desc mark {
+  background: var(--accent-dim);
+  color: var(--text-primary);
+  border-radius: 2px;
+  padding: 0.05em 0.15em;
 }
 
 .search-hint {

@@ -142,41 +142,91 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
     }, { passive: true });
 
     // ── Search ──
-    const searchPages = [
-      { title: 'Foundations', desc: 'Culture, law, science, and nature — the context you need.', url: '/foundations' },
-      { title: 'Culture', desc: 'The cultural history of psychedelic use across civilisations.', url: '/culture' },
-      { title: 'Law', desc: 'Legal status of psychedelics by jurisdiction.', url: '/law' },
-      { title: 'Science', desc: 'The neuroscience and pharmacology of psychedelics.', url: '/science' },
-      { title: 'Nature', desc: 'Ecology, fungi, and the natural world of psychedelics.', url: '/nature' },
-      { title: 'Psilocybin', desc: 'Magic mushrooms — effects, dosage, risks, and research.', url: '/psilocybin' },
-      { title: 'Ayahuasca', desc: 'The Amazonian brew — DMT, MAOIs, ceremony, and safety.', url: '/ayahuasca' },
-      { title: 'DMT (N,N-DMT)', desc: 'The spirit molecule — vaporised, injected, or in ayahuasca.', url: '/dmt' },
-      { title: '5-MeO-DMT', desc: 'The toad molecule — effects, risks, and sourcing ethics.', url: '/fivemedmt' },
-      { title: 'Mescaline', desc: 'Peyote and San Pedro — traditional use and pharmacology.', url: '/mescaline' },
-      { title: 'LSD', desc: 'Lysergic acid diethylamide — history, effects, and harm reduction.', url: '/lsd' },
-      { title: 'Ibogaine', desc: 'Addiction interruption, cardiac risks, and clinical use.', url: '/ibogaine' },
-      { title: 'Ketamine', desc: 'Dissociative therapy — clinical and personal use.', url: '/ketamine' },
-      { title: 'MDMA', desc: 'Empathogen — therapeutic use, neurotoxicity, and safety.', url: '/mdma' },
-      { title: 'Cannabis', desc: 'Psychedelic properties at high doses — risks and interactions.', url: '/cannabis' },
-      { title: '2C-B', desc: 'Phenethylamine — effects, dosing, and harm reduction.', url: '/twocb' },
-      { title: 'Salvia', desc: 'Salvinorin A — unique mechanism, intense effects, and caution.', url: '/salvia' },
-      { title: 'Microdosing', desc: 'Sub-perceptual dosing — protocols, evidence, and risks.', url: '/microdosing' },
-      { title: 'Microdosing Course', desc: 'Structured course on mindful microdosing practice.', url: '/microdosing-course' },
-      { title: 'Assessment', desc: 'Readiness screening and honest self-assessment.', url: '/assessment' },
-      { title: 'Preparation', desc: 'Set and setting — how to prepare for a journey.', url: '/preparation' },
-      { title: 'Navigation', desc: 'Tools for working with difficult experiences.', url: '/navigation' },
-      { title: 'Integration', desc: 'Making meaning and translating insight into change.', url: '/integration' },
-      { title: 'Facilitation', desc: 'Ethics and guidance for those supporting others.', url: '/facilitation' },
-      { title: 'Journey Planner', desc: 'Personalised preparation and integration planning tool.', url: '/planner' },
-      { title: 'Readiness Assessment', desc: 'Ten-question self-assessment for journey readiness.', url: '/readiness' },
-      { title: 'Interaction Checker', desc: 'Drug interaction chart for psychedelics.', url: '/checker' },
-      { title: 'Journeying', desc: 'The complete guide to psychedelic journeying.', url: '/journeying' },
-      { title: 'Substances', desc: 'Comprehensive guides to all major psychedelic substances.', url: '/substances' },
-    ];
+    var searchIndex = null;
+    var searchDebounce = null;
+
+    function loadSearchIndex() {
+      if (searchIndex) return Promise.resolve(searchIndex);
+      return fetch('/search-index.json')
+        .then(function(r) { return r.json(); })
+        .then(function(data) { searchIndex = data; return data; });
+    }
+
+    function scoreResult(entry, q) {
+      var s = 0;
+      var title = (entry.section || entry.page).toLowerCase();
+      var page = entry.page.toLowerCase();
+      var text = entry.text.toLowerCase();
+      if (title === q) s += 100;
+      else if (title.startsWith(q)) s += 60;
+      else if (title.includes(q)) s += 40;
+      if (!entry.section && page.includes(q)) s += 20;
+      if (text.includes(q)) s += 10;
+      var wordBoundary = new RegExp('\\b' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      if (wordBoundary.test(title)) s += 15;
+      if (wordBoundary.test(text)) s += 5;
+      return s;
+    }
+
+    function getSnippet(text, q) {
+      var lower = text.toLowerCase();
+      var pos = lower.indexOf(q);
+      if (pos === -1) return text.slice(0, 120) + '…';
+      var start = Math.max(0, pos - 50);
+      var end = Math.min(text.length, pos + q.length + 70);
+      var snippet = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+      var escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return snippet.replace(new RegExp('(' + escaped + ')', 'gi'), '<mark>$1</mark>');
+    }
+
+    function runSearch(q) {
+      var container = document.getElementById('searchResults');
+      if (!q) {
+        container.innerHTML = '<div class="search-hint">Type to search across all pages</div>';
+        return;
+      }
+      if (!searchIndex) {
+        container.innerHTML = '<div class="search-hint">Loading…</div>';
+        return;
+      }
+      var scored = [];
+      for (var i = 0; i < searchIndex.length; i++) {
+        var entry = searchIndex[i];
+        var s = scoreResult(entry, q);
+        if (s > 0) scored.push({ entry: entry, score: s });
+      }
+      scored.sort(function(a, b) { return b.score - a.score; });
+      var seen = {};
+      var results = [];
+      for (var j = 0; j < scored.length && results.length < 12; j++) {
+        var e = scored[j].entry;
+        var key = e.url + e.hash;
+        if (seen[key]) continue;
+        seen[key] = true;
+        results.push(e);
+      }
+      if (!results.length) {
+        container.innerHTML = '<div class="search-no-results">No results found</div>';
+        return;
+      }
+      container.innerHTML = results.map(function(r) {
+        var title = r.section ? r.section : r.page;
+        var breadcrumb = r.section ? '<div class="search-result-page">' + r.page + '</div>' : '';
+        var snippet = getSnippet(r.text, q);
+        return '<a class="search-result" href="' + r.url + r.hash + '">'
+          + breadcrumb
+          + '<div class="search-result-title">' + title + '</div>'
+          + '<div class="search-result-desc">' + snippet + '</div></a>';
+      }).join('');
+    }
 
     function openSearch() {
+      loadSearchIndex().then(function() {
+        var q = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (q) runSearch(q);
+      });
       document.getElementById('searchOverlay').classList.add('open');
-      setTimeout(() => document.getElementById('searchInput').focus(), 100);
+      setTimeout(function() { document.getElementById('searchInput').focus(); }, 100);
       document.body.style.overflow = 'hidden';
     }
 
@@ -187,32 +237,24 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
       document.body.style.overflow = '';
     }
 
-    // Search overlay close on backdrop click
     document.getElementById('searchOverlay').addEventListener('click', function(e) {
       if (e.target === this) closeSearch();
     });
 
-    // Search close button
     document.getElementById('searchCloseBtn').addEventListener('click', closeSearch);
 
-    // Search open button
     document.querySelector('.search-open-btn').addEventListener('click', openSearch);
 
     document.getElementById('searchInput').addEventListener('input', function(e) {
-      const q = e.target.value.toLowerCase().trim();
-      const container = document.getElementById('searchResults');
-      if (!q) {
-        container.innerHTML = '<div class="search-hint">Type to search across all pages</div>';
-        return;
-      }
-      const results = searchPages.filter(p => p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
-      if (!results.length) {
-        container.innerHTML = '<div class="search-no-results">No results found</div>';
-        return;
-      }
-      container.innerHTML = results.map(r =>
-        '<a class="search-result" href="' + r.url + '"><div class="search-result-title">' + r.title + '</div><div class="search-result-desc">' + r.desc + '</div></a>'
-      ).join('');
+      var q = e.target.value.toLowerCase().trim();
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(function() {
+        if (!searchIndex) {
+          loadSearchIndex().then(function() { runSearch(q); });
+        } else {
+          runSearch(q);
+        }
+      }, 80);
     });
 
     document.addEventListener('keydown', function(e) {
