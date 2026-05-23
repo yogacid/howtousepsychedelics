@@ -1,7 +1,7 @@
 [build]
   base = "astro-site"
   command = "npm run build"
-  publish = "astro-site/dist"
+  publish = "dist"
 
 # Force www → non-www (permanent)
 [[redirects]]
