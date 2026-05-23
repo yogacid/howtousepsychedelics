@@ -7,6 +7,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   output: 'static',
   site: 'https://howtousepsychedelics.com',
+  trailingSlash: 'always',
   adapter: netlify(),
   integrations: [sitemap()],
   build: {

@@ -21,8 +21,9 @@ const {
   hideProgress = false,
 } = Astro.props;
 
-const baseUrl = 'https://www.howtousepsychedelics.com';
-const canonicalUrl = `${baseUrl}${canonicalPath}`;
+const baseUrl = 'https://howtousepsychedelics.com';
+const trailedPath = canonicalPath.endsWith('/') ? canonicalPath : canonicalPath + '/';
+const canonicalUrl = `${baseUrl}${trailedPath}`;
 const ogImageUrl = `${baseUrl}${ogImage}`;
 ---
 
