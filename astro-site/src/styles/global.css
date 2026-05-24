@@ -3890,3 +3890,297 @@ footer {
   .jp-intro-headline { font-size: 24px; }
   .jp-intro-prereqs { flex-direction: column; align-items: flex-start; }
 }
+
+/* ══════════════════════════════════════════════
+   BLOG
+   ══════════════════════════════════════════════ */
+
+.blog-listing {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+/* ── Featured Post ── */
+.blog-featured {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  margin-bottom: 3rem;
+}
+
+.blog-featured:hover {
+  border-color: var(--border-hover);
+  border-top-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+
+[data-theme="light"] .blog-featured:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+}
+
+.blog-featured-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.blog-featured-desc {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0.25rem 0 0.5rem;
+  max-width: 700px;
+}
+
+.blog-featured-link {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--accent);
+  margin-top: 0.5rem;
+}
+
+/* ── Category Pills ── */
+.blog-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.blog-pill {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.45rem 1.1rem;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.blog-pill:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.blog-pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+[data-theme="light"] .blog-pill.active {
+  color: #fff;
+}
+
+/* ── Post Card Grid ── */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.blog-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.75rem 1.5rem;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.blog-card:hover {
+  border-color: var(--border-hover);
+  border-top-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+
+[data-theme="light"] .blog-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+}
+
+.blog-card-category {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.blog-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.blog-card-desc {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0.15rem 0 0;
+}
+
+.blog-card-meta {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.blog-meta-sep {
+  opacity: 0.4;
+}
+
+/* ── Blog Post Hero Meta ── */
+.blog-post-meta-hero {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.blog-post-meta-hero .blog-card-category {
+  font-size: 0.7rem;
+}
+
+/* ── Blog Post TOC sub-items ── */
+.sidebar-nav a.toc-sub {
+  padding-left: 2rem;
+  font-size: 0.78rem;
+}
+
+/* ── Related Posts ── */
+.blog-related {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border);
+}
+
+.blog-related h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.blog-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.blog-related-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.5rem;
+  transition: border-color 0.2s, transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.blog-related-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.blog-related-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.blog-related-card p {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.blog-related-card .blog-card-meta {
+  margin-top: 0.5rem;
+}
+
+/* ── Blog Empty State ── */
+.blog-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.blog-empty p {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* ── Blog Responsive ── */
+@media (max-width: 900px) {
+  .blog-featured {
+    padding: 1.75rem;
+  }
+  .blog-featured-title {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .blog-listing {
+    padding: 2rem 1rem 4rem;
+  }
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+  .blog-card {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  .blog-pills {
+    gap: 0.4rem;
+  }
+  .blog-pill {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.85rem;
+  }
+}

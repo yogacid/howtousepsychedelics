@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const related = allPosts
+  .filter(p => p.id !== post.id && p.data.category === post.data.category)
+  .slice(0, 3);
+
+function readTime(body: string) {
+  const words = body.trim().split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 250));
+}
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+const tocHeadings = headings.filter(h => h.depth <= 3);
+---
+
+<BaseLayout
+  title={`${post.data.title} — How to Use Psychedelics`}
+  description={post.data.description}
+  canonicalPath={`/blog/${post.id}/`}
+  ogImage={post.data.image || '/og-image.png'}
+>
+
+  <div class="content-page">
+
+    <!-- Hero -->
+    <div class="content-hero">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/blog/">Blog</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>{post.data.title}</span>
+      </div>
+      <div class="blog-post-meta-hero">
+        <span class="blog-card-category">{post.data.category}</span>
+        <span class="blog-meta-sep">&middot;</span>
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time>
+        <span class="blog-meta-sep">&middot;</span>
+        <span>{post.data.author}</span>
+        <span class="blog-meta-sep">&middot;</span>
+        <span>{readTime(post.body ?? '')} min read</span>
+      </div>
+      <h1 class="content-hero-title">{post.data.title}</h1>
+      <p class="content-hero-subtitle">{post.data.description}</p>
+    </div>
+
+    <!-- Article Layout -->
+    <div class="article-layout">
+
+      <!-- Sidebar TOC -->
+      <aside class="article-sidebar">
+        <div class="sidebar-nav-label">Contents</div>
+        <ul class="sidebar-nav">
+          {tocHeadings.map(h => (
+            <li>
+              <a href={`#${h.slug}`} class={h.depth === 3 ? 'toc-sub' : ''}>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+
+      <!-- Article Body -->
+      <div class="article-body">
+        <Content />
+
+        <!-- Related Posts -->
+        {related.length > 0 && (
+          <div class="blog-related">
+            <h2>Related posts</h2>
+            <div class="blog-related-grid">
+              {related.map(r => (
+                <a class="blog-related-card" href={`/blog/${r.id}/`}>
+                  <span class="blog-card-category">{r.data.category}</span>
+                  <h3>{r.data.title}</h3>
+                  <p>{r.data.description}</p>
+                  <div class="blog-card-meta">
+                    <time datetime={r.data.date.toISOString().slice(0, 10)}>{formatDate(r.data.date)}</time>
+                    <span class="blog-meta-sep">&middot;</span>
+                    <span>{readTime(r.body ?? '')} min read</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>

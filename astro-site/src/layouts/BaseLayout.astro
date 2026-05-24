@@ -60,6 +60,20 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
     (function(){var t=localStorage.getItem('htup-theme');var theme=t?t:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',theme);})()
   </script>
 
+  <!-- Netlify Identity (for Decap CMS) -->
+  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script is:inline>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", function(user) {
+        if (!user) {
+          window.netlifyIdentity.on("login", function() {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
+
   <slot name="head" />
 </head>
 <body>

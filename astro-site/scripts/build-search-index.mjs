@@ -1,7 +1,9 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { existsSync } from 'node:fs';
 
 const PAGES_DIR = join(import.meta.dirname, '..', 'src', 'pages');
+const BLOG_DIR = join(import.meta.dirname, '..', 'src', 'content', 'blog');
 const OUT_FILE = join(import.meta.dirname, '..', 'public', 'search-index.json');
 
 const SKIP = new Set(['404.astro']);
@@ -127,8 +129,76 @@ async function buildIndex() {
     }
   }
 
+  // ── Index blog posts ──
+  let blogCount = 0;
+  if (existsSync(BLOG_DIR)) {
+    const blogFiles = (await readdir(BLOG_DIR)).filter((f) => f.endsWith('.md'));
+    for (const file of blogFiles) {
+      const src = await readFile(join(BLOG_DIR, file), 'utf-8');
+
+      // Parse frontmatter
+      const fmEnd = extractFrontmatterEnd(src);
+      const fmBlock = src.slice(3, fmEnd - 3).trim();
+      let title = '', description = '', draft = false;
+      for (const line of fmBlock.split('\n')) {
+        const [key, ...rest] = line.split(':');
+        const val = rest.join(':').trim().replace(/^["']|["']$/g, '');
+        if (key.trim() === 'title') title = val;
+        if (key.trim() === 'description') description = val;
+        if (key.trim() === 'draft' && val === 'true') draft = true;
+      }
+      if (draft || !title) continue;
+
+      const body = src.slice(fmEnd).trim();
+      const slug = file.replace('.md', '');
+      const url = '/blog/' + slug;
+
+      // Page-level entry
+      index.push({
+        page: title,
+        url,
+        section: null,
+        hash: '',
+        text: description.slice(0, 400),
+      });
+
+      // Extract markdown h2 sections
+      const h2Re = /^## (.+)$/gm;
+      let h2Match;
+      const h2Positions = [];
+      while ((h2Match = h2Re.exec(body)) !== null) {
+        h2Positions.push({
+          title: h2Match[1].trim(),
+          start: h2Match.index + h2Match[0].length,
+        });
+      }
+      for (let i = 0; i < h2Positions.length; i++) {
+        const start = h2Positions[i].start;
+        const end = i + 1 < h2Positions.length ? h2Positions[i + 1].start : body.length;
+        const sectionText = body.slice(start, end)
+          .replace(/^###? .+$/gm, '')
+          .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+          .replace(/[*_`~]/g, '')
+          .replace(/\n+/g, ' ')
+          .trim();
+        const sectionId = h2Positions[i].title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '');
+        index.push({
+          page: title,
+          url,
+          section: h2Positions[i].title,
+          hash: '#' + sectionId,
+          text: sectionText.slice(0, 400),
+        });
+      }
+      blogCount++;
+    }
+  }
+
   await writeFile(OUT_FILE, JSON.stringify(index));
-  console.log(`Search index: ${index.length} entries from ${files.length} pages → public/search-index.json`);
+  console.log(`Search index: ${index.length} entries from ${files.length} pages + ${blogCount} blog posts → public/search-index.json`);
 }
 
 buildIndex();
