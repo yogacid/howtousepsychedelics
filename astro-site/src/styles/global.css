@@ -2029,6 +2029,7 @@ footer {
   font-style: italic;
   border-left: 2px solid var(--accent);
   padding-left: 1.25rem;
+  max-width: 720px;
 }
 
 .content-hero-updated {
@@ -2057,7 +2058,7 @@ footer {
 }
 
 .content-hero > * {
-  max-width: 760px;
+  max-width: var(--max-w);
   margin-left: auto;
   margin-right: auto;
 }
