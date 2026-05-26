@@ -8,7 +8,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   canonicalPath="/planner"
   hideProgress={true}
 >
-  <script slot="head" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js" defer is:inline></script>
+  <script slot="head" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer is:inline></script>
 
   <style>
     .jp-pdf-section {
@@ -741,7 +741,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
         doc.text('This plan is for personal reference only. It does not constitute medical or clinical advice.', pageW / 2, pageH - 14, { align: 'center' });
-        doc.text('howtousepsychedelics.com • Psygaia', pageW / 2, pageH - 10, { align: 'center' });
+        doc.text('howtousepsychedelics.com  |  Psygaia', pageW / 2, pageH - 10, { align: 'center' });
         doc.text('Page ' + pageNum, pageW - mr, pageH - 10, { align: 'right' });
       }
 
@@ -809,7 +809,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       function checklist(items) {
         for (var i = 0; i < items.length; i++) {
           checkBreak(6);
-          var marker = items[i].checked ? '✓' : '☐';
+          var marker = items[i].checked ? '[x]' : '[ ]';
           doc.setFontSize(10);
           doc.setFont('helvetica', 'normal');
           if (items[i].checked) {
@@ -886,7 +886,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
       var now = new Date();
       var dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-      doc.text('Generated ' + dateStr + '  •  howtousepsychedelics.com  •  Psygaia', ml, y);
+      doc.text('Generated ' + dateStr + '  |  howtousepsychedelics.com  |  Psygaia', ml, y);
       y += 10;
 
       drawLine(y, cLight);
@@ -902,7 +902,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       } else {
         doc.setTextColor(cAmber[0], cAmber[1], cAmber[2]);
       }
-      doc.text(tier + ' — ' + pct + '% complete', ml, y);
+      doc.text(tier + ' - ' + pct + '% complete', ml, y);
       y += 10;
 
       // Warnings
@@ -916,7 +916,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           doc.setFontSize(9);
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(cAmber[0], cAmber[1], cAmber[2]);
-          var wLines = doc.splitTextToSize('• ' + warnings[w], cw);
+          var wLines = doc.splitTextToSize('- ' + warnings[w], cw);
           for (var wl = 0; wl < wLines.length; wl++) {
             checkBreak(4);
             doc.text(wLines[wl], ml, y);
