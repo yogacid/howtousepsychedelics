@@ -410,7 +410,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="jp-card-label">Your Journey Preparation Plan</div>
         <div id="jp-output"></div>
         <div class="jp-output-actions">
-          <button class="jp-btn-copy" id="jp-copy">Copy to Clipboard</button>
           <button class="jp-btn-back" id="jp-edit-back">&larr; Edit Plan</button>
         </div>
 
@@ -655,19 +654,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       document.getElementById('jp-output').innerHTML = html;
       showPanel(5);
-    });
-
-    // Copy
-    document.getElementById('jp-copy').addEventListener('click', function() {
-      var el = document.getElementById('jp-output');
-      var text = el.innerText || el.textContent;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(function() {
-          var btn = document.getElementById('jp-copy');
-          btn.textContent = 'Copied!';
-          setTimeout(function() { btn.textContent = 'Copy to Clipboard'; }, 2000);
-        });
-      }
     });
 
     document.getElementById('jp-edit-back').addEventListener('click', function() { showPanel(4); });
