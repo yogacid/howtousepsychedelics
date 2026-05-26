@@ -873,14 +873,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       // ── Build PDF ──────────────────────────────────────────
 
       // Psygaia logo (top-left)
-      var logoW = 38; // mm
+      var logoW = 32.3; // mm (38 * 0.85)
       var logoH = logoW * (200 / 800); // maintain 4:1 aspect ratio
       try {
         if (psygaiaLogo.complete && psygaiaLogo.naturalWidth > 0) {
           doc.addImage(psygaiaLogo, 'PNG', ml, y, logoW, logoH);
         }
       } catch(e) { /* logo failed to load — continue without it */ }
-      y += logoH + 6;
+      y += logoH + 12;
 
       // Title
       doc.setFontSize(22);
