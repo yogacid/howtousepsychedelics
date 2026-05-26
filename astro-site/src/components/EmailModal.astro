@@ -1,0 +1,359 @@
+---
+// Center-screen email signup modal
+// Triggered by "Get the Guide" buttons across the site
+---
+
+<div id="emailModal" class="email-modal" aria-hidden="true">
+  <div class="email-modal-backdrop"></div>
+  <div class="email-modal-card">
+    <button class="email-modal-close" id="emailModalClose" aria-label="Close">&times;</button>
+
+    <!-- Form state -->
+    <div id="emailModalForm">
+      <span class="email-modal-eyebrow">Free Resource</span>
+      <h3 class="email-modal-title">Discover the Psygaia Framework</h3>
+      <p class="email-modal-body">A research and systems-based approach to psychedelics for safe and grounded experiences — developed at the University of Ottawa.</p>
+
+      <form id="emailModalFormEl" autocomplete="on">
+        <input
+          type="text"
+          name="first_name"
+          placeholder="First name (optional)"
+          class="email-modal-input"
+          autocomplete="given-name"
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your email"
+          class="email-modal-input"
+          required
+          autocomplete="email"
+        />
+        <!-- Honeypot -->
+        <input type="text" name="_hp" class="email-modal-hp" tabindex="-1" autocomplete="off" />
+        <button type="submit" class="email-modal-btn" id="emailModalBtn">
+          <span id="emailModalBtnText">Get the Guide</span>
+        </button>
+      </form>
+      <p class="email-modal-disclaimer">No spam. Unsubscribe anytime.</p>
+      <p id="emailModalError" class="email-modal-error" style="display:none;"></p>
+    </div>
+
+    <!-- Success state -->
+    <div id="emailModalSuccess" class="email-modal-success" style="display:none;">
+      <span class="email-modal-success-icon">&#10003;</span>
+      <h3 class="email-modal-title">You're in.</h3>
+      <p class="email-modal-body">Check your inbox for the guide. Welcome to the community.</p>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* ── EMAIL MODAL (center) ─────────────────────────────────── */
+  .email-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .email-modal.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .email-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  [data-theme="light"] .email-modal-backdrop {
+    background: rgba(0,0,0,0.35);
+  }
+  .email-modal-card {
+    position: relative;
+    width: 400px;
+    max-width: calc(100vw - 48px);
+    padding: 36px 32px 28px;
+    border-radius: 16px;
+    border: none;
+    transform: translateY(12px);
+    transition: transform 0.3s ease;
+    /* Gradient border */
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-image:
+      linear-gradient(var(--bg-card, #1a1a1a), var(--bg-card, #1a1a1a)),
+      linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+    border: 1.5px solid transparent;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .email-modal.open .email-modal-card {
+    transform: translateY(0);
+  }
+  [data-theme="light"] .email-modal-card {
+    background-image:
+      linear-gradient(var(--bg-card, #ffffff), var(--bg-card, #ffffff)),
+      linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  }
+  .email-modal-close {
+    position: absolute;
+    top: 14px; right: 16px;
+    background: none; border: none; cursor: pointer;
+    font-size: 1.4rem; color: var(--text-muted, #787878);
+    line-height: 1; padding: 4px;
+    transition: color 0.15s;
+  }
+  .email-modal-close:hover { color: var(--text-primary, #f5f5f5); }
+  .email-modal-eyebrow {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal, #40d9cc);
+    margin-bottom: 0.75rem;
+  }
+  .email-modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-primary, #f5f5f5);
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+  [data-theme="light"] .email-modal-title {
+    color: #1a1a1a;
+  }
+  .email-modal-body {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--text-secondary, #b0b0b0);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  [data-theme="light"] .email-modal-body {
+    color: #555555;
+  }
+  .email-modal-input {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 400;
+    color: var(--text-primary, #f5f5f5);
+    background: var(--bg-surface, #141414);
+    border: 1px solid var(--border, rgba(255,255,255,0.08));
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  .email-modal-input::placeholder {
+    color: var(--text-muted, #787878);
+    opacity: 0.8;
+  }
+  .email-modal-input:focus {
+    border-color: var(--teal, #40d9cc);
+  }
+  [data-theme="light"] .email-modal-input {
+    color: #1a1a1a;
+    background: var(--bg-surface, #f2efe8);
+  }
+  /* Honeypot */
+  .email-modal-hp {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .email-modal-btn {
+    display: block;
+    width: 100%;
+    padding: 13px 16px;
+    margin-top: 6px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+    background-size: 300% 100%;
+    background-position: 0% center;
+    color: #040a05;
+    transition: background-position 0.55s ease, box-shadow 0.25s ease, opacity 0.2s;
+  }
+  .email-modal-btn:hover {
+    animation: accentShimmer 4s ease-in-out infinite;
+    box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+  }
+  @keyframes accentShimmer {
+    0%   { background-position: 0% center; }
+    50%  { background-position: 100% center; }
+    100% { background-position: 0% center; }
+  }
+  .email-modal-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    animation: none;
+  }
+  .email-modal-disclaimer {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    color: var(--text-muted, #787878);
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+  .email-modal-error {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.8rem;
+    color: #d45252;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  /* Success state */
+  .email-modal-success {
+    text-align: center;
+    padding: 16px 0;
+  }
+  .email-modal-success-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgba(64,217,204,0.12);
+    border: 1px solid rgba(64,217,204,0.25);
+    color: var(--teal, #40d9cc);
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+  .email-modal-success .email-modal-title {
+    margin-bottom: 0.6rem;
+  }
+  .email-modal-success .email-modal-body {
+    margin-bottom: 0;
+  }
+</style>
+
+<script is:inline>
+(function() {
+  var modal = document.getElementById('emailModal');
+  var backdrop = modal.querySelector('.email-modal-backdrop');
+  var closeBtn = document.getElementById('emailModalClose');
+  var form = document.getElementById('emailModalFormEl');
+  var btn = document.getElementById('emailModalBtn');
+  var btnText = document.getElementById('emailModalBtnText');
+  var errorEl = document.getElementById('emailModalError');
+  var formWrap = document.getElementById('emailModalForm');
+  var successWrap = document.getElementById('emailModalSuccess');
+
+  if (!modal) return;
+
+  // Open modal
+  window.openGuideModal = function() {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() {
+      form.querySelector('input[name="email"]').focus();
+    }, 150);
+  };
+
+  // Close modal
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) {
+      closeModal();
+    }
+  });
+
+  // Intercept all "Get the Guide" links
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('a[href="https://psygaia.org/#newsletter"]');
+    if (link) {
+      e.preventDefault();
+      // Reset form state if previously completed
+      formWrap.style.display = '';
+      successWrap.style.display = 'none';
+      errorEl.style.display = 'none';
+      btn.disabled = false;
+      btnText.textContent = 'Get the Guide';
+      form.reset();
+      openGuideModal();
+    }
+  });
+
+  // Form submission
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    errorEl.style.display = 'none';
+
+    var email = form.email.value.trim();
+    var firstName = form.first_name.value.trim();
+    var hp = form._hp.value;
+
+    if (!email) {
+      errorEl.textContent = 'Please enter your email.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btnText.textContent = 'Sending...';
+
+    fetch('/.netlify/functions/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, first_name: firstName, _hp: hp, source: 'htup-guide-btn' }),
+    })
+    .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+    .then(function(result) {
+      if (result.ok && result.data.success) {
+        formWrap.style.display = 'none';
+        successWrap.style.display = 'block';
+        // Auto-close after 3 seconds
+        setTimeout(closeModal, 3000);
+      } else {
+        errorEl.textContent = result.data.error || 'Something went wrong. Please try again.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btnText.textContent = 'Get the Guide';
+      }
+    })
+    .catch(function() {
+      errorEl.textContent = 'Connection error. Please try again.';
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btnText.textContent = 'Get the Guide';
+    });
+  });
+})();
+</script>

@@ -4,6 +4,7 @@ import SearchOverlay from '../components/SearchOverlay.astro';
 import MobileDrawer from '../components/MobileDrawer.astro';
 import Footer from '../components/Footer.astro';
 import EmailPopup from '../components/EmailPopup.astro';
+import EmailModal from '../components/EmailModal.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -114,6 +115,9 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
 
   <!-- Email Signup Popup -->
   {!hideEmailPopup && <EmailPopup />}
+
+  <!-- Email Signup Modal (triggered by Get the Guide buttons) -->
+  <EmailModal />
 
   <!-- Footer -->
   <Footer />

@@ -9,7 +9,7 @@ export default async (req) => {
 
   try {
     const body = await req.json();
-    const { email, first_name, _hp } = body;
+    const { email, first_name, _hp, source } = body;
 
     // Honeypot check — bots fill hidden fields
     if (_hp) {
@@ -43,6 +43,8 @@ export default async (req) => {
       email,
       reactivate_existing: true,
       send_welcome_email: true,
+      utm_source: source || 'htup-popup',
+      referring_site: 'howtousepsychedelics.com',
     };
 
     if (first_name && first_name.trim()) {
