@@ -32,8 +32,10 @@ export default async (req) => {
     const PUB_ID = process.env.BEEHIIV_PUB_ID;
 
     if (!API_KEY || !PUB_ID) {
-      console.error('Missing Beehiiv environment variables');
-      return new Response(JSON.stringify({ error: 'Server configuration error.' }), {
+      return new Response(JSON.stringify({
+        error: 'Server configuration error.',
+        d: { k: !!API_KEY, p: !!PUB_ID }
+      }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
       });
