@@ -32,12 +32,8 @@ export default async (req) => {
     const PUB_ID = process.env.BEEHIIV_PUB_ID;
 
     if (!API_KEY || !PUB_ID) {
-      // Check if ANY custom env vars are visible
-      var envKeys = Object.keys(process.env).filter(k => k.startsWith('BEE'));
-      return new Response(JSON.stringify({
-        error: 'Server configuration error.',
-        d: { k: !!API_KEY, p: !!PUB_ID, bee: envKeys }
-      }), {
+      console.error('Missing Beehiiv environment variables');
+      return new Response(JSON.stringify({ error: 'Server configuration error.' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
       });
