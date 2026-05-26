@@ -671,6 +671,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     var pdfSuccess = document.getElementById('jpPdfSuccess');
     if (!pdfForm) return;
 
+    // Preload Psygaia logo for PDF
+    var psygaiaLogo = new Image();
+    psygaiaLogo.crossOrigin = 'anonymous';
+    psygaiaLogo.src = '/footer-logo-light.png';
+
     // ── Helpers ──────────────────────────────────────────────
     function val(id) {
       var el = document.getElementById(id);
@@ -867,11 +872,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       // ── Build PDF ──────────────────────────────────────────
 
-      // Header gradient line
-      doc.setDrawColor(cTeal[0], cTeal[1], cTeal[2]);
-      doc.setLineWidth(1.2);
-      doc.line(ml, y, pageW - mr, y);
-      y += 10;
+      // Psygaia logo (top-left)
+      var logoW = 38; // mm
+      var logoH = logoW * (200 / 800); // maintain 4:1 aspect ratio
+      try {
+        if (psygaiaLogo.complete && psygaiaLogo.naturalWidth > 0) {
+          doc.addImage(psygaiaLogo, 'PNG', ml, y, logoW, logoH);
+        }
+      } catch(e) { /* logo failed to load — continue without it */ }
+      y += logoH + 6;
 
       // Title
       doc.setFontSize(22);
