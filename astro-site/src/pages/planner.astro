@@ -8,6 +8,140 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   canonicalPath="/planner"
   hideProgress={true}
 >
+  <script slot="head" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js" defer is:inline></script>
+
+  <style>
+    .jp-pdf-section {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .jp-pdf-eyebrow {
+      display: block;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.63rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.6rem;
+    }
+    .jp-pdf-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+    .jp-pdf-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 1.2rem;
+    }
+    .jp-pdf-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .jp-pdf-input {
+      width: 100%;
+      padding: 12px 16px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .jp-pdf-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+    .jp-pdf-input:focus {
+      border-color: var(--accent);
+    }
+    .jp-pdf-hp {
+      position: absolute;
+      left: -9999px;
+      opacity: 0;
+      height: 0;
+      width: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .jp-pdf-btn {
+      width: 100%;
+      padding: 13px 20px;
+      margin-top: 4px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+      background-size: 300% 100%;
+      background-position: 0% center;
+      color: #040a05;
+      transition: background-position 0.55s ease, box-shadow 0.25s ease, opacity 0.2s;
+    }
+    .jp-pdf-btn:hover {
+      animation: accentShimmer 4s ease-in-out infinite;
+      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+    }
+    .jp-pdf-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      animation: none;
+    }
+    .jp-pdf-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+    .jp-pdf-error {
+      font-size: 0.8rem;
+      color: #d45252;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .jp-pdf-success {
+      margin-top: 28px;
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .jp-pdf-success-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(64,217,204,0.12);
+      border: 1px solid rgba(64,217,204,0.25);
+      color: var(--teal);
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+    .jp-pdf-success-text {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    @keyframes accentShimmer {
+      0%   { background-position: 0% center; }
+      50%  { background-position: 100% center; }
+      100% { background-position: 0% center; }
+    }
+  </style>
 
   <div class="jp-page-wrap">
     <div class="jp-section-inner">
@@ -279,6 +413,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <button class="jp-btn-copy" id="jp-copy">Copy to Clipboard</button>
           <button class="jp-btn-back" id="jp-edit-back">&larr; Edit Plan</button>
         </div>
+
+        <!-- PDF Download with Email Capture -->
+        <div class="jp-pdf-section" id="jpPdfSection">
+          <span class="jp-pdf-eyebrow">Save Your Plan</span>
+          <p class="jp-pdf-title">Download as a personalised PDF</p>
+          <p class="jp-pdf-desc">Enter your email to receive your preparation plan as a formatted PDF you can save, print, and refer back to.</p>
+          <form id="jpPdfForm" class="jp-pdf-form" autocomplete="on">
+            <input type="text" name="first_name" placeholder="First name (optional)" class="jp-pdf-input" autocomplete="given-name" />
+            <input type="email" name="email" placeholder="Your email" class="jp-pdf-input" required autocomplete="email" />
+            <input type="text" name="_hp" class="jp-pdf-hp" tabindex="-1" autocomplete="off" />
+            <button type="submit" class="jp-pdf-btn" id="jpPdfBtn"><span id="jpPdfBtnText">Download Plan as PDF &rarr;</span></button>
+          </form>
+          <p class="jp-pdf-note">You'll also receive the Psygaia Framework — our approach to safe, grounded psychedelic experiences.</p>
+          <p id="jpPdfError" class="jp-pdf-error" style="display:none;"></p>
+        </div>
+
+        <!-- PDF Success -->
+        <div class="jp-pdf-success" id="jpPdfSuccess" style="display:none;">
+          <span class="jp-pdf-success-icon">&#10003;</span>
+          <p class="jp-pdf-success-text">Your PDF is downloading. Check your inbox for the Psygaia Framework.</p>
+        </div>
+
         <p class="jp-output-disclaimer">This plan is for personal reference only. It does not constitute medical or clinical advice. If you have medical concerns, consult a qualified clinician before proceeding.</p>
       </div>
 
@@ -515,6 +671,457 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
 
     document.getElementById('jp-edit-back').addEventListener('click', function() { showPanel(4); });
+  })();
+  </script>
+
+  <!-- PDF Generation & Email Capture -->
+  <script is:inline>
+  (function() {
+    var pdfForm = document.getElementById('jpPdfForm');
+    var pdfBtn = document.getElementById('jpPdfBtn');
+    var pdfBtnText = document.getElementById('jpPdfBtnText');
+    var pdfError = document.getElementById('jpPdfError');
+    var pdfSection = document.getElementById('jpPdfSection');
+    var pdfSuccess = document.getElementById('jpPdfSuccess');
+    if (!pdfForm) return;
+
+    // ── Helpers ──────────────────────────────────────────────
+    function val(id) {
+      var el = document.getElementById(id);
+      return el ? (el.value || '') : '';
+    }
+
+    function getChecklistItems(listId) {
+      var list = document.getElementById(listId);
+      if (!list) return [];
+      var items = [];
+      list.querySelectorAll('.jp-check-item').forEach(function(item) {
+        var cb = item.querySelector('input[type="checkbox"]');
+        var spans = item.querySelectorAll('span');
+        var text = spans[spans.length - 1].textContent.trim();
+        items.push({ checked: cb.checked, text: text });
+      });
+      return items;
+    }
+
+    function countChecked(listId) {
+      var el = document.getElementById(listId);
+      if (!el) return { c: 0, t: 0 };
+      return {
+        c: el.querySelectorAll('input:checked').length,
+        t: el.querySelectorAll('input[type="checkbox"]').length
+      };
+    }
+
+    // ── PDF Generation ──────────────────────────────────────
+    function generatePDF() {
+      var jsPDF = window.jspdf.jsPDF;
+      var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+      var pageW = 210;
+      var pageH = 297;
+      var ml = 22; // left margin
+      var mr = 22; // right margin
+      var cw = pageW - ml - mr; // content width
+      var y = 22;
+      var pageNum = 1;
+
+      // Colors (RGB arrays)
+      var cTeal = [62, 201, 191];
+      var cGreen = [92, 184, 74];
+      var cDark = [30, 30, 30];
+      var cBody = [80, 80, 80];
+      var cMuted = [140, 140, 140];
+      var cAmber = [201, 148, 58];
+      var cRed = [180, 60, 60];
+      var cLight = [220, 220, 220];
+
+      // Font size to line height (mm)
+      function lh(fontSize) { return fontSize * 0.42; }
+
+      // Check if we need a page break, add one if so
+      function checkBreak(needed) {
+        if (y + needed > pageH - 22) {
+          addPageFooter();
+          doc.addPage();
+          pageNum++;
+          y = 22;
+        }
+      }
+
+      // Add footer to current page
+      function addPageFooter() {
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
+        doc.text('This plan is for personal reference only. It does not constitute medical or clinical advice.', pageW / 2, pageH - 14, { align: 'center' });
+        doc.text('howtousepsychedelics.com • Psygaia', pageW / 2, pageH - 10, { align: 'center' });
+        doc.text('Page ' + pageNum, pageW - mr, pageH - 10, { align: 'right' });
+      }
+
+      // Draw a horizontal line
+      function drawLine(yPos, color) {
+        doc.setDrawColor(color[0], color[1], color[2]);
+        doc.setLineWidth(0.3);
+        doc.line(ml, yPos, pageW - mr, yPos);
+      }
+
+      // Write a section label (teal uppercase)
+      function sectionLabel(text) {
+        checkBreak(12);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(cTeal[0], cTeal[1], cTeal[2]);
+        doc.text(text.toUpperCase(), ml, y);
+        y += 6;
+      }
+
+      // Write body text with wrapping, returns new y
+      function bodyText(text, options) {
+        if (!text) return;
+        var opts = options || {};
+        var fontSize = opts.fontSize || 10;
+        var color = opts.color || cBody;
+        var style = opts.style || 'normal';
+        var indent = opts.indent || 0;
+
+        doc.setFontSize(fontSize);
+        doc.setFont('helvetica', style);
+        doc.setTextColor(color[0], color[1], color[2]);
+        var lines = doc.splitTextToSize(text, cw - indent);
+        var lineHeight = lh(fontSize);
+        for (var i = 0; i < lines.length; i++) {
+          checkBreak(lineHeight);
+          doc.text(lines[i], ml + indent, y);
+          y += lineHeight;
+        }
+      }
+
+      // Write a label:value pair
+      function labelValue(label, value) {
+        if (!value) return;
+        checkBreak(6);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(cDark[0], cDark[1], cDark[2]);
+        var labelW = doc.getTextWidth(label + ': ');
+        doc.text(label + ': ', ml, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(cBody[0], cBody[1], cBody[2]);
+        var remaining = doc.splitTextToSize(value, cw - labelW);
+        doc.text(remaining[0], ml + labelW, y);
+        y += lh(10);
+        // Wrapped lines
+        for (var i = 1; i < remaining.length; i++) {
+          checkBreak(lh(10));
+          doc.text(remaining[i], ml + labelW, y);
+          y += lh(10);
+        }
+      }
+
+      // Write a checklist
+      function checklist(items) {
+        for (var i = 0; i < items.length; i++) {
+          checkBreak(6);
+          var marker = items[i].checked ? '✓' : '☐';
+          doc.setFontSize(10);
+          doc.setFont('helvetica', 'normal');
+          if (items[i].checked) {
+            doc.setTextColor(cGreen[0], cGreen[1], cGreen[2]);
+          } else {
+            doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
+          }
+          doc.text(marker, ml + 2, y);
+          doc.setTextColor(cBody[0], cBody[1], cBody[2]);
+          var lines = doc.splitTextToSize(items[i].text, cw - 12);
+          for (var j = 0; j < lines.length; j++) {
+            if (j > 0) checkBreak(lh(10));
+            doc.text(lines[j], ml + 10, y);
+            if (j < lines.length - 1) y += lh(10);
+          }
+          y += lh(10) + 1;
+        }
+      }
+
+      // ── Gather Data ──────────────────────────────────────
+      var sub = val('pl-sub');
+      var dose = val('pl-dose');
+      var exp = val('pl-exp');
+      var source = val('pl-source');
+      var intention = val('pl-intent-text');
+      var explore = val('pl-explore');
+      var fears = val('pl-fears');
+      var outcome = val('pl-outcome');
+      var release = val('pl-release');
+      var location = val('pl-location');
+      var sitter = val('pl-sitter');
+      var dateVal = val('pl-date');
+      var settingItems = getChecklistItems('jp-setting-list');
+      var safetyItems = getChecklistItems('jp-safety-list');
+      var integrationItems = getChecklistItems('jp-integration-list');
+      var sc = countChecked('jp-setting-list');
+      var saf = countChecked('jp-safety-list');
+      var intg = countChecked('jp-integration-list');
+      var totalC = sc.c + saf.c + intg.c;
+      var totalT = sc.t + saf.t + intg.t;
+      var pct = totalT > 0 ? Math.round((totalC / totalT) * 100) : 0;
+
+      // Warnings
+      var warnings = [];
+      if (source === 'Unverified') warnings.push('Your substance is unverified. Reagent testing is strongly recommended before use.');
+      if (exp === 'First time ever' && (dose === 'High dose (strong)' || dose === 'Heroic dose (very high)')) warnings.push('A high or heroic dose for a first experience carries significantly elevated risk. Consider starting with a low or moderate dose.');
+      if (sitter === 'No — solo' && exp === 'First time ever') warnings.push('Solo use for a first experience is strongly discouraged. A trusted sitter significantly reduces risk.');
+      if (saf.c < saf.t) warnings.push((saf.t - saf.c) + ' safety checklist items remain unchecked. Review these before proceeding.');
+      if (sub === '5-MeO-DMT' && sitter === 'No — solo') warnings.push('5-MeO-DMT should never be taken without an experienced sitter present.');
+      if (sub === 'Ayahuasca' && sitter === 'No — solo') warnings.push('Ayahuasca should be taken in a supported setting with experienced facilitation.');
+      if (!intention && !explore) warnings.push('No intention has been written. Consider returning to clarify your intention before proceeding.');
+      if (dose === 'Unsure') warnings.push('You are unsure about your dose. Research your chosen substance thoroughly and start conservatively.');
+
+      var tier = (warnings.length === 0 && pct >= 80) ? 'Well-Prepared' : (warnings.length <= 1 && pct >= 50) ? 'Nearly Ready' : 'Needs Attention';
+
+      // ── Build PDF ──────────────────────────────────────────
+
+      // Header gradient line
+      doc.setDrawColor(cTeal[0], cTeal[1], cTeal[2]);
+      doc.setLineWidth(1.2);
+      doc.line(ml, y, pageW - mr, y);
+      y += 10;
+
+      // Title
+      doc.setFontSize(22);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(cDark[0], cDark[1], cDark[2]);
+      doc.text('Journey Preparation Plan', ml, y);
+      y += 8;
+
+      // Subtitle
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
+      var now = new Date();
+      var dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      doc.text('Generated ' + dateStr + '  •  howtousepsychedelics.com  •  Psygaia', ml, y);
+      y += 10;
+
+      drawLine(y, cLight);
+      y += 8;
+
+      // Readiness badge
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      if (tier === 'Well-Prepared') {
+        doc.setTextColor(cGreen[0], cGreen[1], cGreen[2]);
+      } else if (tier === 'Nearly Ready') {
+        doc.setTextColor(cTeal[0], cTeal[1], cTeal[2]);
+      } else {
+        doc.setTextColor(cAmber[0], cAmber[1], cAmber[2]);
+      }
+      doc.text(tier + ' — ' + pct + '% complete', ml, y);
+      y += 10;
+
+      // Warnings
+      if (warnings.length > 0) {
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(cAmber[0], cAmber[1], cAmber[2]);
+        doc.text('ATTENTION', ml, y);
+        y += 5;
+        for (var w = 0; w < warnings.length; w++) {
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(cAmber[0], cAmber[1], cAmber[2]);
+          var wLines = doc.splitTextToSize('• ' + warnings[w], cw);
+          for (var wl = 0; wl < wLines.length; wl++) {
+            checkBreak(4);
+            doc.text(wLines[wl], ml, y);
+            y += 4;
+          }
+          y += 1;
+        }
+        y += 4;
+        drawLine(y, cLight);
+        y += 8;
+      }
+
+      // ── SUBSTANCE & DOSE ──
+      sectionLabel('Substance & Dose');
+      if (sub) labelValue('Substance', sub);
+      if (dose) labelValue('Dose level', dose);
+      if (exp) labelValue('Experience level', exp);
+      if (source) labelValue('Verification', source);
+      y += 4;
+      drawLine(y, cLight);
+      y += 8;
+
+      // ── INTENTION & INNER WORK ──
+      var hasIntention = intention || explore || outcome || release;
+      if (hasIntention) {
+        sectionLabel('Intention & Inner Work');
+        if (intention) {
+          bodyText('Motivation:', { style: 'bold', color: cDark, fontSize: 10 });
+          y += 1;
+          bodyText(intention, { fontSize: 10 });
+          y += 3;
+        }
+        if (explore) {
+          bodyText('Exploring:', { style: 'bold', color: cDark, fontSize: 10 });
+          y += 1;
+          bodyText(explore, { fontSize: 10 });
+          y += 3;
+        }
+        if (outcome) {
+          bodyText('Hoped-for outcome:', { style: 'bold', color: cDark, fontSize: 10 });
+          y += 1;
+          bodyText(outcome, { fontSize: 10 });
+          y += 3;
+        }
+        if (release) {
+          bodyText('Letting go of:', { style: 'bold', color: cDark, fontSize: 10 });
+          y += 1;
+          bodyText(release, { fontSize: 10 });
+          y += 3;
+        }
+        y += 1;
+        drawLine(y, cLight);
+        y += 8;
+      }
+
+      // ── FEARS & CONCERNS ──
+      if (fears) {
+        sectionLabel('Fears & Concerns');
+        bodyText(fears, { fontSize: 10 });
+        y += 4;
+        drawLine(y, cLight);
+        y += 8;
+      }
+
+      // ── SET & SETTING ──
+      sectionLabel('Set & Setting');
+      if (location) labelValue('Location', location);
+      if (sitter) labelValue('Sitter', sitter);
+      if (dateVal) {
+        var dObj = new Date(dateVal);
+        var dStr = dObj.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        labelValue('Date', dStr);
+        var today = new Date(); today.setHours(0,0,0,0);
+        var dDiff = Math.ceil((dObj - today) / (1000*60*60*24));
+        if (dDiff > 0) labelValue('Preparation time remaining', dDiff + ' day' + (dDiff === 1 ? '' : 's'));
+      }
+      y += 3;
+      bodyText('Setting Checklist (' + sc.c + ' of ' + sc.t + ' complete):', { style: 'bold', color: cDark, fontSize: 10 });
+      y += 2;
+      checklist(settingItems);
+      y += 2;
+      drawLine(y, cLight);
+      y += 8;
+
+      // ── SAFETY ──
+      sectionLabel('Safety');
+      bodyText('Safety Checklist (' + saf.c + ' of ' + saf.t + ' complete):', { style: 'bold', color: cDark, fontSize: 10 });
+      y += 2;
+      checklist(safetyItems);
+      y += 2;
+      drawLine(y, cLight);
+      y += 8;
+
+      // ── INTEGRATION ──
+      sectionLabel('Integration');
+      bodyText('Integration Checklist (' + intg.c + ' of ' + intg.t + ' complete):', { style: 'bold', color: cDark, fontSize: 10 });
+      y += 2;
+      checklist(integrationItems);
+      y += 2;
+      drawLine(y, cLight);
+      y += 8;
+
+      // ── OVERALL ──
+      sectionLabel('Overall Preparation');
+      checkBreak(14);
+      // Progress bar background
+      doc.setFillColor(cLight[0], cLight[1], cLight[2]);
+      doc.roundedRect(ml, y, cw, 5, 2.5, 2.5, 'F');
+      // Progress bar fill
+      if (pct > 0) {
+        doc.setFillColor(cTeal[0], cTeal[1], cTeal[2]);
+        var fillW = Math.max(5, (cw * pct) / 100);
+        doc.roundedRect(ml, y, fillW, 5, 2.5, 2.5, 'F');
+      }
+      y += 9;
+      bodyText(pct + '% of all checklist items completed (' + totalC + ' of ' + totalT + ')', { fontSize: 10, color: cDark, style: 'bold' });
+      y += 4;
+      drawLine(y, cLight);
+      y += 8;
+
+      // ── NEXT STEPS ──
+      sectionLabel('Next Steps');
+      var nextText;
+      if (tier === 'Needs Attention') {
+        nextText = 'Review the warnings above and address outstanding items before proceeding. Return to the relevant steps to complete your preparation.';
+      } else if (tier === 'Nearly Ready') {
+        nextText = 'You are nearly there. Address any remaining checklist items and spend time with your intention in the days ahead.';
+      } else {
+        nextText = 'Your preparation looks strong. In the days ahead, continue to sit with your intention, finalise your setting, and take care of your body and mind. Trust what you have built here.';
+      }
+      bodyText(nextText, { fontSize: 10 });
+
+      // Final page footer
+      addPageFooter();
+
+      // Save
+      doc.save('journey-preparation-plan.pdf');
+    }
+
+    // ── Form Submission ──────────────────────────────────────
+    pdfForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      pdfError.style.display = 'none';
+
+      var email = pdfForm.email.value.trim();
+      var firstName = pdfForm.first_name.value.trim();
+      var hp = pdfForm._hp.value;
+
+      if (!email) {
+        pdfError.textContent = 'Please enter your email.';
+        pdfError.style.display = 'block';
+        return;
+      }
+
+      pdfBtn.disabled = true;
+      pdfBtnText.textContent = 'Preparing your PDF...';
+
+      fetch('/.netlify/functions/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, first_name: firstName, _hp: hp, source: 'htup-planner' }),
+      })
+      .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+      .then(function(result) {
+        if (result.ok && result.data.success) {
+          // Generate and download the PDF
+          try {
+            generatePDF();
+            pdfSection.style.display = 'none';
+            pdfSuccess.style.display = 'block';
+          } catch (err) {
+            console.error('PDF generation error:', err);
+            pdfError.textContent = 'PDF generation failed. Please try copying your plan instead.';
+            pdfError.style.display = 'block';
+            pdfBtn.disabled = false;
+            pdfBtnText.textContent = 'Download Plan as PDF →';
+          }
+        } else {
+          pdfError.textContent = result.data.error || 'Something went wrong. Please try again.';
+          pdfError.style.display = 'block';
+          pdfBtn.disabled = false;
+          pdfBtnText.textContent = 'Download Plan as PDF →';
+        }
+      })
+      .catch(function() {
+        pdfError.textContent = 'Connection error. Please try again.';
+        pdfError.style.display = 'block';
+        pdfBtn.disabled = false;
+        pdfBtnText.textContent = 'Download Plan as PDF →';
+      });
+    });
   })();
   </script>
 

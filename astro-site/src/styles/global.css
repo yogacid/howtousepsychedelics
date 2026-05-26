@@ -819,6 +819,7 @@ nav {
   background-size: 300% 100%;
   background-position: 0% center;
   color: #040a05;
+  border: 1.5px solid transparent;
 }
 
 .btn-primary:hover {
