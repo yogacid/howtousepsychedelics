@@ -1,0 +1,256 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy · How to Use Psychedelics"
+  description="Privacy policy for howtousepsychedelics.com — how we collect, use, and protect your personal information."
+  canonicalPath="/privacy"
+  hideProgress={true}
+>
+
+<style>
+  .privacy {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: calc(var(--nav-h) + 48px) 24px 100px;
+  }
+  .privacy-eyebrow {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+  }
+  .privacy h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  .privacy-updated {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+  }
+  .privacy h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .privacy h2:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+  .privacy p {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+  .privacy ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+  }
+  .privacy li {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    padding-left: 1.2rem;
+    position: relative;
+    margin-bottom: 0.35rem;
+  }
+  .privacy li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.7rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+  .privacy strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  .privacy a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(64,217,204,0.3);
+    transition: border-color 0.2s;
+  }
+  .privacy a:hover {
+    border-color: var(--teal);
+  }
+  .privacy-contact {
+    margin-top: 2rem;
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .privacy-contact p {
+    margin-bottom: 0;
+  }
+</style>
+
+<div class="privacy">
+  <span class="privacy-eyebrow">Legal</span>
+  <h1>Privacy Policy</h1>
+  <p class="privacy-updated">Last updated: 25 May 2026</p>
+
+  <p>Psygaia ("we," "us," or "our") operates howtousepsychedelics.com (the "Site"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit the Site or use our services. We are committed to protecting your privacy and handling your data with transparency and care.</p>
+
+  <p>Psygaia is a nonprofit organisation based in British Columbia, Canada. By using this Site, you agree to the collection and use of information in accordance with this policy.</p>
+
+  <h2>Information We Collect</h2>
+
+  <p><strong>Information you provide voluntarily:</strong></p>
+  <ul>
+    <li><strong>Email address</strong> — when you subscribe to our newsletter or sign up for the Psygaia Framework guide</li>
+    <li><strong>First name</strong> — optionally, when subscribing</li>
+    <li><strong>Payment information</strong> — when purchasing a course, processed securely by Stripe. We do not store your payment details on our servers.</li>
+  </ul>
+
+  <p><strong>Information collected automatically:</strong></p>
+  <ul>
+    <li><strong>Analytics data</strong> — page views, referral sources, browser type, device type, and approximate geographic location (country/region level). This data is collected via privacy-respecting analytics tools (DataFast and Umami) and is used in aggregate. We do not use this data to identify individual users.</li>
+    <li><strong>Cookies</strong> — we use a small number of functional cookies to store your theme preference and remember whether you have dismissed the email signup popup. We do not use advertising or tracking cookies.</li>
+  </ul>
+
+  <p><strong>Information we do not collect:</strong></p>
+  <ul>
+    <li>We do not collect sensitive health information, substance use data, or psychedelic experience details through the Site</li>
+    <li>We do not use fingerprinting, advertising pixels, or cross-site tracking technologies</li>
+    <li>We do not collect information from children. This Site is intended for adults only.</li>
+  </ul>
+
+  <h2>How We Use Your Information</h2>
+
+  <p>We use the information we collect for the following purposes:</p>
+  <ul>
+    <li>To deliver newsletter content and educational resources you have requested</li>
+    <li>To process course enrolments and provide access to purchased content</li>
+    <li>To provide access to Psygaia's Circle community platform</li>
+    <li>To understand how visitors use the Site so we can improve content and user experience</li>
+    <li>To respond to inquiries or requests you send us</li>
+  </ul>
+
+  <p>We do not use your information for targeted advertising, profiling, or automated decision-making.</p>
+
+  <h2>Third-Party Services</h2>
+
+  <p>We share your information only with the service providers necessary to operate the Site and deliver our services:</p>
+  <ul>
+    <li><strong>Beehiiv</strong> — email newsletter delivery. Receives your email address and optional first name when you subscribe. <a href="https://www.beehiiv.com/privacy" target="_blank" rel="noopener">Beehiiv Privacy Policy</a></li>
+    <li><strong>Stripe</strong> — payment processing for course purchases. Receives payment details directly; we never see or store your full card number. <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe Privacy Policy</a></li>
+    <li><strong>Circle</strong> — community platform hosting for Psygaia's Circle. Receives your account information when you enrol. <a href="https://circle.so/privacy" target="_blank" rel="noopener">Circle Privacy Policy</a></li>
+    <li><strong>Netlify</strong> — site hosting and serverless functions. Processes requests to the Site. <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener">Netlify Privacy Policy</a></li>
+    <li><strong>DataFast</strong> — privacy-respecting web analytics. Collects anonymised usage data. <a href="https://datafa.st/privacy" target="_blank" rel="noopener">DataFast Privacy Policy</a></li>
+    <li><strong>Umami</strong> — privacy-respecting, cookie-free web analytics. Collects anonymised usage data. <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami Privacy Policy</a></li>
+  </ul>
+
+  <p>We do not sell, rent, or trade your personal information to any third party. We do not share your data with advertisers.</p>
+
+  <h2>Cookies</h2>
+
+  <p>This Site uses a minimal number of cookies, none of which are used for advertising or cross-site tracking:</p>
+  <ul>
+    <li><strong>htup-theme</strong> — stores your preferred colour theme (dark or light mode). Functional, persistent.</li>
+    <li><strong>htup_popup_dismissed</strong> — remembers that you have closed the email signup popup so it does not reappear. Expires after approximately 4 months.</li>
+  </ul>
+
+  <p>Our analytics providers (DataFast and Umami) are configured to respect user privacy and do not set tracking cookies.</p>
+
+  <h2>Data Retention</h2>
+
+  <ul>
+    <li><strong>Email subscribers</strong> — your email address and name are retained for as long as you remain subscribed. You may unsubscribe at any time using the link in any email.</li>
+    <li><strong>Analytics data</strong> — aggregated, anonymised analytics data is retained indefinitely for trend analysis. This data cannot be used to identify you.</li>
+    <li><strong>Course purchases</strong> — transaction records are retained as required by applicable tax and financial regulations.</li>
+  </ul>
+
+  <h2>Your Rights</h2>
+
+  <p>Depending on your jurisdiction, you may have the following rights regarding your personal data:</p>
+  <ul>
+    <li><strong>Access</strong> — request a copy of the personal data we hold about you</li>
+    <li><strong>Correction</strong> — request correction of inaccurate or incomplete data</li>
+    <li><strong>Deletion</strong> — request deletion of your personal data ("right to be forgotten")</li>
+    <li><strong>Portability</strong> — request your data in a structured, commonly used format</li>
+    <li><strong>Objection</strong> — object to the processing of your personal data</li>
+    <li><strong>Withdrawal of consent</strong> — withdraw consent at any time where processing is based on consent</li>
+  </ul>
+
+  <p>To exercise any of these rights, contact us at <a href="mailto:hello@psygaia.org">hello@psygaia.org</a>. We will respond to all legitimate requests within 30 days.</p>
+
+  <h2>GDPR Compliance</h2>
+
+  <p>If you are located in the European Economic Area (EEA) or the United Kingdom, we process your personal data under the following legal bases:</p>
+  <ul>
+    <li><strong>Consent</strong> — when you voluntarily provide your email address to subscribe to our newsletter or sign up for resources</li>
+    <li><strong>Legitimate interest</strong> — for anonymised analytics to improve the Site, where this does not override your rights and freedoms</li>
+    <li><strong>Contractual necessity</strong> — to process course purchases and deliver the services you have paid for</li>
+  </ul>
+
+  <p>You have the right to lodge a complaint with your local data protection authority if you believe your data has been processed unlawfully.</p>
+
+  <h2>CCPA Compliance</h2>
+
+  <p>If you are a California resident, you have the right to:</p>
+  <ul>
+    <li>Know what personal data we collect about you and how it is used</li>
+    <li>Request deletion of your personal data</li>
+    <li>Opt out of the sale of your personal data — though we do not sell personal data</li>
+    <li>Not be discriminated against for exercising your privacy rights</li>
+  </ul>
+
+  <h2>PIPEDA Compliance</h2>
+
+  <p>As a Canadian organisation, we comply with the Personal Information Protection and Electronic Documents Act (PIPEDA). We collect personal information only for identified purposes, with your knowledge and consent, and retain it only as long as necessary to fulfill those purposes.</p>
+
+  <h2>Data Security</h2>
+
+  <p>We implement appropriate technical and organisational measures to protect your personal data, including:</p>
+  <ul>
+    <li>Encrypted data transmission (HTTPS/TLS) across the entire Site</li>
+    <li>API keys and credentials stored as encrypted environment variables, never in source code</li>
+    <li>Third-party services selected for their security practices and compliance standards</li>
+    <li>Minimal data collection — we only collect what is necessary to provide our services</li>
+  </ul>
+
+  <p>No method of electronic transmission or storage is 100% secure. While we strive to protect your personal information, we cannot guarantee its absolute security.</p>
+
+  <h2>International Transfers</h2>
+
+  <p>Your information may be transferred to and processed in countries other than your country of residence, including the United States and Canada, where our service providers operate. These transfers are necessary to provide our services and are conducted with appropriate safeguards in place.</p>
+
+  <h2>Children's Privacy</h2>
+
+  <p>This Site is not directed at individuals under the age of 18. We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a minor, please contact us immediately and we will take steps to delete it.</p>
+
+  <h2>Changes to This Policy</h2>
+
+  <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated revision date. We encourage you to review this page periodically. Your continued use of the Site after any changes constitutes acceptance of the updated policy.</p>
+
+  <h2>Contact</h2>
+
+  <div class="privacy-contact">
+    <p>If you have any questions about this Privacy Policy, your personal data, or wish to exercise your rights, contact us at <a href="mailto:hello@psygaia.org">hello@psygaia.org</a>.</p>
+  </div>
+</div>
+
+</BaseLayout>
