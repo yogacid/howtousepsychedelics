@@ -7,6 +7,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   description="A structured 3-week course on mindful microdosing — evidence-informed, trauma-aware, and grounded in the Psygaia Framework."
   canonicalPath="/microdosing-course"
   hideProgress={true}
+  hideEmailPopup={true}
 >
 
 <style is:global>
@@ -788,7 +789,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     /* ── FALLBACK / NOT READY ───────────────────────────────────── */
     .fallback {
       padding: 80px 5%;
-      background: var(--bg);
+      background: var(--bg-mid);
       text-align: center;
     }
     .fallback h2 {
@@ -818,7 +819,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     /* ── DISCLAIMER ─────────────────────────────────────────────── */
     .disclaimer {
       padding: 44px 5%;
-      background: var(--bg);
+      background: var(--bg-mid);
       text-align: center;
     }
     .disclaimer p {
@@ -987,7 +988,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     /* ── FAQ + TESTIMONIALS ─────────────────────────────────────── */
     .faq {
-      padding: 100px 5%; background: var(--bg-mid);
+      padding: 100px 5%; background: var(--bg);
       display: grid; grid-template-columns: 1.4fr 1fr;
       gap: 80px; align-items: stretch;
     }

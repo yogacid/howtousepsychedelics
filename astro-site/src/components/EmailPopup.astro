@@ -1,0 +1,363 @@
+---
+// Bottom-right email signup popup
+// Shows at 50% scroll, dismissed for 4 months via cookie
+// Excluded from /microdosing-course/ (handled in BaseLayout)
+---
+
+<div id="emailPopup" class="email-popup" aria-hidden="true">
+  <div class="email-popup-card">
+    <button class="email-popup-close" id="emailPopupClose" aria-label="Close">&times;</button>
+
+    <!-- Form state -->
+    <div id="emailPopupForm">
+      <span class="email-popup-eyebrow">Free Resource</span>
+      <h3 class="email-popup-title">Discover the Psygaia Framework.</h3>
+      <p class="email-popup-body">A research and systems-based approach to psychedelics for safe and grounded experiences — developed at the University of Ottawa. Free in your inbox.</p>
+
+      <form id="emailPopupFormEl" autocomplete="on">
+        <input
+          type="text"
+          name="first_name"
+          placeholder="First name (optional)"
+          class="email-popup-input"
+          autocomplete="given-name"
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your email"
+          class="email-popup-input"
+          required
+          autocomplete="email"
+        />
+        <!-- Honeypot — hidden from real users -->
+        <input type="text" name="_hp" class="email-popup-hp" tabindex="-1" autocomplete="off" />
+        <button type="submit" class="email-popup-btn" id="emailPopupBtn">
+          <span id="emailPopupBtnText">Get the Guide</span>
+        </button>
+      </form>
+      <p class="email-popup-disclaimer">No spam. Unsubscribe anytime.</p>
+      <p id="emailPopupError" class="email-popup-error" style="display:none;"></p>
+    </div>
+
+    <!-- Success state -->
+    <div id="emailPopupSuccess" class="email-popup-success" style="display:none;">
+      <span class="email-popup-success-icon">&#10003;</span>
+      <h3 class="email-popup-title">You're in.</h3>
+      <p class="email-popup-body">Check your inbox for the guide. Welcome to the community.</p>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* ── EMAIL POPUP ──────────────────────────────────────────── */
+  .email-popup {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .email-popup.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .email-popup-card {
+    width: 360px;
+    background: var(--bg-card, #0f1612);
+    border: none;
+    border-radius: 14px;
+    padding: 28px 24px 24px;
+    position: relative;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+    /* Gradient border via background trick */
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-image:
+      linear-gradient(var(--bg-card, #0f1612), var(--bg-card, #0f1612)),
+      linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+    border: 1.5px solid transparent;
+  }
+  [data-theme="light"] .email-popup-card {
+    box-shadow: 0 12px 48px rgba(0,0,0,0.12);
+    background-image:
+      linear-gradient(var(--bg-card, #ffffff), var(--bg-card, #ffffff)),
+      linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+  }
+  .email-popup-close {
+    position: absolute;
+    top: 12px; right: 14px;
+    background: none; border: none; cursor: pointer;
+    font-size: 1.3rem; color: var(--cream-dim, #a8b0a4);
+    line-height: 1; padding: 4px;
+    transition: color 0.15s;
+  }
+  .email-popup-close:hover { color: var(--cream, #f2f2ef); }
+  .email-popup-eyebrow {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal, #3ec9bf);
+    margin-bottom: 0.6rem;
+  }
+  .email-popup-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--cream, #f2f2ef);
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .email-popup-body {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--cream-dim, #a8b0a4);
+    line-height: 1.65;
+    margin-bottom: 1.1rem;
+  }
+  .email-popup-input {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--cream, #f2f2ef);
+    background: var(--bg-light, #121a14);
+    border: 1px solid var(--cream-border, rgba(242,242,239,0.12));
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  .email-popup-input::placeholder {
+    color: var(--cream-dim, #a8b0a4);
+    opacity: 0.6;
+  }
+  .email-popup-input:focus {
+    border-color: var(--teal, #3ec9bf);
+  }
+  [data-theme="light"] .email-popup-title {
+    color: #1a1a1a;
+  }
+  [data-theme="light"] .email-popup-body {
+    color: #555555;
+  }
+  [data-theme="light"] .email-popup-input {
+    color: var(--cream, #1a1a1a);
+    background: var(--bg-light, #ede9e0);
+  }
+  /* Honeypot — visually hidden */
+  .email-popup-hp {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    pointer-events: none;
+    tab-index: -1;
+  }
+  .email-popup-btn {
+    display: block;
+    width: 100%;
+    padding: 11px 16px;
+    margin-top: 4px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+    background-size: 300% 100%;
+    background-position: 0% center;
+    color: #040a05;
+    transition: background-position 0.55s ease, box-shadow 0.25s ease, opacity 0.2s;
+  }
+  .email-popup-btn:hover {
+    animation: accentShimmer 4s ease-in-out infinite;
+    box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+  }
+  .email-popup-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    animation: none;
+  }
+  .email-popup-disclaimer {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.68rem;
+    color: var(--cream-dim, #a8b0a4);
+    opacity: 0.6;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+  .email-popup-error {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    color: #d45252;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+
+  /* Success state */
+  .email-popup-success {
+    text-align: center;
+    padding: 12px 0;
+  }
+  .email-popup-success-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(62,201,191,0.12);
+    border: 1px solid rgba(62,201,191,0.25);
+    color: var(--teal, #3ec9bf);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .email-popup-success .email-popup-title {
+    margin-bottom: 0.6rem;
+  }
+  .email-popup-success .email-popup-body {
+    margin-bottom: 0;
+  }
+
+  /* Responsive — full width on small screens */
+  @media (max-width: 480px) {
+    .email-popup {
+      bottom: 12px;
+      right: 12px;
+      left: 12px;
+    }
+    .email-popup-card {
+      width: 100%;
+    }
+  }
+
+  /* Don't overlap sticky CTA bar on course page (though popup is excluded there) */
+  .mdc-page .email-popup {
+    display: none;
+  }
+</style>
+
+<script is:inline>
+(function() {
+  var COOKIE_NAME = 'htup_popup_dismissed';
+  var COOKIE_DAYS = 120; // ~4 months
+
+  function getCookie(name) {
+    var match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return match ? match[1] : null;
+  }
+
+  function setCookie(name, value, days) {
+    var d = new Date();
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = name + '=' + value + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+  // Don't show if already dismissed
+  if (getCookie(COOKIE_NAME)) return;
+
+  var popup = document.getElementById('emailPopup');
+  var closeBtn = document.getElementById('emailPopupClose');
+  var form = document.getElementById('emailPopupFormEl');
+  var btn = document.getElementById('emailPopupBtn');
+  var btnText = document.getElementById('emailPopupBtnText');
+  var errorEl = document.getElementById('emailPopupError');
+  var formWrap = document.getElementById('emailPopupForm');
+  var successWrap = document.getElementById('emailPopupSuccess');
+
+  if (!popup) return;
+
+  var shown = false;
+
+  // Show at 50% scroll
+  function checkScroll() {
+    if (shown) return;
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight > 0 && (scrollTop / docHeight) >= 0.5) {
+      shown = true;
+      popup.classList.add('visible');
+      popup.setAttribute('aria-hidden', 'false');
+      window.removeEventListener('scroll', checkScroll);
+    }
+  }
+
+  window.addEventListener('scroll', checkScroll, { passive: true });
+
+  // Close popup
+  function dismiss() {
+    popup.classList.remove('visible');
+    popup.setAttribute('aria-hidden', 'true');
+    setCookie(COOKIE_NAME, '1', COOKIE_DAYS);
+  }
+
+  closeBtn.addEventListener('click', dismiss);
+
+  // Form submission
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    errorEl.style.display = 'none';
+
+    var email = form.email.value.trim();
+    var firstName = form.first_name.value.trim();
+    var hp = form._hp.value;
+
+    if (!email) {
+      errorEl.textContent = 'Please enter your email.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btnText.textContent = 'Sending...';
+
+    fetch('/.netlify/functions/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, first_name: firstName, _hp: hp }),
+    })
+    .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+    .then(function(result) {
+      if (result.ok && result.data.success) {
+        formWrap.style.display = 'none';
+        successWrap.style.display = 'block';
+        setCookie(COOKIE_NAME, '1', COOKIE_DAYS);
+        // Auto-close after 4 seconds
+        setTimeout(function() {
+          popup.classList.remove('visible');
+          popup.setAttribute('aria-hidden', 'true');
+        }, 4000);
+      } else {
+        errorEl.textContent = result.data.error || 'Something went wrong. Please try again.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btnText.textContent = 'Get the Guide';
+      }
+    })
+    .catch(function() {
+      errorEl.textContent = 'Connection error. Please try again.';
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btnText.textContent = 'Get the Guide';
+    });
+  });
+})();
+</script>

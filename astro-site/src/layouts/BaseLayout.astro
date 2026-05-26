@@ -3,6 +3,7 @@ import Nav from '../components/Nav.astro';
 import SearchOverlay from '../components/SearchOverlay.astro';
 import MobileDrawer from '../components/MobileDrawer.astro';
 import Footer from '../components/Footer.astro';
+import EmailPopup from '../components/EmailPopup.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
   canonicalPath?: string;
   ogImage?: string;
   hideProgress?: boolean;
+  hideEmailPopup?: boolean;
 }
 
 const {
@@ -19,6 +21,7 @@ const {
   canonicalPath = '/',
   ogImage = '/og-image.png',
   hideProgress = false,
+  hideEmailPopup = false,
 } = Astro.props;
 
 const baseUrl = 'https://howtousepsychedelics.com';
@@ -108,6 +111,9 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
       <ul class="toc-modal-list" id="tocModalList"></ul>
     </div>
   </div>
+
+  <!-- Email Signup Popup -->
+  {!hideEmailPopup && <EmailPopup />}
 
   <!-- Footer -->
   <Footer />

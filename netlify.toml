@@ -2,6 +2,7 @@
   base = "astro-site"
   command = "npm run build"
   publish = "dist"
+  functions = "netlify/functions"
 
 # Force www → non-www (permanent)
 [[redirects]]
