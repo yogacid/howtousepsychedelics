@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "node scripts/build-search-index.mjs && astro dev",
+    "dev:local": "astro dev --no-sync",
     "build": "node scripts/build-search-index.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
