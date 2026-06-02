@@ -11,7 +11,7 @@
     <!-- Form state -->
     <div id="emailModalForm">
       <span class="email-modal-eyebrow">Free Resource</span>
-      <h3 class="email-modal-title">Discover the Psygaia Framework</h3>
+      <h3 class="email-modal-title">The Psygaia Framework</h3>
       <p class="email-modal-body">A research and systems-based approach to psychedelics for safe and grounded experiences — developed at the University of Ottawa.</p>
 
       <form id="emailModalFormEl" autocomplete="on">
@@ -297,7 +297,7 @@
 
   // Intercept all "Get the Guide" links
   document.addEventListener('click', function(e) {
-    var link = e.target.closest('a[href="https://psygaia.org/#newsletter"]');
+    var link = e.target.closest('a[href="#get-the-guide"]');
     if (link) {
       e.preventDefault();
       // Reset form state if previously completed
