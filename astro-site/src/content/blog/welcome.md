@@ -1,9 +1,11 @@
 ---
-title: "Why Preparation Matters More Than the Substance"
-description: "Most conversations about psychedelics focus on which substance to take and how much. But the single biggest predictor of a meaningful experience is what you do in the weeks before it begins."
+title: Why Preparation Matters More Than the Substance
+description: Most conversations about psychedelics focus on which substance to
+  take and how much. But the single biggest predictor of a meaningful experience
+  is what you do in the weeks before it begins.
 date: 2026-05-23
 category: Preparation
-featured: true
+featured: false
 author: HTUP
 draft: false
 ---
