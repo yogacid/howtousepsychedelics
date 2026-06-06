@@ -30,23 +30,13 @@ If you want the full account of why context shapes psychedelic experience the wa
 Before anything else: if you're on any medication, have a psychiatric history, or have a family history of schizophrenia or psychosis, run through the [safety assessment](https://howtousepsychedelics.com/assessment/) before you plan anything else. This isn't formality. Certain contraindications genuinely change the risk calculus.
 
 *  Reviewed relevant contraindications for your substance
-*  Checked interactions with any current medications (the 
-
-  [Interaction Checker](https://howtousepsychedelics.com/checker/)
-
-   is a good starting point)
+*  Checked interactions with any current medications (the [Interaction Checker](https://howtousepsychedelics.com/checker/) is a good starting point)
 *  If on SSRIs or other psychiatric medications: aware of the interaction picture and have made an informed decision
 
 #### Have you worked with your intentions?
 
 *  Written down your intentions — not as wishes, but as honest orientations
-*  Distinguished between what you 
-
-  *want*
-
-   and what you genuinely 
-
-  *need*
+*  Distinguished between what you *want* and what you genuinely *need*
 *  Named your fears explicitly, in writing — not suppressed them
 *  Intentions are open-ended rather than outcome-specific ("I want to understand X" not "I want to feel Y")
 
@@ -97,7 +87,7 @@ The Johns Hopkins and Imperial College London playlists are both publicly availa
 
 ### Sitter Checklist
 
-For most people approaching a significant experience — particularly a first experience, or a high dose — a sitter is strongly advisable. The [facilitation guide](https://howtousepsychedelics.com/facilitation/) covers what makes a good sitter and how to prepare them. The short version is here.
+For most people approaching a significant experience — particularly a first experience, or a high dose — a sitter is strongly advisable. The [facilitation guide](https://howtousepsychedelics.com/facilitation/) covers what makes a good sitter and how to prepare them. The short version is here.
 
 #### Do you have the right person?
 
