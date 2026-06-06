@@ -2137,6 +2137,7 @@ footer {
 }
 
 .article-body p a,
+.article-body li a,
 .content-p a {
   color: var(--accent);
   text-decoration: underline;
@@ -2146,6 +2147,7 @@ footer {
 }
 
 .article-body p a:hover,
+.article-body li a:hover,
 .content-p a:hover {
   text-decoration-color: var(--accent);
 }
