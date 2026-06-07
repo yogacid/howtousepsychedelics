@@ -1472,7 +1472,7 @@ nav {
 .support-inner {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 4.5rem 1.5rem;
+  padding: 3rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1482,8 +1482,8 @@ nav {
 
 .support-text h2 {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 0.6rem;
 }
@@ -1536,7 +1536,7 @@ nav {
 
 .footer-support-headline {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.75rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 0.35rem;
