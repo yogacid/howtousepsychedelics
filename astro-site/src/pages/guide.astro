@@ -384,9 +384,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       btn.disabled = true;
 
       try {
-        // TODO: replace with Beehiiv API call
-        // var res = await fetch('...', { method: 'POST', body: JSON.stringify({ email, first_name: name }) });
-        await new Promise(function(r) { setTimeout(r, 800); }); // placeholder
+        var res = await fetch('/.netlify/functions/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, first_name: name, source: 'htup-guide-page' }),
+        });
+        if (!res.ok) throw new Error('Subscribe failed');
 
         form.style.display = 'none';
         success.style.display = 'block';
