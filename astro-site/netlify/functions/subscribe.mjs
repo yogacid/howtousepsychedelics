@@ -39,12 +39,18 @@ export default async (req) => {
       });
     }
 
+    // Map source to a readable tag for Beehiiv segmentation
+    var sourceTag = source || 'htup-popup';
+
     const payload = {
       email,
       reactivate_existing: true,
       send_welcome_email: true,
-      utm_source: source || 'htup-popup',
+      utm_source: sourceTag,
       referring_site: 'howtousepsychedelics.com',
+      custom_fields: [
+        { name: 'signup_source', value: sourceTag },
+      ],
     };
 
     if (first_name && first_name.trim()) {

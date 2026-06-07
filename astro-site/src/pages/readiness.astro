@@ -29,7 +29,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- INTRO VIEW -->
         <div id="ra-view-intro">
           <p class="ra-intro-headline">Before you begin, pause.</p>
-          <p class="ra-intro-body">Preparation is not a formality &mdash; it is part of the experience itself. This eleven-question assessment covers intention, psychological safety, set and setting, and integration readiness. It takes about five minutes. Your answers are completely private and are not stored anywhere.</p>
+          <p class="ra-intro-body">This eleven-question assessment covers intention, psychological safety, set and setting, and integration readiness. It takes about five minutes. Your answers are completely private and are not stored anywhere.</p>
           <div class="ra-intro-meta">
             <span class="ra-meta-pill"><span class="ra-meta-dot"></span>11 questions</span>
             <span class="ra-meta-pill"><span class="ra-meta-dot"></span>5 minutes</span>
@@ -370,7 +370,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         no: {
           severity: 'warning',
           title: 'You have not yet prepared',
-          body: 'Intentional preparation is not optional for a meaningful and safe experience. At minimum, clarify your intention, learn about your substance, secure your setting, and arrange support. The preparation guide walks through each dimension in detail.',
+          body: 'Intentional preparation directly shapes both safety and depth. At minimum, clarify your intention, learn about your substance, secure your setting, and arrange support. The preparation guide walks through each dimension in detail.',
           link: { text:'Read the preparation guide', href:'/preparation/' }
         }
       }
@@ -434,8 +434,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         ready: 'You appear well-positioned to move forward.'
       };
       var subs = {
-        pause: 'Your answers have raised one or more factors that carry genuine safety implications. This is not a judgement and not necessarily a permanent barrier \u2014 but it does mean that moving forward right now without addressing what\u2019s below could put you at risk. Please read each item carefully.',
-        prepare: 'Your foundation has real strengths, but several areas would benefit from meaningful attention before you proceed. Addressing these is not a formality \u2014 it will directly shape the safety and quality of your experience.',
+        pause: 'Your answers have raised one or more factors that carry genuine safety implications. This may not be a permanent barrier \u2014 but moving forward right now without addressing what\u2019s below could put you at risk. Please read each item carefully.',
+        prepare: 'Your foundation has real strengths, but several areas would benefit from meaningful attention before you proceed. Addressing these will directly shape the safety and quality of your experience.',
         strengthen: 'You are approaching this with care. A few areas could be strengthened to give yourself the best possible foundation. None of these are urgent safety concerns, but each one will improve the quality of what you encounter.',
         ready: 'Your answers reflect a thoughtful, well-prepared approach. This does not mean the experience will be easy or predictable \u2014 it never is. But it means you have built a strong foundation for meeting whatever arises.'
       };
@@ -648,6 +648,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var cAmber = [201, 148, 58];
       var cLight = [220, 220, 220];
 
+      // Sanitise text for jsPDF (built-in fonts lack Unicode support)
+      function clean(str) {
+        if (!str) return '';
+        return str
+          .replace(/[‘’ʼ]/g, "'")
+          .replace(/[“”]/g, '"')
+          .replace(/—/g, ' - ')
+          .replace(/–/g, '-')
+          .replace(/→/g, '->')
+          .replace(/…/g, '...')
+          .replace(/ /g, ' ');
+      }
+
       function lh(fontSize) { return fontSize * 0.42; }
 
       function checkBreak(needed) {
@@ -693,7 +706,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         doc.setFontSize(fontSize);
         doc.setFont('helvetica', style);
         doc.setTextColor(color[0], color[1], color[2]);
-        var lines = doc.splitTextToSize(text, cw - indent);
+        var lines = doc.splitTextToSize(clean(text), cw - indent);
         var lineHeight = lh(fontSize);
         for (var i = 0; i < lines.length; i++) {
           checkBreak(lineHeight);
@@ -720,7 +733,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       else tier = 'ready';
 
       var badges = { pause:'Pause', prepare:'More Preparation Needed', strengthen:'Nearly Ready', ready:'Well-Positioned' };
-      var headlines = { pause:'Please pause before moving forward.', prepare:'Important areas need your attention first.', strengthen:'You\u2019re close \u2014 a few things to strengthen.', ready:'You appear well-positioned to move forward.' };
+      var headlines = { pause:'Please pause before moving forward.', prepare:'Important areas need your attention first.', strengthen:'You are close - a few things to strengthen.', ready:'You appear well-positioned to move forward.' };
       var severityOrder = { critical:0, warning:1, note:2, strength:3 };
       items.sort(function(a,b){ return (severityOrder[a.severity]||99)-(severityOrder[b.severity]||99); });
       if (tier === 'ready') {
@@ -771,7 +784,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       doc.setFontSize(13);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(cDark[0], cDark[1], cDark[2]);
-      var headLines = doc.splitTextToSize(headlines[tier], cw);
+      var headLines = doc.splitTextToSize(clean(headlines[tier]), cw);
       for (var hi = 0; hi < headLines.length; hi++) {
         doc.text(headLines[hi], ml, y);
         y += lh(13);
@@ -835,7 +848,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(cDark[0], cDark[1], cDark[2]);
-        var titleLines = doc.splitTextToSize(item.title, cw);
+        var titleLines = doc.splitTextToSize(clean(item.title), cw);
         for (var ti = 0; ti < titleLines.length; ti++) {
           checkBreak(lh(10));
           doc.text(titleLines[ti], ml, y);
@@ -851,7 +864,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(cTeal[0], cTeal[1], cTeal[2]);
           var linkUrl = item.link.href.indexOf('http') === 0 ? item.link.href : 'howtousepsychedelics.com' + item.link.href;
-          doc.text(item.link.text + '  \u2192  ' + linkUrl, ml, y);
+          doc.text(clean(item.link.text) + '  ->  ' + linkUrl, ml, y);
           y += lh(8);
         }
 

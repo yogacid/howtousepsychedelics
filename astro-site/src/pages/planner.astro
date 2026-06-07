@@ -10,7 +10,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 >
   <script slot="head" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer is:inline></script>
 
-  <style>
+  <style is:global>
     .jp-pdf-section {
       margin-top: 28px;
       padding-top: 24px;
@@ -141,6 +141,180 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       50%  { background-position: 100% center; }
       100% { background-position: 0% center; }
     }
+
+    /* Substance info card */
+    .jp-sub-card {
+      margin-top: 12px;
+      padding: 16px 18px;
+      background: rgba(62,201,191,0.04);
+      border: 1px solid rgba(62,201,191,0.15);
+      border-radius: 12px;
+    }
+    .jp-sub-card-header {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .jp-sub-card-header span { white-space: nowrap; }
+    .jp-sub-card-header .jp-sub-val { color: var(--text-primary); }
+    .jp-sub-card-points {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .jp-sub-card-points li {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      padding-left: 14px;
+      position: relative;
+    }
+    .jp-sub-card-points li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.7;
+    }
+    .jp-sub-card-link {
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .jp-sub-card-link:hover { text-decoration: underline; }
+
+    /* Combo warnings */
+    .jp-combo-warn {
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: rgba(201,148,58,0.06);
+      border: 1px solid rgba(201,148,58,0.25);
+      border-radius: 10px;
+    }
+    .jp-combo-warn-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c9943a;
+      margin-bottom: 8px;
+    }
+    .jp-combo-warn-item {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      padding: 4px 0;
+      padding-left: 14px;
+      position: relative;
+    }
+    .jp-combo-warn-item::before {
+      content: '\26A0';
+      position: absolute;
+      left: 0;
+      font-size: 0.7rem;
+    }
+
+    /* Smart summary: recommendations */
+    .jp-out-recs {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .jp-out-rec-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .jp-out-rec-item {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding: 6px 0 6px 14px;
+      border-left: 2px solid rgba(201,148,58,0.3);
+      margin-bottom: 6px;
+    }
+    .jp-out-rec-item.is-critical {
+      border-left-color: #c9943a;
+    }
+    .jp-out-rec-item strong {
+      color: var(--text-primary);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 1px;
+      font-size: 0.8rem;
+    }
+
+    /* Smart summary: substance guidance block */
+    .jp-out-sub-guidance {
+      padding: 14px 16px;
+      background: rgba(62,201,191,0.04);
+      border: 1px solid rgba(62,201,191,0.12);
+      border-radius: 10px;
+      margin: 8px 0;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .jp-out-sub-guidance strong {
+      font-size: 0.84rem;
+      color: var(--text-primary);
+    }
+    .jp-out-sub-guidance ul {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0;
+    }
+    .jp-out-sub-guidance li {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      padding: 3px 0 3px 14px;
+      position: relative;
+    }
+    .jp-out-sub-guidance li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+
+    /* Suggested resources */
+    .jp-out-resources {
+      padding: 14px 0;
+    }
+    .jp-out-resources a {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid rgba(62,201,191,0.2);
+      border-radius: 6px;
+      margin: 3px 6px 3px 0;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .jp-out-resources a:hover {
+      border-color: rgba(62,201,191,0.5);
+      background: rgba(62,201,191,0.05);
+    }
   </style>
 
   <div class="jp-page-wrap">
@@ -253,6 +427,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
 
+        <div class="jp-combo-warn" id="jp-combo-warn" style="display:none;"></div>
+
         <div class="jp-step-footer">
           <span></span>
           <button class="jp-btn-next" data-to="1">Continue &rarr;</button>
@@ -262,7 +438,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <!-- STEP 2: INTENTION -->
       <div class="jp-card jp-step-panel" data-panel="1">
         <div class="jp-card-label">Step 2 &mdash; Intention Setting</div>
-        <p class="jp-card-desc">An intention is not a wish or a demand &mdash; it is an orientation. It gives the experience a direction without trying to control the outcome. Take your time with this step &mdash; the clarity you bring here shapes the quality of everything that follows.</p>
+        <p class="jp-card-desc">Your intention gives the experience a direction without trying to control the outcome. Take your time with this step &mdash; the clarity you bring here shapes the quality of everything that follows.</p>
 
         <div class="jp-field">
           <label>What is drawing you toward this experience right now?</label>
@@ -360,7 +536,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <!-- STEP 4: SAFETY -->
       <div class="jp-card jp-step-panel" data-panel="3">
         <div class="jp-card-label">Step 4 &mdash; Safety Planning</div>
-        <p class="jp-card-desc">Safety is not an obstacle to the experience &mdash; it is part of what makes genuine surrender possible. These are the most important items to address before your session.</p>
+        <p class="jp-card-desc">Thorough safety planning makes genuine surrender possible. These are the most important items to address before your session.</p>
 
         <div class="jp-checklist" id="jp-safety-list">
           <label class="jp-check-item"><input type="checkbox" /><span class="jp-check-box"></span><span>No medical contraindications &mdash; reviewed <a href="/readiness/">Readiness Assessment</a></span></label>
@@ -503,27 +679,236 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     setupCounter('jp-safety-list', 'jp-safety-counter');
     setupCounter('jp-integration-list', 'jp-integration-counter');
 
-    // Substance-specific notes
-    var subNotes = {
-      'Psilocybin mushrooms': 'Duration: 4\u20136 hours. Onset: 20\u201360 minutes. Nausea common on come-up. Empty stomach recommended. Lemon tek can accelerate onset. Read the full guide: /psilocybin',
-      'LSD': 'Duration: 8\u201312 hours. Onset: 30\u201390 minutes. Very long duration \u2014 ensure your schedule is clear for the full day and evening. Read the full guide: /lsd',
-      'DMT (smoked/vaporised)': 'Duration: 5\u201320 minutes (intense). Onset: seconds. Extremely powerful. Sitter strongly recommended. Have a safe place to lie down immediately. Read the full guide: /dmt',
-      'Ayahuasca': 'Duration: 4\u20136 hours. Onset: 20\u201360 minutes. Purging is common and expected. Dietary restrictions (no tyramine) are critical for at least 24 hours before. MAOI interactions are life-threatening. Read the full guide: /ayahuasca',
-      'Mescaline (cactus)': 'Duration: 8\u201312 hours. Onset: 45\u2013120 minutes. Nausea is common and sometimes intense. Very long experience \u2014 plan accordingly. Read the full guide: /mescaline',
-      '5-MeO-DMT': 'Duration: 15\u201345 minutes. Onset: seconds. One of the most powerful psychedelics known. Experienced sitter is essential \u2014 non-negotiable. Multiple fatalities when combined with MAOIs. Read the full guide: /fivemedmt',
-      'MDMA': 'Duration: 3\u20135 hours. Onset: 30\u201360 minutes. Stay hydrated but don\u2019t overhydrate. Monitor body temperature. Do not redose more than once. 3-month minimum between uses. Read the full guide: /mdma',
-      'Ketamine': 'Duration: 45\u201390 minutes. Onset: minutes. Dissociative, not classical psychedelic. Do not combine with alcohol or opioids (respiratory depression risk). Read the full guide: /ketamine',
-      '2C-B': 'Duration: 4\u20136 hours. Onset: 45\u201375 minutes (oral). Effects are strongly dose-dependent \u2014 small dose changes produce large effect changes. Start low. Read the full guide: /twocb'
+    /* ======================================================
+       SUBSTANCE DATA
+       ====================================================== */
+    var SUBSTANCE_DATA = {
+      'Psilocybin mushrooms': {
+        duration: '4–6 hours',
+        onset: '20–60 minutes',
+        points: [
+          'Nausea is common on the come-up, especially on a full stomach. Ginger tea can help.',
+          'Lemon tek (ground mushrooms soaked in lemon juice for 20 min) accelerates onset and may intensify the peak.',
+          'Empty stomach recommended — eat lightly 3–4 hours before.',
+          'Effects build gradually. Do not redose within the first 90 minutes.'
+        ],
+        guide: '/psilocybin',
+        guideName: 'Psilocybin Guide',
+        criticalSafety: [],
+        dietNote: null
+      },
+      'LSD': {
+        duration: '8–12 hours',
+        onset: '30–90 minutes',
+        points: [
+          'Very long duration — ensure your entire day and evening are free of obligations.',
+          'Do not redose. Tolerance builds immediately; a second dose extends duration without proportionally increasing intensity.',
+          'Test your tabs with a reagent kit (Ehrlich/Hofmann). NBOMe compounds sold as LSD can be dangerous.',
+          'Effects may continue to shift and evolve for the full 12 hours. This is normal.'
+        ],
+        guide: '/lsd',
+        guideName: 'LSD Guide',
+        criticalSafety: ['Substance has been verified'],
+        dietNote: null
+      },
+      'DMT (smoked/vaporised)': {
+        duration: '5–20 minutes',
+        onset: 'Seconds',
+        points: [
+          'Extremely intense. Often described as the most powerful psychedelic experience possible.',
+          'A sitter is essential — you will be unable to move or communicate during the peak.',
+          'Have a safe place to lie down immediately before inhaling.',
+          'The short duration does not reduce the psychological intensity. Integration is still important.'
+        ],
+        guide: '/dmt',
+        guideName: 'DMT Guide',
+        criticalSafety: ['Sitter knows the substance, dose, and expected duration', 'Sitter knows what to do if things become difficult'],
+        dietNote: null
+      },
+      'Ayahuasca': {
+        duration: '4–6 hours',
+        onset: '20–60 minutes',
+        points: [
+          'Dietary restrictions are critical: avoid tyramine-containing foods (aged cheese, cured meats, fermented foods, soy sauce) for at least 24–48 hours before.',
+          'MAOI interactions are life-threatening. SSRIs, SNRIs, stimulants, and many other medications must be discontinued well in advance. Use the Interaction Checker.',
+          'Purging (vomiting, diarrhoea) is common and considered part of the process. It is not a sign something is wrong.',
+          'Should be taken in a supported setting with experienced facilitation, not solo.'
+        ],
+        guide: '/ayahuasca',
+        guideName: 'Ayahuasca Guide',
+        criticalSafety: ['No dangerous medication interactions', 'Fasted or eaten lightly'],
+        dietNote: 'Ayahuasca requires strict dietary preparation (tyramine-free diet) for at least 24–48 hours before the ceremony. This is a safety requirement, not optional.'
+      },
+      'Mescaline (cactus)': {
+        duration: '8–12 hours',
+        onset: '45–120 minutes',
+        points: [
+          'Very long experience — plan for a full day with no obligations.',
+          'Nausea is common and sometimes intense, particularly during the first 1–2 hours.',
+          'Slow onset can tempt redosing — wait at least 2 hours before concluding the dose was insufficient.',
+          'The body load is significant. Stay hydrated and have a comfortable place to rest.'
+        ],
+        guide: '/mescaline',
+        guideName: 'Mescaline Guide',
+        criticalSafety: [],
+        dietNote: null
+      },
+      '5-MeO-DMT': {
+        duration: '15–45 minutes',
+        onset: 'Seconds',
+        points: [
+          'One of the most powerful psychedelics known. Non-negotiable: an experienced sitter must be present.',
+          'Complete ego dissolution is common. You may thrash, vocalise, or stop breathing briefly.',
+          'Multiple fatalities have occurred when combined with MAOIs. Never combine with any other substance.',
+          'Not recreational. Requires significant psychological preparation and integration support.'
+        ],
+        guide: '/fivemedmt',
+        guideName: '5-MeO-DMT Guide',
+        criticalSafety: ['Sitter knows the substance, dose, and expected duration', 'Sitter knows what to do if things become difficult', 'Not combining with other substances'],
+        dietNote: null
+      },
+      'MDMA': {
+        duration: '3–5 hours',
+        onset: '30–60 minutes',
+        points: [
+          'Stay hydrated but do not overhydrate — sip water regularly (250ml/hour), do not gulp large amounts.',
+          'Monitor body temperature. Overheating is a serious risk, especially in warm environments.',
+          'Neurotoxicity increases at high doses and with frequent use. Never exceed 1.5mg/kg bodyweight.',
+          'The 3-month rule: allow minimum 3 months between uses to reduce neurotoxic risk and tolerance.'
+        ],
+        guide: '/mdma',
+        guideName: 'MDMA Guide',
+        criticalSafety: ['No dangerous medication interactions', 'Not combining with other substances'],
+        dietNote: null
+      },
+      'Ketamine': {
+        duration: '45–90 minutes',
+        onset: 'Minutes',
+        points: [
+          'Dissociative anaesthetic, not a classical psychedelic. The experience is qualitatively different.',
+          'Do not combine with alcohol, opioids, or benzodiazepines — respiratory depression risk is real.',
+          'Low doses are psychedelic/therapeutic; high doses produce full dissociation (K-hole). Know which you are aiming for.',
+          'Bladder damage occurs with frequent use. Occasional use at moderate doses carries lower risk.'
+        ],
+        guide: '/ketamine',
+        guideName: 'Ketamine Guide',
+        criticalSafety: ['Not combining with other substances'],
+        dietNote: null
+      },
+      '2C-B': {
+        duration: '4–6 hours',
+        onset: '45–75 minutes (oral)',
+        points: [
+          'Strongly dose-sensitive: a 5mg difference can dramatically change the experience. Weigh carefully.',
+          'Has stimulant and empathogenic properties alongside psychedelic effects.',
+          'Nasal administration is extremely painful and hits much harder. Oral recommended.',
+          'Body load can be significant at higher doses. Start with 15–18mg oral for a first experience.'
+        ],
+        guide: '/twocb',
+        guideName: '2C-B Guide',
+        criticalSafety: ['Dose has been carefully measured'],
+        dietNote: null
+      }
     };
+
+    /* ======================================================
+       SAFETY ITEM EXPLANATIONS
+       ====================================================== */
+    var SAFETY_EXPLANATIONS = [
+      { text: 'No medical contraindications', explanation: 'Unscreened medical conditions (heart problems, seizure disorders, psychotic conditions) can cause dangerous reactions. If you have not assessed this, complete the Readiness Assessment first.', link: '/readiness/', linkText: 'Readiness Assessment' },
+      { text: 'No dangerous medication interactions', explanation: 'Some combinations are life-threatening — SSRIs with MDMA or ayahuasca, lithium with any psychedelic, MAOIs with many substances. This is not optional.', link: '/checker/', linkText: 'Interaction Checker' },
+      { text: 'Substance has been verified', explanation: 'Unverified substances may contain dangerous adulterants, wrong compounds, or wildly inaccurate doses. Reagent testing takes minutes and can save your life.' },
+      { text: 'Dose has been carefully measured', explanation: 'Estimating doses leads to unexpectedly intense experiences. Use a milligram scale for powders, count tabs/caps carefully, and know the expected potency of your source.' },
+      { text: 'Sitter knows the substance, dose, and expected duration', explanation: 'Your sitter needs this information to provide appropriate support and to know when something is within normal range versus a genuine concern.' },
+      { text: 'Sitter knows what to do if things become difficult', explanation: 'Difficult experiences require calm, grounding presence — not panic. Brief your sitter on: staying calm, offering reassurance, not trying to talk you out of the experience, and when to seek help.' },
+      { text: 'Emergency contact identified', explanation: 'If you are alone or if your sitter needs help, someone outside the situation should know how to be reached. Leave a note or send a text in advance.' },
+      { text: 'Benzodiazepine or similar available', explanation: 'A benzodiazepine (e.g. diazepam) can significantly reduce a difficult psychedelic experience within 20–30 minutes. Having one available reduces anxiety even if you never use it.' },
+      { text: 'Not combining with other substances', explanation: 'Combinations multiply unpredictability and risk. Cannabis can dramatically intensify psychedelics; alcohol impairs judgement; stimulants add cardiovascular strain.' },
+      { text: 'Fasted or eaten lightly', explanation: 'A full stomach increases nausea (especially with mushrooms, ayahuasca, and mescaline) and can reduce or delay absorption. Eat lightly 3–4 hours before.' }
+    ];
+
+    /* ======================================================
+       INTEGRATION ITEM EXPLANATIONS
+       ====================================================== */
+    var INTEGRATION_EXPLANATIONS = [
+      { text: 'Journal and pen ready', explanation: 'Insights and felt-sense impressions fade quickly after a psychedelic experience. Even brief notes captured within the first hours can be invaluable weeks later.' },
+      { text: 'No high-stakes obligations for 1–3 days', explanation: 'Integration requires psychological space. Major decisions, difficult conversations, and high-pressure work should wait until you have processed the experience.' },
+      { text: 'Trusted person available to talk to', explanation: 'Verbalising the experience with a trusted listener helps consolidate meaning. You do not need to explain everything — just speaking aloud helps.' },
+      { text: 'Therapist or integration coach identified', explanation: 'If difficult material surfaces, professional support can be essential. Having someone identified in advance means you do not need to search while vulnerable.' },
+      { text: 'Time in nature planned', explanation: 'Nature contact supports the integration of expanded awareness. Even a walk in a park within 24–48 hours can help ground insights.' },
+      { text: 'Reviewed the Integration Guide', explanation: 'Structured integration practices (journaling prompts, meditation, somatic exercises) prevent insights from dissolving back into daily autopilot.', link: '/integration/', linkText: 'Integration Guide' },
+      { text: 'Clear of alcohol and cannabis for 1+ week', explanation: 'Alcohol and cannabis can blur the integration window. They may reintroduce avoidance patterns or override the subtle shifts the experience produced.' },
+      { text: 'Gentler exercise, meditation, or breathwork', explanation: 'Embodied practices (yoga, walking, breathwork) help ground psychedelic insights in the body rather than keeping them purely conceptual.' }
+    ];
+
+    /* ======================================================
+       SUBSTANCE-SPECIFIC GUIDANCE (Step 1)
+       ====================================================== */
     var subSelect = document.getElementById('pl-sub');
     var subNote = document.getElementById('jp-sub-note');
     subSelect.addEventListener('change', function() {
-      var note = subNotes[subSelect.value];
-      if (note) { subNote.textContent = note; subNote.style.display = 'block'; }
-      else { subNote.style.display = 'none'; }
+      var data = SUBSTANCE_DATA[subSelect.value];
+      if (data) {
+        var html = '<div class="jp-sub-card">';
+        html += '<div class="jp-sub-card-header">';
+        html += '<span>Duration: <span class="jp-sub-val">' + data.duration + '</span></span>';
+        html += '<span>Onset: <span class="jp-sub-val">' + data.onset + '</span></span>';
+        html += '</div>';
+        html += '<ul class="jp-sub-card-points">';
+        data.points.forEach(function(p) { html += '<li>' + p + '</li>'; });
+        html += '</ul>';
+        html += '<a class="jp-sub-card-link" href="' + data.guide + '/">Read the full ' + data.guideName + ' →</a>';
+        html += '</div>';
+        subNote.innerHTML = html;
+        subNote.style.display = 'block';
+      } else {
+        subNote.style.display = 'none';
+      }
+      checkCombos();
     });
 
-    // Date preparation note
+    /* ======================================================
+       COMBO WARNINGS (Step 1)
+       ====================================================== */
+    var doseSelect = document.getElementById('pl-dose');
+    var expSelect = document.getElementById('pl-exp');
+    var comboWarn = document.getElementById('jp-combo-warn');
+
+    function checkCombos() {
+      var sub = subSelect.value;
+      var dose = doseSelect.value;
+      var exp = expSelect.value;
+      var warns = [];
+
+      if (exp === 'First time ever' && (dose === 'High dose (strong)' || dose === 'Heroic dose (very high)')) {
+        warns.push('A high or heroic dose for a first psychedelic experience carries significantly elevated risk of psychological crisis. Start with a low or moderate dose to understand how you respond.');
+      }
+      if (dose === 'Heroic dose (very high)' && exp === 'First time with this substance') {
+        warns.push('A heroic dose with a substance you have not used before is high-risk. Each substance has a different character — start lower to learn how you respond to this one.');
+      }
+      if ((sub === '5-MeO-DMT' || sub === 'DMT (smoked/vaporised)') && (dose === 'High dose (strong)' || dose === 'Heroic dose (very high)' || dose === 'Moderate dose (standard)')) {
+        warns.push(sub + ' is extremely intense even at moderate doses. Ensure an experienced sitter is present (Step 3).');
+      }
+      if (sub === 'Ayahuasca' && exp === 'First time ever') {
+        warns.push('Ayahuasca is not recommended as a first psychedelic experience without experienced ceremonial facilitation. Ensure appropriate support is in place (Step 3).');
+      }
+
+      if (warns.length > 0) {
+        var html = '<div class="jp-combo-warn-title">⚠ Safety Concern' + (warns.length > 1 ? 's' : '') + '</div>';
+        warns.forEach(function(w) { html += '<div class="jp-combo-warn-item">' + w + '</div>'; });
+        comboWarn.innerHTML = html;
+        comboWarn.style.display = 'block';
+      } else {
+        comboWarn.style.display = 'none';
+      }
+    }
+
+    doseSelect.addEventListener('change', checkCombos);
+    expSelect.addEventListener('change', checkCombos);
+
+    /* ======================================================
+       DATE PREPARATION NOTE
+       ====================================================== */
     var dateInput = document.getElementById('pl-date');
     var dateNote = document.getElementById('jp-date-note');
     dateInput.addEventListener('change', function() {
@@ -537,7 +922,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         dateNote.textContent = 'This date is in the past.';
         dateNote.className = 'jp-date-note jp-date-warn';
       } else if (diffDays === 0) {
-        dateNote.textContent = 'That\u2019s today. If you haven\u2019t already completed your preparation, consider postponing.';
+        dateNote.textContent = "That\u2019s today. If you haven\u2019t already completed your preparation, consider postponing.";
         dateNote.className = 'jp-date-note jp-date-warn';
       } else if (diffDays <= 2) {
         dateNote.textContent = diffDays + ' day' + (diffDays === 1 ? '' : 's') + ' away. This is a short preparation window. Ensure all safety and setting items are already in place.';
@@ -549,18 +934,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         dateNote.textContent = diffDays + ' days away. A good amount of preparation time. Consider journaling, meditation, and reading about your chosen substance in the weeks ahead.';
         dateNote.className = 'jp-date-note jp-date-good';
       } else {
-        dateNote.textContent = diffDays + ' days away. Plenty of time to prepare thoroughly. Use the weeks ahead for intentional preparation \u2014 reading, journaling, meditation, and lifestyle adjustments.';
+        dateNote.textContent = diffDays + ' days away. Plenty of time to prepare thoroughly. Use the weeks ahead for intentional preparation — reading, journaling, meditation, and lifestyle adjustments.';
         dateNote.className = 'jp-date-note jp-date-good';
       }
       dateNote.style.display = 'block';
     });
 
-    // Generate plan
+    /* ======================================================
+       SMART PLAN SUMMARY GENERATION
+       ====================================================== */
     function val(id) { var el = document.getElementById(id); return el ? (el.value || '') : ''; }
     function countChecked(id) {
       var el = document.getElementById(id);
       if (!el) return { c: 0, t: 0 };
       return { c: el.querySelectorAll('input:checked').length, t: el.querySelectorAll('input[type="checkbox"]').length };
+    }
+    function getChecklistStates(listId) {
+      var el = document.getElementById(listId);
+      if (!el) return [];
+      var items = [];
+      el.querySelectorAll('.jp-check-item').forEach(function(item) {
+        var cb = item.querySelector('input[type="checkbox"]');
+        var spans = item.querySelectorAll('span');
+        var text = spans[spans.length - 1].textContent.trim();
+        items.push({ checked: cb.checked, text: text });
+      });
+      return items;
     }
 
     document.getElementById('jp-generate').addEventListener('click', function() {
@@ -571,38 +970,81 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var totalC = sc.c + saf.c + intg.c, totalT = sc.t + saf.t + intg.t;
       var pct = totalT > 0 ? Math.round((totalC / totalT) * 100) : 0;
 
-      var warnings = [];
-      if (source === 'Unverified') warnings.push('Your substance is unverified. Reagent testing is strongly recommended before use.');
-      if (exp === 'First time ever' && (dose === 'High dose (strong)' || dose === 'Heroic dose (very high)')) warnings.push('A high or heroic dose for a first experience carries significantly elevated risk. Consider starting with a low or moderate dose.');
-      if (sitter === 'No \u2014 solo' && exp === 'First time ever') warnings.push('Solo use for a first experience is strongly discouraged. A trusted sitter significantly reduces risk.');
-      if (saf.c < saf.t) warnings.push((saf.t - saf.c) + ' safety checklist items remain unchecked. Review these before proceeding.');
-      if (sub === '5-MeO-DMT' && sitter === 'No \u2014 solo') warnings.push('5-MeO-DMT should never be taken without an experienced sitter present.');
-      if (sub === 'Ayahuasca' && sitter === 'No \u2014 solo') warnings.push('Ayahuasca should be taken in a supported setting with experienced facilitation.');
-      if (!intention && !explore) warnings.push('No intention has been written. Consider returning to Step 2 to clarify your intention before proceeding.');
-      if (dose === 'Unsure') warnings.push('You\u2019re unsure about your dose. Research your chosen substance thoroughly and start conservatively.');
+      var safetyStates = getChecklistStates('jp-safety-list');
+      var integrationStates = getChecklistStates('jp-integration-list');
 
-      var tier = (warnings.length === 0 && pct >= 80) ? 'ready' : (warnings.length <= 1 && pct >= 50) ? 'prepare' : 'review';
+      // ── Build Warnings ──
+      var warnings = [];
+      if (source === 'Unverified') warnings.push('Your substance is unverified. Reagent testing is strongly recommended before any use.');
+      if (exp === 'First time ever' && (dose === 'High dose (strong)' || dose === 'Heroic dose (very high)')) warnings.push('A high or heroic dose for a first experience carries significantly elevated risk of psychological crisis. Consider starting with a low or moderate dose.');
+      if (sitter === 'No — solo' && exp === 'First time ever') warnings.push('Solo use for a first psychedelic experience is strongly discouraged. A trusted sitter significantly reduces risk.');
+      if ((dose === 'High dose (strong)' || dose === 'Heroic dose (very high)') && sitter === 'No — solo') warnings.push('High-dose experiences without a sitter present substantial safety risk.');
+      if (sub === '5-MeO-DMT' && sitter === 'No — solo') warnings.push('5-MeO-DMT should never be taken without an experienced sitter. This is non-negotiable.');
+      if (sub === 'Ayahuasca' && sitter === 'No — solo') warnings.push('Ayahuasca should be taken in a supported setting with experienced facilitation.');
+      if (!intention && !explore) warnings.push('No intention has been written. Consider returning to Step 2 to clarify your intention before proceeding.');
+      if (dose === 'Unsure') warnings.push('You are unsure about your dose. Research your chosen substance thoroughly and start conservatively.');
+
+      // ── Substance cross-references ──
+      var subData = SUBSTANCE_DATA[sub];
+      var crossRefs = [];
+      if (subData && subData.criticalSafety.length > 0) {
+        subData.criticalSafety.forEach(function(critText) {
+          for (var si = 0; si < safetyStates.length; si++) {
+            if (safetyStates[si].text.indexOf(critText) !== -1 && !safetyStates[si].checked) {
+              crossRefs.push({ item: critText, substance: sub, explanation: 'This is especially critical when working with ' + sub + '.' });
+            }
+          }
+        });
+      }
+      if (subData && subData.dietNote) {
+        var fastItem = safetyStates.find(function(s) { return s.text.indexOf('Fasted') !== -1; });
+        if (fastItem && !fastItem.checked) {
+          crossRefs.push({ item: 'Dietary preparation', substance: sub, explanation: subData.dietNote });
+        }
+      }
+
+      // ── Determine tier ──
+      var hasCriticalWarnings = warnings.length > 2 || (sub === '5-MeO-DMT' && sitter === 'No — solo');
+      var tier;
+      if (hasCriticalWarnings || pct < 40) tier = 'review';
+      else if (warnings.length === 0 && pct >= 80) tier = 'ready';
+      else tier = 'prepare';
+
       var tierLabels = { ready: 'Well-Prepared', prepare: 'Nearly Ready', review: 'Needs Attention' };
 
+      // ── Build HTML ──
       var html = '';
-      html += '<div class="jp-out-badge tier-' + tier + '">' + tierLabels[tier] + ' \u2014 ' + pct + '% complete</div>';
+      html += '<div class="jp-out-badge tier-' + tier + '">' + tierLabels[tier] + ' — ' + pct + '% complete</div>';
 
+      // Warnings
       if (warnings.length > 0) {
         html += '<div class="jp-out-section jp-out-warnings">';
-        html += '<div class="jp-out-label">\u26A0 Attention</div>';
+        html += '<div class="jp-out-label">⚠ Attention</div>';
         warnings.forEach(function(w) { html += '<div class="jp-out-warn">' + w + '</div>'; });
         html += '</div>';
       }
 
-      // Substance
+      // Substance-specific guidance
+      if (subData) {
+        html += '<div class="jp-out-section">';
+        html += '<div class="jp-out-label">Substance Guidance</div>';
+        html += '<div class="jp-out-sub-guidance">';
+        html += '<strong>' + sub + '</strong> — ' + subData.duration + ' duration, ' + subData.onset + ' onset';
+        html += '<ul>';
+        subData.points.forEach(function(p) { html += '<li>' + p + '</li>'; });
+        html += '</ul>';
+        html += '</div></div>';
+      }
+
+      // Substance & Dose
       html += '<div class="jp-out-section"><div class="jp-out-label">Substance &amp; Dose</div><div class="jp-out-value">';
       html += sub ? '<strong>' + sub + '</strong>' : '<em>Not selected</em>';
-      if (dose) html += ' \u2014 ' + dose;
+      if (dose) html += ' — ' + dose;
       if (exp) html += '<br>Experience level: ' + exp;
       if (source) html += '<br>Verification: ' + source;
       html += '</div></div>';
 
-      // Intention (combined)
+      // Intention
       var hasIntention = intention || explore || outcome || release;
       if (hasIntention) {
         html += '<div class="jp-out-section"><div class="jp-out-label">Intention &amp; Inner Work</div><div class="jp-out-value">';
@@ -630,37 +1072,90 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         if (diff2 > 0) html += '<strong>Preparation time remaining:</strong> ' + diff2 + ' day' + (diff2===1?'':'s') + '<br>';
       }
       html += '<strong>Setting preparation:</strong> ' + sc.c + ' of ' + sc.t + ' items complete';
-      if (sc.c < sc.t) html += ' \u2014 <em>' + (sc.t - sc.c) + ' remaining</em>';
+      if (sc.c < sc.t) html += ' — <em>' + (sc.t - sc.c) + ' remaining</em>';
       html += '</div></div>';
 
       // Safety
       html += '<div class="jp-out-section"><div class="jp-out-label">Safety</div><div class="jp-out-value">';
       html += '<strong>Safety checklist:</strong> ' + saf.c + ' of ' + saf.t + ' items complete';
-      if (saf.c < saf.t) html += ' \u2014 <em style="color:#c9943a;">' + (saf.t - saf.c) + ' items need attention</em>';
-      else html += ' \u2014 <em style="color:#6dd456;">All safety items addressed</em>';
+      if (saf.c === saf.t) html += ' — <em style="color:#6dd456;">All safety items addressed</em>';
+      else html += ' — <em style="color:#c9943a;">' + (saf.t - saf.c) + ' items need attention</em>';
       html += '</div></div>';
 
       // Integration
       html += '<div class="jp-out-section"><div class="jp-out-label">Integration</div><div class="jp-out-value">';
       html += '<strong>Integration checklist:</strong> ' + intg.c + ' of ' + intg.t + ' items complete';
-      if (intg.c < intg.t) html += ' \u2014 <em>' + (intg.t - intg.c) + ' remaining</em>';
+      if (intg.c < intg.t) html += ' — <em>' + (intg.t - intg.c) + ' remaining</em>';
       html += '</div></div>';
 
       // Overall
       html += '<div class="jp-out-section"><div class="jp-out-label">Overall Preparation</div><div class="jp-out-value">';
       html += '<strong>' + pct + '%</strong> of all checklist items completed (' + totalC + ' of ' + totalT + ')';
       html += '</div></div>';
-
       html += '<div class="jp-out-bar"><div class="jp-out-bar-fill" style="width:' + pct + '%"></div></div>';
 
-      // Next steps
+      // ── PERSONALISED RECOMMENDATIONS ──
+      var recs = [];
+
+      // Cross-reference gaps (substance-specific)
+      crossRefs.forEach(function(cr) {
+        recs.push({ critical: true, title: cr.item + ' (critical for ' + cr.substance + ')', body: cr.explanation });
+      });
+
+      // Unchecked safety items
+      safetyStates.forEach(function(item, idx) {
+        if (!item.checked && SAFETY_EXPLANATIONS[idx]) {
+          var alreadyCrossRef = crossRefs.some(function(cr) { return item.text.indexOf(cr.item) !== -1; });
+          if (!alreadyCrossRef) {
+            recs.push({ critical: false, title: item.text, body: SAFETY_EXPLANATIONS[idx].explanation });
+          }
+        }
+      });
+
+      // Unchecked integration items
+      integrationStates.forEach(function(item, idx) {
+        if (!item.checked && INTEGRATION_EXPLANATIONS[idx]) {
+          recs.push({ critical: false, title: item.text, body: INTEGRATION_EXPLANATIONS[idx].explanation });
+        }
+      });
+
+      if (recs.length > 0) {
+        html += '<div class="jp-out-recs">';
+        html += '<div class="jp-out-rec-title">Personalised Recommendations</div>';
+        recs.forEach(function(r) {
+          html += '<div class="jp-out-rec-item' + (r.critical ? ' is-critical' : '') + '">';
+          html += '<strong>' + r.title + '</strong>';
+          html += r.body;
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+
+      // ── SUGGESTED RESOURCES ──
+      var resources = [];
+      if (subData) resources.push({ href: subData.guide + '/', text: subData.guideName });
+      if (saf.c < saf.t) {
+        resources.push({ href: '/readiness/', text: 'Readiness Assessment' });
+        resources.push({ href: '/checker/', text: 'Interaction Checker' });
+      }
+      if (intg.c < intg.t) resources.push({ href: '/integration/', text: 'Integration Guide' });
+      if (!intention && !explore) resources.push({ href: '/preparation/', text: 'Preparation Guide' });
+
+      if (resources.length > 0) {
+        html += '<div class="jp-out-resources">';
+        html += '<div class="jp-out-rec-title">Suggested Resources</div>';
+        resources.forEach(function(r) { html += '<a href="' + r.href + '">' + r.text + ' →</a>'; });
+        html += '</div>';
+      }
+
+      // ── NEXT STEPS ──
       html += '<div class="jp-out-section"><div class="jp-out-label">Next Steps</div><div class="jp-out-value">';
       if (tier === 'review') {
-        html += 'Review the warnings above and address outstanding items before proceeding. Return to the relevant steps to complete your preparation.';
+        html += 'Review the warnings and recommendations above before proceeding. Address outstanding safety items as a priority. Return to the relevant steps to complete your preparation.';
       } else if (tier === 'prepare') {
-        html += 'You\u2019re nearly there. Address any remaining checklist items and spend time with your intention in the days ahead.';
+        html += 'You are nearly there. Address any remaining recommendations and spend time with your intention in the days ahead. Complete unchecked safety items before your session.';
       } else {
-        html += 'Your preparation looks strong. In the days ahead, continue to sit with your intention, finalise your setting, and take care of your body and mind. Trust what you\u2019ve built here.';
+        html += 'Your preparation looks strong. In the days ahead, continue to sit with your intention, finalise your setting, and take care of your body and mind. Trust what you have built here.';
       }
       html += '</div></div>';
 
@@ -671,6 +1166,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     document.getElementById('jp-edit-back').addEventListener('click', function() { showPanel(4); });
   })();
   </script>
+
 
   <!-- PDF Generation & Email Capture -->
   <script is:inline>
@@ -688,7 +1184,44 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     psygaiaLogo.crossOrigin = 'anonymous';
     psygaiaLogo.src = '/footer-logo-light.png';
 
-    // ── Helpers ──────────────────────────────────────────────
+    // ── Substance Data (mirrored for PDF access) ──
+    var SUBSTANCE_DATA = {
+      'Psilocybin mushrooms': { duration: '4-6 hours', onset: '20-60 minutes', points: ['Nausea common on come-up. Ginger tea can help.', 'Lemon tek accelerates onset and may intensify peak.', 'Empty stomach recommended.', 'Do not redose within first 90 minutes.'], guide: '/psilocybin', guideName: 'Psilocybin Guide' },
+      'LSD': { duration: '8-12 hours', onset: '30-90 minutes', points: ['Very long duration - clear entire day and evening.', 'Do not redose. Tolerance builds immediately.', 'Test tabs with reagent kit (Ehrlich/Hofmann).', 'Effects continue shifting for full 12 hours.'], guide: '/lsd', guideName: 'LSD Guide' },
+      'DMT (smoked/vaporised)': { duration: '5-20 minutes', onset: 'Seconds', points: ['Extremely intense. Sitter essential.', 'You will be unable to move or communicate during peak.', 'Have safe place to lie down before inhaling.', 'Short duration does not reduce psychological intensity.'], guide: '/dmt', guideName: 'DMT Guide' },
+      'Ayahuasca': { duration: '4-6 hours', onset: '20-60 minutes', points: ['Tyramine-free diet required 24-48hrs before (no aged cheese, cured meats, fermented foods).', 'MAOI interactions are life-threatening. Check all medications.', 'Purging is common and expected.', 'Should be taken with experienced facilitation.'], guide: '/ayahuasca', guideName: 'Ayahuasca Guide' },
+      'Mescaline (cactus)': { duration: '8-12 hours', onset: '45-120 minutes', points: ['Very long experience - plan full day.', 'Nausea common in first 1-2 hours.', 'Slow onset - wait at least 2 hours before considering redose.', 'Significant body load. Stay hydrated.'], guide: '/mescaline', guideName: 'Mescaline Guide' },
+      '5-MeO-DMT': { duration: '15-45 minutes', onset: 'Seconds', points: ['One of most powerful psychedelics. Experienced sitter non-negotiable.', 'Complete ego dissolution common. May thrash or vocalise.', 'Never combine with MAOIs or any other substance.', 'Requires significant psychological preparation.'], guide: '/fivemedmt', guideName: '5-MeO-DMT Guide' },
+      'MDMA': { duration: '3-5 hours', onset: '30-60 minutes', points: ['Stay hydrated but do not overhydrate (250ml/hour).', 'Monitor body temperature. Overheating is serious risk.', 'Never exceed 1.5mg/kg bodyweight.', '3-month minimum between uses.'], guide: '/mdma', guideName: 'MDMA Guide' },
+      'Ketamine': { duration: '45-90 minutes', onset: 'Minutes', points: ['Dissociative, not classical psychedelic.', 'Do not combine with alcohol, opioids, or benzodiazepines.', 'Low doses psychedelic; high doses full dissociation.', 'Bladder damage with frequent use.'], guide: '/ketamine', guideName: 'Ketamine Guide' },
+      '2C-B': { duration: '4-6 hours', onset: '45-75 minutes (oral)', points: ['Strongly dose-sensitive: 5mg difference changes experience dramatically.', 'Has stimulant and empathogenic properties.', 'Nasal administration extremely painful. Oral recommended.', 'Start with 15-18mg oral for first experience.'], guide: '/twocb', guideName: '2C-B Guide' }
+    };
+
+    var SAFETY_EXPLANATIONS = [
+      'Unscreened medical conditions can cause dangerous reactions. Complete the Readiness Assessment.',
+      'Some drug combinations are life-threatening (SSRIs + MDMA, lithium + psychedelics, MAOIs + many substances).',
+      'Unverified substances may contain dangerous adulterants or wrong compounds. Reagent test first.',
+      'Estimating doses leads to unexpectedly intense experiences. Use a milligram scale.',
+      'Your sitter needs this information to support you and know what is within normal range.',
+      'Difficult experiences require calm, grounding presence. Brief your sitter on what to do.',
+      'If something goes wrong, someone outside the situation should know how to be reached.',
+      'A benzodiazepine can reduce a difficult psychedelic experience within 20-30 minutes.',
+      'Combinations multiply unpredictability and risk. Cannabis can dramatically intensify psychedelics.',
+      'A full stomach increases nausea and can reduce or delay absorption.'
+    ];
+
+    var INTEGRATION_EXPLANATIONS = [
+      'Insights fade quickly. Even brief notes within the first hours can be invaluable weeks later.',
+      'Integration requires psychological space. Major decisions should wait until you have processed.',
+      'Verbalising with a trusted listener helps consolidate meaning.',
+      'Professional support can be essential if difficult material surfaces.',
+      'Nature contact supports integration of expanded awareness.',
+      'Structured practices prevent insights from dissolving back into daily autopilot.',
+      'Alcohol and cannabis can blur the integration window and reintroduce avoidance patterns.',
+      'Embodied practices help ground insights in the body rather than keeping them conceptual.'
+    ];
+
+    // ── Helpers ──
     function val(id) {
       var el = document.getElementById(id);
       return el ? (el.value || '') : '';
@@ -716,33 +1249,38 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       };
     }
 
-    // ── PDF Generation ──────────────────────────────────────
+    // ── PDF Generation ──
     function generatePDF() {
       var jsPDF = window.jspdf.jsPDF;
       var doc = new jsPDF({ unit: 'mm', format: 'a4' });
 
-      var pageW = 210;
-      var pageH = 297;
-      var ml = 22; // left margin
-      var mr = 22; // right margin
-      var cw = pageW - ml - mr; // content width
-      var y = 22;
-      var pageNum = 1;
+      var pageW = 210, pageH = 297;
+      var ml = 22, mr = 22, cw = pageW - ml - mr;
+      var y = 22, pageNum = 1;
 
-      // Colors (RGB arrays)
       var cTeal = [62, 201, 191];
       var cGreen = [92, 184, 74];
       var cDark = [30, 30, 30];
       var cBody = [80, 80, 80];
       var cMuted = [140, 140, 140];
       var cAmber = [201, 148, 58];
-      var cRed = [180, 60, 60];
       var cLight = [220, 220, 220];
 
-      // Font size to line height (mm)
+      // Sanitise text for jsPDF (built-in fonts lack Unicode support)
+      function clean(str) {
+        if (!str) return '';
+        return str
+          .replace(/['‘’ʼ]/g, "'")
+          .replace(/["“”]/g, '"')
+          .replace(/—/g, ' - ')
+          .replace(/–/g, '-')
+          .replace(/→/g, '->')
+          .replace(/…/g, '...')
+          .replace(/ /g, ' ');
+      }
+
       function lh(fontSize) { return fontSize * 0.42; }
 
-      // Check if we need a page break, add one if so
       function checkBreak(needed) {
         if (y + needed > pageH - 22) {
           addPageFooter();
@@ -752,7 +1290,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         }
       }
 
-      // Add footer to current page
       function addPageFooter() {
         doc.setFontSize(7);
         doc.setFont('helvetica', 'normal');
@@ -762,14 +1299,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         doc.text('Page ' + pageNum, pageW - mr, pageH - 10, { align: 'right' });
       }
 
-      // Draw a horizontal line
       function drawLine(yPos, color) {
         doc.setDrawColor(color[0], color[1], color[2]);
         doc.setLineWidth(0.3);
         doc.line(ml, yPos, pageW - mr, yPos);
       }
 
-      // Write a section label (teal uppercase)
       function sectionLabel(text) {
         checkBreak(12);
         doc.setFontSize(8);
@@ -779,7 +1314,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         y += 6;
       }
 
-      // Write body text with wrapping, returns new y
       function bodyText(text, options) {
         if (!text) return;
         var opts = options || {};
@@ -787,11 +1321,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         var color = opts.color || cBody;
         var style = opts.style || 'normal';
         var indent = opts.indent || 0;
-
         doc.setFontSize(fontSize);
         doc.setFont('helvetica', style);
         doc.setTextColor(color[0], color[1], color[2]);
-        var lines = doc.splitTextToSize(text, cw - indent);
+        var lines = doc.splitTextToSize(clean(text), cw - indent);
         var lineHeight = lh(fontSize);
         for (var i = 0; i < lines.length; i++) {
           checkBreak(lineHeight);
@@ -800,7 +1333,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         }
       }
 
-      // Write a label:value pair
       function labelValue(label, value) {
         if (!value) return;
         checkBreak(6);
@@ -811,10 +1343,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         doc.text(label + ': ', ml, y);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(cBody[0], cBody[1], cBody[2]);
-        var remaining = doc.splitTextToSize(value, cw - labelW);
+        var remaining = doc.splitTextToSize(clean(value), cw - labelW);
         doc.text(remaining[0], ml + labelW, y);
         y += lh(10);
-        // Wrapped lines
         for (var i = 1; i < remaining.length; i++) {
           checkBreak(lh(10));
           doc.text(remaining[i], ml + labelW, y);
@@ -822,7 +1353,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         }
       }
 
-      // Write a checklist
       function checklist(items) {
         for (var i = 0; i < items.length; i++) {
           checkBreak(6);
@@ -836,7 +1366,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           }
           doc.text(marker, ml + 2, y);
           doc.setTextColor(cBody[0], cBody[1], cBody[2]);
-          var lines = doc.splitTextToSize(items[i].text, cw - 12);
+          var lines = doc.splitTextToSize(clean(items[i].text), cw - 12);
           for (var j = 0; j < lines.length; j++) {
             if (j > 0) checkBreak(lh(10));
             doc.text(lines[j], ml + 10, y);
@@ -846,7 +1376,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         }
       }
 
-      // ── Gather Data ──────────────────────────────────────
+      // ── Gather Data ──
       var sub = val('pl-sub');
       var dose = val('pl-dose');
       var exp = val('pl-exp');
@@ -871,27 +1401,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       // Warnings
       var warnings = [];
-      if (source === 'Unverified') warnings.push('Your substance is unverified. Reagent testing is strongly recommended before use.');
-      if (exp === 'First time ever' && (dose === 'High dose (strong)' || dose === 'Heroic dose (very high)')) warnings.push('A high or heroic dose for a first experience carries significantly elevated risk. Consider starting with a low or moderate dose.');
-      if (sitter === 'No — solo' && exp === 'First time ever') warnings.push('Solo use for a first experience is strongly discouraged. A trusted sitter significantly reduces risk.');
-      if (saf.c < saf.t) warnings.push((saf.t - saf.c) + ' safety checklist items remain unchecked. Review these before proceeding.');
-      if (sub === '5-MeO-DMT' && sitter === 'No — solo') warnings.push('5-MeO-DMT should never be taken without an experienced sitter present.');
-      if (sub === 'Ayahuasca' && sitter === 'No — solo') warnings.push('Ayahuasca should be taken in a supported setting with experienced facilitation.');
-      if (!intention && !explore) warnings.push('No intention has been written. Consider returning to clarify your intention before proceeding.');
-      if (dose === 'Unsure') warnings.push('You are unsure about your dose. Research your chosen substance thoroughly and start conservatively.');
+      if (source === 'Unverified') warnings.push('Your substance is unverified. Reagent testing is strongly recommended.');
+      if (exp === 'First time ever' && (dose === 'High dose (strong)' || dose === 'Heroic dose (very high)')) warnings.push('A high or heroic dose for a first experience carries significantly elevated risk.');
+      if (sitter === 'No — solo' && exp === 'First time ever') warnings.push('Solo use for a first experience is strongly discouraged.');
+      if ((dose === 'High dose (strong)' || dose === 'Heroic dose (very high)') && sitter === 'No — solo') warnings.push('High-dose experiences without a sitter present substantial safety risk.');
+      if (sub === '5-MeO-DMT' && sitter === 'No — solo') warnings.push('5-MeO-DMT should never be taken without an experienced sitter.');
+      if (sub === 'Ayahuasca' && sitter === 'No — solo') warnings.push('Ayahuasca should be taken with experienced facilitation.');
+      if (!intention && !explore) warnings.push('No intention written. Consider clarifying your intention before proceeding.');
+      if (dose === 'Unsure') warnings.push('Dose is uncertain. Research thoroughly and start conservatively.');
 
-      var tier = (warnings.length === 0 && pct >= 80) ? 'Well-Prepared' : (warnings.length <= 1 && pct >= 50) ? 'Nearly Ready' : 'Needs Attention';
+      var hasCriticalWarnings = warnings.length > 2 || (sub === '5-MeO-DMT' && sitter === 'No — solo');
+      var tier = hasCriticalWarnings || pct < 40 ? 'Needs Attention' : (warnings.length === 0 && pct >= 80) ? 'Well-Prepared' : 'Nearly Ready';
 
-      // ── Build PDF ──────────────────────────────────────────
+      // ── Build PDF ──
 
-      // Psygaia logo (top-left)
-      var logoW = 32.3; // mm (38 * 0.85)
-      var logoH = logoW * (200 / 800); // maintain 4:1 aspect ratio
+      // Logo
+      var logoW = 32.3, logoH = logoW * (200 / 800);
       try {
         if (psygaiaLogo.complete && psygaiaLogo.naturalWidth > 0) {
           doc.addImage(psygaiaLogo, 'PNG', ml, y, logoW, logoH);
         }
-      } catch(e) { /* logo failed to load — continue without it */ }
+      } catch(e) {}
       y += logoH + 12;
 
       // Title
@@ -913,16 +1443,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       drawLine(y, cLight);
       y += 8;
 
-      // Readiness badge
+      // Tier badge
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
-      if (tier === 'Well-Prepared') {
-        doc.setTextColor(cGreen[0], cGreen[1], cGreen[2]);
-      } else if (tier === 'Nearly Ready') {
-        doc.setTextColor(cTeal[0], cTeal[1], cTeal[2]);
-      } else {
-        doc.setTextColor(cAmber[0], cAmber[1], cAmber[2]);
-      }
+      if (tier === 'Well-Prepared') doc.setTextColor(cGreen[0], cGreen[1], cGreen[2]);
+      else if (tier === 'Nearly Ready') doc.setTextColor(cTeal[0], cTeal[1], cTeal[2]);
+      else doc.setTextColor(cAmber[0], cAmber[1], cAmber[2]);
       doc.text(tier + ' - ' + pct + '% complete', ml, y);
       y += 10;
 
@@ -937,7 +1463,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           doc.setFontSize(9);
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(cAmber[0], cAmber[1], cAmber[2]);
-          var wLines = doc.splitTextToSize('- ' + warnings[w], cw);
+          var wLines = doc.splitTextToSize('- ' + clean(warnings[w]), cw);
           for (var wl = 0; wl < wLines.length; wl++) {
             checkBreak(4);
             doc.text(wLines[wl], ml, y);
@@ -946,6 +1472,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           y += 1;
         }
         y += 4;
+        drawLine(y, cLight);
+        y += 8;
+      }
+
+      // ── SUBSTANCE GUIDANCE ──
+      var subData = SUBSTANCE_DATA[sub];
+      if (subData) {
+        sectionLabel('Substance Guidance');
+        bodyText(sub + ' - Duration: ' + subData.duration + ', Onset: ' + subData.onset, { fontSize: 10, style: 'bold', color: cDark });
+        y += 2;
+        for (var sp = 0; sp < subData.points.length; sp++) {
+          bodyText('• ' + subData.points[sp], { fontSize: 9, indent: 3 });
+          y += 1;
+        }
+        y += 3;
         drawLine(y, cLight);
         y += 8;
       }
@@ -960,7 +1501,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       drawLine(y, cLight);
       y += 8;
 
-      // ── INTENTION & INNER WORK ──
+      // ── INTENTION ──
       var hasIntention = intention || explore || outcome || release;
       if (hasIntention) {
         sectionLabel('Intention & Inner Work');
@@ -993,7 +1534,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         y += 8;
       }
 
-      // ── FEARS & CONCERNS ──
+      // ── FEARS ──
       if (fears) {
         sectionLabel('Fears & Concerns');
         bodyText(fears, { fontSize: 10 });
@@ -1040,13 +1581,66 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       drawLine(y, cLight);
       y += 8;
 
+      // ── PERSONALISED RECOMMENDATIONS ──
+      var hasRecs = false;
+      var uncheckedSafety = [];
+      safetyItems.forEach(function(item, idx) {
+        if (!item.checked && SAFETY_EXPLANATIONS[idx]) {
+          uncheckedSafety.push({ text: item.text, explanation: SAFETY_EXPLANATIONS[idx] });
+        }
+      });
+      var uncheckedIntegration = [];
+      integrationItems.forEach(function(item, idx) {
+        if (!item.checked && INTEGRATION_EXPLANATIONS[idx]) {
+          uncheckedIntegration.push({ text: item.text, explanation: INTEGRATION_EXPLANATIONS[idx] });
+        }
+      });
+
+      if (uncheckedSafety.length > 0 || uncheckedIntegration.length > 0) {
+        hasRecs = true;
+        sectionLabel('Personalised Recommendations');
+
+        if (uncheckedSafety.length > 0) {
+          bodyText('Safety items to address:', { style: 'bold', color: cDark, fontSize: 10 });
+          y += 2;
+          for (var us = 0; us < uncheckedSafety.length; us++) {
+            checkBreak(10);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(cAmber[0], cAmber[1], cAmber[2]);
+            doc.text(clean('• ' + uncheckedSafety[us].text), ml + 3, y);
+            y += lh(9) + 1;
+            bodyText(uncheckedSafety[us].explanation, { fontSize: 8, color: cBody, indent: 6 });
+            y += 2;
+          }
+          y += 3;
+        }
+
+        if (uncheckedIntegration.length > 0) {
+          bodyText('Integration items to consider:', { style: 'bold', color: cDark, fontSize: 10 });
+          y += 2;
+          for (var ui = 0; ui < uncheckedIntegration.length; ui++) {
+            checkBreak(10);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(cTeal[0], cTeal[1], cTeal[2]);
+            doc.text(clean('• ' + uncheckedIntegration[ui].text), ml + 3, y);
+            y += lh(9) + 1;
+            bodyText(uncheckedIntegration[ui].explanation, { fontSize: 8, color: cBody, indent: 6 });
+            y += 2;
+          }
+          y += 3;
+        }
+
+        drawLine(y, cLight);
+        y += 8;
+      }
+
       // ── OVERALL ──
       sectionLabel('Overall Preparation');
       checkBreak(14);
-      // Progress bar background
       doc.setFillColor(cLight[0], cLight[1], cLight[2]);
       doc.roundedRect(ml, y, cw, 5, 2.5, 2.5, 'F');
-      // Progress bar fill
       if (pct > 0) {
         doc.setFillColor(cTeal[0], cTeal[1], cTeal[2]);
         var fillW = Math.max(5, (cw * pct) / 100);
@@ -1062,22 +1656,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       sectionLabel('Next Steps');
       var nextText;
       if (tier === 'Needs Attention') {
-        nextText = 'Review the warnings above and address outstanding items before proceeding. Return to the relevant steps to complete your preparation.';
+        nextText = 'Review the warnings and recommendations above before proceeding. Address outstanding safety items as a priority. Return to the planner to complete your preparation.';
       } else if (tier === 'Nearly Ready') {
-        nextText = 'You are nearly there. Address any remaining checklist items and spend time with your intention in the days ahead.';
+        nextText = 'You are nearly there. Address any remaining recommendations and spend time with your intention in the days ahead. Complete unchecked safety items before your session.';
       } else {
         nextText = 'Your preparation looks strong. In the days ahead, continue to sit with your intention, finalise your setting, and take care of your body and mind. Trust what you have built here.';
       }
       bodyText(nextText, { fontSize: 10 });
+      y += 4;
 
-      // Final page footer
+      // Suggested resources
+      bodyText('Resources: howtousepsychedelics.com', { fontSize: 9, color: cMuted });
+      if (subData) bodyText('Substance guide: howtousepsychedelics.com' + subData.guide, { fontSize: 9, color: cTeal });
+      if (saf.c < saf.t) bodyText('Readiness Assessment: howtousepsychedelics.com/readiness', { fontSize: 9, color: cTeal });
+      if (intg.c < intg.t) bodyText('Integration Guide: howtousepsychedelics.com/integration', { fontSize: 9, color: cTeal });
+
       addPageFooter();
-
-      // Save
       doc.save('journey-preparation-plan.pdf');
     }
 
-    // ── Form Submission ──────────────────────────────────────
+    // ── Form Submission (fire-and-forget pattern) ──
     pdfForm.addEventListener('submit', function(e) {
       e.preventDefault();
       pdfError.style.display = 'none';
@@ -1095,41 +1693,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       pdfBtn.disabled = true;
       pdfBtnText.textContent = 'Preparing your PDF...';
 
+      // Fire-and-forget subscribe
       fetch('/.netlify/functions/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email, first_name: firstName, _hp: hp, source: 'htup-planner' }),
-      })
-      .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
-      .then(function(result) {
-        if (result.ok && result.data.success) {
-          // Generate and download the PDF
-          try {
-            generatePDF();
-            pdfSection.style.display = 'none';
-            pdfSuccess.style.display = 'block';
-          } catch (err) {
-            console.error('PDF generation error:', err);
-            pdfError.textContent = 'PDF generation failed. Please try copying your plan instead.';
-            pdfError.style.display = 'block';
-            pdfBtn.disabled = false;
-            pdfBtnText.textContent = 'Download Plan as PDF →';
-          }
-        } else {
-          pdfError.textContent = result.data.error || 'Something went wrong. Please try again.';
-          pdfError.style.display = 'block';
-          pdfBtn.disabled = false;
-          pdfBtnText.textContent = 'Download Plan as PDF →';
-        }
-      })
-      .catch(function() {
-        pdfError.textContent = 'Connection error. Please try again.';
+      }).catch(function() {});
+
+      // Generate PDF immediately
+      try {
+        generatePDF();
+        pdfSection.style.display = 'none';
+        pdfSuccess.style.display = 'block';
+      } catch (err) {
+        console.error('PDF generation error:', err);
+        pdfError.textContent = 'PDF generation failed. Please try again.';
         pdfError.style.display = 'block';
         pdfBtn.disabled = false;
         pdfBtnText.textContent = 'Download Plan as PDF →';
-      });
+      }
     });
   })();
   </script>
+
 
 </BaseLayout>
