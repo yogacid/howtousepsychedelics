@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout
   title="Readiness Assessment — How to Use Psychedelics"
-  description="A ten-question self-assessment covering intention, psychological safety, set and setting, and integration readiness. Completely private — nothing is stored."
+  description="A eleven-question self-assessment covering intention, psychological safety, set and setting, and integration readiness. Completely private — nothing is stored."
   canonicalPath="/readiness"
   hideProgress={true}
 >
@@ -29,9 +29,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- INTRO VIEW -->
         <div id="ra-view-intro">
           <p class="ra-intro-headline">Before you begin, pause.</p>
-          <p class="ra-intro-body">Preparation is not a formality &mdash; it is part of the experience itself. This ten-question assessment covers intention, psychological safety, set and setting, and integration readiness. It takes about five minutes. Your answers are completely private and are not stored anywhere.</p>
+          <p class="ra-intro-body">Preparation is not a formality &mdash; it is part of the experience itself. This eleven-question assessment covers intention, psychological safety, set and setting, and integration readiness. It takes about five minutes. Your answers are completely private and are not stored anywhere.</p>
           <div class="ra-intro-meta">
-            <span class="ra-meta-pill"><span class="ra-meta-dot"></span>10 questions</span>
+            <span class="ra-meta-pill"><span class="ra-meta-dot"></span>11 questions</span>
             <span class="ra-meta-pill"><span class="ra-meta-dot"></span>5 minutes</span>
             <span class="ra-meta-pill"><span class="ra-meta-dot"></span>Completely private</span>
           </div>
@@ -81,199 +81,496 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </div>
 
+  <script slot="head" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer is:inline></script>
   <script is:inline>
   (function() {
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+       QUESTIONS
+       Each option has:
+         w  = weight (0 = no concern, 1-2 mild, 3-4 moderate, 5+ serious)
+         cat = 'safety' or 'prep' \u2014 determines which score pool it feeds
+         flag = 'stop' for non-negotiable medical contraindications
+       \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
     var QS = [
       { id:'intention', cat:'Motivation & Intention',
         q:'What is drawing you toward this experience?',
         hint:'Choose the answer that feels most honest right now.',
         opts:[
-          { t:'Curiosity and personal growth', v:'growth', flag:null },
-          { t:'Healing from specific pain, trauma, or grief', v:'healing', flag:null },
-          { t:'Spiritual exploration or deepening', v:'spiritual', flag:null },
-          { t:'Relief from or escape from my current life', v:'escape', flag:'hard', hk:'escape' },
-          { t:'I\u2019m not yet sure', v:'unsure', flag:'soft' }
+          { t:'Curiosity and personal growth', v:'growth', w:0, pool:'prep' },
+          { t:'Healing from specific pain, trauma, or grief', v:'healing', w:0, pool:'prep' },
+          { t:'Spiritual exploration or deepening', v:'spiritual', w:0, pool:'prep' },
+          { t:'Relief from or escape from my current life', v:'escape', w:4, pool:'safety' },
+          { t:'I\u2019m not yet sure', v:'unsure', w:1, pool:'prep' }
         ]
       },
       { id:'mh_history', cat:'Psychological Safety',
         q:'Have you, or a close family member, ever experienced psychosis, schizophrenia, or bipolar\u00a0I\u00a0disorder?',
         hint:'This is a key safety question. There are no wrong answers here.',
         opts:[
-          { t:'No, not to my knowledge', v:'no', flag:null },
-          { t:'Yes, or I\u2019m unsure', v:'yes', flag:'hard', hk:'mh_history' }
+          { t:'No, not to my knowledge', v:'no', w:0, pool:'safety' },
+          { t:'Yes \u2014 personally diagnosed', v:'yes_personal', w:10, pool:'safety', flag:'stop' },
+          { t:'Yes \u2014 in a close family member', v:'yes_family', w:7, pool:'safety', flag:'stop' },
+          { t:'I\u2019m not sure', v:'unsure', w:5, pool:'safety' }
         ]
       },
       { id:'current_state', cat:'Psychological Safety',
         q:'How would you describe your current emotional and mental state?',
         hint:'Be as honest as you can \u2014 this shapes everything that follows.',
         opts:[
-          { t:'Stable and relatively grounded', v:'stable', flag:null },
-          { t:'Managing some stress, but functional', v:'stressed', flag:null },
-          { t:'Going through significant difficulty or upheaval', v:'difficult', flag:'soft' },
-          { t:'In acute crisis or overwhelm', v:'crisis', flag:'hard', hk:'crisis' }
+          { t:'Stable and relatively grounded', v:'stable', w:0, pool:'safety' },
+          { t:'Managing some stress, but functional', v:'stressed', w:1, pool:'safety' },
+          { t:'Going through significant difficulty or upheaval', v:'difficult', w:3, pool:'safety' },
+          { t:'In acute crisis or overwhelm', v:'crisis', w:8, pool:'safety', flag:'stop' }
         ]
       },
       { id:'medications', cat:'Physical Health',
         q:'Are you currently taking any psychiatric or cardiovascular medications?',
         hint:'SSRIs, SNRIs, MAOIs, antipsychotics, lithium, heart medications, or blood thinners.',
         opts:[
-          { t:'No', v:'no', flag:null },
-          { t:'Yes', v:'yes', flag:'hard', hk:'medications' },
-          { t:'I\u2019m not certain what I\u2019m taking', v:'unsure', flag:'hard', hk:'medications' }
+          { t:'No', v:'no', w:0, pool:'safety' },
+          { t:'Yes \u2014 and I have consulted a physician about interactions', v:'yes_consulted', w:2, pool:'safety' },
+          { t:'Yes \u2014 but I have not discussed interactions with a physician', v:'yes_not_consulted', w:7, pool:'safety', flag:'stop' },
+          { t:'I\u2019m not certain what I\u2019m taking', v:'unsure', w:6, pool:'safety', flag:'stop' }
         ]
       },
       { id:'setting', cat:'Set & Setting',
         q:'Do you have access to a safe, comfortable, and private space for the experience?',
         hint:'Where you are shapes what you encounter.',
         opts:[
-          { t:'Yes, I have access to a suitable space', v:'yes', flag:null },
-          { t:'I\u2019m still working this out', v:'working', flag:'soft' },
-          { t:'No, not yet', v:'no', flag:'soft' }
+          { t:'Yes \u2014 a familiar, private, comfortable space', v:'yes', w:0, pool:'prep' },
+          { t:'I\u2019m still working this out', v:'working', w:2, pool:'prep' },
+          { t:'No \u2014 I would likely be in an unfamiliar or public setting', v:'no', w:4, pool:'prep' }
         ]
       },
       { id:'sitter', cat:'Set & Setting',
         q:'Will you have a trusted, sober person present or reachable during the experience?',
         hint:'A sitter is one of the most meaningful harm reduction factors available to you.',
         opts:[
-          { t:'Yes \u2014 an experienced guide or facilitator', v:'experienced', flag:null },
-          { t:'Yes \u2014 a trusted friend or partner', v:'trusted', flag:null },
-          { t:'No \u2014 I would be alone', v:'no', flag:'soft' }
+          { t:'Yes \u2014 an experienced guide or facilitator', v:'experienced', w:0, pool:'prep' },
+          { t:'Yes \u2014 a trusted friend or partner', v:'trusted', w:0, pool:'prep' },
+          { t:'Someone will be reachable by phone, not present', v:'remote', w:2, pool:'prep' },
+          { t:'No \u2014 I would be completely alone', v:'no', w:3, pool:'prep' }
         ]
       },
-      { id:'substance', cat:'Set & Setting',
+      { id:'substance', cat:'Substance & Source',
         q:'Do you know exactly what substance you plan to use, and do you trust its source?',
         hint:'Knowing what you\u2019re taking is foundational to safety.',
         opts:[
-          { t:'Yes \u2014 tested it or obtained from a fully trusted source', v:'verified', flag:null },
-          { t:'Mostly \u2014 I have a reasonable level of trust in the source', v:'trusted', flag:null },
-          { t:'Not yet \u2014 I\u2019m still figuring this out', v:'unsure', flag:'soft' }
+          { t:'Yes \u2014 reagent-tested or from a verified source', v:'verified', w:0, pool:'safety' },
+          { t:'Reasonably confident in the source, but not tested', v:'trusted', w:1, pool:'safety' },
+          { t:'Not yet sure what I\u2019ll take or where I\u2019ll get it', v:'unsure', w:4, pool:'safety' }
+        ]
+      },
+      { id:'experience', cat:'Experience Level',
+        q:'What is your level of experience with the substance you plan to use?',
+        hint:'There is no right answer. First-time experiences simply require more preparation.',
+        opts:[
+          { t:'This will be my first psychedelic experience ever', v:'first_ever', w:2, pool:'prep' },
+          { t:'I\u2019ve used psychedelics before, but not this substance', v:'first_substance', w:1, pool:'prep' },
+          { t:'I\u2019ve used this substance a few times', v:'few_times', w:0, pool:'prep' },
+          { t:'I\u2019m experienced with this substance (10+ times)', v:'experienced', w:0, pool:'prep' }
         ]
       },
       { id:'int_time', cat:'Integration Capacity',
         q:'Do you have 1\u20133 days free after the experience for rest and reflection?',
         hint:'What happens after the experience matters as much as the experience itself.',
         opts:[
-          { t:'Yes \u2014 I\u2019ve intentionally protected this time', v:'yes', flag:null },
-          { t:'Partially \u2014 I have one day, maybe two', v:'partial', flag:null },
-          { t:'No \u2014 I\u2019d need to return to regular life quickly', v:'no', flag:'soft' }
+          { t:'Yes \u2014 I\u2019ve intentionally protected this time', v:'yes', w:0, pool:'prep' },
+          { t:'Partially \u2014 I have one day, maybe two', v:'partial', w:1, pool:'prep' },
+          { t:'No \u2014 I\u2019d need to return to regular life quickly', v:'no', w:3, pool:'prep' }
         ]
       },
       { id:'support', cat:'Integration Capacity',
         q:'Do you have at least one person you can speak to openly about this experience?',
         hint:'Integration is rarely a solo process.',
         opts:[
-          { t:'Yes \u2014 someone I trust deeply', v:'yes', flag:null },
-          { t:'Somewhat \u2014 someone who might understand', v:'somewhat', flag:null },
-          { t:'No \u2014 I\u2019d be navigating this alone', v:'no', flag:'soft' }
+          { t:'Yes \u2014 someone I trust deeply', v:'yes', w:0, pool:'prep' },
+          { t:'Somewhat \u2014 someone who might understand', v:'somewhat', w:1, pool:'prep' },
+          { t:'No \u2014 I\u2019d be navigating this entirely alone', v:'no', w:3, pool:'prep' }
         ]
       },
       { id:'preparation', cat:'Preparation',
         q:'Have you done any intentional preparation for this experience?',
         hint:'Reading, journaling, meditation, setting intentions, or working with a guide.',
         opts:[
-          { t:'Yes \u2014 I\u2019ve been actively preparing', v:'yes', flag:null },
-          { t:'Some \u2014 I\u2019ve begun but could go deeper', v:'some', flag:null },
-          { t:'Not yet', v:'no', flag:'soft' }
+          { t:'Yes \u2014 I\u2019ve been actively preparing', v:'yes', w:0, pool:'prep' },
+          { t:'Some \u2014 I\u2019ve begun but could go deeper', v:'some', w:1, pool:'prep' },
+          { t:'Not yet', v:'no', w:2, pool:'prep' }
         ]
       }
     ];
 
-    function buildResultHTML(hard, soft) {
-      var tier = (hard.length > 0 || soft.length >= 5) ? 'pause'
-               : (soft.length >= 2) ? 'prepare' : 'ready';
-      var hks = hard.map(function(h){ return h.hk; });
-      var badges = { pause:'Pause & Prepare', prepare:'Almost Ready', ready:'Well-Positioned' };
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+       PERSONALISED FEEDBACK per question/answer
+       Each entry is keyed by question id, then answer value.
+       Only answers that warrant feedback have entries.
+       severity: 'critical' | 'warning' | 'note' | 'strength'
+       \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+    var FEEDBACK = {
+      intention: {
+        escape: {
+          severity: 'critical',
+          title: 'Your intention needs careful attention',
+          body: 'You indicated that you are seeking relief or escape from your current life. This is an honest and important answer. Psychedelics amplify what is already present \u2014 including the desire to escape. When the underlying motivation is avoidance rather than exploration, the experience can intensify distress rather than dissolve it. This does not mean you should never have this experience. It means the timing and your relationship to this intention deserve careful reflection first. Consider working with a therapist or trusted guide to explore what you are hoping to move away from before moving toward psychedelics.',
+          link: { text:'Read about intention setting', href:'/preparation/#prep-intention' }
+        },
+        unsure: {
+          severity: 'note',
+          title: 'Spend more time with your intention',
+          body: 'Not having a clear intention is not a disqualifier, but it is worth pausing on. The clarity you bring to your \u2018why\u2019 directly shapes the quality of the experience. Spend time journaling, reflecting, or talking with someone you trust about what is drawing you toward this. An intention does not need to be grand \u2014 it needs to be honest.',
+          link: { text:'Explore intention setting', href:'/preparation/#prep-intention' }
+        }
+      },
+      mh_history: {
+        yes_personal: {
+          severity: 'critical',
+          title: 'Personal history of psychosis, schizophrenia, or bipolar I',
+          body: 'A personal diagnosis of psychosis, schizophrenia-spectrum disorder, or bipolar I disorder is the most significant risk factor in psychedelic use. Psychedelics can trigger acute psychotic episodes, prolonged dissociation, or severe destabilisation in individuals with these conditions. This is not a judgement \u2014 it is a well-established clinical reality. We strongly recommend against proceeding without direct consultation with a psychiatrist experienced in psychedelic medicine, and even then, extreme caution is warranted.',
+          link: { text:'Review medical contraindications', href:'/assessment/#ass-contraindications' }
+        },
+        yes_family: {
+          severity: 'critical',
+          title: 'Family history of psychosis or schizophrenia',
+          body: 'A close family member with psychosis, schizophrenia, or bipolar I disorder meaningfully elevates your risk. These conditions have a genetic component, and psychedelics can potentially trigger a first episode in individuals who carry latent vulnerability \u2014 particularly in the late teens through early thirties. We recommend consulting a psychiatrist before proceeding, ideally one with experience in psychedelic medicine. This is not necessarily a closed door, but it requires professional guidance.',
+          link: { text:'Review medical contraindications', href:'/assessment/#ass-contraindications' }
+        },
+        unsure: {
+          severity: 'warning',
+          title: 'Investigate your family mental health history',
+          body: 'If you are unsure whether a close family member has experienced psychosis, schizophrenia, or bipolar I, it is worth finding out before proceeding. Speak with family members, review any available medical records, or consult your family doctor. This is one of the most important safety variables in psychedelic use, and clarity here is worth the effort.',
+          link: { text:'Review medical contraindications', href:'/assessment/#ass-contraindications' }
+        }
+      },
+      current_state: {
+        stressed: {
+          severity: 'note',
+          title: 'Moderate stress is present',
+          body: 'Some background stress is normal and does not preclude a meaningful experience. However, psychedelics amplify what is present. Consider what you can do in the days before your experience to reduce unnecessary stressors: clear obligations, have important conversations, give yourself more space than you think you need.'
+        },
+        difficult: {
+          severity: 'warning',
+          title: 'You are going through significant difficulty',
+          body: 'Psychedelics during periods of upheaval can go either way \u2014 they can offer profound perspective, or they can deepen the difficulty. The key question is whether you feel emotionally resourced enough to meet intense experience, even if it is challenging. If you are unsure, consider waiting until you have more stability, or working with a professional facilitator who can hold space for difficult material. Proceeding alone during a turbulent period is not recommended.',
+          link: { text:'Read about psychological readiness', href:'/assessment/#ass-psych' }
+        },
+        crisis: {
+          severity: 'critical',
+          title: 'You are in acute crisis or overwhelm',
+          body: 'Psychedelics during acute crisis carry a high risk of deepening distress. When you are already overwhelmed, the amplification and loss of ordinary coping mechanisms that psychedelics produce can lead to panic, retraumatisation, or dangerous behaviour. Please prioritise stabilisation first. Reach out to a mental health professional, a crisis line, or a trusted person in your life. The experience will still be available when you are in a more resourced state.',
+          link: { text:'Fireside Project crisis line: 62-FIRESIDE', href:'https://firesideproject.org' }
+        }
+      },
+      medications: {
+        yes_consulted: {
+          severity: 'note',
+          title: 'You are on medications but have consulted a physician',
+          body: 'This is the responsible approach. Ensure your physician is aware of the specific substance you plan to use, not just psychedelics in general. Different substances interact differently \u2014 for example, MAOI-containing ayahuasca has a very different interaction profile than psilocybin. Use the Interaction Checker for substance-specific detail.',
+          link: { text:'Check specific interactions', href:'/checker/' }
+        },
+        yes_not_consulted: {
+          severity: 'critical',
+          title: 'You are on medications and have not consulted a physician',
+          body: 'This is one of the most important safety factors in psychedelic use. Certain medication combinations can be genuinely dangerous: SSRIs with MDMA can cause serotonin syndrome, MAOIs with many substances can be life-threatening, and lithium combined with psychedelics significantly increases seizure risk. Please consult a physician before proceeding. If that is not possible, at minimum use the Interaction Checker to understand the risk profile of your specific combination.',
+          link: { text:'Use the Interaction Checker', href:'/checker/' }
+        },
+        unsure: {
+          severity: 'critical',
+          title: 'You are not certain what medications you are taking',
+          body: 'It is essential to know exactly what you are taking before combining anything with a psychedelic substance. Check your prescriptions, contact your pharmacy, or ask your prescribing physician. Some combinations \u2014 particularly involving MAOIs, lithium, or tramadol \u2014 can be life-threatening. Do not proceed until you have clarity on this.',
+          link: { text:'Review drug interactions', href:'/checker/' }
+        }
+      },
+      setting: {
+        working: {
+          severity: 'note',
+          title: 'Secure your setting before proceeding',
+          body: 'Where you are shapes what you encounter. Prioritise safety and genuine privacy over aesthetics. A comfortable, familiar space where you will not be interrupted is far more important than a beautiful but unfamiliar one. Finalise this before your planned date.',
+          link: { text:'Read about setting', href:'/preparation/#prep-setting' }
+        },
+        no: {
+          severity: 'warning',
+          title: 'You do not yet have a suitable space',
+          body: 'An unfamiliar or public setting significantly increases the risk of anxiety, paranoia, and unsafe situations during a psychedelic experience. This is one of the most important practical factors to get right. Do not proceed until you have identified a space that is private, comfortable, physically safe, and genuinely familiar to you.',
+          link: { text:'Read about setting', href:'/preparation/#prep-setting' }
+        }
+      },
+      sitter: {
+        remote: {
+          severity: 'note',
+          title: 'Consider having someone present, not just reachable',
+          body: 'Having someone reachable by phone is better than being entirely alone, but during an intense experience, making a phone call may feel impossible. If this is your first experience, a high dose, or you will be working with difficult material, having someone physically present is strongly recommended.'
+        },
+        no: {
+          severity: 'warning',
+          title: 'You would be completely alone',
+          body: 'Sitting alone is a significant risk factor, particularly for first-time experiences, higher doses, or any session where you intend to work with difficult emotional material. At minimum, ensure someone knows what you are doing, when you started, and when to check on you. For meaningful experiences, a trusted sitter is one of the single most impactful harm reduction measures available.',
+          link: { text:'Read about sitters', href:'/facilitation/' }
+        }
+      },
+      substance: {
+        trusted: {
+          severity: 'note',
+          title: 'Consider reagent testing your substance',
+          body: 'Even with a trusted source, reagent testing provides an additional layer of certainty. Ehrlich reagent for psilocybin and LSD, Marquis for MDMA and 2C-B, and fentanyl test strips for any pressed pill or powder of uncertain origin. Testing is inexpensive and takes minutes.'
+        },
+        unsure: {
+          severity: 'warning',
+          title: 'You do not yet know what you will take or where you will get it',
+          body: 'Knowing exactly what you are putting into your body is non-negotiable for safe practice. Misidentified substances, unexpected adulterants, and incorrect dosing are among the most common causes of serious harm. Do not proceed until you have identified your substance and have confidence in its source. Reagent-test if at all possible.',
+          link: { text:'Learn about substance verification', href:'/assessment/#ass-testing' }
+        }
+      },
+      experience: {
+        first_ever: {
+          severity: 'note',
+          title: 'This will be your first psychedelic experience',
+          body: 'First experiences warrant extra preparation. Start with a lower dose than you think you need \u2014 you can always go further in a future session, but you cannot reduce intensity once it has begun. Having a sitter present is particularly important for a first experience. Read the substance-specific page for your chosen substance to understand onset, peak, duration, and what to expect.',
+          link: { text:'Browse substance guides', href:'/#substance-nav' }
+        },
+        first_substance: {
+          severity: 'note',
+          title: 'First time with this specific substance',
+          body: 'Even with prior psychedelic experience, each substance has a distinct character, duration, and risk profile. Read the substance-specific guide and start at a conservative dose. What you know from one substance does not fully transfer to another.',
+          link: { text:'Browse substance guides', href:'/#substance-nav' }
+        }
+      },
+      int_time: {
+        partial: {
+          severity: 'note',
+          title: 'Protect more integration time if possible',
+          body: 'One day may be enough for a lighter experience, but for moderate to high doses, 2\u20133 days of relative stillness makes a significant difference. The days after a psychedelic experience are when insights consolidate \u2014 rushing back to obligations can cause disorientation and loss of the material that surfaced.'
+        },
+        no: {
+          severity: 'warning',
+          title: 'No integration time protected',
+          body: 'Returning to demanding obligations immediately after a significant psychedelic experience is one of the most common mistakes. The experience does not end when the substance wears off \u2014 the 48\u201372 hours afterward are a critical window for processing, journaling, and allowing what surfaced to settle. If you truly cannot protect this time, consider postponing until you can.',
+          link: { text:'Read about integration', href:'/integration/' }
+        }
+      },
+      support: {
+        somewhat: {
+          severity: 'note',
+          title: 'Strengthen your integration support',
+          body: 'Having someone who \u2018might understand\u2019 is better than no one, but integration is significantly enriched by having at least one person you can speak to with full honesty. Consider identifying a therapist, integration coach, or integration circle before your experience.',
+          link: { text:'Explore integration support', href:'/integration/' }
+        },
+        no: {
+          severity: 'warning',
+          title: 'No one to speak to openly afterward',
+          body: 'Processing a psychedelic experience entirely alone is possible, but significantly harder. The material that surfaces often needs to be spoken aloud to be understood. Without support, insights can fragment, difficult experiences can become isolating, and the integration process can stall. Consider joining an online integration circle, contacting a psychedelic integration coach, or identifying anyone in your life who can hold non-judgemental space.',
+          link: { text:'Explore integration support', href:'/integration/' }
+        }
+      },
+      preparation: {
+        some: {
+          severity: 'note',
+          title: 'Deepen your preparation',
+          body: 'You have begun preparing \u2014 good. Consider going further: write out your intentions in detail, research your specific substance, prepare your physical space, and talk to someone you trust about what you are approaching. The quality of preparation directly shapes the quality of the experience.'
+        },
+        no: {
+          severity: 'warning',
+          title: 'You have not yet prepared',
+          body: 'Intentional preparation is not optional for a meaningful and safe experience. At minimum, clarify your intention, learn about your substance, secure your setting, and arrange support. The preparation guide walks through each dimension in detail.',
+          link: { text:'Read the preparation guide', href:'/preparation/' }
+        }
+      }
+    };
+
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+       BUILD RESULT
+       \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+    function buildResultHTML(answers) {
+      var safetyScore = 0;
+      var prepScore = 0;
+      var stops = [];
+      var items = [];
+
+      /* Score and collect feedback */
+      QS.forEach(function(q) {
+        var val = answers[q.id];
+        if (!val) return;
+        var opt = null;
+        for (var i = 0; i < q.opts.length; i++) {
+          if (q.opts[i].v === val) { opt = q.opts[i]; break; }
+        }
+        if (!opt) return;
+
+        /* Accumulate scores */
+        if (opt.pool === 'safety') safetyScore += opt.w;
+        else prepScore += opt.w;
+
+        /* Collect stops */
+        if (opt.flag === 'stop') stops.push(q.id);
+
+        /* Collect personalised feedback */
+        if (FEEDBACK[q.id] && FEEDBACK[q.id][val]) {
+          items.push(FEEDBACK[q.id][val]);
+        }
+      });
+
+      /* \u2500\u2500 Determine tier \u2500\u2500 */
+      var totalScore = safetyScore + prepScore;
+      var tier;
+      if (stops.length > 0 || safetyScore >= 8) {
+        tier = 'pause';
+      } else if (totalScore >= 8 || safetyScore >= 5 || prepScore >= 10) {
+        tier = 'prepare';
+      } else if (totalScore >= 4) {
+        tier = 'strengthen';
+      } else {
+        tier = 'ready';
+      }
+
+      var badges = {
+        pause: 'Pause',
+        prepare: 'More Preparation Needed',
+        strengthen: 'Nearly Ready',
+        ready: 'Well-Positioned'
+      };
       var headlines = {
-        pause: 'Now may not be the right moment.',
-        prepare: 'You\u2019re on the right path.',
+        pause: 'Please pause before moving forward.',
+        prepare: 'Important areas need your attention first.',
+        strengthen: 'You\u2019re close \u2014 a few things to strengthen.',
         ready: 'You appear well-positioned to move forward.'
       };
       var subs = {
-        pause: 'This is not a closed door \u2014 it is an invitation to build the foundation that will make this experience genuinely worthwhile. Please read on carefully.',
-        prepare: 'A few areas of preparation would meaningfully strengthen your foundation. Addressing these before moving forward will shape the quality of what you encounter.',
-        ready: 'Your answers reflect a foundation of intention, care, and preparation. That doesn\u2019t remove all uncertainty \u2014 it never does. But it puts you in a strong position to meet what arises.'
+        pause: 'Your answers have raised one or more factors that carry genuine safety implications. This is not a judgement and not necessarily a permanent barrier \u2014 but it does mean that moving forward right now without addressing what\u2019s below could put you at risk. Please read each item carefully.',
+        prepare: 'Your foundation has real strengths, but several areas would benefit from meaningful attention before you proceed. Addressing these is not a formality \u2014 it will directly shape the safety and quality of your experience.',
+        strengthen: 'You are approaching this with care. A few areas could be strengthened to give yourself the best possible foundation. None of these are urgent safety concerns, but each one will improve the quality of what you encounter.',
+        ready: 'Your answers reflect a thoughtful, well-prepared approach. This does not mean the experience will be easy or predictable \u2014 it never is. But it means you have built a strong foundation for meeting whatever arises.'
       };
-      var items = [];
-      if (tier === 'pause') {
-        if (hks.indexOf('mh_history') > -1) {
-          items.push({ ic:'warn', ico:'\u26A0', t:'Investigate your family mental health history',
-            b:'Personal or family histories of psychosis, schizophrenia, or bipolar\u00a0I disorder are significant risk factors. If you\u2019re unsure, speak with family members, review any medical records, or ask your family doctor. Once you have a clearer picture, we recommend consulting a mental health clinician experienced in psychedelic medicine before moving forward.' });
-        }
-        if (hks.indexOf('crisis') > -1) {
-          items.push({ ic:'warn', ico:'\u26A0', t:'Current acute distress or crisis',
-            b:'Psychedelics tend to amplify and intensify whatever is present \u2014 including emotional states. Entering an experience during acute crisis can deepen distress rather than resolve it. Please reach out to a mental health professional or trusted support person first.' });
-        }
-        if (hks.indexOf('medications') > -1) {
-          items.push({ ic:'warn', ico:'\u26A0', t:'Current medications',
-            b:'Certain medications \u2014 particularly SSRIs, MAOIs, antipsychotics, and lithium \u2014 can interact significantly with serotonergic psychedelics, ranging from blunted effects to serious physiological risk. Please consult a physician experienced in psychedelic medicine before proceeding. Use our <a href="/checker/" style="color:var(--accent)">Drug Interaction Checker</a> for specific substance pairs.' });
-        }
-        if (hks.indexOf('escape') > -1) {
-          items.push({ ic:'warn', ico:'\u26A0', t:'Your intention may need more attention',
-            b:'Psychedelics amplify what is already present \u2014 including the desire to escape. An escape-oriented intention can intensify rather than dissolve difficulty, leading to an experience that deepens distress rather than offering relief. This doesn\u2019t mean you shouldn\u2019t ever have this experience \u2014 but it means the timing and your relationship to the intention deserve careful reflection first. Consider working with a therapist or trusted guide to explore what you\u2019re hoping to escape from before moving forward.' });
-        }
-        if (hard.length === 0) {
-          items.push({ ic:'info', ico:'\u25CE', t:'Several areas of preparation need attention',
-            b:'Your answers suggest a number of areas \u2014 setting, support, integration time, and preparation \u2014 that would benefit from more attention before moving forward.' });
-        }
-      }
-      var softLabels = {
-        intention: { ico:'\u25CE', t:'Clarifying your intention',
-          b:'Your intention appears oriented toward relief or escape rather than exploration. Psychedelics amplify what is present, and an escape-oriented intention can intensify rather than dissolve difficulty. Spend more time with your \u2018why\u2019 before moving forward.' },
-        setting: { ico:'\u25CE', t:'Securing your setting',
-          b:'Before you proceed, identify a space that feels genuinely safe, comfortable, and private \u2014 somewhere you can move freely and be fully yourself.' },
-        sitter: { ico:'\u25CE', t:'Finding a trusted sitter',
-          b:'Having a calm, sober, trusted presence available during your experience is one of the most meaningful harm reduction factors available to you. Even if that person isn\u2019t in the room, knowing they\u2019re reachable can significantly stabilise the experience.' },
-        substance: { ico:'\u25CE', t:'Knowing your substance',
-          b:'Clarity about what you\u2019re taking \u2014 and confidence in its source \u2014 is foundational. Consider using a reagent testing kit, or take the time to establish a fully trusted source before proceeding.' },
-        int_time: { ico:'\u25CE', t:'Protecting integration time',
-          b:'If at all possible, protect 1\u20133 days of relative stillness and space afterward \u2014 without major obligations or demands.' },
-        support: { ico:'\u25CE', t:'Building integration support',
-          b:'Integration is rarely a solo process. Consider identifying one trusted person you can debrief with openly, or joining an integration circle or community.' },
-        preparation: { ico:'\u25CE', t:'Deepening your preparation',
-          b:'Intentional preparation can make a significant difference. Setting clear intentions, journaling, and learning from others\u2019 experiences are among the most valuable things you can do before the day arrives.' }
-      };
-      if (tier === 'prepare') {
-        soft.forEach(function(s) {
-          if (softLabels[s]) items.push({ ic:'info', ico:softLabels[s].ico, t:softLabels[s].t, b:softLabels[s].b });
-        });
-      }
+
+      /* \u2500\u2500 Sort feedback by severity \u2500\u2500 */
+      var severityOrder = { critical: 0, warning: 1, note: 2, strength: 3 };
+      items.sort(function(a, b) {
+        return (severityOrder[a.severity] || 99) - (severityOrder[b.severity] || 99);
+      });
+
+      /* \u2500\u2500 For "ready" tier, add encouragement items \u2500\u2500 */
       if (tier === 'ready') {
-        items = [
-          { ic:'check', ico:'\u2713', t:'Stay in relationship with your intention',
-            b:'Even with strong preparation, returning to your intention throughout \u2014 before, during, and after \u2014 deepens what becomes possible.' },
-          { ic:'check', ico:'\u2713', t:'Integration begins now',
-            b:'The integration process starts before the experience, not after. The attention you bring to preparation, setting, and relationship will shape what you carry forward.' },
-          { ic:'check', ico:'\u2713', t:'Hold the experience lightly',
-            b:'Whatever arises \u2014 whether profound, difficult, or quietly ordinary \u2014 is information. Resist the urge to fix its meaning too quickly. Let it continue to speak in the days and weeks that follow.' }
+        var readyItems = [
+          { severity:'strength', title:'Stay connected to your intention',
+            body:'Even with strong preparation, returning to your intention before, during, and after the experience deepens what becomes possible. Read it aloud before you begin.' },
+          { severity:'strength', title:'Integration begins before the experience',
+            body:'The attention you are bringing to preparation, setting, and support is already part of the integration process. Continue this quality of attention in the days following.' },
+          { severity:'strength', title:'Hold whatever arises with openness',
+            body:'Whether the experience is profound, difficult, or quietly ordinary \u2014 it is all information. Resist the urge to fix its meaning too quickly. Let it continue to speak in the days and weeks that follow.' }
+        ];
+        items = items.concat(readyItems);
+      }
+
+      /* \u2500\u2500 Build HTML \u2500\u2500 */
+      var iconMap = { critical:'\u26A0', warning:'\u25B2', note:'\u25CE', strength:'\u2713' };
+      var classMap = { critical:'warn', warning:'caution', note:'info', strength:'check' };
+
+      var itemsHTML = items.map(function(item) {
+        var ico = iconMap[item.severity] || '\u25CE';
+        var cls = classMap[item.severity] || 'info';
+        var linkHTML = '';
+        if (item.link) {
+          var target = item.link.href.indexOf('http') === 0 ? ' target="_blank" rel="noopener"' : '';
+          linkHTML = '<a class="ra-item-link" href="' + item.link.href + '"' + target + '>' + item.link.text + ' \u2192</a>';
+        }
+        return '<div class="ra-result-item ra-severity-' + item.severity + '">'
+          + '<div class="ra-item-header">'
+          + '<span class="ra-item-icon ' + cls + '">' + ico + '</span>'
+          + '<span class="ra-item-title">' + item.title + '</span>'
+          + '</div>'
+          + '<p class="ra-item-body">' + item.body + '</p>'
+          + linkHTML
+          + '</div>';
+      }).join('');
+
+      /* \u2500\u2500 Score summary \u2500\u2500 */
+      var summaryHTML = '<div class="ra-score-summary">'
+        + '<div class="ra-score-bar"><span class="ra-score-label">Safety</span>'
+        + '<div class="ra-score-track"><div class="ra-score-fill ra-score-safety" style="width:' + Math.min(100, Math.round((safetyScore / 15) * 100)) + '%"></div></div>'
+        + '<span class="ra-score-val">' + (safetyScore === 0 ? 'Clear' : safetyScore <= 3 ? 'Minor considerations' : safetyScore <= 6 ? 'Needs attention' : 'Significant concerns') + '</span></div>'
+        + '<div class="ra-score-bar"><span class="ra-score-label">Preparation</span>'
+        + '<div class="ra-score-track"><div class="ra-score-fill ra-score-prep" style="width:' + Math.min(100, Math.round((prepScore / 15) * 100)) + '%"></div></div>'
+        + '<span class="ra-score-val">' + (prepScore === 0 ? 'Strong' : prepScore <= 4 ? 'Good foundation' : prepScore <= 8 ? 'Needs work' : 'Significant gaps') + '</span></div>'
+        + '</div>';
+
+      /* \u2500\u2500 Next steps (contextual) \u2500\u2500 */
+      var steps;
+      if (tier === 'pause') {
+        steps = [
+          { t:'Review the full safety assessment', h:'/assessment/' },
+          { t:'Check drug interactions', h:'/checker/' },
+          { t:'Read the preparation guide', h:'/preparation/' }
+        ];
+      } else if (tier === 'prepare') {
+        steps = [
+          { t:'Read the preparation guide', h:'/preparation/' },
+          { t:'Check drug interactions', h:'/checker/' },
+          { t:'Open the Journey Planner', h:'/planner/' }
+        ];
+      } else if (tier === 'strengthen') {
+        steps = [
+          { t:'Open the Journey Planner', h:'/planner/' },
+          { t:'Read the preparation guide', h:'/preparation/' },
+          { t:'Explore integration practices', h:'/integration/' }
+        ];
+      } else {
+        steps = [
+          { t:'Open the Journey Planner', h:'/planner/' },
+          { t:'Explore integration practices', h:'/integration/' },
+          { t:'Check drug interactions', h:'/checker/' }
         ];
       }
-      var steps = (tier === 'ready')
-        ? [ { t:'Explore integration practices', h:'/integration' },
-            { t:'Open the Journey Planner', h:'/planner' },
-            { t:'Check drug interactions', h:'/checker' } ]
-        : [ { t:'Read the preparation guide', h:'/preparation' },
-            { t:'Open the Journey Planner', h:'/planner' },
-            { t:'Check drug interactions', h:'/checker' } ];
-      var itemsHTML = items.map(function(item) {
-        return '<div class="ra-result-item">'
-          + '<div class="ra-item-header">'
-          + '<span class="ra-item-icon ' + item.ic + '">' + item.ico + '</span>'
-          + '<span class="ra-item-title">' + item.t + '</span>'
-          + '</div><p class="ra-item-body">' + item.b + '</p></div>';
-      }).join('');
+
       var stepsHTML = steps.map(function(s) {
-        return '<a class="ra-next-btn" href="' + s.h + '">' + s.t + '</a>';
+        return '<a class="ra-next-btn" href="' + s.h + '">' + s.t + ' \u2192</a>';
       }).join('');
+
+      /* \u2500\u2500 Item count summary \u2500\u2500 */
+      var critCount = items.filter(function(i){ return i.severity === 'critical'; }).length;
+      var warnCount = items.filter(function(i){ return i.severity === 'warning'; }).length;
+      var noteCount = items.filter(function(i){ return i.severity === 'note'; }).length;
+      var countParts = [];
+      if (critCount) countParts.push(critCount + ' critical');
+      if (warnCount) countParts.push(warnCount + ' important');
+      if (noteCount) countParts.push(noteCount + (noteCount === 1 ? ' note' : ' notes'));
+      var countHTML = countParts.length > 0
+        ? '<p class="ra-result-count">Your personalised assessment identified ' + countParts.join(', ') + '.</p>'
+        : '<p class="ra-result-count">No specific concerns identified.</p>';
+
+      var downloadPanel = '<div class="ra-download-panel" id="raPdfSection">'
+        + '<span class="ra-download-eyebrow">Save Your Results</span>'
+        + '<p class="ra-download-heading">Download Your Personalised Results</p>'
+        + '<p class="ra-download-sub">Save a copy of your full assessment — scores, personalised feedback, and next steps — for your own reference.</p>'
+        + '<form id="raPdfForm" class="ra-download-form" autocomplete="on">'
+        + '<input type="text" name="first_name" placeholder="First name (optional)" class="ra-download-input" autocomplete="given-name" />'
+        + '<input type="email" name="email" placeholder="Your email" class="ra-download-input" required autocomplete="email" />'
+        + '<input type="text" name="_hp" class="ra-download-hp" tabindex="-1" autocomplete="off" />'
+        + '<button type="submit" class="ra-download-btn" id="raPdfBtn"><span id="raPdfBtnText">Download Results as PDF →</span></button>'
+        + '</form>'
+        + '<p class="ra-download-note">You’ll also receive the Psygaia Framework — our approach to safe, grounded psychedelic experiences.</p>'
+        + '<p id="raPdfError" class="ra-download-error" style="display:none;"></p>'
+        + '</div>'
+        + '<div class="ra-download-success" id="raPdfSuccess" style="display:none;">'
+        + '<span class="ra-download-success-icon">&#10003;</span>'
+        + '<p class="ra-download-success-text">Your PDF is downloading. Check your inbox for the Psygaia Framework.</p>'
+        + '</div>';
+
+      var disclaimer = '<p class="ra-result-disclaimer">This assessment is for educational purposes only. It does not constitute medical or clinical advice and is not a substitute for professional consultation. If you are managing a mental health condition, taking psychiatric medications, or have concerns about your readiness, please speak with a qualified clinician before proceeding.</p>';
+
       return '<div class="ra-result-badge tier-' + tier + '">' + badges[tier] + '</div>'
         + '<h3 class="ra-result-headline">' + headlines[tier] + '</h3>'
         + '<p class="ra-result-sub">' + subs[tier] + '</p>'
+        + summaryHTML
+        + countHTML
         + '<div class="ra-result-items">' + itemsHTML + '</div>'
+        + downloadPanel
         + '<p class="ra-next-label">Where to go from here</p>'
         + '<div class="ra-next-steps">' + stepsHTML + '</div>'
         + '<button class="ra-restart" id="ra-restart">Start over</button>'
-        + '<p class="ra-result-disclaimer">This assessment is for educational purposes only. It does not constitute medical or clinical advice and is not a substitute for professional consultation. If you are managing a mental health condition, taking psychiatric medications, or have concerns about your readiness, please speak with a qualified clinician before proceeding.</p>';
+        + disclaimer;
     }
 
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+       QUIZ NAVIGATION (unchanged structure)
+       \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
     var current = 0;
     var answers = {};
     var viewIntro = document.getElementById('ra-view-intro');
@@ -331,21 +628,251 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
     }
 
-    function showResult() {
-      var hard = [], soft = [];
+    var psygaiaLogo = new Image();
+    psygaiaLogo.crossOrigin = 'anonymous';
+    psygaiaLogo.src = '/footer-logo-light.png';
+
+    function generatePDF(answers) {
+      var jsPDF = window.jspdf.jsPDF;
+      var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+      var pageW = 210, pageH = 297;
+      var ml = 22, mr = 22, cw = pageW - ml - mr;
+      var y = 22, pageNum = 1;
+
+      var cTeal = [62, 201, 191];
+      var cGreen = [92, 184, 74];
+      var cDark = [30, 30, 30];
+      var cBody = [80, 80, 80];
+      var cMuted = [140, 140, 140];
+      var cAmber = [201, 148, 58];
+      var cLight = [220, 220, 220];
+
+      function lh(fontSize) { return fontSize * 0.42; }
+
+      function checkBreak(needed) {
+        if (y + needed > pageH - 22) {
+          addPageFooter();
+          doc.addPage();
+          pageNum++;
+          y = 22;
+        }
+      }
+
+      function addPageFooter() {
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
+        doc.text('This assessment is for educational purposes only. It does not constitute medical or clinical advice.', pageW / 2, pageH - 14, { align: 'center' });
+        doc.text('howtousepsychedelics.com  |  Psygaia', pageW / 2, pageH - 10, { align: 'center' });
+        doc.text('Page ' + pageNum, pageW - mr, pageH - 10, { align: 'right' });
+      }
+
+      function drawLine(yPos, color) {
+        doc.setDrawColor(color[0], color[1], color[2]);
+        doc.setLineWidth(0.3);
+        doc.line(ml, yPos, pageW - mr, yPos);
+      }
+
+      function sectionLabel(text) {
+        checkBreak(12);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(cTeal[0], cTeal[1], cTeal[2]);
+        doc.text(text.toUpperCase(), ml, y);
+        y += 6;
+      }
+
+      function bodyText(text, options) {
+        if (!text) return;
+        var opts = options || {};
+        var fontSize = opts.fontSize || 10;
+        var color = opts.color || cBody;
+        var style = opts.style || 'normal';
+        var indent = opts.indent || 0;
+        doc.setFontSize(fontSize);
+        doc.setFont('helvetica', style);
+        doc.setTextColor(color[0], color[1], color[2]);
+        var lines = doc.splitTextToSize(text, cw - indent);
+        var lineHeight = lh(fontSize);
+        for (var i = 0; i < lines.length; i++) {
+          checkBreak(lineHeight);
+          doc.text(lines[i], ml + indent, y);
+          y += lineHeight;
+        }
+      }
+
+      var safetyScore = 0, prepScore = 0, stops = [], items = [];
       QS.forEach(function(q) {
-        var val = answers[q.id];
-        if (!val) return;
+        var val = answers[q.id]; if (!val) return;
         var opt = null;
         for (var i = 0; i < q.opts.length; i++) { if (q.opts[i].v === val) { opt = q.opts[i]; break; } }
         if (!opt) return;
-        if (opt.flag === 'hard') hard.push({ qid:q.id, hk:opt.hk });
-        else if (opt.flag === 'soft') soft.push(q.id);
+        if (opt.pool === 'safety') safetyScore += opt.w; else prepScore += opt.w;
+        if (opt.flag === 'stop') stops.push(q.id);
+        if (FEEDBACK[q.id] && FEEDBACK[q.id][val]) items.push(FEEDBACK[q.id][val]);
       });
+      var totalScore = safetyScore + prepScore;
+      var tier;
+      if (stops.length > 0 || safetyScore >= 8) tier = 'pause';
+      else if (totalScore >= 8 || safetyScore >= 5 || prepScore >= 10) tier = 'prepare';
+      else if (totalScore >= 4) tier = 'strengthen';
+      else tier = 'ready';
+
+      var badges = { pause:'Pause', prepare:'More Preparation Needed', strengthen:'Nearly Ready', ready:'Well-Positioned' };
+      var headlines = { pause:'Please pause before moving forward.', prepare:'Important areas need your attention first.', strengthen:'You\u2019re close \u2014 a few things to strengthen.', ready:'You appear well-positioned to move forward.' };
+      var severityOrder = { critical:0, warning:1, note:2, strength:3 };
+      items.sort(function(a,b){ return (severityOrder[a.severity]||99)-(severityOrder[b.severity]||99); });
+      if (tier === 'ready') {
+        items = items.concat([
+          { severity:'strength', title:'Stay connected to your intention', body:'Even with strong preparation, returning to your intention before, during, and after the experience deepens what becomes possible.' },
+          { severity:'strength', title:'Integration begins before the experience', body:'The attention you are bringing to preparation, setting, and support is already part of the integration process.' },
+          { severity:'strength', title:'Hold whatever arises with openness', body:'Whether the experience is profound, difficult, or quietly ordinary \u2014 it is all information. Let it continue to speak in the days and weeks that follow.' }
+        ]);
+      }
+
+      var safetyLabel = safetyScore === 0 ? 'Clear' : safetyScore <= 3 ? 'Minor considerations' : safetyScore <= 6 ? 'Needs attention' : 'Significant concerns';
+      var prepLabel = prepScore === 0 ? 'Strong' : prepScore <= 4 ? 'Good foundation' : prepScore <= 8 ? 'Needs work' : 'Significant gaps';
+      var sevColors = { critical: cAmber, warning: [224, 160, 64], note: cTeal, strength: cGreen };
+      var sevLabels = { critical:'CRITICAL', warning:'IMPORTANT', note:'NOTE', strength:'STRENGTH' };
+
+      var logoW = 32.3, logoH = logoW * (200 / 800);
+      try {
+        if (psygaiaLogo.complete && psygaiaLogo.naturalWidth > 0) {
+          doc.addImage(psygaiaLogo, 'PNG', ml, y, logoW, logoH);
+        }
+      } catch(e) {}
+      y += logoH + 12;
+
+      doc.setFontSize(22);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(cDark[0], cDark[1], cDark[2]);
+      doc.text('Readiness Assessment', ml, y);
+      y += 8;
+
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(cMuted[0], cMuted[1], cMuted[2]);
+      var now = new Date();
+      var dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      doc.text('Generated ' + dateStr + '  |  howtousepsychedelics.com  |  Psygaia', ml, y);
+      y += 10;
+
+      drawLine(y, cLight);
+      y += 8;
+
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      var tierColor = tier === 'pause' ? cAmber : tier === 'prepare' ? cTeal : cGreen;
+      doc.setTextColor(tierColor[0], tierColor[1], tierColor[2]);
+      doc.text(badges[tier], ml, y);
+      y += 7;
+
+      doc.setFontSize(13);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(cDark[0], cDark[1], cDark[2]);
+      var headLines = doc.splitTextToSize(headlines[tier], cw);
+      for (var hi = 0; hi < headLines.length; hi++) {
+        doc.text(headLines[hi], ml, y);
+        y += lh(13);
+      }
+      y += 6;
+
+      sectionLabel('Score Summary');
+
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(cDark[0], cDark[1], cDark[2]);
+      doc.text('Safety:', ml, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(cBody[0], cBody[1], cBody[2]);
+      doc.text(safetyLabel, ml + 22, y);
+      y += 5;
+      var safetyPct = Math.min(100, Math.round((safetyScore / 15) * 100));
+      doc.setFillColor(cLight[0], cLight[1], cLight[2]);
+      doc.roundedRect(ml, y, cw, 4, 2, 2, 'F');
+      if (safetyPct > 0) {
+        doc.setFillColor(cAmber[0], cAmber[1], cAmber[2]);
+        doc.roundedRect(ml, y, Math.max(4, (cw * safetyPct) / 100), 4, 2, 2, 'F');
+      }
+      y += 8;
+
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(cDark[0], cDark[1], cDark[2]);
+      doc.text('Preparation:', ml, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(cBody[0], cBody[1], cBody[2]);
+      doc.text(prepLabel, ml + 30, y);
+      y += 5;
+      var prepPct = Math.min(100, Math.round((prepScore / 15) * 100));
+      doc.setFillColor(cLight[0], cLight[1], cLight[2]);
+      doc.roundedRect(ml, y, cw, 4, 2, 2, 'F');
+      if (prepPct > 0) {
+        doc.setFillColor(cTeal[0], cTeal[1], cTeal[2]);
+        doc.roundedRect(ml, y, Math.max(4, (cw * prepPct) / 100), 4, 2, 2, 'F');
+      }
+      y += 8;
+
+      drawLine(y, cLight);
+      y += 8;
+
+      sectionLabel('Personalised Feedback');
+
+      for (var fi = 0; fi < items.length; fi++) {
+        var item = items[fi];
+        var sc = sevColors[item.severity] || cTeal;
+        var sl = sevLabels[item.severity] || '';
+
+        checkBreak(20);
+
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(sc[0], sc[1], sc[2]);
+        doc.text(sl, ml, y);
+        y += 4;
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(cDark[0], cDark[1], cDark[2]);
+        var titleLines = doc.splitTextToSize(item.title, cw);
+        for (var ti = 0; ti < titleLines.length; ti++) {
+          checkBreak(lh(10));
+          doc.text(titleLines[ti], ml, y);
+          y += lh(10);
+        }
+        y += 2;
+
+        bodyText(item.body, { fontSize: 9 });
+
+        if (item.link) {
+          y += 1;
+          doc.setFontSize(8);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(cTeal[0], cTeal[1], cTeal[2]);
+          var linkUrl = item.link.href.indexOf('http') === 0 ? item.link.href : 'howtousepsychedelics.com' + item.link.href;
+          doc.text(item.link.text + '  \u2192  ' + linkUrl, ml, y);
+          y += lh(8);
+        }
+
+        y += 5;
+      }
+
+      drawLine(y, cLight);
+      y += 8;
+
+      sectionLabel('Where To Go From Here');
+      bodyText('Visit howtousepsychedelics.com for substance guides, the preparation guide, integration practices, the journey planner, and the drug interaction checker.', { fontSize: 10 });
+
+      addPageFooter();
+      doc.save('readiness-assessment.pdf');
+    }
+
+    function showResult() {
       fillEl.style.width = '100%';
       pctEl.textContent = '100%';
       viewQuiz.style.display = 'none';
-      viewResult.innerHTML = buildResultHTML(hard, soft);
+      viewResult.innerHTML = buildResultHTML(answers);
       viewResult.style.display = 'block';
       document.getElementById('ra-restart').addEventListener('click', function() {
         answers = {}; current = 0;
@@ -353,6 +880,50 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         viewResult.innerHTML = '';
         fillEl.style.width = '0%';
         viewIntro.style.display = 'block';
+      });
+
+      var pdfForm = document.getElementById('raPdfForm');
+      var pdfBtn = document.getElementById('raPdfBtn');
+      var pdfBtnText = document.getElementById('raPdfBtnText');
+      var pdfError = document.getElementById('raPdfError');
+      var pdfSection = document.getElementById('raPdfSection');
+      var pdfSuccess = document.getElementById('raPdfSuccess');
+      if (!pdfForm) return;
+
+      pdfForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        pdfError.style.display = 'none';
+
+        var email = pdfForm.email.value.trim();
+        var firstName = pdfForm.first_name.value.trim();
+        var hp = pdfForm._hp.value;
+
+        if (!email) {
+          pdfError.textContent = 'Please enter your email.';
+          pdfError.style.display = 'block';
+          return;
+        }
+
+        pdfBtn.disabled = true;
+        pdfBtnText.textContent = 'Preparing your PDF...';
+
+        fetch('/.netlify/functions/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, first_name: firstName, _hp: hp, source: 'htup-readiness' }),
+        }).catch(function() {});
+
+        try {
+          generatePDF(answers);
+          pdfSection.style.display = 'none';
+          pdfSuccess.style.display = 'block';
+        } catch (err) {
+          console.error('PDF generation error:', err);
+          pdfError.textContent = 'PDF generation failed. Please try again.';
+          pdfError.style.display = 'block';
+          pdfBtn.disabled = false;
+          pdfBtnText.textContent = 'Download Results as PDF \u2192';
+        }
       });
     }
 
@@ -376,3 +947,4 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </script>
 
 </BaseLayout>
+
