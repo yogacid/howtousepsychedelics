@@ -12,10 +12,11 @@ collections:
     label: "Blog Posts"
     folder: "astro-site/src/content/blog"
     create: true
-    slug: "{{slug}}"
+    slug: "{{fields.url_slug}}"
     extension: "md"
     fields:
       - { label: "Title", name: "title", widget: "string" }
+      - { label: "URL Slug", name: "url_slug", widget: "string", hint: "The URL path for this post, e.g. microdosing-protocols-compared. Use lowercase letters, numbers, and hyphens only." }
       - { label: "Description", name: "description", widget: "text" }
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Updated", name: "updated", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, required: false }
