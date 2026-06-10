@@ -44,7 +44,7 @@ A few things people consistently underestimate:
 
 **Lighting.** Harsh overhead fluorescents are genuinely unfavourable. Warm, adjustable light (or natural light) supports a more comfortable visual environment. It sounds minor until you're in it.
 
-The [set and setting checklist](/blog/set-and-setting-checklist) walks through the physical environment in practical detail. The [preparation guide](https://howtousepsychedelics.com/preparation/) covers why context shapes experience the way it does.
+The [set and setting checklist](/blog/a-set-and-setting-checklist-for-your-next-psychedelic-session/) walks through the physical environment in practical detail. The [preparation guide](https://howtousepsychedelics.com/preparation/) covers why context shapes experience the way it does.
 
 ## Why Is Choosing the Wrong Sitter (or No Sitter) Such a Common Problem?
 

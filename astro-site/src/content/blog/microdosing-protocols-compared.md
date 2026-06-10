@@ -9,7 +9,7 @@ featured: false
 author: HTUP
 draft: false
 ---
-If you've looked into microdosing for more than an hour, you've encountered James Fadiman's name and Paul Stamets's name, and probably heard that one of their protocols is "the best one to start with." What you've probably encountered less often is a clear-eyed comparison of what each protocol actually involves, what it's optimised for, and where each one tends to fall short
+If you've looked into microdosing for more than an hour, you've encountered James Fadiman's name and Paul Stamets's name, and probably heard that one of their protocols is "the best one to start with." What you've probably encountered less often is a clear-eyed comparison of what each protocol actually involves, what it's optimised for, and where each one tends to fall short.
 
 While our [microdosing overview](https://howtousepsychedelics.com/microdosing/) covers the evidence base, risks, and broader context, this article assumes you've done that reading and are now trying to decide how to actually structure a practice.
 
@@ -79,7 +79,7 @@ For most people starting out, the Fadiman Protocol is the right choice. It has t
 
 If you've already completed a Fadiman cycle and want to experiment with the stack, the Stamets Protocol is a reasonable next step — with realistic expectations about the evidence base for the added supplements.
 
-Whatever protocol you use, keeping a daily journal or meditation practice is non-negotiable. Effects are often subtle and cumulative; without a written record or mindfulness practice, you're relying on impression rather than data. The [microdosing overview](https://howtousepsychedelics.com/microdosing/) covers what good journaling looks like, and if you want a structured approach that walks through protocols, calibration, meditation, and integration together, [Microdosing Mindfully](https://howtousepsychedelics.com/microdosing-course/) is a course built for exactly that.
+Whatever protocol you use, keeping a daily journal or meditation practice is non-negotiable. Effects are often subtle and cumulative; without a written record or mindfulness practice, you're relying on impression rather than data. The [microdosing overview](https://howtousepsychedelics.com/microdosing/) covers what good journalling looks like, and if you want a structured approach that walks through protocols, calibration, meditation, and integration together, [Microdosing Mindfully](https://howtousepsychedelics.com/microdosing-course/) is a course built for exactly that.
 
 ## Frequently Asked Questions
 

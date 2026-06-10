@@ -39,7 +39,7 @@ The practices that support integration are rarely dramatic. That's part of why t
 
 **Time outdoors.** Particularly in natural settings — not a structured hike, just time outside without a specific agenda. There's something about being in an environment that isn't optimized for productivity that allows the nervous system to keep processing. [For more on why natural environments support this kind of settling, the Psygaia piece on ecological set and setting goes deeper.](https://psygaia.org/blog/set-and-setting-an-ecological-reframe/)
 
-**Unhurried journalling.** Not systematic capture, not a debrief form — following what arises. Write without knowing where you're going. Some of the most useful integration writing is fragmentary, even incoherent at first. You're not trying to produce a summary. You're trying to stay in contact with what's still moving. [Our journal prompts guide](https://howtousepsychedelics.com/blog/journal-prompts-after-psychedelic-experience) can help if you're not sure where to start.
+**Unhurried journalling.** Not systematic capture, not a debrief form — following what arises. Write without knowing where you're going. Some of the most useful integration writing is fragmentary, even incoherent at first. You're not trying to produce a summary. You're trying to stay in contact with what's still moving. The [integration page](https://howtousepsychedelics.com/integration/) has structured prompts if you're not sure where to start.
 
 **Honest conversation.** With someone who understands what you've been through — not someone who needs you to minimize or explain. This might be a partner, a close friend, a community, or a coach. The point isn't to be understood perfectly; it's to speak what's true out loud, which tends to clarify it.
 

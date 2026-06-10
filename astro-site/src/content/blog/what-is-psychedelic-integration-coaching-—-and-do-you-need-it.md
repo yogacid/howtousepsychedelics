@@ -27,7 +27,7 @@ Without some form of active integration, even genuinely powerful experiences can
 
 ## What Integration Coaching Is
 
-Psychedelic integration coaching is a non-clinical form of support designed to help you make meaning of an experience and apply what emerged to your actual life. The distinction from therapy matters and we'll come back to it — but the core of coaching is this: reflective dialogue, practical tools, and structured support from someone who understands the terrain.
+Psychedelic integration coaching is a non-clinical form of support designed to help you make meaning of an experience and apply what emerged to your actual life. The distinction from therapy matters, and we'll come back to it — but the core of coaching is this: reflective dialogue, practical tools, and structured support from someone who understands the terrain.
 
 A good integration coach isn't interpreting your experience for you. They're not telling you what your visions meant or prescribing a path forward. They're asking the right questions, holding space for the process, and helping you do the meaning-making yourself. The insight is yours. The coach helps you work with it.
 
@@ -85,7 +85,7 @@ One thing worth being honest about: integration isn't something you complete. It
 
 That doesn't mean you need ongoing coaching indefinitely. For many people, a focused period of support — four to eight sessions, often — is enough to establish the internal skills and the structure needed to continue the work independently. A good coach is building toward your self-sufficiency, not your dependence.
 
-What "integration as ongoing practice" actually looks like is different for everyone. It might be a consistent journaling practice. Regular time in nature, honest conversations with people who know you, attention to how the experience continues to influence how you're showing up. The forms vary. The commitment is to actually living what you learned, not just remembering it.
+What "integration as ongoing practice" actually looks like is different for everyone. It might be a consistent journalling practice. Regular time in nature, honest conversations with people who know you, attention to how the experience continues to influence how you're showing up. The forms vary. The commitment is to actually living what you learned, not just remembering it.
 
 If you're somewhere in that process — recently returned from a significant experience, trying to make sense of something that happened months ago, or preparing for a journey and wanting to think through the full arc — that's what integration coaching is for.
 
