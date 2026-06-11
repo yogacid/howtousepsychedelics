@@ -928,29 +928,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
     .enroll-cta-panel {
       background: var(--bg-card); border-radius: var(--r-xl);
-      border: 1px solid var(--accent-border);
-      padding: 40px 36px; margin-top: 3rem; flex: 1;
-      display: flex; flex-direction: column; gap: 20px;
+      border: 1.5px solid var(--accent-border);
+      box-shadow: 0 8px 40px rgba(62,201,191,0.08);
+      padding: 44px 40px; margin-top: 3rem; flex: 1;
+      display: flex; flex-direction: column; justify-content: center; gap: 20px;
     }
     .enroll-cta-label {
-      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.2em;
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-dim); border: 1px solid var(--accent-border);
+      border-radius: 999px; padding: 5px 14px;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em;
       text-transform: uppercase; color: var(--teal);
     }
     .enroll-cta-heading {
       font-family: 'Space Grotesk', sans-serif;
       font-size: clamp(1.6rem, 3vw, 2.2rem);
       font-weight: 400; line-height: 1.15; color: var(--cream);
-    }
-    .enroll-cta-includes {
-      list-style: none; display: flex; flex-direction: column; gap: 8px;
-    }
-    .enroll-cta-includes li {
-      display: flex; align-items: flex-start; gap: 10px;
-      font-size: 0.85rem; font-weight: 400; color: var(--cream-dim); line-height: 1.5;
-    }
-    .enroll-cta-includes li::before {
-      content: '\2713'; color: var(--teal); font-weight: 700;
-      font-size: 0.8rem; flex-shrink: 0; margin-top: 1px;
     }
     .enroll-cta-btn {
       display: block; width: 100%; text-align: center;
@@ -966,21 +960,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       animation: accentShimmer 4s ease-in-out infinite;
       box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
     }
+    .enroll-cta-summary {
+      font-size: 0.82rem; font-weight: 500; color: var(--cream);
+      letter-spacing: 0.01em;
+    }
     .enroll-cta-price {
-      text-align: center; font-size: 0.85rem; font-weight: 500;
+      font-size: 0.85rem; font-weight: 500;
       color: var(--cream-dim); margin-bottom: 10px;
     }
-    .enroll-cta-guarantee {
-      display: flex; align-items: flex-start; gap: 10px;
-      padding: 14px 16px;
-      background: rgba(62,201,191,0.04);
-      border: 1px solid rgba(62,201,191,0.2);
-      border-radius: var(--r-lg);
+    .enroll-cta-guarantee-note {
+      font-size: 0.76rem; font-weight: 500; color: var(--cream-dim);
+      letter-spacing: 0.02em;
     }
-    .enroll-cta-guarantee-icon { color: var(--teal); flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
-    .enroll-cta-guarantee p {
-      font-size: 0.8rem; font-weight: 400; color: var(--cream-dim); line-height: 1.6;
-    }
+    .enroll-cta-guarantee-note .gnote-star { color: var(--teal); }
     @media (max-width: 768px) {
       .enroll-steps { grid-template-columns: 1fr; gap: 40px; }
       .enroll-steps-left, .enroll-cta-panel { margin-top: 0; }
@@ -1367,8 +1359,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="principle">
           <div class="principle-icon">&#9681;</div>
           <div>
-            <div class="principle-title">Ecologically grounded</div>
-            <p class="principle-desc">Framing microdosing as a relationship with living organisms — one that asks for attention and reciprocity, not just a desired outcome.</p>
+            <div class="principle-title">Reflective &amp; relational</div>
+            <p class="principle-desc">Framing microdosing as a reflective and relational practice — one that asks for honest attention to what arises, not just a desired outcome.</p>
           </div>
         </div>
         <div class="principle">
@@ -1539,19 +1531,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div class="enroll-cta-panel">
     <span class="enroll-cta-label">Ready to begin?</span>
     <h3 class="enroll-cta-heading">Start your practice.<br><em>On your terms.</em></h3>
-    <ul class="enroll-cta-includes">
-      <li>15 lessons across 3 structured weeks</li>
-      <li>Lifetime access — learn at your own pace</li>
-      <li>Psygaia's Circle community membership</li>
-      <li>Monthly integration &amp; breathwork circles</li>
-      <li>Developed by an independent nonprofit</li>
-    </ul>
+    <p class="enroll-cta-summary">15 lessons &middot; Lifetime access &middot; Community included</p>
     <p class="enroll-cta-price">$99 USD &middot; one-time payment</p>
     <a href="https://psygaia.circle.so/checkout/microdosing-mindfully-course" class="enroll-cta-btn" target="_blank" rel="noopener">Enrol Now &rarr;</a>
-    <div class="enroll-cta-guarantee">
-      <span class="enroll-cta-guarantee-icon">&#10022;</span>
-      <p>14-day money-back guarantee. If you're not satisfied, email us for a full refund — no questions asked.</p>
-    </div>
+    <p class="enroll-cta-guarantee-note"><span class="gnote-star">&#10022;</span> 14-day money-back guarantee</p>
   </div>
 </section>
 
@@ -1579,9 +1562,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <p class="instructor-bio">
       Louis created this course in response to a gap he observed in
       psychedelic education — where technical protocols dominate, and the
-      inner, reflective work that makes microdosing genuinely meaningful
+      reflective, relational work that makes microdosing genuinely meaningful
       gets lost. His approach frames microdosing as a reflective and
-      relational practice, grounded in ethics, ecology, and honest
+      relational practice, grounded in ethics, mindfulness, and honest
       self-inquiry.
     </p>
 
