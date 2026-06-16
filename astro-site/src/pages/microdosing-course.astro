@@ -748,21 +748,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
     .sidebar-card-dark a { color: var(--teal); text-decoration: none; }
 
-    /* ── INSTRUCTOR ─────────────────────────────────────────────── */
-    .instructor {
-      padding: 72px 5%; background: var(--bg-mid);
-      display: grid; grid-template-columns: 1fr 1.35fr;
-      gap: 52px; align-items: center;
+    /* ── INSTRUCTORS ────────────────────────────────────────────── */
+    .instructors {
+      background: var(--bg-mid);
     }
+    .instructor {
+      padding: 72px 5%;
+      display: grid; grid-template-columns: 1fr 1.35fr;
+      gap: 72px; align-items: center;
+      border-bottom: 1px solid var(--cream-border);
+    }
+    .instructor:last-child { border-bottom: none; }
+    .instructor--right { grid-template-columns: 1.35fr 1fr; }
     .instructor-image {
       position: relative; aspect-ratio: 4/5; overflow: hidden;
-      border-radius: var(--r-xl); max-width: 360px;
+      border-radius: var(--r-xl); width: 100%; max-width: 400px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.4);
     }
+    .instructor--left .instructor-image { justify-self: end; width: 100%; }
+    .instructor--right .instructor-image { justify-self: start; width: 100%; }
     .instructor-image-inner {
       position: absolute; inset: 0;
-      background:
-        url('/images/course/instructor.jpg') center center/cover no-repeat;
+      background-size: cover; background-repeat: no-repeat;
+    }
+    .instructor-image-inner--louis {
+      background-image: url('/images/team/louis-belleau.jpg');
+      background-position: center center;
+    }
+    .instructor-image-inner--jack {
+      background-image: url('/images/team/jack-bunce.png');
+      background-position: center top;
     }
     .instructor-name {
       font-family: 'Space Grotesk', sans-serif;
@@ -1046,8 +1061,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       .community { grid-template-columns: 1fr; }
       .community-image { min-height: 260px; }
       .pricing-inner { grid-template-columns: 1fr; }
-      .instructor { grid-template-columns: 1fr; gap: 40px; }
-      .instructor-image { max-width: 100%; aspect-ratio: 4/3; }
+      .instructor, .instructor--right { grid-template-columns: 1fr; }
+      .instructor--right .instructor-image { order: -1; }
+      .instructor-image { max-width: 100%; aspect-ratio: 4/3; justify-self: stretch !important; }
       .instructor-image-inner { background-position: center center; }
       .footer-support-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
       .footer-support-btn { align-self: stretch; text-align: center; }
@@ -1538,44 +1554,49 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 </section>
 
-<!-- ── INSTRUCTOR ────────────────────────────────────────────────── -->
-<section class="instructor">
-  <div class="instructor-image">
-    <div class="instructor-image-inner"></div>
-  </div>
+<!-- ── INSTRUCTORS ───────────────────────────────────────────────── -->
+<section class="instructors">
 
-  <div class="instructor-content">
-    <span class="section-eyebrow">Course Creator</span>
-    <h2 class="instructor-name">Louis Belleau, M.A.</h2>
-    <div class="instructor-credentials">M.A. Psychedelics & Consciousness Studies &middot; University of Ottawa</div>
-
-    <p class="instructor-bio">
-      As founder of Psygaia, Louis has spent years working directly with
-      people navigating psychedelic experiences — building this course
-      around what he observed them genuinely needing, not just what the
-      literature recommends. He holds an MA in Psychedelics &amp;
-      Consciousness Studies from the University of Ottawa, an
-      interdisciplinary background in Psychology, Philosophy, and Religious
-      Studies from McGill, and is a certified yoga and breathwork teacher.
-    </p>
-
-    <p class="instructor-bio">
-      Louis created this course in response to a gap he observed in
-      psychedelic education — where technical protocols dominate, and the
-      reflective, relational work that makes microdosing genuinely meaningful
-      gets lost. His approach frames microdosing as a reflective and
-      relational practice, grounded in ethics, mindfulness, and honest
-      self-inquiry.
-    </p>
-
-    <div class="credential-tags">
-      <span class="credential-tag">Yoga Teacher</span>
-      <span class="credential-tag">Breathwork</span>
-      <span class="credential-tag">Psychedelic Research</span>
-      <span class="credential-tag">McGill University</span>
-      <span class="credential-tag">University of Ottawa</span>
+  <div class="instructor instructor--left">
+    <div class="instructor-image">
+      <div class="instructor-image-inner instructor-image-inner--louis"></div>
+    </div>
+    <div class="instructor-content">
+      <span class="section-eyebrow">Course Creator</span>
+      <h2 class="instructor-name">Louis Belleau, M.A.</h2>
+      <div class="instructor-credentials">M.A. Psychedelics & Consciousness Studies &middot; University of Ottawa</div>
+      <p class="instructor-bio">As founder of Psygaia, Louis has spent years working directly with people navigating psychedelic experiences — building this course around what he observed them genuinely needing, not just what the literature recommends. He holds an MA in Psychedelics &amp; Consciousness Studies from the University of Ottawa, an interdisciplinary background in Psychology, Philosophy, and Religious Studies from McGill, and is a certified yoga and breathwork teacher.</p>
+      <p class="instructor-bio">Louis created this course in response to a gap he observed in psychedelic education — where technical protocols dominate, and the reflective, relational work that makes microdosing genuinely meaningful gets lost.</p>
+      <div class="credential-tags">
+        <span class="credential-tag">Yoga Teacher</span>
+        <span class="credential-tag">Breathwork</span>
+        <span class="credential-tag">Psychedelic Research</span>
+        <span class="credential-tag">McGill University</span>
+        <span class="credential-tag">University of Ottawa</span>
+      </div>
     </div>
   </div>
+
+  <div class="instructor instructor--right">
+    <div class="instructor-content">
+      <span class="section-eyebrow">Course Creator</span>
+      <h2 class="instructor-name">Jack Bunce</h2>
+      <div class="instructor-credentials">Somatic Healing Guide &middot; Relationship Coach &middot; @wholesome.guide</div>
+      <p class="instructor-bio">Jack is a somatic healing guide and relationship coach who helps men improve their emotional capacity and become more grounded. His work is deeply personal, drawing from his own experiences navigating anxiety, PTSD, and panic attacks. His toolkit spans shadow work, breathwork, somatic therapy, men's work, and psychedelic integration.</p>
+      <p class="instructor-bio">In 2025, Jack received his 80-hour Wilderness First Responder (WFR) and ACMG Apprentice Hiking Guide certifications — building a professional foundation in backcountry guiding that complements decades of skiing, hiking, and paddling. His goal is to support people in embodying grounded, mature masculinity, so they can show up better for themselves and the people they love.</p>
+      <div class="credential-tags">
+        <span class="credential-tag">Somatic Therapy</span>
+        <span class="credential-tag">Breathwork</span>
+        <span class="credential-tag">Men's Work</span>
+        <span class="credential-tag">Wilderness First Responder</span>
+        <span class="credential-tag">ACMG Hiking Guide</span>
+      </div>
+    </div>
+    <div class="instructor-image">
+      <div class="instructor-image-inner instructor-image-inner--jack"></div>
+    </div>
+  </div>
+
 </section>
 
 <!-- ── PRICING ───────────────────────────────────────────────────── -->
