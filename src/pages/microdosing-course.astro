@@ -761,12 +761,12 @@ import Base from '../layouts/Base.astro';
     .instructor:last-child { border-bottom: none; }
     .instructor--right { grid-template-columns: 1.35fr 1fr; }
     .instructor-image {
-      position: relative; aspect-ratio: 4/5; overflow: hidden;
-      border-radius: var(--r-xl); width: 100%; max-width: 400px;
+      position: relative; aspect-ratio: 1/1; overflow: hidden;
+      border-radius: var(--r-xl); width: 100%;
       box-shadow: 0 20px 60px rgba(0,0,0,0.4);
     }
-    .instructor--left .instructor-image { justify-self: end; width: 100%; }
-    .instructor--right .instructor-image { justify-self: start; width: 100%; }
+    .instructor--left .instructor-image { justify-self: start; }
+    .instructor--right .instructor-image { justify-self: end; }
     .instructor-image-inner {
       position: absolute; inset: 0;
       background-size: cover; background-repeat: no-repeat;
