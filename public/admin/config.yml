@@ -4,13 +4,13 @@ backend:
 
 publish_mode: editorial_workflow
 
-media_folder: "astro-site/public/blog/images"
+media_folder: "public/blog/images"
 public_folder: "/blog/images"
 
 collections:
   - name: "blog"
     label: "Blog Posts"
-    folder: "astro-site/src/content/blog"
+    folder: "src/content/blog"
     create: true
     slug: "{{fields.url_slug}}"
     extension: "md"
