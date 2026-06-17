@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
@@ -20,7 +20,7 @@ function formatDate(date: Date) {
 }
 ---
 
-<BaseLayout
+<Base
   title="Blog — How to Use Psychedelics"
   description="Practical guides, harm reduction insights, and grounded perspectives on psychedelic preparation, safety, and integration."
   canonicalPath="/blog"
@@ -129,4 +129,4 @@ function formatDate(date: Date) {
     })();
   </script>
 
-</BaseLayout>
+</Base>

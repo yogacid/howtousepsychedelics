@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -32,7 +32,7 @@ function formatDate(date: Date) {
 const tocHeadings = headings.filter(h => h.depth <= 3);
 ---
 
-<BaseLayout
+<Base
   title={`${post.data.title} — How to Use Psychedelics`}
   description={post.data.description}
   canonicalPath={`/blog/${post.id}/`}
@@ -121,4 +121,4 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
 
   </div>
 
-</BaseLayout>
+</Base>
