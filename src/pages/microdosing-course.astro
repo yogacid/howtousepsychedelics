@@ -66,6 +66,7 @@ import Base from '../layouts/Base.astro';
       line-height: 1.75;
       -webkit-font-smoothing: antialiased;
       overflow-x: clip;
+      padding-bottom: 64px;
     }
     .mdc-page p { text-wrap: pretty; }
     .mdc-page h1, .mdc-page h2, .mdc-page h3, .mdc-page h4 { text-wrap: balance; }
@@ -850,7 +851,8 @@ import Base from '../layouts/Base.astro';
     }
     [data-theme="light"] .footer-support { background: linear-gradient(135deg, rgba(62,201,191,0.06) 0%, rgba(92,184,74,0.02) 100%); }
     .footer-support-inner {
-      max-width: 100%; margin: 0 auto; padding: 2.5rem;
+      max-width: 100%; margin: 0 auto; padding: 2.5rem 2.5rem 2.5rem;
+      padding-top: 0;
       display: flex; align-items: center; gap: 2.5rem; justify-content: space-between;
     }
     .footer-support-text { flex: 1; }
