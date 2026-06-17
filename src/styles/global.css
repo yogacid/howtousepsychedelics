@@ -1506,7 +1506,6 @@ nav {
    FOOTER SUPPORT BANNER (article pages)
    ══════════════════════════════════════════════ */
 .footer-support {
-  margin-top: 2.5rem;
   background: linear-gradient(135deg, rgba(64,217,204,0.07) 0%, rgba(109,212,86,0.03) 100%);
   border-bottom: 1px solid rgba(64,217,204,0.15);
   border-top: 1px solid rgba(64,217,204,0.08);
