@@ -435,9 +435,18 @@ import Base from '../layouts/Base.astro';
         radial-gradient(ellipse 35% 40% at 15% 80%, rgba(92,184,74,0.05) 0%, transparent 55%);
       pointer-events: none;
     }
+    .history-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: stretch; position: relative; z-index: 1;
+    }
+    .history-image {
+      background: url('/historical-context.png') center/cover no-repeat;
+      border-radius: var(--r-xl);
+      min-height: 500px;
+    }
     .history-header { margin-bottom: 3rem; position: relative; z-index: 1; }
     .history-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
+      display: grid; grid-template-columns: 1fr;
       gap: 14px; position: relative; z-index: 1;
     }
     .history-item {
@@ -1052,6 +1061,8 @@ import Base from '../layouts/Base.astro';
       .for-you-intro { position: static; }
       .testimonials-grid { grid-template-columns: 1fr; }
       .outcomes-inner { grid-template-columns: 1fr; gap: 40px; }
+      .history-layout { grid-template-columns: 1fr; }
+      .history-image { min-height: 300px; }
       .history-grid { grid-template-columns: 1fr; }
       .approach-inner { grid-template-columns: 1fr; gap: 40px; }
       .approach-right { margin-top: 0; }
@@ -1331,23 +1342,26 @@ import Base from '../layouts/Base.astro';
 
 <!-- ── HISTORY ───────────────────────────────────────────────────── -->
 <section class="history">
-  <div class="history-header">
-    <span class="section-eyebrow">Historical Context</span>
-    <h2 class="section-title">A practice with deep roots.</h2>
-  </div>
-
-  <div class="history-grid">
-    <div class="history-item">
-      <span class="history-item-label">Western Origins</span>
-      <div class="history-item-title">Hofmann, Grof & the pioneers</div>
-      <p>Albert Hofmann — who first synthesized LSD — used microdosing in his later years to enhance clarity, creativity, and connection to nature, viewing it as a sacred tool for consciousness exploration rather than a scientific curiosity. Stanislav Grof explored how lower doses of LSD could facilitate therapeutic breakthroughs while maintaining greater ego stability than high-dose sessions — insight and healing with less intensity.</p>
+  <div class="history-layout">
+    <div class="history-left">
+      <div class="history-header">
+        <span class="section-eyebrow">Historical Context</span>
+        <h2 class="section-title">A practice with deep roots.</h2>
+      </div>
+      <div class="history-grid">
+        <div class="history-item">
+          <span class="history-item-label">Western Origins</span>
+          <div class="history-item-title">Hofmann, Grof & the pioneers</div>
+          <p>Albert Hofmann — who first synthesized LSD — used microdosing in his later years to enhance clarity, creativity, and connection to nature, viewing it as a sacred tool for consciousness exploration rather than a scientific curiosity. Stanislav Grof explored how lower doses of LSD could facilitate therapeutic breakthroughs while maintaining greater ego stability than high-dose sessions — insight and healing with less intensity.</p>
+        </div>
+        <div class="history-item">
+          <span class="history-item-label">Indigenous Traditions</span>
+          <div class="history-item-title">Low-dose practices in the Amazon and beyond</div>
+          <p>Long before the term emerged, Indigenous communities — particularly in the Amazon — used low doses of plant medicines as part of ongoing spiritual, relational, and medicinal practice: enhancing connection to the natural world, maintaining energetic balance, and deepening participation in the living community of species. These traditions represent a long-standing understanding of non-visionary, relational engagement with plant medicines.</p>
+        </div>
+      </div>
     </div>
-
-    <div class="history-item">
-      <span class="history-item-label">Indigenous Traditions</span>
-      <div class="history-item-title">Low-dose practices in the Amazon and beyond</div>
-      <p>Long before the term emerged, Indigenous communities — particularly in the Amazon — used low doses of plant medicines as part of ongoing spiritual, relational, and medicinal practice: enhancing connection to the natural world, maintaining energetic balance, and deepening participation in the living community of species. These traditions represent a long-standing understanding of non-visionary, relational engagement with plant medicines.</p>
-    </div>
+    <div class="history-image"></div>
   </div>
 </section>
 
