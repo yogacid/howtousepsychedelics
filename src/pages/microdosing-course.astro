@@ -425,7 +425,7 @@ import Base from '../layouts/Base.astro';
 
     /* ── HISTORY ────────────────────────────────────────────────── */
     .history {
-      padding: 100px 5%; background: var(--bg);
+      padding: 0; background: var(--bg);
       position: relative; overflow: hidden;
     }
     .history::before {
@@ -437,12 +437,13 @@ import Base from '../layouts/Base.astro';
     }
     .history-layout {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 48px; align-items: stretch; position: relative; z-index: 1;
+      min-height: 560px; align-items: stretch; position: relative; z-index: 1;
+    }
+    .history-left {
+      padding: 100px 5% 100px 5%;
     }
     .history-image {
       background: url('/historical-context.png') center/cover no-repeat;
-      border-radius: var(--r-xl);
-      min-height: 500px;
     }
     .history-header { margin-bottom: 3rem; position: relative; z-index: 1; }
     .history-grid {
@@ -1061,8 +1062,8 @@ import Base from '../layouts/Base.astro';
       .for-you-intro { position: static; }
       .testimonials-grid { grid-template-columns: 1fr; }
       .outcomes-inner { grid-template-columns: 1fr; gap: 40px; }
-      .history-layout { grid-template-columns: 1fr; }
-      .history-image { min-height: 300px; }
+      .history-layout { grid-template-columns: 1fr; min-height: unset; }
+      .history-image { min-height: 300px; order: -1; background-position: center bottom; }
       .history-grid { grid-template-columns: 1fr; }
       .approach-inner { grid-template-columns: 1fr; gap: 40px; }
       .approach-right { margin-top: 0; }
