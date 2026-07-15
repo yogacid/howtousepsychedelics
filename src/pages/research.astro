@@ -1,0 +1,413 @@
+---
+import Base from '../layouts/Base.astro';
+
+interface Study {
+  substance: string;
+  topic: string;
+  year: number;
+  authors: string;
+  journal: string;
+  title: string;
+  finding: string;
+  doi: string;
+}
+
+const studies: Study[] = [
+  // ── Psilocybin ──
+  {
+    substance: 'Psilocybin', topic: 'Mystical experience', year: 2006,
+    authors: 'Griffiths, Richards, McCann & Jesse', journal: 'Psychopharmacology',
+    title: 'Psilocybin can occasion mystical-type experiences having substantial and sustained personal meaning and spiritual significance',
+    finding: 'The landmark study that reopened modern psychedelic research: under supported conditions, a single high dose occasioned experiences participants ranked among the most meaningful of their lives, with benefits persisting at follow-up.',
+    doi: '10.1007/s00213-006-0457-5',
+  },
+  {
+    substance: 'Psilocybin', topic: 'End-of-life distress', year: 2016,
+    authors: 'Griffiths et al.', journal: 'Journal of Psychopharmacology',
+    title: 'Psilocybin produces substantial and sustained decreases in depression and anxiety in patients with life-threatening cancer',
+    finding: 'In a randomized double-blind crossover trial, a single high dose produced large, sustained reductions in depression and anxiety in cancer patients, with ~80% showing clinically significant response at six months.',
+    doi: '10.1177/0269881116675513',
+  },
+  {
+    substance: 'Psilocybin', topic: 'End-of-life distress', year: 2016,
+    authors: 'Ross et al.', journal: 'Journal of Psychopharmacology',
+    title: 'Rapid and sustained symptom reduction following psilocybin treatment for anxiety and depression in patients with life-threatening cancer',
+    finding: 'The parallel NYU trial: a single psilocybin session with psychotherapy produced immediate and enduring reductions in cancer-related existential distress, mediated by mystical-type experience.',
+    doi: '10.1177/0269881116675512',
+  },
+  {
+    substance: 'Psilocybin', topic: 'Depression', year: 2021,
+    authors: 'Carhart-Harris et al.', journal: 'New England Journal of Medicine',
+    title: 'Trial of psilocybin versus escitalopram for depression',
+    finding: 'Head-to-head against a standard SSRI over six weeks, psilocybin therapy performed at least as well on the primary measure and better on most secondary measures — though the trial was not powered to establish superiority.',
+    doi: '10.1056/NEJMoa2032994',
+  },
+  {
+    substance: 'Psilocybin', topic: 'Depression', year: 2021,
+    authors: 'Davis et al.', journal: 'JAMA Psychiatry',
+    title: 'Effects of psilocybin-assisted therapy on major depressive disorder',
+    finding: 'Randomized waiting-list trial in major depression: two psilocybin sessions with supportive therapy produced large, rapid antidepressant effects, with over half of participants in remission at four weeks.',
+    doi: '10.1001/jamapsychiatry.2020.3285',
+  },
+  {
+    substance: 'Psilocybin', topic: 'Depression', year: 2022,
+    authors: 'Goodwin et al.', journal: 'New England Journal of Medicine',
+    title: 'Single-dose psilocybin for a treatment-resistant episode of major depression',
+    finding: 'The largest psilocybin trial to date (233 participants, 22 sites): 25 mg significantly reduced treatment-resistant depression versus 1 mg control at three weeks, though effects waned in a subset and adverse events were not trivial.',
+    doi: '10.1056/NEJMoa2206443',
+  },
+  {
+    substance: 'Psilocybin', topic: 'Depression', year: 2023,
+    authors: 'Raison et al.', journal: 'JAMA',
+    title: 'Single-dose psilocybin treatment for major depressive disorder',
+    finding: 'A rigorous randomized trial with an active placebo (niacin): a single 25 mg dose with psychological support produced a large, sustained reduction in depression over six weeks.',
+    doi: '10.1001/jama.2023.14530',
+  },
+  {
+    substance: 'Psilocybin', topic: 'Addiction', year: 2022,
+    authors: 'Bogenschutz et al.', journal: 'JAMA Psychiatry',
+    title: 'Percentage of heavy drinking days following psilocybin-assisted psychotherapy vs placebo',
+    finding: 'In the first modern RCT for alcohol use disorder (93 participants), two psilocybin sessions within psychotherapy roughly halved heavy drinking days over 32 weeks compared with active placebo.',
+    doi: '10.1001/jamapsychiatry.2022.2096',
+  },
+  {
+    substance: 'Psilocybin', topic: 'Addiction', year: 2014,
+    authors: 'Johnson, Garcia-Romeu, Cosimano & Griffiths', journal: 'Journal of Psychopharmacology',
+    title: 'Pilot study of the 5-HT2AR agonist psilocybin in the treatment of tobacco addiction',
+    finding: 'Small open-label pilot in long-term smokers: 80% biologically confirmed abstinence at six months — far above typical cessation outcomes — motivating the larger randomized trials that followed.',
+    doi: '10.1177/0269881114548296',
+  },
+  // ── MDMA ──
+  {
+    substance: 'MDMA', topic: 'PTSD', year: 2021,
+    authors: 'Mitchell et al.', journal: 'Nature Medicine',
+    title: 'MDMA-assisted therapy for severe PTSD: a randomized, double-blind, placebo-controlled phase 3 study',
+    finding: 'The first Phase 3 trial: 67% of participants receiving MDMA-assisted therapy no longer met PTSD diagnostic criteria after three sessions, versus 32% with placebo plus identical therapy.',
+    doi: '10.1038/s41591-021-01336-3',
+  },
+  {
+    substance: 'MDMA', topic: 'PTSD', year: 2023,
+    authors: 'Mitchell et al.', journal: 'Nature Medicine',
+    title: 'MDMA-assisted therapy for moderate to severe PTSD: a randomized, placebo-controlled phase 3 trial',
+    finding: 'The confirmatory Phase 3 trial replicated the first in a more diverse sample. Despite both trials meeting endpoints, the FDA declined approval in 2024 and requested an additional study.',
+    doi: '10.1038/s41591-023-02565-4',
+  },
+  {
+    substance: 'MDMA', topic: 'PTSD', year: 2011,
+    authors: 'Mithoefer et al.', journal: 'Journal of Psychopharmacology',
+    title: 'The safety and efficacy of ±3,4-methylenedioxymethamphetamine-assisted psychotherapy in subjects with chronic, treatment-resistant PTSD',
+    finding: 'The first randomized controlled trial of MDMA-assisted therapy: 83% clinical response in treatment-resistant PTSD versus 25% with placebo, launching the two-decade path toward Phase 3.',
+    doi: '10.1177/0269881110378371',
+  },
+  // ── LSD ──
+  {
+    substance: 'LSD', topic: 'Anxiety', year: 2023,
+    authors: 'Holze et al.', journal: 'Biological Psychiatry',
+    title: 'Lysergic acid diethylamide-assisted therapy in patients with anxiety with and without a life-threatening illness',
+    finding: 'Modern randomized trial of LSD for anxiety disorders: two 200 µg sessions produced rapid, robust reductions in anxiety and depression sustained at 16 weeks.',
+    doi: '10.1016/j.biopsych.2022.08.025',
+  },
+  {
+    substance: 'LSD', topic: 'Anxiety', year: 2014,
+    authors: 'Gasser et al.', journal: 'Journal of Nervous and Mental Disease',
+    title: 'Safety and efficacy of LSD-assisted psychotherapy for anxiety associated with life-threatening diseases',
+    finding: 'The first controlled LSD trial in over 40 years: LSD-assisted psychotherapy reduced anxiety in patients facing terminal illness, with benefits sustained at 12-month follow-up.',
+    doi: '10.1097/NMD.0000000000000113',
+  },
+  {
+    substance: 'LSD', topic: 'Mechanism', year: 2016,
+    authors: 'Carhart-Harris et al.', journal: 'PNAS',
+    title: 'Neural correlates of the LSD experience revealed by multimodal neuroimaging',
+    finding: 'The first modern neuroimaging study of LSD: expanded visual cortex connectivity tracked hallucinations, while decreased default mode network integrity tracked ego dissolution.',
+    doi: '10.1073/pnas.1518377113',
+  },
+  // ── Ayahuasca ──
+  {
+    substance: 'Ayahuasca', topic: 'Depression', year: 2019,
+    authors: 'Palhano-Fontes et al.', journal: 'Psychological Medicine',
+    title: 'Rapid antidepressant effects of the psychedelic ayahuasca in treatment-resistant depression: a randomized placebo-controlled trial',
+    finding: 'The first RCT of ayahuasca: a single session produced significant antidepressant effects versus placebo within a week in treatment-resistant patients.',
+    doi: '10.1017/S0033291718001356',
+  },
+  // ── DMT ──
+  {
+    substance: 'DMT', topic: 'Phenomenology', year: 1994,
+    authors: 'Strassman & Qualls', journal: 'Archives of General Psychiatry',
+    title: 'Dose-response study of N,N-dimethyltryptamine in humans',
+    finding: 'The study that restarted US psychedelic research after a 20-year freeze: systematic characterization of intravenous DMT’s dose-dependent effects in healthy volunteers.',
+    doi: '10.1001/archpsyc.1994.03950020022002',
+  },
+  {
+    substance: 'DMT', topic: 'Mechanism', year: 2023,
+    authors: 'Timmermann et al.', journal: 'PNAS',
+    title: 'Human brain effects of DMT assessed via EEG-fMRI',
+    finding: 'Simultaneous EEG-fMRI during the DMT peak: profound disintegration of higher-level cortical networks with increased global connectivity — the most detailed picture yet of a psychedelic’s acute brain action.',
+    doi: '10.1073/pnas.2218949120',
+  },
+  // ── 5-MeO-DMT ──
+  {
+    substance: '5-MeO-DMT', topic: 'Depression', year: 2021,
+    authors: 'Reckweg et al.', journal: 'Frontiers in Pharmacology',
+    title: 'A phase 1, dose-ranging study to assess safety and psychoactive effects of a vaporized 5-methoxy-N,N-dimethyltryptamine formulation (GH001)',
+    finding: 'First formal Phase 1 trial of vaporized 5-MeO-DMT: single doses were tolerated in healthy volunteers with rapid, short-lived, dose-dependent peak experiences.',
+    doi: '10.3389/fphar.2021.760671',
+  },
+  {
+    substance: '5-MeO-DMT', topic: 'Naturalistic use', year: 2019,
+    authors: 'Davis, Barsuglia, Lancelotta, Grant & Renn', journal: 'American Journal of Drug and Alcohol Abuse',
+    title: 'The epidemiology of 5-methoxy-N,N-dimethyltryptamine (5-MeO-DMT) use: benefits, consequences, patterns of use',
+    finding: 'Survey of 5-MeO-DMT users: most reported improvements in depression and anxiety after use, alongside meaningful rates of challenging effects — motivating controlled study.',
+    doi: '10.1080/00952990.2018.1545024',
+  },
+  // ── Ketamine ──
+  {
+    substance: 'Ketamine', topic: 'Depression', year: 2000,
+    authors: 'Berman et al.', journal: 'Biological Psychiatry',
+    title: 'Antidepressant effects of ketamine in depressed patients',
+    finding: 'The serendipitous origin of rapid-acting antidepressants: a single sub-anesthetic ketamine infusion reduced depression within hours — an effect no conventional antidepressant produces.',
+    doi: '10.1016/S0006-3223(99)00230-9',
+  },
+  {
+    substance: 'Ketamine', topic: 'Depression', year: 2006,
+    authors: 'Zarate et al.', journal: 'Archives of General Psychiatry',
+    title: 'A randomized trial of an N-methyl-D-aspartate antagonist in treatment-resistant major depression',
+    finding: 'NIH replication in treatment-resistant depression: robust antidepressant effects within two hours of a single infusion, sustained for about a week — establishing ketamine’s clinical significance.',
+    doi: '10.1001/archpsyc.63.8.856',
+  },
+  {
+    substance: 'Ketamine', topic: 'Depression', year: 2019,
+    authors: 'Popova et al.', journal: 'American Journal of Psychiatry',
+    title: 'Efficacy and safety of flexibly dosed esketamine nasal spray combined with a newly initiated oral antidepressant in treatment-resistant depression',
+    finding: 'A pivotal trial behind Spravato — the intranasal esketamine formulation that became the first psychedelic-adjacent medicine to win FDA approval (2019).',
+    doi: '10.1176/appi.ajp.2019.19020172',
+  },
+  // ── Ibogaine ──
+  {
+    substance: 'Ibogaine', topic: 'Addiction', year: 2018,
+    authors: 'Noller, Frampton & Yazar-Klosinski', journal: 'American Journal of Drug and Alcohol Abuse',
+    title: 'Ibogaine treatment outcomes for opioid dependence from a twelve-month follow-up observational study',
+    finding: 'Observational study of legal ibogaine treatment in New Zealand: a single treatment reduced opioid withdrawal and craving, with a subset achieving sustained abstinence at 12 months.',
+    doi: '10.1080/00952990.2017.1310218',
+  },
+  {
+    substance: 'Ibogaine', topic: 'Addiction', year: 2018,
+    authors: 'Brown & Alper', journal: 'American Journal of Drug and Alcohol Abuse',
+    title: 'Treatment of opioid use disorder with ibogaine: detoxification and drug use outcomes',
+    finding: 'Mexico clinic outcomes: ibogaine substantially reduced opioid withdrawal symptoms and use at follow-up — alongside a cardiac risk profile that makes medical screening and monitoring non-negotiable.',
+    doi: '10.1080/00952990.2017.1320802',
+  },
+  {
+    substance: 'Ibogaine', topic: 'Brain injury', year: 2024,
+    authors: 'Cherian et al.', journal: 'Nature Medicine',
+    title: 'Magnesium–ibogaine therapy in veterans with traumatic brain injuries',
+    finding: 'Stanford observational study of special-operations veterans treated in Mexico: one magnesium-ibogaine session was followed by large improvements in PTSD, depression, anxiety, and disability, with no cardiac events under monitoring.',
+    doi: '10.1038/s41591-023-02705-w',
+  },
+  // ── Microdosing ──
+  {
+    substance: 'Microdosing', topic: 'Placebo effects', year: 2021,
+    authors: 'Szigeti et al.', journal: 'eLife',
+    title: 'Self-blinding citizen science to explore psychedelic microdosing',
+    finding: 'The largest placebo-controlled microdosing study (191 participants self-blinding their own doses): microdosers improved on wellbeing measures — but so did placebo, with no significant difference between them.',
+    doi: '10.7554/eLife.62878',
+  },
+  {
+    substance: 'Microdosing', topic: 'Observational', year: 2019,
+    authors: 'Polito & Stevenson', journal: 'PLOS ONE',
+    title: 'A systematic study of microdosing psychedelics',
+    finding: 'Six-week daily-diary study: small improvements in depression and stress and reduced mind-wandering, but effects were selective and did not match the sweeping claims of microdosing folklore.',
+    doi: '10.1371/journal.pone.0211023',
+  },
+  {
+    substance: 'Microdosing', topic: 'Placebo effects', year: 2022,
+    authors: 'Cavanna et al.', journal: 'Translational Psychiatry',
+    title: 'Microdosing with psilocybin mushrooms: a double-blind placebo-controlled study',
+    finding: 'Double-blind study in a natural setting: acute measures showed subtle perceptible effects, but cognitive, creative, and wellbeing outcomes did not separate from placebo.',
+    doi: '10.1038/s41398-022-02039-0',
+  },
+  // ── General / cross-cutting ──
+  {
+    substance: 'General', topic: 'Safety', year: 2008,
+    authors: 'Johnson, Richards & Griffiths', journal: 'Journal of Psychopharmacology',
+    title: 'Human hallucinogen research: guidelines for safety',
+    finding: 'The safety framework underlying every modern trial: screening criteria, preparation, session conduct, and follow-up. Essential reading for understanding what "supported conditions" actually means.',
+    doi: '10.1177/0269881108093587',
+  },
+  {
+    substance: 'General', topic: 'Safety', year: 2016,
+    authors: 'Carbonaro et al.', journal: 'Journal of Psychopharmacology',
+    title: 'Survey study of challenging experiences after ingesting psilocybin mushrooms: acute and enduring positive and negative consequences',
+    finding: 'Among ~2,000 people reporting their most difficult psilocybin experience: 39% rated it among the most challenging of their lives, yet 84% endorsed having benefited — difficulty and value are not opposites.',
+    doi: '10.1177/0269881116662634',
+  },
+  {
+    substance: 'General', topic: 'Epidemiology', year: 2015,
+    authors: 'Hendricks et al.', journal: 'Journal of Psychopharmacology',
+    title: 'Classic psychedelic use is associated with reduced psychological distress and suicidality in the United States adult population',
+    finding: 'Population-level analysis of ~190,000 US adults: lifetime classic psychedelic use was associated with reduced psychological distress and suicidality — correlational, but contrary to the assumption of population harm.',
+    doi: '10.1177/0269881114565653',
+  },
+  {
+    substance: 'General', topic: 'Drug policy', year: 2010,
+    authors: 'Nutt, King & Phillips', journal: 'The Lancet',
+    title: 'Drug harms in the UK: a multicriteria decision analysis',
+    finding: 'The famous harm-ranking analysis: across sixteen harm criteria, psilocybin mushrooms and LSD ranked among the least harmful drugs assessed — while alcohol ranked most harmful overall.',
+    doi: '10.1016/S0140-6736(10)61462-6',
+  },
+  {
+    substance: 'General', topic: 'Mechanism', year: 2018,
+    authors: 'Ly et al.', journal: 'Cell Reports',
+    title: 'Psychedelics promote structural and functional neural plasticity',
+    finding: 'Preclinical foundation for the neuroplasticity hypothesis: psychedelics increased dendritic growth and synapse formation in cortical neurons, comparable to ketamine.',
+    doi: '10.1016/j.celrep.2018.05.022',
+  },
+  {
+    substance: 'General', topic: 'Mechanism', year: 2019,
+    authors: 'Carhart-Harris & Friston', journal: 'Pharmacological Reviews',
+    title: 'REBUS and the anarchic brain: toward a unified model of the brain action of psychedelics',
+    finding: 'The most influential theoretical model of how psychedelics work: relaxation of high-level beliefs (priors) allows bottom-up information to revise entrenched patterns of mind.',
+    doi: '10.1124/pr.118.017160',
+  },
+  // ── Nature ──
+  {
+    substance: 'Nature', topic: 'Nature relatedness', year: 2017,
+    authors: 'Forstmann & Sagioglou', journal: 'Journal of Psychopharmacology',
+    title: 'Lifetime experience with (classic) psychedelics predicts pro-environmental behavior through an increase in nature relatedness',
+    finding: 'In a large survey, lifetime psychedelic use predicted self-reported pro-environmental behavior — an effect statistically explained by feeling more connected to nature. The study that opened the psychedelics–ecology research line.',
+    doi: '10.1177/0269881117714049',
+  },
+  {
+    substance: 'Nature', topic: 'Nature relatedness', year: 2018,
+    authors: 'Lyons & Carhart-Harris', journal: 'Journal of Psychopharmacology',
+    title: 'Increased nature relatedness and decreased authoritarian political views after psilocybin for treatment-resistant depression',
+    finding: 'In a clinical sample, nature relatedness increased significantly after psilocybin therapy and remained elevated at 7–12 months — evidence that the connection shift is a lasting effect, not an acute mood artifact.',
+    doi: '10.1177/0269881117748902',
+  },
+  {
+    substance: 'Nature', topic: 'Nature relatedness', year: 2019,
+    authors: 'Kettner, Gandy, Haijen & Carhart-Harris', journal: 'Int. Journal of Environmental Research and Public Health',
+    title: 'From egoism to ecoism: psychedelics increase nature relatedness in a state-mediated and context-dependent manner',
+    finding: 'Prospective study tracking people before and after planned psychedelic experiences: nature relatedness rose after use and stayed elevated at two years, mediated by ego dissolution and amplified by natural settings.',
+    doi: '10.3390/ijerph16245147',
+  },
+  {
+    substance: 'Nature', topic: 'Pro-environmental behavior', year: 2022,
+    authors: 'Paterniti, Bright & Gringart', journal: 'Journal of Humanistic Psychology',
+    title: 'The relationship between psychedelic use, mystical experiences, and pro-environmental behaviors',
+    finding: 'Among 240 psychedelic-experienced participants, mystical-type experiences specifically — not use alone — predicted pro-environmental behavior, suggesting the quality of the experience drives the ecological shift.',
+    doi: '10.1177/00221678221111024',
+  },
+];
+
+const substances = ['All', ...Array.from(new Set(studies.map(s => s.substance)))];
+const sorted = studies.slice().sort((a, b) => b.year - a.year);
+---
+
+<Base
+  title="Research Library — How to Use Psychedelics"
+  description="A curated library of landmark psychedelic studies — psilocybin, MDMA, LSD, ketamine, ayahuasca, ibogaine, and microdosing research — with plain-language summaries and links to every original paper."
+  canonicalPath="/research"
+>
+
+  <div class="content-page">
+
+    <!-- Content Hero -->
+    <div class="content-hero">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/foundations/">Foundations</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Research Library</span>
+      </div>
+      <p class="content-hero-updated">Updated &middot; July 2026 &middot; {studies.length} studies</p>
+      <h1 class="content-hero-title">Research Library</h1>
+      <p class="content-hero-subtitle">The studies that actually moved the field — landmark trials, foundational safety work, and the honest null results — each summarized in plain language and linked to the original paper. Curated for signal, not volume.</p>
+    </div>
+
+    <div class="research-listing">
+
+      <div class="content-callout">
+        <div class="callout-label">How to read this library</div>
+        <p>Clinical trials happen under careful screening, calibrated doses, and professional support — conditions that don't transfer automatically to other contexts. Positive findings are evidence of what's possible under those conditions, not a promise. We include null and cautionary results deliberately.</p>
+      </div>
+
+      <!-- Substance filter -->
+      <div class="blog-pills" id="researchPills">
+        {substances.map(s => (
+          <button class={`blog-pill${s === 'All' ? ' active' : ''}`} data-substance={s}>{s}</button>
+        ))}
+      </div>
+
+      <!-- Study cards -->
+      <div class="research-grid" id="researchGrid">
+        {sorted.map(s => (
+          <a class="research-card" href={`https://doi.org/${s.doi}`} target="_blank" rel="noopener" data-substance={s.substance}>
+            <div class="research-card-tags">
+              <span class="blog-card-category">{s.substance}</span>
+              <span class="research-card-topic">{s.topic}</span>
+              <span class="research-card-year">{s.year}</span>
+            </div>
+            <h3 class="research-card-title">{s.title}</h3>
+            <p class="research-card-finding">{s.finding}</p>
+            <div class="research-card-meta">
+              <span>{s.authors}</span>
+              <span class="blog-meta-sep">&middot;</span>
+              <em>{s.journal}</em>
+              <span class="research-card-doi">DOI →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="blog-empty" id="researchEmpty" style="display:none;">
+        <p>No studies for this filter yet.</p>
+      </div>
+
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer-bar"><p>Harm reduction education only. Summaries simplify; always read the original paper before drawing conclusions.</p></div>
+
+    <!-- Support Banner -->
+    <div class="footer-support">
+      <div class="footer-support-inner">
+        <div class="footer-support-text">
+          <p class="footer-support-label">Support Psychedelic Research &amp; Education</p>
+          <p class="footer-support-headline">This work exists because people like you care.</p>
+          <p class="footer-support-body">Psygaia is an independent nonprofit — no ads, no corporate sponsors. Just rigorous, freely available education in service of safer psychedelic practice and planetary health. Your support keeps this work alive.</p>
+        </div>
+        <a class="footer-support-btn" href="https://buy.stripe.com/bIYcMX3W893Z4o04gg" target="_blank" rel="noopener">Support This Work →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Substance Filter Script -->
+  <script is:inline>
+    (function() {
+      var pills = document.querySelectorAll('#researchPills .blog-pill');
+      var cards = document.querySelectorAll('.research-card');
+      var empty = document.getElementById('researchEmpty');
+
+      pills.forEach(function(pill) {
+        pill.addEventListener('click', function() {
+          pills.forEach(function(p) { p.classList.remove('active'); });
+          pill.classList.add('active');
+          var sub = pill.getAttribute('data-substance');
+          var visible = 0;
+          cards.forEach(function(card) {
+            if (sub === 'All' || card.getAttribute('data-substance') === sub) {
+              card.style.display = '';
+              visible++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          empty.style.display = visible === 0 ? '' : 'none';
+        });
+      });
+    })();
+  </script>
+
+</Base>

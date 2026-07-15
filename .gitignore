@@ -31,3 +31,5 @@ pnpm-debug.log*
 # local only
 .claude/
 _archive/
+# generated search index
+public/glossary-data.json

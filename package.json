@@ -6,14 +6,16 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "node scripts/build-search-index.mjs && astro dev",
+    "dev": "node scripts/build-search-index.mjs && node scripts/build-glossary-data.mjs && NETLIFY_DEV=1 astro dev",
     "dev:local": "astro dev --no-sync",
-    "build": "node scripts/build-search-index.mjs && astro build",
+    "dev:netlify": "npx netlify dev",
+    "build": "node scripts/build-search-index.mjs && node scripts/build-glossary-data.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/netlify": "^7.0.4",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.1",
     "astro": "^6.0.8"
   }
