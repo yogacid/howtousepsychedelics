@@ -5,6 +5,42 @@
    ================================================================ */
 
 /* ══════════════════════════════════════════════
+   FONTS (self-hosted variable fonts)
+   ══════════════════════════════════════════════ */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/dm-sans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/dm-sans-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ══════════════════════════════════════════════
    DESIGN TOKENS
    ══════════════════════════════════════════════ */
 :root {
@@ -101,6 +137,39 @@ a { text-decoration: none; color: inherit; }
 h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 
+/* ── Skip link (keyboard users) ── */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 3000;
+  padding: 0.6rem 1.1rem;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  transform: translateY(-200%);
+  transition: transform 0.15s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ══════════════════════════════════════════════
    THEME TRANSITION
    ══════════════════════════════════════════════ */
@@ -195,7 +264,8 @@ nav {
   opacity: 0.5;
 }
 
-.nav-menu-item:hover .chevron {
+.nav-menu-item:hover .chevron,
+.nav-menu-item:focus-within .chevron {
   transform: rotate(180deg);
 }
 
@@ -225,7 +295,8 @@ nav {
   box-shadow: 0 12px 40px rgba(44,31,14,0.12);
 }
 
-.nav-menu-item:hover .nav-dropdown {
+.nav-menu-item:hover .nav-dropdown,
+.nav-menu-item:focus-within .nav-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -2505,6 +2576,14 @@ footer {
   border: 1px solid var(--border);
   border-radius: 6px;
   position: relative;
+  margin: 1.5rem 0 2rem;
+}
+
+/* A dosage-style table inside a scroll wrap: the wrap owns border & spacing */
+.combo-table-wrap .dosage-table {
+  margin: 0;
+  border: none;
+  border-radius: 0;
 }
 .combo-table {
   border-collapse: separate;
@@ -4306,4 +4385,323 @@ footer {
     font-size: 0.7rem;
     padding: 0.4rem 0.85rem;
   }
+}
+
+/* ══════════════════════════════════════════════
+   CRISIS PAGE
+   ══════════════════════════════════════════════ */
+.crisis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0 3rem;
+}
+
+.crisis-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.crisis-card-primary {
+  grid-column: 1 / -1;
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.crisis-card-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.crisis-card-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.crisis-card-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0.25rem 0;
+  transition: color 0.2s;
+}
+
+.crisis-card-number:hover { color: var(--accent); }
+
+.crisis-card-number-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.crisis-card-desc {
+  font-size: 0.88rem;
+  color: var(--text-body);
+  line-height: 1.55;
+}
+
+.crisis-card-desc a { color: var(--accent); }
+
+.crisis-card-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-top: auto;
+}
+
+@media (max-width: 700px) {
+  .crisis-grid { grid-template-columns: 1fr; }
+  .crisis-card-number { font-size: 1.6rem; }
+}
+
+/* ══════════════════════════════════════════════
+   GLOSSARY PAGE
+   ══════════════════════════════════════════════ */
+.sidebar-nav-letters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+  border-left: none;
+}
+
+.sidebar-nav-letters li { list-style: none; }
+
+.sidebar-nav-letters a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  margin-left: 0;
+  border-left: none;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+.sidebar-nav-letters a:hover {
+  background: var(--accent-dim);
+}
+
+.sidebar-nav-letters a.active {
+  border-left: none;
+  margin-left: 0;
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.glossary-letter {
+  font-size: 1.6rem;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+.glossary-term {
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+}
+
+.glossary-term:last-child { border-bottom: none; }
+
+.glossary-term-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.glossary-term-name a { color: inherit; transition: color 0.2s; }
+.glossary-term-name a:hover { color: var(--accent); }
+
+.glossary-term-def {
+  font-size: 0.92rem;
+  color: var(--text-body);
+  line-height: 1.65;
+}
+
+.glossary-term-def a {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent-dim);
+}
+
+/* ══════════════════════════════════════════════
+   RESEARCH LIBRARY
+   ══════════════════════════════════════════════ */
+.research-listing {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.research-listing .content-callout { margin-bottom: 2rem; }
+.research-listing .blog-pills { margin-bottom: 1.5rem; }
+
+.research-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.research-card {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.5rem;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.research-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.research-card-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.research-card-topic,
+.research-card-year {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.research-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.research-card-finding {
+  font-size: 0.88rem;
+  color: var(--text-body);
+  line-height: 1.6;
+  margin-bottom: 0.7rem;
+}
+
+.research-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.research-card-doi {
+  margin-left: auto;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .research-listing { padding: 1.5rem 1rem 3rem; }
+  .research-card { padding: 1.1rem 1.15rem; }
+}
+
+/* ══════════════════════════════════════════════
+   GLOSSARY TOOLTIPS
+   ══════════════════════════════════════════════ */
+.gloss-ref {
+  color: inherit;
+  border-bottom: 1px dotted var(--accent);
+  cursor: help;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.gloss-ref:hover,
+.gloss-ref:focus-visible {
+  color: var(--accent);
+  border-bottom-style: solid;
+}
+
+.gloss-tip {
+  position: absolute;
+  z-index: 2500;
+  max-width: 320px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+  pointer-events: none;
+}
+
+[data-theme="light"] .gloss-tip {
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(44,31,14,0.15);
+}
+
+.gloss-tip.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.gloss-tip-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+}
+
+.gloss-tip-def {
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--text-body);
+}
+
+.gloss-tip-more {
+  display: inline-block;
+  margin-top: 0.45rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+a.gloss-tip-more:hover {
+  text-decoration: underline;
 }

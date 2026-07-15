@@ -12,6 +12,7 @@ interface Props {
   description: string;
   canonicalPath?: string;
   ogImage?: string;
+  ogType?: string;
   hideProgress?: boolean;
   hideEmailPopup?: boolean;
 }
@@ -21,6 +22,7 @@ const {
   description,
   canonicalPath = '/',
   ogImage = '/og-image.png',
+  ogType = 'website',
   hideProgress = false,
   hideEmailPopup = false,
 } = Astro.props;
@@ -40,7 +42,7 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
   <meta name="description" content={description}/>
   <link rel="canonical" href={canonicalUrl}/>
   <meta property="og:site_name" content="How to Use Psychedelics"/>
-  <meta property="og:type" content="website"/>
+  <meta property="og:type" content={ogType}/>
   <meta property="og:url" content={canonicalUrl}/>
   <meta property="og:title" content={title}/>
   <meta property="og:description" content={description}/>
@@ -48,10 +50,33 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
   <meta property="og:image:width" content="2048"/>
   <meta property="og:image:height" content="1072"/>
   <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)"/>
+  <meta name="theme-color" content="#faf8f4" media="(prefers-color-scheme: light)"/>
   <link rel="icon" type="image/png" href="/favicon.png"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300..700&family=Space+Grotesk:wght@300;400;500;600;700&display=block" rel="stylesheet"/>
+  <link rel="alternate" type="application/rss+xml" title="How to Use Psychedelics — Articles" href="/rss.xml"/>
+  <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin/>
+
+  <!-- Structured data: site-wide -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${baseUrl}/#organization`,
+        name: 'How to Use Psychedelics',
+        url: `${baseUrl}/`,
+        logo: `${baseUrl}/favicon-512.png`,
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${baseUrl}/#website`,
+        name: 'How to Use Psychedelics',
+        url: `${baseUrl}/`,
+        publisher: { '@id': `${baseUrl}/#organization` },
+      },
+    ],
+  })} />
 
   <!-- DataFast Analytics -->
   <script defer data-website-id="dfid_2Uvi8Ss7ZLqjk1dk1nbVz" data-domain="howtousepsychedelics.com" src="https://datafa.st/js/script.js"></script>
@@ -64,23 +89,31 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
     (function(){var t=localStorage.getItem('htup-theme');var theme=t?t:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',theme);})()
   </script>
 
-  <!-- Netlify Identity (for Decap CMS) -->
-  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <!-- Netlify Identity (for Decap CMS) — only loaded when an identity token lands on the site -->
   <script is:inline>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", function(user) {
-        if (!user) {
-          window.netlifyIdentity.on("login", function() {
-            document.location.href = "/admin/";
-          });
-        }
-      });
-    }
+    (function() {
+      if (!/(invite_token|recovery_token|confirmation_token|email_change_token|access_token)=/.test(window.location.hash)) return;
+      var s = document.createElement('script');
+      s.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+      s.onload = function() {
+        window.netlifyIdentity.on('init', function(user) {
+          if (!user) {
+            window.netlifyIdentity.on('login', function() {
+              document.location.href = '/admin/';
+            });
+          }
+        });
+      };
+      document.head.appendChild(s);
+    })();
   </script>
 
   <slot name="head" />
 </head>
 <body>
+
+  <!-- Skip link for keyboard users -->
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <!-- Scroll Progress -->
   {!hideProgress && <div class="scroll-progress" id="scrollProgress"></div>}
@@ -95,7 +128,9 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
   <MobileDrawer />
 
   <!-- Page Content -->
-  <slot />
+  <main id="main-content" data-hide-cta={hideEmailPopup ? 'true' : undefined}>
+    <slot />
+  </main>
 
   <!-- Mobile TOC FAB -->
   <button class="toc-fab" id="tocFab" aria-label="Table of contents">
@@ -124,7 +159,7 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
 
   <!-- Disclaimer -->
   <div class="disclaimer">
-    <p>This site provides harm reduction education only. Psychedelics are controlled substances in most jurisdictions.<br>Nothing here constitutes medical or legal advice. In crisis, contact a healthcare provider or crisis line immediately.</p>
+    <p>This site provides harm reduction education only. Psychedelics are controlled substances in most jurisdictions.<br>Nothing here constitutes medical or legal advice. In crisis, see our <a href="/crisis/">crisis resources</a> or contact a healthcare provider immediately.</p>
   </div>
 
   <!-- Shared Scripts -->
@@ -159,12 +194,14 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
 
     // Scroll progress bar
     const progressBar = document.getElementById('scrollProgress');
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      progressBar.style.width = progress + '%';
-    }, { passive: true });
+    if (progressBar) {
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = progress + '%';
+      }, { passive: true });
+    }
 
     // ── Search ──
     var searchIndex = null;
@@ -509,6 +546,7 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
     // AUTO-INJECT "GET THE GUIDE" CTA CARDS
     // ══════════════════════════════════════════════
     (function() {
+      if (document.querySelector('main[data-hide-cta]')) return;
       var body = document.querySelector('.article-body');
       if (!body) return;
       var h2s = body.querySelectorAll('h2');
@@ -542,18 +580,29 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
     })();
 
     // ── FAQ Accordion (global handler for all article pages) ──
-    document.addEventListener('click', function(e) {
-      var question = e.target.closest('.faq-question, .faq-q');
-      if (!question) return;
+    // Progressive enhancement: make question toggles keyboard-accessible
+    document.querySelectorAll('.faq-question, .faq-q').forEach(function(q) {
+      q.setAttribute('role', 'button');
+      q.setAttribute('tabindex', '0');
+      var item = q.closest('.faq-item');
+      q.setAttribute('aria-expanded', item && item.classList.contains('open') ? 'true' : 'false');
+    });
+
+    function syncFaqAria(item) {
+      var q = item.querySelector('.faq-question, .faq-q');
+      if (q) q.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
+    }
+
+    function toggleFaq(question) {
       var item = question.closest('.faq-item');
       if (!item) return;
-      var isOpen = item.classList.contains('open');
       // Close all siblings (accordion behavior)
       var parent = item.parentElement;
       if (parent) {
         parent.querySelectorAll('.faq-item.open').forEach(function(faq) {
           if (faq !== item) {
             faq.classList.remove('open');
+            syncFaqAria(faq);
             var tog = faq.querySelector('.tog, .faq-icon');
             if (tog && tog.tagName !== 'svg') tog.textContent = '+';
           }
@@ -561,11 +610,144 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
       }
       // Toggle current
       item.classList.toggle('open');
+      syncFaqAria(item);
       var tog = question.querySelector('.tog, .faq-icon');
       if (tog && tog.tagName !== 'svg') {
         tog.textContent = item.classList.contains('open') ? '−' : '+';
       }
+    }
+
+    document.addEventListener('click', function(e) {
+      var question = e.target.closest('.faq-question, .faq-q');
+      if (question) toggleFaq(question);
     });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var question = e.target.closest && e.target.closest('.faq-question, .faq-q');
+      if (!question) return;
+      e.preventDefault();
+      toggleFaq(question);
+    });
+
+    // ══════════════════════════════════════════════
+    // GLOSSARY TOOLTIPS — link first mention of each
+    // glossary term in article bodies, with hover defs
+    // ══════════════════════════════════════════════
+    (function() {
+      var body = document.querySelector('.article-body');
+      if (!body) return;
+      if (window.location.pathname.indexOf('/glossary') === 0) return;
+
+      var SKIP_CLOSEST = 'a, h1, h2, h3, h4, h5, h6, button, code, pre, .email-cta-box, .blog-related, .related-strip, .faq-question, .faq-q';
+
+      fetch('/glossary-data.json')
+        .then(function(r) { return r.json(); })
+        .then(function(terms) {
+          // Longest names first so "trip sitter" wins over "sitter"
+          var entries = [];
+          terms.forEach(function(t) {
+            t.names.forEach(function(n) {
+              if (n.length < 4) return; // skip ultra-short aliases
+              entries.push({ id: t.id, name: t.name, match: n, def: t.def });
+            });
+          });
+          entries.sort(function(a, b) { return b.match.length - a.match.length; });
+
+          var linkedIds = {};
+
+          function collectTextNodes() {
+            var walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+              acceptNode: function(node) {
+                if (!node.nodeValue || node.nodeValue.length < 4) return NodeFilter.FILTER_REJECT;
+                if (node.parentElement && node.parentElement.closest(SKIP_CLOSEST)) return NodeFilter.FILTER_REJECT;
+                return NodeFilter.FILTER_ACCEPT;
+              }
+            });
+            var nodes = [];
+            while (walker.nextNode()) nodes.push(walker.currentNode);
+            return nodes;
+          }
+
+          entries.forEach(function(entry) {
+            if (linkedIds[entry.id]) return;
+            var escaped = entry.match.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            var re = new RegExp('\\b(' + escaped + 's?)\\b', 'i');
+            var nodes = collectTextNodes();
+            for (var i = 0; i < nodes.length; i++) {
+              var node = nodes[i];
+              var m = re.exec(node.nodeValue);
+              if (!m) continue;
+              var link = document.createElement('a');
+              link.className = 'gloss-ref';
+              link.href = '/glossary/#' + entry.id;
+              link.setAttribute('data-gloss-name', entry.name);
+              link.setAttribute('data-gloss-def', entry.def);
+              link.textContent = m[1];
+              var after = node.splitText(m.index);
+              after.nodeValue = after.nodeValue.slice(m[1].length);
+              node.parentNode.insertBefore(link, after);
+              linkedIds[entry.id] = true;
+              break;
+            }
+          });
+
+          initGlossTip();
+        })
+        .catch(function() { /* glossary data unavailable — degrade silently */ });
+
+      function initGlossTip() {
+        var refs = document.querySelectorAll('.gloss-ref');
+        if (!refs.length) return;
+
+        var tip = document.createElement('div');
+        tip.className = 'gloss-tip';
+        tip.setAttribute('role', 'tooltip');
+        tip.innerHTML = '<div class="gloss-tip-name"></div><div class="gloss-tip-def"></div><a class="gloss-tip-more" href="#">Full definition →</a>';
+        document.body.appendChild(tip);
+        var nameEl = tip.querySelector('.gloss-tip-name');
+        var defEl = tip.querySelector('.gloss-tip-def');
+        var moreEl = tip.querySelector('.gloss-tip-more');
+        var hideTimer = null;
+
+        function show(ref) {
+          clearTimeout(hideTimer);
+          nameEl.textContent = ref.getAttribute('data-gloss-name');
+          defEl.textContent = ref.getAttribute('data-gloss-def');
+          moreEl.href = ref.href;
+          tip.classList.add('visible');
+          var r = ref.getBoundingClientRect();
+          var tw = tip.offsetWidth;
+          var th = tip.offsetHeight;
+          var left = r.left + r.width / 2 - tw / 2;
+          left = Math.max(12, Math.min(left, window.innerWidth - tw - 12));
+          var top = r.top - th - 10;
+          if (top < 12) top = r.bottom + 10;
+          tip.style.left = left + window.scrollX + 'px';
+          tip.style.top = top + window.scrollY + 'px';
+        }
+
+        function hideNow() { tip.classList.remove('visible'); }
+
+        function scheduleHide() {
+          clearTimeout(hideTimer);
+          hideTimer = setTimeout(hideNow, 200);
+        }
+
+        // Keep the card open while the pointer is over it, so
+        // "Full definition" is actually reachable and clickable
+        tip.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
+        tip.addEventListener('mouseleave', scheduleHide);
+
+        refs.forEach(function(ref) {
+          ref.addEventListener('mouseenter', function() { show(ref); });
+          ref.addEventListener('mouseleave', scheduleHide);
+          ref.addEventListener('focus', function() { show(ref); });
+          ref.addEventListener('blur', scheduleHide);
+        });
+        window.addEventListener('scroll', hideNow, { passive: true });
+      }
+    })();
   </script>
 
 </body>
