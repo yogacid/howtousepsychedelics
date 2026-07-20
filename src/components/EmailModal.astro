@@ -85,22 +85,15 @@
     border: none;
     transform: translateY(12px);
     transition: transform 0.3s ease;
-    /* Gradient border */
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-    background-image:
-      linear-gradient(var(--bg-card, #1a1a1a), var(--bg-card, #1a1a1a)),
-      linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
-    border: 1.5px solid transparent;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
   }
   .email-modal.open .email-modal-card {
     transform: translateY(0);
   }
   [data-theme="light"] .email-modal-card {
-    background-image:
-      linear-gradient(var(--bg-card, #ffffff), var(--bg-card, #ffffff)),
-      linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+    background: #ffffff;
     box-shadow: 0 20px 60px rgba(0,0,0,0.18);
   }
   .email-modal-close {
@@ -194,15 +187,16 @@
     border: none;
     border-radius: 100px;
     cursor: pointer;
-    background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+    background: linear-gradient(135deg, #3ec9bf 0%, #7dde55 40%, #3ec9bf 70%, #5cb84a 100%);
     background-size: 300% 100%;
     background-position: 0% center;
-    color: #040a05;
-    transition: background-position 0.55s ease, box-shadow 0.25s ease, opacity 0.2s;
+    color: #06211f;
+    transition: box-shadow 0.25s ease, transform 0.2s ease, opacity 0.2s;
   }
   .email-modal-btn:hover {
     animation: accentShimmer 4s ease-in-out infinite;
-    box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+    box-shadow: 0 6px 20px rgba(64,217,204,0.18);
+    transform: translateY(-1px);
   }
   @keyframes accentShimmer {
     0%   { background-position: 0% center; }
