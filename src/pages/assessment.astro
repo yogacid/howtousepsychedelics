@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import JourneyHud from '../components/JourneyHud.astro';
 ---
 
 <Base
@@ -24,6 +25,9 @@ import Base from '../layouts/Base.astro';
       <h1 class="content-hero-title">Safety Assessment: Is This Right for Me?</h1>
       <p class="content-hero-subtitle">Before engaging with a psychedelic substance, an honest and thorough assessment of your readiness — psychological, medical, relational, and contextual — is the most important thing you can do. This is not gatekeeping. Psychedelics amplify what is already present. Giving yourself the best possible conditions is not optional preparation — it is the practice.</p>
     </div>
+
+    <!-- Journey Arc HUD -->
+    <JourneyHud id="assessment" />
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
@@ -165,7 +169,7 @@ import Base from '../layouts/Base.astro';
             <div class="combo-tip-note" id="ct-note"></div>
           </div>
 
-          <script is:inline>
+          <script is:inline data-astro-rerun>
           window._combo = (function(){
             var SY='sy', LO='lo', DE='de', CA='ca', UN='un', DA='da', UK='uk', SE='cs';
             var ICONS  = {sy:'↑',lo:'⊙',de:'↓',ca:'△',un:'✕',da:'✕',uk:'?',cs:''};

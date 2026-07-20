@@ -384,29 +384,39 @@ const sorted = studies.slice().sort((a, b) => b.year - a.year);
   </div>
 
   <!-- Substance Filter Script -->
-  <script is:inline>
+  <script is:inline data-astro-rerun>
     (function() {
       var pills = document.querySelectorAll('#researchPills .blog-pill');
       var cards = document.querySelectorAll('.research-card');
       var empty = document.getElementById('researchEmpty');
 
-      pills.forEach(function(pill) {
-        pill.addEventListener('click', function() {
-          pills.forEach(function(p) { p.classList.remove('active'); });
-          pill.classList.add('active');
-          var sub = pill.getAttribute('data-substance');
-          var visible = 0;
-          cards.forEach(function(card) {
-            if (sub === 'All' || card.getAttribute('data-substance') === sub) {
-              card.style.display = '';
-              visible++;
-            } else {
-              card.style.display = 'none';
-            }
-          });
-          empty.style.display = visible === 0 ? '' : 'none';
+      function applyFilter(pill) {
+        pills.forEach(function(p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+        var sub = pill.getAttribute('data-substance');
+        var visible = 0;
+        cards.forEach(function(card) {
+          if (sub === 'All' || card.getAttribute('data-substance') === sub) {
+            card.style.display = '';
+            visible++;
+          } else {
+            card.style.display = 'none';
+          }
         });
+        empty.style.display = visible === 0 ? '' : 'none';
+      }
+
+      pills.forEach(function(pill) {
+        pill.addEventListener('click', function() { applyFilter(pill); });
       });
+
+      // Deep link: /research/?substance=Psilocybin pre-selects a filter
+      var param = new URLSearchParams(window.location.search).get('substance');
+      if (param) {
+        pills.forEach(function(pill) {
+          if (pill.getAttribute('data-substance').toLowerCase() === param.toLowerCase()) applyFilter(pill);
+        });
+      }
     })();
   </script>
 

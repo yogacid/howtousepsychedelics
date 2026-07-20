@@ -1,5 +1,39 @@
 ---
 import Base from '../layouts/Base.astro';
+import { substances } from '../data/substances';
+
+// One comparison row per substance route, on a shared square-root
+// time axis (keeps DMT's 20 minutes and ibogaine's 48 hours legible
+// on the same chart).
+const AXIS_MAX_H = 48;
+const sqrtPct = (h: number) => Math.sqrt(h / AXIS_MAX_H) * 100;
+
+const rows = Object.values(substances)
+  .flatMap((sub) =>
+    sub.routes.map((r) => {
+      const endInUnit = r.phases[r.phases.length - 1].to;
+      const hours = r.unit === 'min' ? endInUnit / 60 : endInUnit;
+      return {
+        name: sub.name,
+        url: `/${sub.id}/`,
+        route: r.name,
+        multiRoute: sub.routes.length > 1,
+        hours,
+        label: r.total,
+        pct: sqrtPct(hours),
+      };
+    })
+  )
+  .sort((a, b) => a.hours - b.hours);
+
+const ticks = [
+  { h: 0.25, label: '15m' },
+  { h: 1, label: '1h' },
+  { h: 4, label: '4h' },
+  { h: 12, label: '12h' },
+  { h: 24, label: '24h' },
+  { h: 48, label: '48h' },
+].map((t) => ({ ...t, pct: sqrtPct(t.h) }));
 ---
 
 <Base
@@ -98,6 +132,34 @@ import Base from '../layouts/Base.astro';
         <div class="card-arrow">Read &rarr;</div>
       </a>
     </div>
+
+    <!-- Duration Comparison -->
+    <section class="cmp-section" id="durations" aria-label="Duration comparison">
+      <div class="cmp-head">
+        <h2 class="content-h2">How Long Does Each Psychedelic Last?</h2>
+        <p class="content-p">Total duration of primary effects by route of administration. The time axis is square-root scaled so twenty-minute and two-day journeys stay comparable — each substance page has the full phase-by-phase timeline.</p>
+      </div>
+      <div class="cmp-chart">
+        <div class="cmp-row cmp-row--axis" aria-hidden="true">
+          <span class="cmp-name"></span>
+          <span class="cmp-track">
+            {ticks.map((t) => (
+              <i class="cmp-tick" style={`left: ${t.pct}%`}>{t.label}</i>
+            ))}
+          </span>
+        </div>
+        {rows.map((r) => (
+          <a class="cmp-row" href={r.url}>
+            <span class="cmp-name">{r.name}{r.multiRoute && <em>{r.route.toLowerCase()}</em>}</span>
+            <span class="cmp-track">
+              {ticks.map((t) => <i class="cmp-gridline" style={`left: ${t.pct}%`}></i>)}
+              <span class="cmp-bar" style={`width: ${r.pct}%`}></span>
+              <span class="cmp-value" style={`left: calc(${r.pct}% + 10px)`}>{r.label}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
 
     <!-- Disclaimer -->
     <div class="disclaimer-bar"><p>Harm reduction education only.</p></div>

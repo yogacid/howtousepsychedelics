@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import SubstanceHud from '../components/SubstanceHud.astro';
 ---
 
 <Base
@@ -24,6 +25,9 @@ import Base from '../layouts/Base.astro';
       <h1 class="content-hero-title">Ketamine: Dissociative Effects &amp; Clinical Use</h1>
       <p class="content-hero-subtitle">Ketamine occupies a genuinely unusual position in the psychedelic landscape &mdash; it is a <span class="tt" data-tip="A class of psychoactive substances — including ketamine, PCP, and nitrous oxide — that produce detachment from sensory experience and a sense of separation from the body or environment. Distinct from classical serotonergic psychedelics in mechanism and phenomenological character.">dissociative</span> anaesthetic, not a classical <span class="tt" data-tip="Relating to the neurotransmitter serotonin and its receptors. Classical psychedelics — psilocybin, LSD, DMT, mescaline — are serotonergic: they produce their primary effects by activating serotonin receptors, particularly 5-HT₂A.">serotonergic</span> psychedelic, with a distinct mechanism and phenomenological character. It is also the only psychedelic-adjacent substance currently approved and widely prescribed for depression. This guide examines what ketamine is, how it differs from classical psychedelics, the clinical evidence, its therapeutic use, and its meaningful risks including dependence.</p>
     </div>
+
+    <!-- At a Glance HUD -->
+    <SubstanceHud id="ketamine" />
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">

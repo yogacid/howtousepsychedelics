@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import SubstanceHud from '../components/SubstanceHud.astro';
 ---
 
 <Base
@@ -24,6 +25,9 @@ import Base from '../layouts/Base.astro';
       <h1 class="content-hero-title">MDMA: Effects, Risks &amp; Therapeutic Use</h1>
       <p class="content-hero-subtitle">MDMA (3,4-methylenedioxymethamphetamine) occupies a unique position in the psychedelic landscape &mdash; it is an empathogen-entactogen rather than a classical serotonergic psychedelic, producing states of emotional openness and empathic connection that have driven both its widespread recreational use and its emergence as a promising PTSD treatment. This guide covers effects, risks, neurotoxicity, the clinical evidence, and responsible harm reduction.</p>
     </div>
+
+    <!-- At a Glance HUD -->
+    <SubstanceHud id="mdma" />
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">

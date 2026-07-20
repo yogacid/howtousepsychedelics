@@ -1,0 +1,95 @@
+---
+// Microdosing "at a glance" HUD — protocol rhythms shown as
+// week-dot calendars; values mirror the page prose.
+
+interface Protocol {
+  name: string;
+  // one repeating week: 1 = dose day, 0 = off day, 2 = "as needed"
+  week: (0 | 1 | 2)[];
+  note: string;
+}
+
+const protocols: Protocol[] = [
+  { name: 'Fadiman', week: [1, 0, 0, 1, 0, 0, 1], note: '1 on · 2 off — most beginner-friendly' },
+  { name: 'Stamets', week: [1, 1, 1, 1, 0, 0, 0], note: '4 on · 3 off — with lion’s mane & niacin' },
+  { name: 'Intuitive', week: [2, 0, 2, 0, 0, 2, 0], note: 'as needed — never two days in a row' },
+];
+
+const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+---
+
+<div class="hud-wrap">
+  <section class="hud" aria-label="Microdosing at a glance">
+
+    <div class="hud-head">
+      <div class="hud-chips">
+        <span class="hud-chip hud-chip--accent">Practice · Sub-perceptual dosing</span>
+        <span class="hud-chip"><strong>Psilocybin</strong>&nbsp; 0.05–0.3 g dried</span>
+        <span class="hud-chip"><strong>LSD</strong>&nbsp; 5–20 µg</span>
+        <span class="hud-chip hud-chip--warn">Never dose daily</span>
+      </div>
+    </div>
+
+    <div class="hud-grid">
+      <div class="hud-cell">
+        <div class="hud-label">Protocol rhythms <span class="hud-label-sub">one repeating week</span></div>
+        <div class="hud-protos">
+          <div class="hud-proto hud-proto-daylabels" aria-hidden="true">
+            <span class="hud-proto-name"></span>
+            <span class="hud-proto-days">
+              {dayLabels.map((d) => <i class="hud-proto-daylabel">{d}</i>)}
+            </span>
+            <span class="hud-proto-note"></span>
+          </div>
+          {protocols.map((p) => (
+            <div class="hud-proto">
+              <span class="hud-proto-name">{p.name}</span>
+              <span class="hud-proto-days">
+                {p.week.map((d) => <i class={`hud-dot${d === 1 ? ' on' : d === 2 ? ' maybe' : ''}`}></i>)}
+              </span>
+              <span class="hud-proto-note">{p.note}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="hud-cell">
+        <div class="hud-question-label">The sub-perceptual check</div>
+        <div class="hud-question">If you can clearly feel it, it isn’t a microdose.</div>
+        <div class="hud-subnote">A microdose is roughly one-tenth to one-twentieth of a full dose — enough to engage the system, not enough to alter perception. Weigh doses; potency varies widely between mushrooms and blotters.</div>
+      </div>
+    </div>
+
+    <div class="hud-tiles">
+      <div class="hud-tile">
+        <div class="hud-tile-k">Evidence</div>
+        <div class="hud-tile-v">Mixed <span class="hud-dots">●●<span class="off">○○○</span></span></div>
+        <div class="hud-tile-s">placebo-controlled trials show strong expectation effects · <a href="/research/?substance=Microdosing">view studies →</a></div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Key cautions</div>
+        <div class="hud-tile-v"><span class="hud-warnflag">Chronic cardiac question</span></div>
+        <div class="hud-tile-s">5-HT2B activation with long-term frequent use · take breaks · <a href="/checker/">check interactions →</a></div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Cycle length</div>
+        <div class="hud-tile-v">4–8 weeks</div>
+        <div class="hud-tile-s">then pause and reassess against your baseline</div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Track it</div>
+        <div class="hud-tile-v"><a href="/blog/how-to-microdosing-journal/">Keep a journal →</a></div>
+        <div class="hud-tile-s">observed change beats remembered change</div>
+      </div>
+    </div>
+
+    <div class="hud-foot">
+      <span>Reference information — <b>not a recommendation to use</b>. Individual response varies.</span>
+      <a href="/microdosing-course/">Free 30-day microdosing course →</a>
+    </div>
+
+  </section>
+</div>

@@ -1,0 +1,246 @@
+---
+import { substances } from '../data/substances';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const s = substances[id];
+if (!s) throw new Error(`SubstanceHud: unknown substance "${id}"`);
+
+// Pick an axis step that divides axisMax into <= 8 whole intervals
+function axisTicks(axisMax: number, unit: 'min' | 'h'): number[] {
+  const steps = unit === 'h' ? [1, 2, 3, 4, 6, 12, 24] : [5, 10, 15, 20, 30, 60];
+  const step = steps.find((st) => axisMax % st === 0 && axisMax / st <= 8) ?? steps[steps.length - 1];
+  const ticks = [];
+  for (let v = 0; v < axisMax; v += step) ticks.push(v);
+  return ticks;
+}
+
+// Flex share of a phase segment (afterglow gets a fixed 12% tail)
+const AFTERGLOW_SHARE = 0.12;
+
+function segments(route: (typeof s.routes)[0]) {
+  const segs = route.phases.map((p, i) => ({
+    label: p.label,
+    flex: p.to - p.from,
+    share: (p.to - p.from) / route.axisMax,
+    kind: ['onset', 'comeup', 'peak', 'return'][Math.min(i, 3)] as string,
+  }));
+  // Identify the peak segment by label so 3-phase routes still highlight correctly
+  segs.forEach((seg) => {
+    const l = seg.label.toLowerCase();
+    if (l.includes('peak') || l.includes('visionary')) seg.kind = 'peak';
+  });
+  if (route.afterglow) {
+    segs.push({ label: 'Afterglow', flex: route.axisMax * AFTERGLOW_SHARE, share: AFTERGLOW_SHARE, kind: 'after' });
+  }
+  return segs;
+}
+
+function doseColor(idx: number, count: number, caution?: boolean) {
+  if (caution) return null;
+  const pct = count === 1 ? 60 : Math.round(18 + (idx * (78 - 18)) / (count - 1));
+  return `background: color-mix(in srgb, var(--accent) ${pct}%, var(--bg-elevated));`;
+}
+
+const evidenceUrl = s.evidence.researchFilter
+  ? `/research/?substance=${encodeURIComponent(s.evidence.researchFilter)}`
+  : null;
+---
+
+<div class="hud-wrap">
+  <section class="hud" aria-label={`${s.name} at a glance`}>
+
+    <div class="hud-head">
+      <div class="hud-chips">
+        <span class="hud-chip"><strong>Class</strong>&nbsp; {s.class}</span>
+        <span class="hud-chip"><strong>Mechanism</strong>&nbsp; {s.mechanism}</span>
+        {s.chips.map((c) => (
+          <span class={`hud-chip ${c.tone === 'warn' ? 'hud-chip--warn' : 'hud-chip--accent'}`}>{c.text}</span>
+        ))}
+      </div>
+    </div>
+
+    <div class="hud-grid">
+      <div class="hud-cell">
+        <div class="hud-label">
+          Effects timeline
+          {s.routes.length > 1 && (
+            <span class="hud-routes">
+              {s.routes.map((r, i) => (
+                <button class={`hud-route${i === 0 ? ' active' : ''}`} data-route={r.name} aria-pressed={i === 0 ? 'true' : 'false'}>{r.name}</button>
+              ))}
+            </span>
+          )}
+          {s.routes.length === 1 && <span class="hud-label-sub">{s.routes[0].name.toLowerCase()}</span>}
+        </div>
+
+        {s.routes.map((route, ri) => (
+          <div class="hud-timeline" data-route={route.name} style={ri > 0 ? 'display:none' : undefined}>
+            <div class="hud-tl-bar">
+              {segments(route).map((seg) => (
+                <div class={`hud-tl-seg hud-tl-seg--${seg.kind}`} style={`flex: ${seg.flex}`}>
+                  {seg.share >= 0.08 && <span>{seg.label}</span>}
+                </div>
+              ))}
+            </div>
+            <div class="hud-tl-axis">
+              {axisTicks(route.axisMax, route.unit).map((v, i, arr) => (
+                <i>{v}{route.unit === 'h' ? 'h' : 'm'}{i === arr.length - 1 && route.afterglow ? '+' : ''}</i>
+              ))}
+            </div>
+            <div class="hud-tl-meta">
+              <span><b>Total</b> {route.total}</span>
+              <span><b>Peak</b> {route.peak}</span>
+              <span><b>First effects</b> {route.first}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="hud-cell">
+        <div class="hud-label">Dose spectrum <span class="hud-label-sub">{s.doses.unit}</span></div>
+        <div class="hud-dose-bar">
+          {s.doses.bands.map((b, i) => (
+            <div
+              class={`hud-dose-seg${b.caution ? ' hud-dose-seg--caution' : ''}`}
+              style={doseColor(i, s.doses.bands.length, b.caution)}
+            ></div>
+          ))}
+        </div>
+        <div class="hud-dose-rows">
+          {s.doses.bands.map((b) => (
+            <div class="hud-dose-row">
+              <b>{b.caution ? <span class="hud-warnflag">{b.label}</span> : b.label}</b>
+              <span class="hud-dose-range">{b.range}</span>
+              <span class="hud-dose-note">{b.note}</span>
+            </div>
+          ))}
+        </div>
+        {s.doses.footnote && <div class="hud-dose-foot">{s.doses.footnote}</div>}
+        {s.testing && <div class="hud-dose-foot hud-dose-testing"><b>Test first:</b> {s.testing}.</div>}
+      </div>
+    </div>
+
+    <div class="hud-tiles">
+      <div class="hud-tile">
+        <div class="hud-tile-k">Clinical evidence</div>
+        {s.evidence.items.length > 0 ? (
+          <>
+            <div class="hud-tile-v">
+              {s.evidence.items[0].condition}
+              <span class="hud-dots" aria-label={`${s.evidence.items[0].strength} of 5`}>
+                {'●'.repeat(s.evidence.items[0].strength)}<span class="off">{'○'.repeat(5 - s.evidence.items[0].strength)}</span>
+              </span>
+            </div>
+            <div class="hud-tile-s">
+              {s.evidence.items.slice(1).map((e) => `${e.condition} ${'●'.repeat(e.strength)}${'○'.repeat(5 - e.strength)}`).join(' · ')}
+              {s.evidence.items.length > 1 && evidenceUrl && ' · '}
+              {evidenceUrl && <a href={evidenceUrl}>View studies →</a>}
+              {s.evidence.note && <span class="hud-tile-note"> {s.evidence.note}</span>}
+            </div>
+          </>
+        ) : (
+          <>
+            <div class="hud-tile-v">Limited research</div>
+            <div class="hud-tile-s">{s.evidence.note}</div>
+          </>
+        )}
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Key interactions</div>
+        <div class="hud-tile-v">
+          {s.interactions.items.map((it, i) => (
+            <>
+              {i > 0 && ' · '}
+              {it.danger ? <span class="hud-warnflag">{it.name}</span> : it.name}
+            </>
+          ))}
+        </div>
+        {s.ssri && <div class="hud-tile-s"><b>On antidepressants?</b> {s.ssri}.</div>}
+        <div class="hud-tile-s"><a href="/checker/">Run the interaction checker →</a></div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Tolerance</div>
+        <div class="hud-tile-v">{s.tolerance.value}</div>
+        <div class="hud-tile-s">{s.tolerance.sub}</div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Legal status</div>
+        <div class="hud-tile-v">{s.legal.value}</div>
+        <div class="hud-tile-s">{s.legal.sub} · <a href="/law/#law-table">full table →</a></div>
+      </div>
+    </div>
+
+    <div class={`hud-foot${s.emergency ? ' hud-foot--alert' : ''}`}>
+      {s.emergency ? (
+        <span><b class="hud-warnflag">Get help fast if:</b> {s.emergency}.</span>
+      ) : (
+        <span>Reference ranges from published research — <b>not a recommendation to use</b>. Individual response varies.</span>
+      )}
+      <a href="/crisis/">Difficult experience? Crisis resources →</a>
+    </div>
+
+  </section>
+
+  <div class="hud-sticky" data-hud-sticky aria-hidden="true">
+    <span class="hud-sticky-name">{s.name}</span>
+    <span class="hud-sticky-stats">
+      <span class="hud-sticky-stat"><small>Total</small>{s.routes[0].total}</span>
+      <span class="hud-sticky-stat"><small>Peak</small>{s.routes[0].peak}</span>
+      <span class="hud-sticky-stat hud-sticky-stat--wide"><small>Tolerance</small>{s.tolerance.value}</span>
+      {s.evidence.items.length > 0 && (
+        <span class="hud-sticky-stat hud-sticky-stat--wide"><small>{s.evidence.items[0].condition}</small><span class="hud-dots">{'●'.repeat(s.evidence.items[0].strength)}<span class="off">{'○'.repeat(5 - s.evidence.items[0].strength)}</span></span></span>
+      )}
+    </span>
+    <a class="hud-sticky-link" href="#" data-scroll-top>Back to top ↑</a>
+  </div>
+</div>
+
+<script>
+  function initHudSticky() {
+    const hud = document.querySelector('.hud-wrap .hud');
+    const sticky = document.querySelector('[data-hud-sticky]');
+    if (!hud || !sticky || (sticky as HTMLElement).dataset.bound) return;
+    (sticky as HTMLElement).dataset.bound = 'true';
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const e = entries[0];
+        const above = !e.isIntersecting && e.boundingClientRect.bottom < 100;
+        sticky.classList.toggle('visible', above);
+        sticky.setAttribute('aria-hidden', above ? 'false' : 'true');
+      },
+      { rootMargin: '-80px 0px 0px 0px' }
+    );
+    observer.observe(hud);
+  }
+
+  document.addEventListener('astro:page-load', initHudSticky);
+  initHudSticky();
+
+  document.addEventListener('click', (e) => {
+    const topLink = (e.target as HTMLElement).closest('[data-scroll-top]');
+    if (topLink) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const btn = (e.target as HTMLElement).closest('.hud-route') as HTMLElement | null;
+    if (!btn) return;
+    const hud = btn.closest('.hud');
+    if (!hud) return;
+    hud.querySelectorAll<HTMLElement>('.hud-route').forEach((b) => {
+      const active = b === btn;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    hud.querySelectorAll<HTMLElement>('.hud-timeline').forEach((tl) => {
+      tl.style.display = tl.dataset.route === btn.dataset.route ? '' : 'none';
+    });
+  });
+</script>

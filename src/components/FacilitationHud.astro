@@ -1,0 +1,77 @@
+---
+// Facilitation "at a glance" HUD — the role spectrum plus the
+// non-negotiables of holding space. Mirrors the page prose.
+
+const roles = [
+  { name: 'Sitter', sub: 'a sober, trusted friend', tint: 30, href: '#fac-sitter' },
+  { name: 'Guide', sub: 'experienced, more active', tint: 55, href: '#fac-spectrum' },
+  { name: 'Facilitator', sub: 'formal training & ethics', tint: 80, href: '#fac-training' },
+  { name: 'Clinician', sub: 'licensed, legal pathway', tint: 100, href: '#fac-legal' },
+];
+---
+
+<div class="hud-wrap">
+  <section class="hud" aria-label="Facilitation at a glance">
+
+    <div class="hud-head">
+      <div class="hud-chips">
+        <span class="hud-chip hud-chip--accent">Practice · Holding space</span>
+        <span class="hud-chip"><strong>Golden rule</strong>&nbsp; Presence over intervention</span>
+        <span class="hud-chip hud-chip--warn">Sitters stay completely sober</span>
+      </div>
+    </div>
+
+    <div class="hud-grid">
+      <div class="hud-cell">
+        <div class="hud-label">The facilitation spectrum <span class="hud-label-sub">responsibility &amp; training increase →</span></div>
+        <div class="hud-arc">
+          {roles.map((r) => (
+            <div class="hud-arc-phase">
+              <div class="hud-arc-bar" style={`background: color-mix(in srgb, var(--accent) ${r.tint}%, var(--bg-elevated));`}></div>
+              <div class="hud-arc-name"><a href={r.href}>{r.name}</a></div>
+              <div class="hud-arc-when">{r.sub}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="hud-cell">
+        <div class="hud-question-label">Before saying yes, ask yourself</div>
+        <div class="hud-question">Can I keep this person safe — and can they be fully honest with me?</div>
+        <div class="hud-subnote">If either answer is shaky, the kindest thing you can do is help them find someone better placed.</div>
+      </div>
+    </div>
+
+    <div class="hud-tiles">
+      <div class="hud-tile">
+        <div class="hud-tile-k">Agree beforehand, sober</div>
+        <div class="hud-tile-v">Boundaries &amp; consent</div>
+        <div class="hud-tile-s">touch, music, leaving the space, when to intervene — decided before, never during</div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">During the session</div>
+        <div class="hud-tile-v">Speak less, reassure simply</div>
+        <div class="hud-tile-s">"You took a psychedelic. You're safe. I'm here." · <a href="/crisis/#crisis-supporting">supporting someone →</a></div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Escalate if</div>
+        <div class="hud-tile-v"><span class="hud-warnflag">Unresponsive · overheating</span></div>
+        <div class="hud-tile-s">seizure, chest pain, danger to self — <a href="/crisis/">call for help →</a></div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Choosing a facilitator?</div>
+        <div class="hud-tile-v"><a href="#fac-red-flags">Know the red flags →</a></div>
+        <div class="hud-tile-s"><a href="/blog/finding-a-trustworthy-guide/">finding a trustworthy guide →</a></div>
+      </div>
+    </div>
+
+    <div class="hud-foot">
+      <span>A sitter's most important instrument is their own <b>regulated nervous system</b>.</span>
+      <a href="/crisis/">Sitting right now and unsure? Fireside supports sitters too →</a>
+    </div>
+
+  </section>
+</div>

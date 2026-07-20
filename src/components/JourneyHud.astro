@@ -1,0 +1,80 @@
+---
+import { arc, phases } from '../data/journey';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const phase = phases[id];
+if (!phase) throw new Error(`JourneyHud: unknown phase "${id}"`);
+
+const currentIdx = arc.findIndex((p) => p.id === id);
+const phaseNum = currentIdx + 1;
+
+const footLink =
+  id === 'navigation'
+    ? { url: '/crisis/', label: 'Difficult experience? Crisis resources →' }
+    : { url: '/planner/', label: 'Plan your journey end-to-end →' };
+---
+
+<div class="hud-wrap">
+  <section class="hud" aria-label={`${phase.name} phase at a glance`}>
+
+    <div class="hud-head">
+      <div class="hud-chips">
+        <span class="hud-chip hud-chip--accent">Phase {phaseNum} of 4 · {phase.name}</span>
+        <span class="hud-chip"><strong>When</strong>&nbsp; {phase.when}</span>
+        <span class="hud-chip"><strong>Effort</strong>&nbsp; {phase.effort}</span>
+      </div>
+    </div>
+
+    <div class="hud-grid">
+      <div class="hud-cell">
+        <div class="hud-label">The journey arc</div>
+        <div class="hud-arc">
+          {arc.map((p, i) => (
+            <div class={`hud-arc-phase${i === currentIdx ? ' active' : i < currentIdx ? ' done' : ''}`}>
+              <div class="hud-arc-bar"></div>
+              <div class="hud-arc-name">
+                {i === currentIdx ? p.name : <a href={p.url}>{p.name}</a>}
+              </div>
+              <div class="hud-arc-when">{p.when}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="hud-cell">
+        <div class="hud-question-label">This phase in one question</div>
+        <div class="hud-question">{phase.question}</div>
+      </div>
+    </div>
+
+    <div class="hud-tiles hud-tiles--3">
+      <div class="hud-tile">
+        <div class="hud-tile-k">Key practices</div>
+        <div class="hud-tile-v">{phase.practices[0]}</div>
+        <div class="hud-tile-s">{phase.practices.slice(1).join(' · ')}</div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Watch out for</div>
+        <div class="hud-tile-v"><span class="hud-warnflag">{phase.pitfall.label}</span></div>
+        <div class="hud-tile-s">{phase.pitfall.note}</div>
+      </div>
+
+      <div class="hud-tile">
+        <div class="hud-tile-k">Tools for this phase</div>
+        <div class="hud-tile-v">{phase.tools[0] && <a href={phase.tools[0].url}>{phase.tools[0].label} →</a>}</div>
+        <div class="hud-tile-s">{phase.tools[1] && <a href={phase.tools[1].url}>{phase.tools[1].label} →</a>}</div>
+      </div>
+    </div>
+
+    <div class="hud-foot">
+      <span>Four phases, one process — this page covers <b>{phase.name}</b> in depth.</span>
+      <a href={footLink.url}>{footLink.label}</a>
+    </div>
+
+  </section>
+</div>

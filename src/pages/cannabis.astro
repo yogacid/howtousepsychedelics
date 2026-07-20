@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import SubstanceHud from '../components/SubstanceHud.astro';
 ---
 
 <Base
@@ -24,6 +25,9 @@ import Base from '../layouts/Base.astro';
       <h1 class="content-hero-title">Cannabis</h1>
       <p class="content-hero-subtitle">Cannabis sits at an unusual intersection: too familiar to treat as exotic, too complex to treat as ordinary. Its relationship to the psychedelic experience is real but contested, its risks are real but systematically overstated and understated in different directions, and its combination with other psychedelics carries specific hazards worth understanding carefully.</p>
     </div>
+
+    <!-- At a Glance HUD -->
+    <SubstanceHud id="cannabis" />
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">

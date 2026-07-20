@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import SubstanceHud from '../components/SubstanceHud.astro';
 ---
 
 <Base
@@ -24,6 +25,9 @@ import Base from '../layouts/Base.astro';
       <h1 class="content-hero-title">2C-B: Effects, Dosage &amp; Harm Reduction</h1>
       <p class="content-hero-subtitle">2C-B (4-bromo-2,5-dimethoxy<span class="tt" data-tip="A structural class of compounds containing the phenethylamine backbone. Includes MDMA, mescaline, 2C-B, and the 2C-x/DOx families. Phenethylamine psychedelics are pharmacologically distinct from tryptamines, acting on both 5-HT₂A and dopamine/noradrenaline pathways.">phenethylamine</span>) is a synthetic phenethylamine psychedelic synthesised by Alexander Shulgin and documented in <em>PiHKAL</em> (1991). Its steep dose-response curve and hybrid phenethylamine-<span class="tt" data-tip="A class of compounds sharing the core indole-ethylamine structure. Classical serotonergic psychedelics — psilocin, DMT, LSD, ibogaine — are tryptamines. The tryptamine scaffold is also the backbone of serotonin and melatonin.">tryptamine</span> character make it distinctive among psychedelics. This guide covers <span class="tt" data-tip="The branch of science concerned with how substances interact with biological systems — including their mechanisms of action, absorption, distribution, metabolism, and effects at the receptor level.">pharmacology</span>, effects, the critical importance of precise dosing, risks, and harm reduction.</p>
     </div>
+
+    <!-- At a Glance HUD -->
+    <SubstanceHud id="twocb" />
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
