@@ -2,11 +2,13 @@
 // Facilitation "at a glance" HUD — the role spectrum plus the
 // non-negotiables of holding space. Mirrors the page prose.
 
+// Depth of training rises left to right; therapist and shaman sit
+// equal at the top — same depth, different lineages (teal vs green)
 const roles = [
-  { name: 'Sitter', sub: 'a sober, trusted friend', tint: 30, href: '#fac-sitter' },
-  { name: 'Guide', sub: 'experienced, more active', tint: 55, href: '#fac-spectrum' },
-  { name: 'Facilitator', sub: 'formal training & ethics', tint: 80, href: '#fac-training' },
-  { name: 'Clinician', sub: 'licensed, legal pathway', tint: 100, href: '#fac-legal' },
+  { name: 'Sitter', sub: 'a sober, trusted friend', href: '#fac-sitter', bar: 'color-mix(in srgb, var(--accent) 30%, var(--bg-elevated))' },
+  { name: 'Guide', sub: 'trained through practice or study', href: '#fac-spectrum', bar: 'color-mix(in srgb, var(--accent) 60%, var(--bg-elevated))' },
+  { name: 'Therapist', sub: 'licensed clinical care', href: '#fac-training', bar: 'var(--accent)' },
+  { name: 'Shaman', sub: 'rooted in living tradition', href: '#fac-spectrum', bar: 'var(--green)' },
 ];
 ---
 
@@ -23,11 +25,11 @@ const roles = [
 
     <div class="hud-grid">
       <div class="hud-cell">
-        <div class="hud-label">The facilitation spectrum <span class="hud-label-sub">responsibility &amp; training increase →</span></div>
+        <div class="hud-label">The facilitation spectrum <span class="hud-label-sub">depth of training increases →</span></div>
         <div class="hud-arc">
           {roles.map((r) => (
             <div class="hud-arc-phase">
-              <div class="hud-arc-bar" style={`background: color-mix(in srgb, var(--accent) ${r.tint}%, var(--bg-elevated));`}></div>
+              <div class="hud-arc-bar" style={`background: ${r.bar};`}></div>
               <div class="hud-arc-name"><a href={r.href}>{r.name}</a></div>
               <div class="hud-arc-when">{r.sub}</div>
             </div>
