@@ -4820,14 +4820,14 @@ a.gloss-tip-more:hover {
 
 .hud-tl-seg span {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.6rem;
+  font-size: 0.57rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
   color: var(--text-body);
-  padding: 0 0.3rem;
+  padding: 0 0.25rem;
 }
 
 .hud-tl-seg--onset  { background: color-mix(in srgb, var(--accent) 28%, var(--bg-elevated)); }
@@ -4989,9 +4989,12 @@ a.gloss-tip-more:hover {
 @media (max-width: 560px) {
   .hud-dose-row { grid-template-columns: 6.5rem 1fr; }
   .hud-dose-note { grid-column: 1 / -1; margin-top: -0.1rem; }
+  .hud-foot { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+}
+
+@media (max-width: 700px) {
   .hud-tl-seg span { display: none; }
   .hud-tl-seg--peak span { display: block; }
-  .hud-foot { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
 }
 
 /* ── Elevated instrument cards share a top light-catch ── */
@@ -5052,9 +5055,7 @@ a.gloss-tip-more:hover {
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.3;
 }
 
 .hud-arc-name a { color: inherit; transition: color 0.15s; }
@@ -5064,9 +5065,8 @@ a.gloss-tip-more:hover {
 .hud-arc-when {
   font-size: 0.66rem;
   color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.45;
+  padding-right: 0.5rem;
 }
 
 .hud-arc-phase.active .hud-arc-when { color: var(--accent); }
@@ -5157,9 +5157,7 @@ a.gloss-tip-more:hover {
 .hud-proto-note {
   font-size: 0.7rem;
   color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.4;
 }
 
 .hud-subnote {
@@ -5248,9 +5246,7 @@ a.gloss-tip-more:hover {
   font-weight: 600;
   color: var(--text-primary);
   text-align: right;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
   transition: color 0.15s;
 }
 
@@ -5404,12 +5400,17 @@ a.cmp-row:hover .cmp-value { color: var(--accent); }
   white-space: nowrap;
 }
 
-@media (max-width: 700px) {
-  .hud-sticky { gap: 0.9rem; padding: 0.5rem 1rem; }
+@media (max-width: 960px) {
   .hud-sticky-stat--wide { display: none; }
   .hud-sticky-link { display: none; }
+}
+
+@media (max-width: 700px) {
+  .hud-sticky { gap: 0.9rem; padding: 0.5rem 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hud-sticky { transition: none; }
 }
+
+.hud-arc--3 { grid-template-columns: repeat(3, 1fr); }
