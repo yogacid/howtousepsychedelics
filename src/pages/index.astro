@@ -252,7 +252,7 @@ import Base from '../layouts/Base.astro';
   </div>
 
   <!-- ── Rotating hero words script ──────────────────────────── -->
-  <script is:inline>
+  <script is:inline data-astro-rerun>
     (function() {
       const words = document.querySelectorAll('.accent-word .word');
       let current = 0;

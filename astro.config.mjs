@@ -8,6 +8,7 @@ export default defineConfig({
   output: 'static',
   site: 'https://howtousepsychedelics.com',
   trailingSlash: 'always',
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   adapter: netlify(),
   integrations: [sitemap()],
   build: {

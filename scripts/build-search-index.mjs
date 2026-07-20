@@ -65,11 +65,11 @@ function extractSections(html) {
     const sectionHtml = html.slice(start, end);
 
     const paragraphs = [];
-    const pRe = /<(?:p|li)[^>]*>([\s\S]*?)<\/(?:p|li)>/g;
+    const pRe = /<(?:p|li|td|th)[^>]*>([\s\S]*?)<\/(?:p|li|td|th)>/g;
     let pMatch;
     while ((pMatch = pRe.exec(sectionHtml)) !== null) {
       const text = stripHtml(pMatch[1]);
-      if (text.length > 10) paragraphs.push(text);
+      if (text.length > 3) paragraphs.push(text);
     }
 
     const h3s = [];
@@ -83,7 +83,7 @@ function extractSections(html) {
       id: h2Positions[i].id,
       title: h2Positions[i].title,
       h3s,
-      text: paragraphs.join(' ').slice(0, 500),
+      text: paragraphs.join(' ').slice(0, 800),
     });
   }
 
@@ -124,9 +124,62 @@ async function buildIndex() {
         url,
         section: sec.title,
         hash: '#' + sec.id,
-        text: (sec.h3s.join(' — ') + ' ' + sec.text).trim().slice(0, 400),
+        text: (sec.h3s.join(' — ') + ' ' + sec.text).trim().slice(0, 700),
       });
     }
+  }
+
+  // ── Index data-driven content (HUDs, research library, comparison) ──
+  const SRC_DATA = join(import.meta.dirname, '..', 'src', 'data', 'substances.ts');
+  if (existsSync(SRC_DATA)) {
+    const dataSrc = await readFile(SRC_DATA, 'utf-8');
+    const recRe = /(\w+): \{\s*id: '([^']+)',\s*name: '([^']+)',\s*class: '([^']+)',\s*mechanism: '([^']+)',/g;
+    const totals = [];
+    let rm;
+    while ((rm = recRe.exec(dataSrc)) !== null) {
+      const [, , id, name, klass, mech] = rm;
+      const block = dataSrc.slice(rm.index, dataSrc.indexOf('\n  },', rm.index));
+      const totalM = block.match(/total: '([^']+)'/);
+      const peakM = block.match(/peak: '([^']+)'/);
+      const tolM = block.match(/tolerance: \{ value: '([^']+)', sub: '([^']+)'/);
+      if (totalM) totals.push(`${name} ${totalM[1]}`);
+      index.push({
+        page: name,
+        url: '/' + id,
+        section: 'At a glance',
+        hash: '',
+        text: `${klass} ${mech} duration ${totalM ? totalM[1] : ''} peak ${peakM ? peakM[1] : ''} tolerance ${tolM ? tolM[1] + ' ' + tolM[2] : ''}`.trim().slice(0, 400),
+      });
+    }
+    if (totals.length) {
+      index.push({
+        page: 'Substance Guides',
+        url: '/substances',
+        section: 'How long does each psychedelic last?',
+        hash: '#durations',
+        text: ('Duration comparison of all psychedelics: ' + totals.join(' · ')).slice(0, 400),
+      });
+    }
+  }
+
+  const RESEARCH_FILE = join(PAGES_DIR, 'research.astro');
+  if (existsSync(RESEARCH_FILE)) {
+    const rSrc = await readFile(RESEARCH_FILE, 'utf-8');
+    const studyRe = /substance: '([^']+)', topic: '([^']+)', year: (\d+),\s*authors: '([^']+)', journal: '([^']+)',\s*title:\s*'((?:[^'\\]|\\.)*)',\s*finding:\s*'((?:[^'\\]|\\.)*)',/g;
+    let sm;
+    let studies = 0;
+    while ((sm = studyRe.exec(rSrc)) !== null) {
+      const [, substance, topic, year, authors, journal, title, finding] = sm;
+      index.push({
+        page: 'Research Library',
+        url: '/research',
+        section: `${authors} (${year})`,
+        hash: '',
+        text: `${substance} ${topic} ${title.replace(/\\'/g, "'")} — ${finding.replace(/\\'/g, "'")} ${journal}`.slice(0, 400),
+      });
+      studies++;
+    }
+    console.log(`build-search-index: indexed ${studies} research studies`);
   }
 
   // ── Index blog posts ──
