@@ -97,23 +97,37 @@ async function buildIndex() {
 
   const index = [];
 
+  // Substance page slugs — used to type page entries for palette grouping
+  const SRC_DATA = join(import.meta.dirname, '..', 'src', 'data', 'substances.ts');
+  const substanceIds = new Set();
+  if (existsSync(SRC_DATA)) {
+    const dataSrc = await readFile(SRC_DATA, 'utf-8');
+    for (const m of dataSrc.matchAll(/^    id: '([^']+)',$/gm)) substanceIds.add(m[1]);
+  }
+
   for (const file of files) {
     const src = await readFile(join(PAGES_DIR, file), 'utf-8');
     const html = src.slice(extractFrontmatterEnd(src));
     const slug = file.replace('.astro', '');
-    const url = '/' + (slug === 'index' ? '' : slug);
+    const url = '/' + (slug === 'index' ? '' : slug + '/');
 
     const meta = extractPageMeta(html);
     if (!meta.title) continue;
 
     const descMatch = src.match(/description="([^"]*)"/);
     const pageDesc = descMatch ? descMatch[1] : '';
+    const pageType = substanceIds.has(slug)
+      ? 'Substances'
+      : slug === 'research'
+        ? 'Research'
+        : 'Guides';
 
     index.push({
       page: meta.title,
       url,
       section: null,
       hash: '',
+      type: pageType,
       text: (meta.subtitle + ' ' + pageDesc).trim().slice(0, 400),
     });
 
@@ -124,13 +138,13 @@ async function buildIndex() {
         url,
         section: sec.title,
         hash: '#' + sec.id,
+        type: pageType,
         text: (sec.h3s.join(' — ') + ' ' + sec.text).trim().slice(0, 700),
       });
     }
   }
 
   // ── Index data-driven content (HUDs, research library, comparison) ──
-  const SRC_DATA = join(import.meta.dirname, '..', 'src', 'data', 'substances.ts');
   if (existsSync(SRC_DATA)) {
     const dataSrc = await readFile(SRC_DATA, 'utf-8');
     const recRe = /(\w+): \{\s*id: '([^']+)',\s*name: '([^']+)',\s*class: '([^']+)',\s*mechanism: '([^']+)',/g;
@@ -145,18 +159,20 @@ async function buildIndex() {
       if (totalM) totals.push(`${name} ${totalM[1]}`);
       index.push({
         page: name,
-        url: '/' + id,
+        url: '/' + id + '/',
         section: 'At a glance',
         hash: '',
+        type: 'Substances',
         text: `${klass} ${mech} duration ${totalM ? totalM[1] : ''} peak ${peakM ? peakM[1] : ''} tolerance ${tolM ? tolM[1] + ' ' + tolM[2] : ''}`.trim().slice(0, 400),
       });
     }
     if (totals.length) {
       index.push({
         page: 'Substance Guides',
-        url: '/substances',
+        url: '/substances/',
         section: 'How long does each psychedelic last?',
         hash: '#durations',
+        type: 'Substances',
         text: ('Duration comparison of all psychedelics: ' + totals.join(' · ')).slice(0, 400),
       });
     }
@@ -172,9 +188,10 @@ async function buildIndex() {
       const [, substance, topic, year, authors, journal, title, finding] = sm;
       index.push({
         page: 'Research Library',
-        url: '/research',
+        url: '/research/',
         section: `${authors} (${year})`,
         hash: '',
+        type: 'Research',
         text: `${substance} ${topic} ${title.replace(/\\'/g, "'")} — ${finding.replace(/\\'/g, "'")} ${journal}`.slice(0, 400),
       });
       studies++;
@@ -204,7 +221,7 @@ async function buildIndex() {
 
       const body = src.slice(fmEnd).trim();
       const slug = file.replace('.md', '');
-      const url = '/blog/' + slug;
+      const url = '/blog/' + slug + '/';
 
       // Page-level entry
       index.push({
@@ -212,6 +229,7 @@ async function buildIndex() {
         url,
         section: null,
         hash: '',
+        type: 'Blog',
         text: description.slice(0, 400),
       });
 
@@ -243,6 +261,7 @@ async function buildIndex() {
           url,
           section: h2Positions[i].title,
           hash: '#' + sectionId,
+          type: 'Blog',
           text: sectionText.slice(0, 400),
         });
       }

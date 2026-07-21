@@ -9,6 +9,7 @@ export default defineConfig({
   site: 'https://howtousepsychedelics.com',
   trailingSlash: 'always',
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
+  server: { port: process.env.PORT ? Number(process.env.PORT) : 4322 },
   adapter: netlify(),
   integrations: [sitemap()],
   build: {

@@ -27,7 +27,7 @@ import Base from '../layouts/Base.astro';
       --accent:       #3ec9bf;
       --accent-dim:   rgba(62,201,191,0.15);
       --accent-border:rgba(62,201,191,0.25);
-      --grad:         linear-gradient(135deg, #3ec9bf 0%, #5cb84a 100%);
+      --grad:         linear-gradient(135deg, #6dd456 0%, #40d9cc 50%, #2e9fd8 100%);
       --nav-h:        75px;
       --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 20px;
       --sab: env(safe-area-inset-bottom, 0px);
@@ -51,7 +51,7 @@ import Base from '../layouts/Base.astro';
       --accent-dim:   rgba(26,158,148,0.10);
       --accent-border:rgba(26,158,148,0.18);
 
-      --grad: linear-gradient(135deg, #1a9e94 0%, #3a8f28 100%);
+      --grad: linear-gradient(135deg, #3a8f28 0%, #1a9e94 50%, #1f7fb2 100%);
 
       --danger:   #b83333;
       --warn:     #a67c00;
@@ -104,7 +104,7 @@ import Base from '../layouts/Base.astro';
       font-family: 'DM Sans', sans-serif; font-size: 0.75rem;
       font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
       text-decoration: none; border-radius: 100px; border: none; cursor: pointer;
-      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+      background: linear-gradient(135deg, #5cb84a 0%, #2e9fd8 50%, #5cb84a 100%);
       background-size: 300% 100%;
       background-position: 0% center;
       color: #040a05;
@@ -113,7 +113,7 @@ import Base from '../layouts/Base.astro';
     }
     .btn-primary:hover {
       animation: accentShimmer 4s ease-in-out infinite;
-      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+      box-shadow: 0 6px 20px rgba(64,217,204,0.18);
     }
     .btn-outline {
       display: inline-flex; align-items: center; gap: 0.5rem;
@@ -668,7 +668,6 @@ import Base from '../layouts/Base.astro';
       background: var(--bg-card); border-radius: var(--r-xl);
       border: 1.5px solid var(--accent-border);
       padding: 44px 40px;
-      box-shadow: 0 8px 40px rgba(62,201,191,0.08);
     }
     .pricing-badge {
       display: inline-flex; align-items: center; gap: 6px;
@@ -722,7 +721,7 @@ import Base from '../layouts/Base.astro';
       font-family: 'DM Sans', sans-serif; font-size: 0.75rem;
       font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
       text-decoration: none; border-radius: 100px; border: none; cursor: pointer;
-      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+      background: linear-gradient(135deg, #5cb84a 0%, #2e9fd8 50%, #5cb84a 100%);
       background-size: 300% 100%;
       background-position: 0% center;
       color: #040a05;
@@ -730,7 +729,7 @@ import Base from '../layouts/Base.astro';
     }
     .btn-primary-full:hover {
       animation: accentShimmer 4s ease-in-out infinite;
-      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+      box-shadow: 0 6px 20px rgba(64,217,204,0.18);
     }
     .guarantee-note {
       font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
@@ -772,7 +771,7 @@ import Base from '../layouts/Base.astro';
     .instructor-image {
       position: relative; aspect-ratio: 1/1; overflow: hidden;
       border-radius: var(--r-xl); width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.25);
     }
     .instructor--left .instructor-image { justify-self: start; }
     .instructor--right .instructor-image { justify-self: end; }
@@ -879,7 +878,7 @@ import Base from '../layouts/Base.astro';
     }
     .footer-support-btn {
       display: inline-block; flex-shrink: 0; padding: 0.7rem 1.6rem;
-      background: linear-gradient(135deg, #2e9fd8 0%, #5cb84a 50%, #2e9fd8 100%);
+      background: linear-gradient(135deg, #5cb84a 0%, #2e9fd8 50%, #5cb84a 100%);
       background-size: 300% 100%; background-position: 0% center;
       color: #0a120d; font-size: 0.72rem; font-weight: 700;
       letter-spacing: 0.1em; text-transform: uppercase;
@@ -888,7 +887,7 @@ import Base from '../layouts/Base.astro';
     }
     .footer-support-btn:hover {
       animation: accentShimmer 4s ease-in-out infinite;
-      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+      box-shadow: 0 6px 20px rgba(64,217,204,0.18);
     }
 
     /* ── NONPROFIT PILL ─────────────────────────────────────────── */
@@ -953,7 +952,6 @@ import Base from '../layouts/Base.astro';
     .enroll-cta-panel {
       background: var(--bg-card); border-radius: var(--r-xl);
       border: 1.5px solid var(--accent-border);
-      box-shadow: 0 8px 40px rgba(62,201,191,0.08);
       padding: 44px 40px; margin-top: 3rem; flex: 1;
       display: flex; flex-direction: column; justify-content: center; gap: 20px;
     }
@@ -982,7 +980,7 @@ import Base from '../layouts/Base.astro';
     }
     .enroll-cta-btn:hover {
       animation: accentShimmer 4s ease-in-out infinite;
-      box-shadow: 0 0 0 3px rgba(62,201,191,0.18), 0 0 22px rgba(92,184,74,0.30);
+      box-shadow: 0 6px 20px rgba(64,217,204,0.18);
     }
     .enroll-cta-summary {
       font-size: 0.82rem; font-weight: 500; color: var(--cream);

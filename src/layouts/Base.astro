@@ -197,9 +197,20 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
         else document.documentElement.removeAttribute('data-theme');
       });
 
-      // ── Search ──
+      // ── Search (command palette) ──
       var searchIndex = null;
       var searchDebounce = null;
+      var paletteSel = 0;
+
+      var QUICK_LINKS = [
+        { title: 'All Substances', url: '/substances/' },
+        { title: 'Journey Planner', url: '/planner/' },
+        { title: 'Microdosing', url: '/microdosing/' },
+        { title: 'Research Library', url: '/research/' },
+        { title: 'Glossary', url: '/glossary/' },
+        { title: 'Facilitation', url: '/facilitation/' },
+        { title: 'Crisis Resources', url: '/crisis/' },
+      ];
 
       function loadSearchIndex() {
         if (searchIndex) return Promise.resolve(searchIndex);
@@ -208,41 +219,92 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
           .then(function (data) { searchIndex = data; return data; });
       }
 
-      function scoreResult(entry, q) {
-        var s = 0;
+      function escapeRe(s) {
+        return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+      // Every term must hit somewhere; terms sum their scores, and the
+      // whole phrase appearing in the title earns a bonus.
+      function scoreResult(entry, terms, phrase) {
         var title = (entry.section || entry.page).toLowerCase();
         var page = entry.page.toLowerCase();
         var text = entry.text.toLowerCase();
-        if (title === q) s += 100;
-        else if (title.startsWith(q)) s += 60;
-        else if (title.includes(q)) s += 40;
-        if (!entry.section && page.includes(q)) s += 20;
-        if (text.includes(q)) s += 10;
-        var wordBoundary = new RegExp('\\b' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-        if (wordBoundary.test(title)) s += 15;
-        if (wordBoundary.test(text)) s += 5;
-        return s;
+        var total = 0;
+        for (var i = 0; i < terms.length; i++) {
+          var t = terms[i];
+          var s = 0;
+          if (title === t) s += 100;
+          else if (title.startsWith(t)) s += 60;
+          else if (title.includes(t)) s += 40;
+          if (!entry.section && page.includes(t)) s += 20;
+          if (text.includes(t)) s += 10;
+          var wordBoundary = new RegExp('\\b' + escapeRe(t));
+          if (wordBoundary.test(title)) s += 15;
+          if (wordBoundary.test(text)) s += 5;
+          if (s === 0) return 0;
+          total += s;
+        }
+        if (terms.length > 1 && title.includes(phrase)) total += 30;
+        return total;
       }
 
-      function getSnippet(text, q) {
+      function getSnippet(text, terms) {
         var lower = text.toLowerCase();
-        var pos = lower.indexOf(q);
-        if (pos === -1) return text.slice(0, 120) + '…';
-        var start = Math.max(0, pos - 50);
-        var end = Math.min(text.length, pos + q.length + 70);
-        var snippet = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
-        var escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var pos = -1;
+        for (var i = 0; i < terms.length; i++) {
+          var p = lower.indexOf(terms[i]);
+          if (p !== -1 && (pos === -1 || p < pos)) pos = p;
+        }
+        var snippet;
+        if (pos === -1) snippet = text.slice(0, 120) + (text.length > 120 ? '…' : '');
+        else {
+          var start = Math.max(0, pos - 50);
+          var end = Math.min(text.length, pos + 120);
+          snippet = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+        }
+        // Longest terms first so "setting" wins over "set" in the alternation
+        var escaped = terms.slice().sort(function (a, b) { return b.length - a.length; }).map(escapeRe).join('|');
         return snippet.replace(new RegExp('(' + escaped + ')', 'gi'), '<mark>$1</mark>');
+      }
+
+      function paletteRows() {
+        return document.getElementById('searchResults').querySelectorAll('.search-result');
+      }
+
+      function setPaletteSel(idx, scroll) {
+        var rows = paletteRows();
+        if (!rows.length) return;
+        paletteSel = Math.max(0, Math.min(idx, rows.length - 1));
+        for (var i = 0; i < rows.length; i++) {
+          rows[i].classList.toggle('selected', i === paletteSel);
+        }
+        if (scroll) rows[paletteSel].scrollIntoView({ block: 'nearest' });
+      }
+
+      function renderQuickLinks() {
+        var container = document.getElementById('searchResults');
+        container.innerHTML = '<div class="palette-group-label">Quick links</div>'
+          + QUICK_LINKS.map(function (l) {
+            return '<a class="search-result search-result-quick" href="' + l.url + '">'
+              + '<div class="search-result-title">' + l.title + '</div></a>';
+          }).join('');
+        setPaletteSel(0, false);
       }
 
       function runSearch(q) {
         var container = document.getElementById('searchResults');
-        if (!q) { container.innerHTML = '<div class="search-hint">Type to search across all pages</div>'; return; }
+        if (!q) { renderQuickLinks(); return; }
         if (!searchIndex) { container.innerHTML = '<div class="search-hint">Loading…</div>'; return; }
+        var terms = q.split(/\s+/);
+        // Stopwords score everywhere and litter the highlights — drop
+        // them, but never below one real term
+        var STOP = /^(a|an|and|are|do|for|how|i|in|is|it|my|of|on|or|the|to|vs|what|with)$/;
+        var filtered = terms.filter(function (t) { return !STOP.test(t); });
+        if (filtered.length) terms = filtered;
         var scored = [];
         for (var i = 0; i < searchIndex.length; i++) {
           var entry = searchIndex[i];
-          var sc = scoreResult(entry, q);
+          var sc = scoreResult(entry, terms, q);
           if (sc > 0) scored.push({ entry: entry, score: sc });
         }
         scored.sort(function (a, b) { return b.score - a.score; });
@@ -255,16 +317,29 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
           seen[key] = true;
           results.push(e);
         }
-        if (!results.length) { container.innerHTML = '<div class="search-no-results">No results found</div>'; return; }
-        container.innerHTML = results.map(function (r) {
-          var title = r.section ? r.section : r.page;
-          var breadcrumb = r.section ? '<div class="search-result-page">' + r.page + '</div>' : '';
-          var snippet = getSnippet(r.text, q);
-          return '<a class="search-result" href="' + r.url + r.hash + '">'
-            + breadcrumb
-            + '<div class="search-result-title">' + title + '</div>'
-            + '<div class="search-result-desc">' + snippet + '</div></a>';
+        if (!results.length) { container.innerHTML = '<div class="search-no-results">No results for “' + q.replace(/</g, '&lt;') + '”</div>'; return; }
+        // Group by type; groups keep best-score order via first appearance
+        var groups = [];
+        var byType = {};
+        for (var k = 0; k < results.length; k++) {
+          var r = results[k];
+          var type = r.type || 'Guides';
+          if (!byType[type]) { byType[type] = []; groups.push(type); }
+          byType[type].push(r);
+        }
+        container.innerHTML = groups.map(function (type) {
+          return '<div class="palette-group-label">' + type + '</div>'
+            + byType[type].map(function (r) {
+              var title = r.section ? r.section : r.page;
+              var breadcrumb = r.section ? '<div class="search-result-page">' + r.page + '</div>' : '';
+              var snippet = getSnippet(r.text, terms);
+              return '<a class="search-result" href="' + r.url + r.hash + '">'
+                + breadcrumb
+                + '<div class="search-result-title">' + title + '</div>'
+                + '<div class="search-result-desc">' + snippet + '</div></a>';
+            }).join('');
         }).join('');
+        setPaletteSel(0, false);
       }
 
       function openSearch() {
@@ -272,6 +347,7 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
           var q = document.getElementById('searchInput').value.toLowerCase().trim();
           if (q) runSearch(q);
         });
+        renderQuickLinks();
         document.getElementById('searchOverlay').classList.add('open');
         setTimeout(function () { document.getElementById('searchInput').focus(); }, 100);
         document.body.style.overflow = 'hidden';
@@ -280,7 +356,6 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
       function closeSearch() {
         document.getElementById('searchOverlay').classList.remove('open');
         document.getElementById('searchInput').value = '';
-        document.getElementById('searchResults').innerHTML = '<div class="search-hint">Type to search across all pages</div>';
         document.body.style.overflow = '';
       }
 
@@ -291,8 +366,21 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
       document.getElementById('searchResults').addEventListener('click', function (e) {
         if (e.target.closest('a')) closeSearch();
       });
+      // Hover follows the mouse, but only on real movement — keyboard
+      // scrolling must not yank the selection back under the cursor
+      document.getElementById('searchResults').addEventListener('mousemove', function (e) {
+        var row = e.target.closest('.search-result');
+        if (!row) return;
+        var rows = paletteRows();
+        for (var i = 0; i < rows.length; i++) {
+          if (rows[i] === row) { if (i !== paletteSel) setPaletteSel(i, false); return; }
+        }
+      });
       document.getElementById('searchCloseBtn').addEventListener('click', closeSearch);
       document.querySelector('.search-open-btn').addEventListener('click', openSearch);
+      if (!/Mac|iP(hone|ad|od)/.test(navigator.platform || '')) {
+        document.querySelector('.nav-kbd').textContent = 'Ctrl K';
+      }
       document.getElementById('searchInput').addEventListener('input', function (e) {
         var q = e.target.value.toLowerCase().trim();
         clearTimeout(searchDebounce);
@@ -328,6 +416,15 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
       });
 
       document.addEventListener('keydown', function (e) {
+        if (document.getElementById('searchOverlay').classList.contains('open')) {
+          if (e.key === 'ArrowDown') { e.preventDefault(); setPaletteSel(paletteSel + 1, true); return; }
+          if (e.key === 'ArrowUp') { e.preventDefault(); setPaletteSel(paletteSel - 1, true); return; }
+          if (e.key === 'Enter') {
+            var rows = paletteRows();
+            if (rows.length) { e.preventDefault(); rows[paletteSel].click(); }
+            return;
+          }
+        }
         if (e.key === 'Escape') { closeSearch(); closeDrawer(); }
         if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
       });
@@ -337,6 +434,44 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
         return nav ? nav.offsetHeight : 72;
       }
 
+      // Fixed chrome above anchored content: nav + (on substance pages)
+      // the sticky HUD strip, which is in the layout even while hidden
+      function getScrollOffset() {
+        var off = getNavHeight() + 12;
+        var strip = document.querySelector('[data-hud-sticky]');
+        if (strip) off += strip.offsetHeight;
+        return off;
+      }
+
+      // ── Hash landing fix ──
+      // The ClientRouter forces scrollRestoration to "manual" and its
+      // fragment re-navigation is skipped by Chrome, so cross-page and
+      // direct-load hash URLs land pinned to the top. Scroll ourselves,
+      // but only when still at the top — a restored scroll position
+      // (back/forward) must win.
+      document.addEventListener('astro:page-load', function () {
+        if (!location.hash || window.scrollY > 0) return;
+        var id = decodeURIComponent(location.hash.slice(1));
+
+        function jumpTo() {
+          var target = document.getElementById(id);
+          if (!target) return 0;
+          var top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - getScrollOffset());
+          if (top > 1) window.scrollTo({ top: top, behavior: 'instant' });
+          return top;
+        }
+
+        var expected = jumpTo();
+        if (expected <= 1) return;
+        // Image loads and per-page init shift layout after this event —
+        // correct once more if the target drifted and the user hasn't
+        // scrolled themselves. (Timeout, not rAF: must also run in
+        // background tabs.)
+        setTimeout(function () {
+          if (Math.abs(window.scrollY - expected) < 2) jumpTo();
+        }, 350);
+      });
+
       // ── Sidebar TOC click (delegated — survives page swaps) ──
       document.addEventListener('click', function (e) {
         var a = e.target.closest('.sidebar-nav a');
@@ -345,7 +480,7 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
         var id = a.getAttribute('href').replace(/^.*#/, '');
         var target = document.getElementById(id);
         if (!target) return;
-        var top = target.getBoundingClientRect().top + window.scrollY - getNavHeight() - 12;
+        var top = target.getBoundingClientRect().top + window.scrollY - getScrollOffset();
         var sidebar = a.closest('.sidebar-nav');
         if (sidebar) {
           sidebar.querySelectorAll('a').forEach(function (l) { l.classList.remove('active'); });
@@ -361,6 +496,7 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
 
       function runSpy() {
         rafPending = false;
+        document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 24);
         var progressBar = document.getElementById('scrollProgress');
         if (progressBar) {
           var docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -392,7 +528,8 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
         spyTargets = [];
         spyLinkMap = {};
         var sidebar = document.querySelector('.sidebar-nav');
-        if (!sidebar) return;
+        // Pages without a TOC still need the nav scrolled-state refresh
+        if (!sidebar) { runSpy(); return; }
         sidebar.querySelectorAll('a[href]').forEach(function (a) {
           var hash = a.getAttribute('href').replace(/^.*#/, '');
           if (hash) spyLinkMap[hash] = a;
@@ -433,7 +570,7 @@ const ogImageUrl = `${baseUrl}${ogImage}`;
             var id = this.getAttribute('href').replace(/^.*#/, '');
             var target = document.getElementById(id);
             if (target) {
-              var top = target.getBoundingClientRect().top + window.scrollY - getNavHeight() - 12;
+              var top = target.getBoundingClientRect().top + window.scrollY - getScrollOffset();
               setTimeout(function () { window.scrollTo({ top: top, behavior: 'smooth' }); }, 50);
             }
           });
