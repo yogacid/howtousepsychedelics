@@ -6,7 +6,7 @@ import { Resvg } from '@resvg/resvg-js';
 import esbuild from 'esbuild';
 
 const ROOT = join(import.meta.dirname, '..');
-const FONT_CACHE = join(ROOT, '.font-cache');
+const FONT_DIR = join(ROOT, 'scripts', 'og-fonts');
 const OUT_DIR = join(ROOT, 'public', 'og');
 const BLOG_DIR = join(ROOT, 'src', 'content', 'blog');
 const SUBSTANCES_FILE = join(ROOT, 'src', 'data', 'substances.ts');
@@ -28,9 +28,10 @@ const COLORS = {
 
 // ── Fonts: satori needs static (non-variable) TTF/OTF. The self-hosted
 // woff2 files are variable fonts satori's bundled opentype parser can't
-// read, so pull static per-weight TTFs from Google's legacy CSS API
-// (a spoofed old-browser UA is what makes it hand back .ttf instead of
-// .woff2) and cache them locally to keep repeat builds offline-fast.
+// read, so these static per-weight TTFs live committed in scripts/og-fonts/
+// (keeps the build offline-safe — no dependency on Google at deploy time).
+// If a file is ever missing, fetch it from Google's legacy CSS API (a
+// spoofed old-browser UA is what makes it hand back .ttf, not .woff2).
 const FONT_SPECS = [
   { family: 'DM Sans', weight: 400 },
   { family: 'DM Sans', weight: 500 },
@@ -38,9 +39,9 @@ const FONT_SPECS = [
   { family: 'Space Grotesk', weight: 700 },
 ];
 
-async function fetchStaticTtf(family, weight) {
-  const cachePath = join(FONT_CACHE, `${family.replace(/\s+/g, '-')}-${weight}.ttf`);
-  if (existsSync(cachePath)) return readFile(cachePath);
+async function loadTtf(family, weight) {
+  const fontPath = join(FONT_DIR, `${family.replace(/\s+/g, '-')}-${weight}.ttf`);
+  if (existsSync(fontPath)) return readFile(fontPath);
 
   const cssUrl = `https://fonts.googleapis.com/css?family=${encodeURIComponent(family)}:${weight}`;
   const css = await fetch(cssUrl, {
@@ -50,8 +51,8 @@ async function fetchStaticTtf(family, weight) {
   if (!match) throw new Error(`No static TTF found for ${family} ${weight}`);
 
   const buf = Buffer.from(await fetch(match[1]).then((r) => r.arrayBuffer()));
-  await mkdir(FONT_CACHE, { recursive: true });
-  await writeFile(cachePath, buf);
+  await mkdir(FONT_DIR, { recursive: true });
+  await writeFile(fontPath, buf);
   return buf;
 }
 
@@ -59,7 +60,7 @@ async function loadFonts() {
   const fonts = await Promise.all(
     FONT_SPECS.map(async (spec) => ({
       name: spec.family,
-      data: await fetchStaticTtf(spec.family, spec.weight),
+      data: await loadTtf(spec.family, spec.weight),
       weight: spec.weight,
       style: 'normal',
     }))
