@@ -139,7 +139,7 @@ const ticks = [
         <h2 class="content-h2">How Long Does Each Psychedelic Last?</h2>
         <p class="content-p">Total duration of primary effects by route of administration. The time axis is square-root scaled so twenty-minute and two-day journeys stay comparable — each substance page has the full phase-by-phase timeline.</p>
       </div>
-      <div class="cmp-chart">
+      <div class="cmp-chart" data-reveal>
         <div class="cmp-row cmp-row--axis" aria-hidden="true">
           <span class="cmp-name"></span>
           <span class="cmp-track">
@@ -148,8 +148,8 @@ const ticks = [
             ))}
           </span>
         </div>
-        {rows.map((r) => (
-          <a class="cmp-row" href={r.url}>
+        {rows.map((r, i) => (
+          <a class="cmp-row" href={r.url} style={`--row-i: ${i}`}>
             <span class="cmp-name">{r.name}{r.multiRoute && <em>{r.route.toLowerCase()}</em>}</span>
             <span class="cmp-track">
               {ticks.map((t) => <i class="cmp-gridline" style={`left: ${t.pct}%`}></i>)}

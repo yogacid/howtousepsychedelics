@@ -32,7 +32,7 @@ const footLink =
     <div class="hud-grid">
       <div class="hud-cell">
         <div class="hud-label">The journey arc</div>
-        <div class="hud-arc">
+        <div class="hud-arc" data-reveal>
           {arc.map((p, i) => (
             <div class={`hud-arc-phase${i === currentIdx ? ' active' : i < currentIdx ? ' done' : ''}`}>
               <div class="hud-arc-bar"></div>

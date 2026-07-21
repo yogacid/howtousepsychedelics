@@ -3130,6 +3130,28 @@ footer {
   padding: 0;
   margin: 0;
   border-left: 1px solid var(--border);
+  position: relative;
+}
+
+/* Sliding active indicator — positioned by JS, rides the hairline */
+.toc-marker {
+  position: absolute;
+  left: -1px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: 0;
+}
+
+.toc-marker.on { opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .toc-marker {
+    transition:
+      top 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+      height 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+      opacity 0.2s ease;
+  }
 }
 
 .sidebar-nav li {
@@ -3153,8 +3175,6 @@ footer {
 
 .sidebar-nav a.active {
   color: var(--accent);
-  border-left: 2px solid var(--accent);
-  margin-left: -1px;
 }
 
 /* ══════════════════════════════════════════════
@@ -4960,6 +4980,44 @@ a.gloss-tip-more:hover {
 .hud-tl-seg--peak span { color: #06211f; }
 [data-theme="light"] .hud-tl-seg--peak span { color: #ffffff; }
 .hud-tl-seg--comeup span { color: #06211f; }
+
+/* ── Scroll micro-motion: data bars draw in once on first view.
+   Hidden states are gated on .reveal-ready (set by JS) and on motion
+   preference, so no-JS and reduced-motion visitors always see the
+   bars fully drawn. Transforms only — no layout shift. ── */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal] :is(.hud-tl-seg, .hud-dose-seg, .cmp-bar),
+  .reveal-ready [data-reveal] .hud-arc-bar {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .reveal-ready [data-reveal].visible :is(.hud-tl-seg, .hud-dose-seg, .cmp-bar),
+  .reveal-ready [data-reveal].visible .hud-arc-bar {
+    transform: scaleX(1);
+    transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  /* Cascade left → right */
+  .reveal-ready [data-reveal].visible :is(.hud-tl-seg, .hud-dose-seg):nth-child(2) { transition-delay: 70ms; }
+  .reveal-ready [data-reveal].visible :is(.hud-tl-seg, .hud-dose-seg):nth-child(3) { transition-delay: 140ms; }
+  .reveal-ready [data-reveal].visible :is(.hud-tl-seg, .hud-dose-seg):nth-child(4) { transition-delay: 210ms; }
+  .reveal-ready [data-reveal].visible :is(.hud-tl-seg, .hud-dose-seg):nth-child(5) { transition-delay: 280ms; }
+
+  /* Journey arc: one bar per phase */
+  .reveal-ready [data-reveal].visible .hud-arc-phase:nth-child(2) .hud-arc-bar { transition-delay: 90ms; }
+  .reveal-ready [data-reveal].visible .hud-arc-phase:nth-child(3) .hud-arc-bar { transition-delay: 180ms; }
+  .reveal-ready [data-reveal].visible .hud-arc-phase:nth-child(4) .hud-arc-bar { transition-delay: 270ms; }
+
+  /* Duration comparison: rows cascade top-down, value labels trail their bar */
+  .reveal-ready [data-reveal].visible .cmp-bar { transition-delay: calc(var(--row-i, 0) * 45ms); }
+  .reveal-ready [data-reveal] .cmp-value { opacity: 0; }
+  .reveal-ready [data-reveal].visible .cmp-value {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+    transition-delay: calc(var(--row-i, 0) * 45ms + 0.3s);
+  }
+}
 
 .hud-tl-axis {
   display: flex;

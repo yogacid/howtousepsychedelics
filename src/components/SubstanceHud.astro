@@ -79,7 +79,7 @@ const evidenceUrl = s.evidence.researchFilter
 
         {s.routes.map((route, ri) => (
           <div class="hud-timeline" data-route={route.name} style={ri > 0 ? 'display:none' : undefined}>
-            <div class="hud-tl-bar">
+            <div class="hud-tl-bar" data-reveal>
               {segments(route).map((seg) => (
                 <div class={`hud-tl-seg hud-tl-seg--${seg.kind}`} style={`flex: ${seg.flex}`}>
                   {seg.share >= 0.08 && <span>{seg.label}</span>}
@@ -102,7 +102,7 @@ const evidenceUrl = s.evidence.researchFilter
 
       <div class="hud-cell">
         <div class="hud-label">Dose spectrum <span class="hud-label-sub">{s.doses.unit}</span></div>
-        <div class="hud-dose-bar">
+        <div class="hud-dose-bar" data-reveal>
           {s.doses.bands.map((b, i) => (
             <div
               class={`hud-dose-seg${b.caution ? ' hud-dose-seg--caution' : ''}`}

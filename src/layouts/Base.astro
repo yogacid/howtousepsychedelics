@@ -191,8 +191,14 @@ const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] :
         setTimeout(function () { html.classList.remove('theme-switching'); }, 350);
       });
 
-      // View transitions replace <html> attributes — re-apply theme before paint
+      // Scroll-reveal hidden states only apply once JS is live — no-JS
+      // and reduced-motion visitors always see the bars fully drawn
+      document.documentElement.classList.add('reveal-ready');
+
+      // View transitions replace <html> attributes — re-apply theme (and
+      // the reveal-ready gate) before paint
       document.addEventListener('astro:after-swap', function () {
+        document.documentElement.classList.add('reveal-ready');
         var t = localStorage.getItem('htup-theme');
         var theme = t ? t : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
@@ -436,6 +442,27 @@ const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] :
         return nav ? nav.offsetHeight : 72;
       }
 
+      // ── Sliding TOC marker (desktop sidebar) ──
+      function moveTocMarker(link) {
+        var nav = link.closest('.sidebar-nav');
+        if (!nav) return;
+        var m = nav.querySelector('.toc-marker');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'toc-marker';
+          // Position before insertion so the first paint lands in place
+          m.style.top = link.offsetTop + 'px';
+          m.style.height = link.offsetHeight + 'px';
+          nav.appendChild(m);
+          // Force a layout so the opacity fade-in transitions from the set position
+          void m.offsetHeight;
+        } else {
+          m.style.top = link.offsetTop + 'px';
+          m.style.height = link.offsetHeight + 'px';
+        }
+        m.classList.add('on');
+      }
+
       // Fixed chrome above anchored content: nav + (on substance pages)
       // the sticky HUD strip, which is in the layout even while hidden
       function getScrollOffset() {
@@ -487,6 +514,7 @@ const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] :
         if (sidebar) {
           sidebar.querySelectorAll('a').forEach(function (l) { l.classList.remove('active'); });
           a.classList.add('active');
+          moveTocMarker(a);
         }
         window.scrollTo({ top: top, behavior: 'smooth' });
       });
@@ -517,7 +545,10 @@ const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] :
         }
         if (!activeId && spyTargets.length) activeId = spyTargets[0].id;
         Object.keys(spyLinkMap).forEach(function (k) { spyLinkMap[k].classList.remove('active'); });
-        if (spyLinkMap[activeId]) spyLinkMap[activeId].classList.add('active');
+        if (spyLinkMap[activeId]) {
+          spyLinkMap[activeId].classList.add('active');
+          moveTocMarker(spyLinkMap[activeId]);
+        }
       }
 
       window.addEventListener('scroll', function () {
@@ -758,6 +789,8 @@ const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] :
           });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(function (el) { revealObserver.observe(el); });
+        // Data bars (timelines, dose spectra, comparison chart) draw in once
+        document.querySelectorAll('[data-reveal]:not(.visible)').forEach(function (el) { revealObserver.observe(el); });
 
         // FAB availability for this page
         var fab = document.getElementById('tocFab');
