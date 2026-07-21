@@ -9,7 +9,8 @@
     "dev": "node scripts/build-search-index.mjs && node scripts/build-glossary-data.mjs && NETLIFY_DEV=1 astro dev",
     "dev:local": "astro dev --no-sync",
     "dev:netlify": "npx netlify dev",
-    "build": "node scripts/build-search-index.mjs && node scripts/build-glossary-data.mjs && astro build",
+    "og": "node scripts/generate-og-images.mjs",
+    "build": "node scripts/build-search-index.mjs && node scripts/build-glossary-data.mjs && node scripts/generate-og-images.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -17,6 +18,8 @@
     "@astrojs/netlify": "^7.0.4",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.1",
-    "astro": "^6.0.8"
+    "@resvg/resvg-js": "^2.6.2",
+    "astro": "^6.0.8",
+    "satori": "^0.28.1"
   }
 }

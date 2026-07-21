@@ -68,7 +68,7 @@ const structuredData = {
   title={`${post.data.title} — How to Use Psychedelics`}
   description={post.data.description}
   canonicalPath={`/blog/${post.id}/`}
-  ogImage={post.data.image || '/og-image.png'}
+  ogImage={`/og/blog/${post.id}.png`}
   ogType="article"
 >
   <Fragment slot="head">

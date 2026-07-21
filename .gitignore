@@ -4,6 +4,9 @@ dist/
 .astro/
 # generated search index
 public/search-index.json
+# generated OG images + font cache for the generator
+public/og/
+.font-cache/
 
 # dependencies
 node_modules/
