@@ -3439,7 +3439,7 @@ footer {
 /* ══════════════════════════════════════════════
    READINESS ASSESSMENT
    ══════════════════════════════════════════════ */
-.ra-page-wrap { padding: 0 0 5rem; }
+.ra-page-wrap { padding: var(--nav-h) 0 5rem; }
 .ra-section-inner { max-width: 700px; margin: 0 auto; padding: 0 24px; }
 .ra-section-header { text-align: center; margin-bottom: 52px; margin-top: 4.5rem; }
 .ra-eyebrow {
@@ -3755,7 +3755,7 @@ footer {
 /* ══════════════════════════════════════════════
    DRUG INTERACTION CHECKER
    ══════════════════════════════════════════════ */
-.ic-page-wrap { padding: 0 0 5rem; }
+.ic-page-wrap { padding: var(--nav-h) 0 5rem; }
 .ic-section-inner { max-width: 780px; margin: 0 auto; padding: 0 24px; }
 .ic-section-header { text-align: center; margin-bottom: 48px; margin-top: 4.5rem; }
 .ic-eyebrow {
@@ -3968,7 +3968,7 @@ footer {
 /* ══════════════════════════════════════════════
    JOURNEY PLANNER
    ══════════════════════════════════════════════ */
-.jp-page-wrap { padding: 0 0 5rem; }
+.jp-page-wrap { padding: var(--nav-h) 0 5rem; }
 .jp-section-inner { max-width: 740px; margin: 0 auto; padding: 0 24px; }
 .jp-section-header { text-align: center; margin-bottom: 36px; margin-top: 4.5rem; }
 .jp-eyebrow {
