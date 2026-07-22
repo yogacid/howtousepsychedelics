@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Serverless endpoints are POST-only APIs, not pages — crawling them
+# returns 405 and shows up in Search Console as a 4xx indexing issue.
+Disallow: /.netlify/
+
 Sitemap: https://howtousepsychedelics.com/sitemap-index.xml

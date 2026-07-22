@@ -10,6 +10,60 @@
   status = 301
   force = true
 
+# ── Legacy URLs (retired paths Google still crawls; each 404s today) ──
+# Both slash variants are listed so the rule matches regardless of where
+# Netlify's trailing-slash normalisation runs in the redirect pipeline.
+
+# Old homepage path
+[[redirects]]
+  from = "/home"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/home/"
+  to = "/"
+  status = 301
+
+# Retired philosophy page → conceptual hub
+[[redirects]]
+  from = "/philosophy"
+  to = "/foundations/"
+  status = 301
+[[redirects]]
+  from = "/philosophy/"
+  to = "/foundations/"
+  status = 301
+
+# Old blog slug → current post
+[[redirects]]
+  from = "/blog/set-and-setting-checklist"
+  to = "/blog/a-set-and-setting-checklist-for-your-next-psychedelic-session/"
+  status = 301
+[[redirects]]
+  from = "/blog/set-and-setting-checklist/"
+  to = "/blog/a-set-and-setting-checklist-for-your-next-psychedelic-session/"
+  status = 301
+
+# Retired post → closest equivalent content (intention setting)
+[[redirects]]
+  from = "/blog/setting-an-intention-for-a-psychedelic-journey"
+  to = "/preparation/"
+  status = 301
+[[redirects]]
+  from = "/blog/setting-an-intention-for-a-psychedelic-journey/"
+  to = "/preparation/"
+  status = 301
+
+# Retired default post → blog index
+[[redirects]]
+  from = "/blog/welcome"
+  to = "/blog/"
+  status = 301
+[[redirects]]
+  from = "/blog/welcome/"
+  to = "/blog/"
+  status = 301
+
 # Custom 404
 [[redirects]]
   from = "/*"
