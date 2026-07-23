@@ -44,12 +44,13 @@
    DESIGN TOKENS
    ══════════════════════════════════════════════ */
 :root {
-  /* Backgrounds — richer, true dark */
-  --bg:             #0a0a0a;
-  --bg-surface:     #141414;
-  --bg-card:        #1a1a1a;
-  --bg-card-hover:  #222222;
-  --bg-elevated:    #1e1e1e;
+  /* Backgrounds — dark with a faint teal-green undertone (brand blood in the
+     neutrals, not a visible tint). Keeps the canvas from reading as flat void. */
+  --bg:             #0a0c0b;
+  --bg-surface:     #131614;
+  --bg-card:        #191c1a;
+  --bg-card-hover:  #212523;
+  --bg-elevated:    #1d211f;
 
   /* Text — high contrast */
   --text-primary:   #f5f5f5;
@@ -133,7 +134,14 @@ html[data-astro-transition] { scroll-behavior: auto; }
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
+  background-color: var(--bg);
+  /* Ambient top-light — a single soft wash lit from above the fold, giving the
+     canvas depth and a focal lift behind the hero (not floating orbs). Confined
+     to the top ~85vh, so everything below settles to the plain tinted base. */
+  background-image: radial-gradient(125% 90% at 50% 0%, rgba(88,204,190,0.06), rgba(88,204,190,0) 68%);
+  background-repeat: no-repeat;
+  background-size: 100% 85vh;
+  background-position: center top;
   color: var(--text-primary);
   font-weight: 400;
   line-height: 1.6;
@@ -141,9 +149,34 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Light mode needs a stronger, slightly deeper tint — a cool teal wash gets
+   swallowed by the bright cream, so it's lifted ~2.3× vs dark to read the same
+   "lit from above" feel (cool top settling into the warm cream base). */
+[data-theme="light"] body {
+  background-image: radial-gradient(125% 90% at 50% 0%, rgba(26,158,148,0.14), rgba(26,158,148,0) 68%);
+}
+
 a { text-decoration: none; color: inherit; }
 
 h1, h2, h3 { text-wrap: balance; }
+
+/* Film grain — a whisper of tactile noise over the whole canvas so the flat
+   background reads as a considered surface, not a digital void. Fixed, inert,
+   blends into the backdrop; static (no perf cost). Tuned faint per theme. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.04;
+}
+[data-theme="light"] body::after {
+  mix-blend-mode: multiply;
+  opacity: 0.05;
+}
 p { text-wrap: pretty; }
 
 /* ── Skip link (keyboard users) ── */
