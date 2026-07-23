@@ -145,7 +145,11 @@ const evidenceUrl = s.evidence.researchFilter
         ) : (
           <>
             <div class="hud-tile-v">Limited research</div>
-            <div class="hud-tile-s">{s.evidence.note}</div>
+            <div class="hud-tile-s">
+              {evidenceUrl && <a href={evidenceUrl}>View studies →</a>}
+              {evidenceUrl && s.evidence.note && ' · '}
+              {s.evidence.note}
+            </div>
           </>
         )}
       </div>

@@ -8,6 +8,12 @@ const OUT_FILE = join(import.meta.dirname, '..', 'public', 'search-index.json');
 
 const SKIP = new Set(['404.astro']);
 
+// Pages whose <h2>s are structural rather than topical. The glossary's are
+// single letters, which would surface in the palette as "Psychedelic Glossary
+// › B" — useless. These get a page-level entry here and richer per-item
+// entries further down instead.
+const SKIP_SECTIONS = new Set(['glossary.astro']);
+
 function stripHtml(html) {
   return html
     .replace(/<[^>]+>/g, ' ')
@@ -131,7 +137,7 @@ async function buildIndex() {
       text: (meta.subtitle + ' ' + pageDesc).trim().slice(0, 400),
     });
 
-    const sections = extractSections(html);
+    const sections = SKIP_SECTIONS.has(file) ? [] : extractSections(html);
     for (const sec of sections) {
       index.push({
         page: meta.title,
@@ -176,6 +182,35 @@ async function buildIndex() {
         text: ('Duration comparison of all psychedelics: ' + totals.join(' · ')).slice(0, 400),
       });
     }
+  }
+
+  // ── Index glossary terms individually ──
+  // Same term regex as build-glossary-data.mjs, so the two stay in step.
+  const GLOSSARY_FILE = join(PAGES_DIR, 'glossary.astro');
+  if (existsSync(GLOSSARY_FILE)) {
+    const gSrc = await readFile(GLOSSARY_FILE, 'utf-8');
+    const gTitleM = gSrc.match(/class="content-hero-title"[^>]*>([^<]+)</);
+    const gTitle = gTitleM ? stripHtml(gTitleM[1]) : 'Psychedelic Glossary';
+    const termRe = /<div class="glossary-term" id="([^"]+)">\s*<h3 class="glossary-term-name"><a[^>]*>([\s\S]*?)<\/a><\/h3>\s*<p class="glossary-term-def">([\s\S]*?)<\/p>/g;
+    let gm;
+    let termCount = 0;
+    while ((gm = termRe.exec(gSrc)) !== null) {
+      const [, id, rawName, rawDef] = gm;
+      index.push({
+        page: gTitle,
+        url: '/glossary/',
+        section: stripHtml(rawName),
+        hash: '#' + id,
+        type: 'Glossary',
+        text: stripHtml(rawDef).slice(0, 400),
+      });
+      termCount++;
+    }
+    if (!termCount) {
+      console.error('build-search-index: no glossary terms matched — check glossary.astro markup');
+      process.exit(1);
+    }
+    console.log(`build-search-index: indexed ${termCount} glossary terms`);
   }
 
   const RESEARCH_FILE = join(PAGES_DIR, 'research.astro');

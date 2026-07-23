@@ -407,6 +407,7 @@ export const substances: Record<string, Substance> = {
     evidence: {
       items: [{ condition: 'Modern clinical trials', strength: 1 }],
       note: 'long history of ceremonial use; little modern clinical research',
+      researchFilter: 'Mescaline',
     },
     interactions: {
       items: [{ name: 'MAOIs', danger: true }, { name: 'SSRIs' }, { name: 'Stimulants' }],
@@ -595,6 +596,7 @@ export const substances: Record<string, Substance> = {
         { condition: 'Nausea & appetite', strength: 3 },
       ],
       note: 'large but uneven evidence base',
+      researchFilter: 'Cannabis',
     },
     interactions: {
       items: [{ name: 'Psychedelics (amplifies)' }, { name: 'Alcohol' }, { name: 'Heart conditions' }],
@@ -705,6 +707,7 @@ export const substances: Record<string, Substance> = {
     evidence: {
       items: [],
       note: 'κ-opioid pharmacology of research interest; no clinical trials',
+      researchFilter: 'Salvia',
     },
     interactions: {
       items: [{ name: 'Few known pharmacological interactions' }, { name: 'Environment is the hazard' }],
