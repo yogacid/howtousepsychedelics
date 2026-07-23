@@ -88,7 +88,6 @@ export const phases: Record<string, JourneyPhase> = {
     },
     tools: [
       { label: 'Integration articles', url: '/blog/' },
-      { label: 'The Essential Guide', url: '/guide/' },
     ],
   },
 };

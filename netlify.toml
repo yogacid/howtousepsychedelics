@@ -54,6 +54,16 @@
   to = "/preparation/"
   status = 301
 
+# Retired dosage post → the psilocybin guide covers this content now
+[[redirects]]
+  from = "/blog/mushroom-dosage-guide-psilocybin-doses-and-effects"
+  to = "/psilocybin/"
+  status = 301
+[[redirects]]
+  from = "/blog/mushroom-dosage-guide-psilocybin-doses-and-effects/"
+  to = "/psilocybin/"
+  status = 301
+
 # Retired default post → blog index
 [[redirects]]
   from = "/blog/welcome"

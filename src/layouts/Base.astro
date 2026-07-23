@@ -16,6 +16,8 @@ interface Props {
   ogType?: string;
   hideProgress?: boolean;
   hideEmailPopup?: boolean;
+  /** Retired/parked pages: keep the URL working but out of Google's index. */
+  noindex?: boolean;
 }
 
 const {
@@ -26,6 +28,7 @@ const {
   ogType = 'website',
   hideProgress = false,
   hideEmailPopup = false,
+  noindex = false,
 } = Astro.props;
 
 const baseUrl = 'https://howtousepsychedelics.com';
@@ -43,6 +46,7 @@ const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] :
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{title}</title>
   <meta name="description" content={description}/>
+  {noindex && <meta name="robots" content="noindex, follow"/>}
   <link rel="canonical" href={canonicalUrl}/>
   <meta property="og:site_name" content="How to Use Psychedelics"/>
   <meta property="og:type" content={ogType}/>
