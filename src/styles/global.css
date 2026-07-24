@@ -44,13 +44,12 @@
    DESIGN TOKENS
    ══════════════════════════════════════════════ */
 :root {
-  /* Backgrounds — dark with a faint teal-green undertone (brand blood in the
-     neutrals, not a visible tint). Keeps the canvas from reading as flat void. */
-  --bg:             #0a0c0b;
-  --bg-surface:     #131614;
-  --bg-card:        #191c1a;
-  --bg-card-hover:  #212523;
-  --bg-elevated:    #1d211f;
+  /* Backgrounds — richer, true dark */
+  --bg:             #0a0a0a;
+  --bg-surface:     #141414;
+  --bg-card:        #1a1a1a;
+  --bg-card-hover:  #222222;
+  --bg-elevated:    #1e1e1e;
 
   /* Text — high contrast */
   --text-primary:   #f5f5f5;
@@ -135,13 +134,6 @@ html[data-astro-transition] { scroll-behavior: auto; }
 body {
   font-family: 'DM Sans', sans-serif;
   background-color: var(--bg);
-  /* Ambient top-light — a single soft wash lit from above the fold, giving the
-     canvas depth and a focal lift behind the hero (not floating orbs). Confined
-     to the top ~85vh, so everything below settles to the plain tinted base. */
-  background-image: radial-gradient(125% 90% at 50% 0%, rgba(88,204,190,0.06), rgba(88,204,190,0) 68%);
-  background-repeat: no-repeat;
-  background-size: 100% 85vh;
-  background-position: center top;
   color: var(--text-primary);
   font-weight: 400;
   line-height: 1.6;
@@ -149,10 +141,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Ambient top-light — a single soft wash lit from above the fold, giving the
+   canvas depth and a focal lift behind the hero (not floating orbs). Confined
+   to the top ~85vh, so everything below settles to the plain base. Homepage only. */
+body.home {
+  background-image: radial-gradient(125% 90% at 50% 0%, rgba(88,204,190,0.06), rgba(88,204,190,0) 68%);
+  background-repeat: no-repeat;
+  background-size: 100% 85vh;
+  background-position: center top;
+}
+
 /* Light mode needs a stronger, slightly deeper tint — a cool teal wash gets
    swallowed by the bright cream, so it's lifted ~2.3× vs dark to read the same
    "lit from above" feel (cool top settling into the warm cream base). */
-[data-theme="light"] body {
+[data-theme="light"] body.home {
   background-image: radial-gradient(125% 90% at 50% 0%, rgba(26,158,148,0.14), rgba(26,158,148,0) 68%);
 }
 
@@ -160,10 +162,10 @@ a { text-decoration: none; color: inherit; }
 
 h1, h2, h3 { text-wrap: balance; }
 
-/* Film grain — a whisper of tactile noise over the whole canvas so the flat
+/* Film grain — a whisper of tactile noise over the homepage canvas so the flat
    background reads as a considered surface, not a digital void. Fixed, inert,
-   blends into the backdrop; static (no perf cost). Tuned faint per theme. */
-body::after {
+   blends into the backdrop; static (no perf cost). Homepage only. */
+body.home::after {
   content: "";
   position: fixed;
   inset: 0;
@@ -173,7 +175,7 @@ body::after {
   mix-blend-mode: overlay;
   opacity: 0.04;
 }
-[data-theme="light"] body::after {
+[data-theme="light"] body.home::after {
   mix-blend-mode: multiply;
   opacity: 0.05;
 }
@@ -447,20 +449,22 @@ nav.scrolled {
   border: 1.5px solid var(--border-hover);
   color: var(--text-secondary);
   background: transparent;
-  transition: background-position 0.55s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   white-space: nowrap;
   cursor: pointer;
   text-decoration: none;
 }
 
+/* Quiet, tactile hover to match the hero secondary button — faint fill and a
+   brighter border/text, no brand color or animated gradient text. */
 .nav-cta-outline:hover {
-  border-color: var(--accent);
-  background: linear-gradient(135deg, #3ec9bf 0%, #7dde55 40%, #3ec9bf 70%, #5cb84a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 300% auto;
-  animation: accentShimmer 4s ease-in-out infinite;
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+  background-color: rgba(255,255,255,0.05);
+}
+
+[data-theme="light"] .nav-cta-outline:hover {
+  background-color: rgba(0,0,0,0.04);
 }
 
 .nav-cta-primary {
@@ -1016,7 +1020,7 @@ nav.scrolled {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   border-radius: 100px;
-  transition: background-position 0.55s ease, box-shadow 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+  transition: background-position 0.55s ease, background-color 0.25s ease, box-shadow 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
   cursor: pointer;
   border: none;
 }
@@ -1041,14 +1045,17 @@ nav.scrolled {
   border: 1.5px solid var(--border-hover);
 }
 
+/* Quiet, tactile hover — a faint surface fill, brighter border, subtle lift.
+   No brand color, no animated gradient text: the secondary button stays
+   secondary and lets the primary CTA keep the only shimmer in the hero. */
 .btn-outline:hover {
-  border-color: var(--accent);
-  background: linear-gradient(135deg, #3ec9bf 0%, #7dde55 40%, #3ec9bf 70%, #5cb84a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 300% auto;
-  animation: accentShimmer 4s ease-in-out infinite;
+  border-color: var(--text-secondary);
+  background-color: rgba(255,255,255,0.05);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .btn-outline:hover {
+  background-color: rgba(0,0,0,0.04);
 }
 
 /* ══════════════════════════════════════════════
@@ -5164,6 +5171,20 @@ a.gloss-tip-more:hover {
 
 .hud-tile-s a { color: var(--accent); font-weight: 600; }
 .hud-tile-note { display: block; }
+
+/* Arrow links (View studies →, full table →, etc.) always sit on their own
+   line beneath the tile's secondary text — never inline with it. The arrow is
+   glued to its last word (non-breaking space in the markup) so it can never
+   orphan onto its own line; the text still wraps gracefully rather than clip. */
+.hud-tile-link {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+.hud-tile-link:hover { text-decoration: underline; }
 
 .hud-tiles--3 { grid-template-columns: repeat(3, 1fr); }
 .hud-tile-v a { color: var(--accent); }

@@ -18,6 +18,8 @@ interface Props {
   hideEmailPopup?: boolean;
   /** Retired/parked pages: keep the URL working but out of Google's index. */
   noindex?: boolean;
+  /** Extra class on <body> for page-scoped styling (e.g. "home"). */
+  bodyClass?: string;
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   hideProgress = false,
   hideEmailPopup = false,
   noindex = false,
+  bodyClass = '',
 } = Astro.props;
 
 const baseUrl = 'https://howtousepsychedelics.com';
@@ -119,7 +122,7 @@ const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] :
 
   <slot name="head" />
 </head>
-<body>
+<body class={bodyClass}>
 
   <!-- Skip link for keyboard users -->
   <a class="skip-link" href="#main-content">Skip to content</a>

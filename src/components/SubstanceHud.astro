@@ -137,19 +137,15 @@ const evidenceUrl = s.evidence.researchFilter
             </div>
             <div class="hud-tile-s">
               {s.evidence.items.slice(1).map((e) => `${e.condition} ${'●'.repeat(e.strength)}${'○'.repeat(5 - e.strength)}`).join(' · ')}
-              {s.evidence.items.length > 1 && evidenceUrl && ' · '}
-              {evidenceUrl && <a href={evidenceUrl}>View studies →</a>}
               {s.evidence.note && <span class="hud-tile-note"> {s.evidence.note}</span>}
             </div>
+            {evidenceUrl && <a class="hud-tile-link" href={evidenceUrl}>View studies&nbsp;→</a>}
           </>
         ) : (
           <>
             <div class="hud-tile-v">Limited research</div>
-            <div class="hud-tile-s">
-              {evidenceUrl && <a href={evidenceUrl}>View studies →</a>}
-              {evidenceUrl && s.evidence.note && ' · '}
-              {s.evidence.note}
-            </div>
+            {s.evidence.note && <div class="hud-tile-s">{s.evidence.note}</div>}
+            {evidenceUrl && <a class="hud-tile-link" href={evidenceUrl}>View studies&nbsp;→</a>}
           </>
         )}
       </div>
@@ -165,7 +161,7 @@ const evidenceUrl = s.evidence.researchFilter
           ))}
         </div>
         {s.ssri && <div class="hud-tile-s"><b>On antidepressants?</b> {s.ssri}.</div>}
-        <div class="hud-tile-s"><a href="/checker/">Run the interaction checker →</a></div>
+        <a class="hud-tile-link" href="/checker/">Run the interaction checker&nbsp;→</a>
       </div>
 
       <div class="hud-tile">
@@ -177,7 +173,8 @@ const evidenceUrl = s.evidence.researchFilter
       <div class="hud-tile">
         <div class="hud-tile-k">Legal status</div>
         <div class="hud-tile-v">{s.legal.value}</div>
-        <div class="hud-tile-s">{s.legal.sub} · <a href="/law/#law-table">full table →</a></div>
+        <div class="hud-tile-s">{s.legal.sub}</div>
+        <a class="hud-tile-link" href="/law/#law-table">full table&nbsp;→</a>
       </div>
     </div>
 
