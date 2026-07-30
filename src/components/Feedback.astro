@@ -1,0 +1,549 @@
+---
+// Page feedback — two entry points, one Netlify form ("page-feedback"):
+//   1. Slim strips injected after selected .content-section blocks, which open
+//      the modal tagged with the section they came from.
+//   2. An end-of-page disclosure holding a real, no-JS-submittable form.
+// Both forms share the Netlify form name, so submissions land in one bucket
+// exactly as they already do across the 40-odd pages that render this.
+const path = Astro.url.pathname;
+---
+
+<!-- End-of-page disclosure -->
+<details class="feedback">
+  <summary class="feedback-summary">
+    <span class="feedback-label">Improve this page</span>
+    <span class="feedback-prompt">Spot an error, or something missing? Tell us &rarr;</span>
+  </summary>
+
+  <div class="feedback-panel" data-feedback-body>
+    <div data-feedback-formwrap>
+      <form
+        name="page-feedback"
+        method="POST"
+        action="/"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        data-feedback-form
+      >
+        <input type="hidden" name="form-name" value="page-feedback" />
+        <input type="hidden" name="page" value={path} />
+        <input type="hidden" name="section" value="(whole page)" />
+        <p class="feedback-hp">
+          <label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+
+        <label class="feedback-field-label" for="feedbackMessage">What should we fix or add?</label>
+        <textarea
+          id="feedbackMessage"
+          name="message"
+          class="feedback-textarea"
+          rows="4"
+          required
+          placeholder="Corrections, sources we've missed, anything that reads wrong or unclear."></textarea>
+
+        <label class="feedback-field-label" for="feedbackEmail">Email <span class="feedback-optional">(optional — only if you want a reply)</span></label>
+        <input type="email" id="feedbackEmail" name="email" class="feedback-input" autocomplete="email" />
+
+        <div class="feedback-actions">
+          <button type="submit" class="feedback-btn" data-feedback-btn>Send feedback</button>
+          <p class="feedback-error" data-feedback-error style="display:none;"></p>
+        </div>
+      </form>
+
+      <p class="feedback-note">
+        Reviewed by a human, but not monitored in real time. If you're having a hard time right now
+        or need urgent support, please see our <a href="/crisis/">crisis resources</a>.
+      </p>
+    </div>
+
+    <div class="feedback-success" data-feedback-success style="display:none;">
+      <p class="feedback-success-title">Thank you — we've got it.</p>
+      <p class="feedback-success-body">Every correction makes this resource more trustworthy for the next person who reads it.</p>
+    </div>
+  </div>
+</details>
+
+<!-- Modal opened by the injected section strips -->
+<div class="feedback-modal" id="feedbackModal" aria-hidden="true">
+  <div class="feedback-modal-backdrop" data-feedback-close></div>
+  <div class="feedback-modal-card" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
+    <button class="feedback-modal-close" data-feedback-close aria-label="Close">&times;</button>
+
+    <div data-feedback-body>
+      <div data-feedback-formwrap>
+        <span class="feedback-label">Improve this page</span>
+        <h3 class="feedback-modal-title" id="feedbackModalTitle">What should we fix or add?</h3>
+        <p class="feedback-modal-context" data-feedback-context></p>
+
+        <!-- Submits by fetch only; Netlify matches it to the registered
+             "page-feedback" form via the form-name field, so this one does
+             not need (or want) a second data-netlify registration. -->
+        <form name="page-feedback" method="POST" action="/" data-feedback-form>
+          <input type="hidden" name="form-name" value="page-feedback" />
+          <input type="hidden" name="page" value={path} />
+          <input type="hidden" name="section" value="" data-feedback-section-field />
+          <p class="feedback-hp">
+            <label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
+
+          <textarea
+            name="message"
+            class="feedback-textarea"
+            rows="4"
+            required
+            data-feedback-message
+            placeholder="Corrections, sources we've missed, anything that reads wrong or unclear."></textarea>
+
+          <label class="feedback-field-label" for="feedbackModalEmail">Email <span class="feedback-optional">(optional — only if you want a reply)</span></label>
+          <input type="email" id="feedbackModalEmail" name="email" class="feedback-input" autocomplete="email" />
+
+          <div class="feedback-actions">
+            <button type="submit" class="feedback-btn" data-feedback-btn>Send feedback</button>
+            <p class="feedback-error" data-feedback-error style="display:none;"></p>
+          </div>
+        </form>
+
+        <p class="feedback-note">
+          Reviewed by a human, but not monitored in real time. If you're having a hard time right now
+          or need urgent support, please see our <a href="/crisis/">crisis resources</a>.
+        </p>
+      </div>
+
+      <div class="feedback-success" data-feedback-success style="display:none;">
+        <p class="feedback-success-title">Thank you — we've got it.</p>
+        <p class="feedback-success-body">Every correction makes this resource more trustworthy for the next person who reads it.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* ── PAGE FEEDBACK ────────────────────────────────────────── */
+  .feedback {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 2rem 1.5rem;
+  }
+
+  .feedback-summary {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+    padding: 0.85rem 0;
+    border-top: 1px solid var(--border);
+    cursor: pointer;
+    list-style: none;
+    transition: border-color 0.2s ease;
+  }
+  .feedback-summary::-webkit-details-marker { display: none; }
+  .feedback-summary:hover { border-top-color: var(--border-hover); }
+
+  .feedback-label {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .feedback-prompt {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+  }
+  .feedback-summary:hover .feedback-prompt { color: var(--text-secondary); }
+  .feedback[open] .feedback-prompt { display: none; }
+
+  .feedback-panel {
+    padding: 0.5rem 0 0.25rem;
+    max-width: 620px;
+  }
+
+  .feedback-field-label {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+  }
+  .feedback-optional { font-weight: 400; color: var(--text-muted); }
+
+  .feedback-textarea,
+  .feedback-input {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    margin-bottom: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    transition: border-color 0.2s ease;
+  }
+  .feedback-textarea { resize: vertical; min-height: 5.5rem; }
+  .feedback-textarea::placeholder,
+  .feedback-input::placeholder { color: var(--text-muted); }
+  .feedback-textarea:focus,
+  .feedback-input:focus { outline: none; border-color: var(--accent); }
+
+  .feedback-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .feedback-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .feedback-btn {
+    padding: 0.6rem 1.4rem;
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .feedback-btn:hover:not(:disabled) { background: var(--accent); color: var(--bg); }
+  .feedback-btn:disabled { opacity: 0.55; cursor: default; }
+
+  .feedback-error {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--coral);
+  }
+
+  .feedback-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-top: 0.9rem;
+  }
+  .feedback-note a { color: var(--text-secondary); text-decoration: underline; }
+  .feedback-note a:hover { color: var(--accent); }
+
+  .feedback-success { padding: 0.35rem 0 0.5rem; }
+  .feedback-success-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+  .feedback-success-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    /* Even line lengths instead of a short orphan last line. Degrades to
+       normal wrapping where unsupported. */
+    text-wrap: balance;
+  }
+  .feedback-success-title { text-wrap: balance; }
+
+  /* ── In-flow section card ─────────────────────────────────────
+     A property-for-property clone of .email-cta-box (global.css) —
+     same padding, margin, radius, gap, type scale and button metrics.
+     Hue is the only intentional difference: sky in place of the
+     teal/green accent. Sky carries no severity meaning in this palette
+     (coral = error, amber = caution), so a contribution prompt reads as
+     meta-UI rather than a warning. Keep the two in step if either is
+     restyled. */
+  .feedback-card {
+    position: relative;
+    padding: 1.75rem 2rem;
+    margin: 2.5rem 0;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, rgba(96,168,232,0.08) 0%, rgba(96,168,232,0.03) 100%);
+    border: 1px solid rgba(96,168,232,0.16);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    overflow: hidden;
+  }
+
+  [data-theme="light"] .feedback-card {
+    background: linear-gradient(135deg, rgba(40,120,192,0.08) 0%, rgba(40,120,192,0.03) 100%);
+    border-color: rgba(40,120,192,0.16);
+  }
+
+  .feedback-card-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sky);
+  }
+
+  .feedback-card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.25;
+  }
+
+  .feedback-card-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.83rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 520px;
+  }
+  .feedback-card-desc em {
+    font-style: normal;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .feedback-card-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 0.45rem;
+    padding: 0.7rem 1.6rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    /* <button> defaults to text-align:center; .email-cta-btn is an <a>, which
+       defaults to start. Match it so wrapped labels align the same way. */
+    text-align: start;
+    border: none;
+    border-radius: 100px;
+    background: linear-gradient(135deg, #4a94d8 0%, #60a8e8 50%, #4a94d8 100%);
+    background-size: 300% 100%;
+    background-position: 0% center;
+    color: #02101c;
+    cursor: pointer;
+    transition: box-shadow 0.25s ease;
+    margin-top: 0.25rem;
+  }
+
+  .feedback-card-btn:hover {
+    animation: accentShimmer 4s ease-in-out infinite;
+    box-shadow: 0 6px 20px rgba(96,168,232,0.22);
+  }
+
+  /* ── Modal ────────────────────────────────────────────────── */
+  .feedback-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+  }
+  .feedback-modal.open { display: flex; }
+
+  .feedback-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .feedback-modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 1.75rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .feedback-modal-close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.85rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .feedback-modal-close:hover { color: var(--text-primary); }
+
+  .feedback-modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0.35rem 0 0.3rem;
+  }
+
+  .feedback-modal-context {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.9rem;
+  }
+  .feedback-modal-context strong { color: var(--text-primary); font-weight: 600; }
+
+  [data-theme="light"] .feedback-modal-card {
+    background: #fff;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+  }
+
+  @media (max-width: 900px) {
+    .feedback { padding: 0 1.25rem 1.25rem; }
+  }
+
+  /* No mobile padding override here on purpose: global.css:2129 tries to give
+     .email-cta-box 1.5rem under 600px, but the base rule at global.css:2589
+     comes later at equal specificity and wins, so that card keeps 1.75rem 2rem
+     at every width. Matching the rendered behaviour keeps the two cards
+     identical; if that override is ever revived, add the same one here. */
+</style>
+
+<script is:inline>
+  (function () {
+    // ── Injection: runs per page (content is replaced on ClientRouter swaps) ──
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function injectCards() {
+      var sections = document.querySelectorAll('.content-page .content-section');
+      if (sections.length < 4) return; // too short to carry a card
+
+      var count = Math.min(3, Math.floor(sections.length / 4));
+      for (var i = 1; i <= count; i++) {
+        var idx = Math.round((i / (count + 1)) * sections.length) - 1;
+        var section = sections[idx];
+        if (!section || section.querySelector('.feedback-card')) continue;
+
+        var heading = section.querySelector('h2');
+        var title = heading ? heading.textContent.trim() : '';
+        var safe = escapeHtml(title);
+
+        var card = document.createElement('div');
+        card.className = 'feedback-card';
+        // div (not p) for the text rows, matching .email-cta-box — .article-body p
+        // is more specific than a single card class and would otherwise win.
+        card.innerHTML =
+          '<div class="feedback-card-label">Help us get this right</div>' +
+          '<div class="feedback-card-title">Spot an error in this section?</div>' +
+          '<div class="feedback-card-desc">This is a living document, corrected as the evidence changes. ' +
+          (title
+            ? 'If <em>' + safe + '</em> contains a mistake, an outdated figure, or a claim missing its source, tell us.'
+            : 'If something here is wrong, outdated, or missing a source, tell us.') +
+          ' Every report is read by a human.</div>' +
+          '<button type="button" class="feedback-card-btn" data-feedback-open="' + safe + '">' +
+          'Send feedback &rarr;</button>';
+        section.appendChild(card);
+      }
+    }
+
+    document.addEventListener('astro:page-load', injectCards);
+    if (document.readyState !== 'loading') injectCards();
+    else document.addEventListener('DOMContentLoaded', injectCards);
+
+    // ── Behaviour: bound once per document, delegated ──
+    if (window.__htupFeedbackBound) return;
+    window.__htupFeedbackBound = true;
+
+    function closeModal() {
+      var modal = document.getElementById('feedbackModal');
+      if (!modal) return;
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', function (e) {
+      var opener = e.target.closest('[data-feedback-open]');
+      if (opener) {
+        var modal = document.getElementById('feedbackModal');
+        if (!modal) return;
+        var title = opener.getAttribute('data-feedback-open');
+        modal.querySelector('[data-feedback-section-field]').value = title || '(whole page)';
+        var context = modal.querySelector('[data-feedback-context]');
+        context.innerHTML = title
+          ? 'About the section <strong>' + title.replace(/</g, '&lt;') + '</strong>'
+          : '';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        setTimeout(function () {
+          modal.querySelector('[data-feedback-message]').focus();
+        }, 60);
+        return;
+      }
+      if (e.target.closest('[data-feedback-close]')) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    document.addEventListener('submit', function (e) {
+      var form = e.target;
+      if (!form || !form.hasAttribute('data-feedback-form')) return;
+      e.preventDefault();
+
+      var body = form.closest('[data-feedback-body]');
+      var btn = form.querySelector('[data-feedback-btn]');
+      var errorEl = form.querySelector('[data-feedback-error]');
+      var formWrap = body.querySelector('[data-feedback-formwrap]');
+      var successWrap = body.querySelector('[data-feedback-success]');
+
+      errorEl.style.display = 'none';
+
+      if (!form.message.value.trim()) {
+        errorEl.textContent = 'Please tell us what to fix.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(form)).toString(),
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('bad status');
+          formWrap.style.display = 'none';
+          successWrap.style.display = 'block';
+        })
+        .catch(function () {
+          errorEl.textContent = 'Could not send — please try again in a moment.';
+          errorEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Send feedback';
+        });
+    });
+  })();
+</script>
