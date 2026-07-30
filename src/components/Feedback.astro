@@ -132,13 +132,13 @@ const path = Astro.url.pathname;
     -webkit-appearance: none;
     transition: border-color 0.2s ease;
   }
-  .feedback-select:focus { outline: none; border-color: var(--accent); }
+  .feedback-select:focus { outline: none; border-color: var(--sky); }
 
   .feedback-textarea { resize: vertical; min-height: 5.5rem; }
   .feedback-textarea::placeholder,
   .feedback-input::placeholder { color: var(--text-muted); }
   .feedback-textarea:focus,
-  .feedback-input:focus { outline: none; border-color: var(--accent); }
+  .feedback-input:focus { outline: none; border-color: var(--sky); }
 
   .feedback-hp {
     position: absolute;
@@ -155,12 +155,14 @@ const path = Astro.url.pathname;
     flex-wrap: wrap;
   }
 
+  /* Sky throughout the modal, matching the cards that open it and the
+     "Help us get this right" eyebrow — the feature reads as one colour. */
   .feedback-btn {
     padding: 0.6rem 1.4rem;
     background: transparent;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--sky);
     border-radius: 100px;
-    color: var(--accent);
+    color: var(--sky);
     font-family: 'DM Sans', sans-serif;
     font-size: 0.7rem;
     font-weight: 700;
@@ -169,7 +171,7 @@ const path = Astro.url.pathname;
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease;
   }
-  .feedback-btn:hover:not(:disabled) { background: var(--accent); color: var(--bg); }
+  .feedback-btn:hover:not(:disabled) { background: var(--sky); color: var(--bg); }
   .feedback-btn:disabled { opacity: 0.55; cursor: default; }
 
   .feedback-error {
@@ -186,7 +188,7 @@ const path = Astro.url.pathname;
     margin-top: 0.9rem;
   }
   .feedback-note a { color: var(--text-secondary); text-decoration: underline; }
-  .feedback-note a:hover { color: var(--accent); }
+  .feedback-note a:hover { color: var(--sky); }
 
   .feedback-success { padding: 0.35rem 0 0.5rem; }
   .feedback-success-title {
@@ -361,15 +363,49 @@ const path = Astro.url.pathname;
       return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    // Cards append to the end of a section, so the very next thing on the page
+    // is whatever follows that section. .article-body interleaves sections with
+    // .email-cta-box and a trailing .related-strip — landing directly above
+    // either stacks two cards back to back. Only sections followed by another
+    // section are usable.
+    function usable(section) {
+      var next = section.nextElementSibling;
+      return !!(next && next.classList && next.classList.contains('content-section'));
+    }
+
+    // Nearest usable, unused section to the ideal position, searching outward.
+    function findSlot(sections, ideal, taken) {
+      for (var d = 0; d < sections.length; d++) {
+        var tries = d === 0 ? [ideal] : [ideal + d, ideal - d];
+        for (var k = 0; k < tries.length; k++) {
+          var j = tries[k];
+          if (j < 0 || j >= sections.length) continue;
+          if (taken.indexOf(j) > -1) continue;
+          if (!usable(sections[j])) continue;
+          if (sections[j].querySelector('.feedback-card')) continue;
+          return j;
+        }
+      }
+      return -1;
+    }
+
     function injectCards() {
+      // Runs more than once per page (astro:page-load plus any re-entry), and
+      // findSlot deliberately routes around carded sections — so without this
+      // a second pass would place a second full set rather than no-op.
+      if (document.querySelector('.content-page .feedback-card')) return;
+
       var sections = document.querySelectorAll('.content-page .content-section');
       if (sections.length < 4) return; // too short to carry a card
 
       var count = Math.min(3, Math.floor(sections.length / 4));
+      var taken = [];
       for (var i = 1; i <= count; i++) {
-        var idx = Math.round((i / (count + 1)) * sections.length) - 1;
+        var ideal = Math.round((i / (count + 1)) * sections.length) - 1;
+        var idx = findSlot(sections, ideal, taken);
+        if (idx === -1) continue; // no room left that doesn't collide
+        taken.push(idx);
         var section = sections[idx];
-        if (!section || section.querySelector('.feedback-card')) continue;
 
         var heading = section.querySelector('h2');
         var title = heading ? heading.textContent.trim() : '';
@@ -395,9 +431,15 @@ const path = Astro.url.pathname;
       }
     }
 
-    document.addEventListener('astro:page-load', injectCards);
-    if (document.readyState !== 'loading') injectCards();
-    else document.addEventListener('DOMContentLoaded', injectCards);
+    // Base.astro's initPageContent injects the "Get the Guide" cards on the same
+    // astro:page-load event, at the same quarter positions this uses. Our
+    // listener registers first (component markup parses before the layout's
+    // trailing script), so reading nextElementSibling synchronously would see
+    // the page before those cards exist and place one right against them.
+    // A macrotask defers us until every page-load handler has finished.
+    document.addEventListener('astro:page-load', function () {
+      setTimeout(injectCards, 0);
+    });
 
     // ── Behaviour: bound once per document, delegated ──
     if (window.__htupFeedbackBound) return;
