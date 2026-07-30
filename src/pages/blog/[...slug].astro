@@ -1,6 +1,5 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Feedback from '../../components/Feedback.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -146,9 +145,6 @@ const structuredData = {
         )}
       </div>
     </div>
-
-    <!-- Page Feedback -->
-    <Feedback />
 
     <!-- Support Banner -->
     <div class="footer-support">
