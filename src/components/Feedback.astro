@@ -511,6 +511,12 @@ const path = Astro.url.pathname;
       if (!form || !form.hasAttribute('data-feedback-form')) return;
       e.preventDefault();
 
+      // Disabling the button only stops click-submits — Enter in a text input
+      // still submits the form, so a second keypress before the first request
+      // settles would POST twice and create a duplicate submission. Gate on
+      // the form itself.
+      if (form.dataset.feedbackSending === '1') return;
+
       var body = form.closest('[data-feedback-body]');
       var btn = form.querySelector('[data-feedback-btn]');
       var errorEl = form.querySelector('[data-feedback-error]');
@@ -525,6 +531,7 @@ const path = Astro.url.pathname;
         return;
       }
 
+      form.dataset.feedbackSending = '1';
       btn.disabled = true;
       btn.textContent = 'Sending...';
 
@@ -537,10 +544,12 @@ const path = Astro.url.pathname;
           if (!res.ok) throw new Error('bad status');
           formWrap.style.display = 'none';
           successWrap.style.display = 'block';
+          // left flagged: the form is replaced by the success state
         })
         .catch(function () {
           errorEl.textContent = 'Could not send — please try again in a moment.';
           errorEl.style.display = 'block';
+          form.dataset.feedbackSending = '';
           btn.disabled = false;
           btn.textContent = 'Send feedback';
         });
