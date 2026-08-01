@@ -13,6 +13,10 @@
   <div class="beta-notice-card">
 
     <div id="betaNoticeMain">
+      <div class="beta-notice-brand">
+        <img class="logo-dark" src="/footer-logo-dark.png" alt="Psygaia" width="800" height="200" />
+        <img class="logo-light" src="/footer-logo-light.png" alt="Psygaia" width="800" height="200" />
+      </div>
       <span class="beta-notice-eyebrow">Heads up</span>
       <h2 class="beta-notice-title" id="betaNoticeTitle">This site is still being built.</h2>
       <p class="beta-notice-body">You are welcome to read anything here, but pages are still being written and revised. Some sections are incomplete, and there will be mistakes we haven't caught yet.</p>
@@ -30,7 +34,7 @@
         </div>
         <input type="text" id="betaNoticeHp" class="beta-notice-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <p id="betaNoticeError" class="beta-notice-error" style="display:none;"></p>
-        <p class="beta-notice-disclaimer">This adds you to the newsletter, so you will get the welcome emails too, along with a note when the site is finished. Unsubscribe anytime.</p>
+        <p class="beta-notice-disclaimer">Join the Psygaia mailing list and get notified when this site is officially launched. Unsubscribe anytime.</p>
       </div>
       <p id="betaNoticeThanks" class="beta-notice-thanks" style="display:none;">Thanks. Check your inbox for the welcome email.</p>
     </div>
@@ -90,6 +94,21 @@
     background: #ffffff;
     box-shadow: 0 20px 60px rgba(0,0,0,0.18);
   }
+
+  /* The notice covers the nav, so without this there is no identity on
+     screen while it is open. Quiet, not a hero element. */
+  .beta-notice-brand {
+    margin-bottom: 20px;
+  }
+  .beta-notice-brand img {
+    height: 30px;
+    width: auto;
+    display: block;
+  }
+  .beta-notice-brand .logo-dark { display: block; }
+  .beta-notice-brand .logo-light { display: none; }
+  [data-theme="light"] .beta-notice-brand .logo-dark { display: none; }
+  [data-theme="light"] .beta-notice-brand .logo-light { display: block; }
 
   .beta-notice-eyebrow {
     display: block;
