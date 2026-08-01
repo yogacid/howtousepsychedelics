@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
+import NatureCard from '../components/NatureCard.astro';
 ---
 
 <Base
@@ -33,21 +35,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#meo-what">What 5-MeO-DMT is</a></li>
-          <li><a href="#meo-sources">Sources: toad vs. synthetic</a></li>
-          <li><a href="#meo-history">History &amp; cultural roots</a></li>
-          <li><a href="#meo-how">How it works</a></li>
-          <li><a href="#meo-effects">Effects</a></li>
-          <li><a href="#meo-dosage">Dosage reference</a></li>
-          <li><a href="#meo-research">What the research shows</a></li>
-          <li><a href="#meo-risks">Risks &amp; contraindications</a></li>
-          <li><a href="#meo-legal">Legal status</a></li>
-          <li><a href="#meo-faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="fivemedmt" />
 
       <div class="article-body">
 
@@ -67,6 +55,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
             <p>Wild populations of <em>Incilius alvarius</em> in the Sonoran Desert are under documented pressure from the dramatic increase in demand for toad secretion. The toad has a restricted range (Sonoran Desert of Arizona and Mexico), and collection practices in retreat settings often involve significant stress and harm to the animals. Herpetologists and conservationists have raised alarms about population-level impacts. Independent of conservation concerns, the use of stressed wild animals as sacramental vessels raises animal welfare questions that practitioners and seekers should engage with honestly. <strong>Synthetic 5-MeO-DMT is chemically identical to the compound in toad secretion</strong>, produces the same experience, involves no animal harm, and is the recommended choice from conservation and welfare perspectives. There is no experiential, pharmacological, or spiritual justification for preferring toad-source over synthetic in contemporary practice.</p>
           </div>
           <p class="content-p">Plant-source 5-MeO-DMT &mdash; from <em>Anadenanthera</em> seeds or <em>Virola</em> bark &mdash; is used in traditional snuff preparations in South America and is a sustainable alternative for those who prefer natural sources. Yopo snuff (<em>A. peregrina</em> seeds) contains both 5-MeO-DMT and bufotenine and has been used in ceremonial contexts across the Amazon and Caribbean for thousands of years.</p>
+          <NatureCard id="fivemedmt" />
         </div>
 
         <!-- History & Cultural Roots -->
@@ -132,6 +121,30 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           <p class="content-p"><strong>Psychological unpreparedness:</strong> Complete ego dissolution is not a gentle experience. People who have not had significant experience with other psychedelics, who carry significant unprocessed trauma without therapeutic support, or who are not genuinely prepared for the complete disappearance of self should not approach breakthrough doses of 5-MeO-DMT. This is a compound where preparation and guide quality are not optional enhancements &mdash; they are essential safety infrastructure.</p>
           <p class="content-p"><strong>Reactivations:</strong> As described above, spontaneous reactivations are common and can be disorienting or frightening. Integration support must include specific preparation for this possibility.</p>
           <p class="content-p"><strong>Physical safety during the experience:</strong> Persons must be in a safe supine position; physical coordination is absent during peak effects. Falls and self-injury are possible without appropriate physical support from a sitter.</p>
+        </div>
+
+        <!-- Verifying What You Have -->
+        <div class="content-section">
+          <h2 class="content-h2" id="meo-testing">Verifying What You Have</h2>
+          <p class="content-p">The verification problem specific to 5-MeO-DMT is that it is routinely confused with a compound whose name differs by four characters and whose effective dose is several times larger. Getting this wrong in one direction produces an unexpectedly overwhelming experience. Getting it wrong in the other direction is a serious overdose of a compound with an unusually steep dose-response curve.</p>
+
+          <div class="content-callout content-callout--warning">
+            <div class="callout-label">5-MeO-DMT and N,N-DMT are not interchangeable</div>
+            <p>A breakthrough dose of vaporised <a href="/dmt/" class="inline-link">N,N-DMT</a> is <strong>25&ndash;50 mg</strong>, with most reports in the 30&ndash;50 mg range. A breakthrough dose of 5-MeO-DMT is <strong>10&ndash;20 mg</strong>.</p>
+            <p>Someone who has learned to measure DMT and applies that habit to a powder they believe is the same thing is taking roughly two to four times a full 5-MeO dose. This is the direction that produces unresponsiveness, respiratory difficulty, and cardiac events. <strong>Never dose one tryptamine by reference to a dose you know for another.</strong></p>
+          </div>
+
+          <h3 class="content-h3">Appearance and reagents will not tell them apart</h3>
+          <p class="content-p">Both compounds present as off-white to yellowish or pinkish crystalline solids. Colour, texture and smell do not distinguish them, and neither does price or the confidence of whoever handed it to you.</p>
+          <p class="content-p">More importantly, the reagent most people would reach for cannot make the distinction either. 5-MeO-DMT and N,N-DMT are both indole alkaloids, so both produce the characteristic Ehrlich reaction. A purple result confirms an indole is present, and is entirely compatible with either compound, and with several others. No home reagent kit reliably differentiates the two, and treating a positive Ehrlich as confirmation that you have the tryptamine you expected is exactly the error this section exists to prevent.</p>
+
+          <h3 class="content-h3">Toad secretion cannot be dosed by weight at all</h3>
+          <p class="content-p">The dosage figures on this page apply to synthetic 5-MeO-DMT. Dried toad secretion is a mixture of 5-MeO-DMT, bufotenine and other tryptamines, whose composition varies between individual animals, across seasons, and according to how the material was collected and dried. There is no way to know the concentration in a given batch without laboratory analysis, which means any dose is an estimate built on someone's prior experience with different material.</p>
+          <p class="content-p">This is worth weighing alongside the conservation and animal-welfare arguments set out under <a href="#meo-sources" class="inline-link">Sources</a> above. Synthetic 5-MeO-DMT is the same molecule, can be quantified, involves no animal, and is the only form for which the numbers in the dosage table actually mean anything.</p>
+
+          <h3 class="content-h3">What verification actually looks like</h3>
+          <p class="content-p">Laboratory analysis by GC/MS or HPLC is the only method that answers the question. For synthetic material, that means a <strong>certificate of analysis whose batch number matches the material in front of you</strong>, naming the compound and stating its purity. Mail-in services such as DrugsData will identify an unknown tryptamine, and given what is at stake in the identification, the turnaround time is worth waiting out.</p>
+          <p class="content-p">If you are working with a facilitator rather than sourcing material yourself, the questions are the same ones in different clothes: which compound are you administering, synthetic or toad-derived, at what dose in milligrams, and how do you know. A facilitator who refers only to "the medicine" and cannot name the compound and quantify the dose is not in a position to keep the experience safe, however experienced they present as being.</p>
         </div>
 
         <!-- Legal Status -->

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
 ---
 
 <Base
@@ -33,19 +34,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#tcb-what">What 2C-B is</a></li>
-          <li><a href="#tcb-pharmacology">Pharmacology</a></li>
-          <li><a href="#tcb-effects">Effects</a></li>
-          <li><a href="#tcb-dosage">Dosage &mdash; critical note</a></li>
-          <li><a href="#tcb-vs-others">vs. Psilocybin and LSD</a></li>
-          <li><a href="#tcb-risks">Risks</a></li>
-          <li><a href="#tcb-testing">Testing</a></li>
-          <li><a href="#tcb-faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="twocb" />
 
       <div class="article-body">
 

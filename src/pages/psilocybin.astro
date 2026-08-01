@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
+import NatureCard from '../components/NatureCard.astro';
 ---
 
 <Base
@@ -33,25 +35,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#what">What psilocybin is</a></li>
-          <li><a href="#species">Species guide</a></li>
-          <li><a href="#history">History &amp; cultural roots</a></li>
-          <li><a href="#how">How it works</a></li>
-          <li><a href="#effects">Effects</a></li>
-          <li><a href="#dosage">Dosage reference</a></li>
-          <li><a href="#methods">Methods of consumption</a></li>
-          <li><a href="#research">What the research shows</a></li>
-          <li><a href="#ecology">Psilocybin &amp; the living world</a></li>
-          <li><a href="#risks">Risks &amp; contraindications</a></li>
-          <li><a href="#testing">Testing &amp; harm reduction</a></li>
-          <li><a href="#legal">Legal status</a></li>
-          <li><a href="#preparing">Preparing for an experience</a></li>
-          <li><a href="#faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="psilocybin" />
 
       <div class="article-body">
 
@@ -60,7 +44,8 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           <h2 class="content-h2" id="what">What Psilocybin Is</h2>
           <p class="content-p">Psilocybin (4-phosphoryloxy-N,N-dimethyltryptamine) is a naturally occurring tryptamine alkaloid found in more than 200 species of fungi distributed across every major continent. After ingestion it is rapidly dephosphorylated in the body to psilocin — the pharmacologically active compound — which binds primarily at serotonin 5-HT2A receptors in the brain and produces the characteristic psychedelic experience.</p>
           <p class="content-p">The genus <em>Psilocybe</em> contains the largest number of psilocybin-producing species, with <em>Psilocybe cubensis</em> being the most widely cultivated and therefore most commonly encountered in the contemporary West. Other significant species include <em>P. semilanceata</em> (liberty cap), <em>P. azurescens</em>, and <em>P. cyanescens</em>, which can contain substantially higher psilocybin concentrations than <em>P. cubensis</em>. Potency varies considerably not just between species but between individual specimens, flushes, and growing conditions — a practical consideration for anyone planning an experience.</p>
-          <p class="content-p">Psilocybin evolved as a secondary metabolite — a biochemical compound not essential to basic cellular function, but producing significant effects in the organisms that encounter it. Genomic analyses have revealed that the biosynthetic gene cluster responsible for psilocybin production evolved independently at least twice in distantly related fungal lineages, a pattern known as convergent evolution (Reynolds et al., 2018). This suggests the compound conferred meaningful ecological advantages — most likely in interactions with insects or other decomposers — rather than evolving in relation to human neurobiology. That human nervous systems respond profoundly to this fungal molecule is a fact about interspecies chemical relationships, not teleological design.</p>
+          <p class="content-p">Psilocybin is a secondary metabolite, a biochemical compound not essential to basic cellular function but produced at metabolic cost, and it has significant effects on the organisms that encounter it. Analyses of fungal biosynthetic gene clusters indicate that psilocybin evolved independently at least twice in distantly related lineages, a rare instance of convergent evolution in natural product biosynthesis. Horizontal transfer of the gene cluster between fungi sharing the same habitats appears to have spread it further (Meyer &amp; Slot, 2023; Reynolds et al., 2018).</p>
+          <p class="content-p">What makes this more than a genomic curiosity is where it happened. The fungi carrying the cluster largely live in dung and decaying wood, which are insect-rich environments. That suggests psilocybin conferred an ecological advantage there, most likely in interactions with insects or other decomposers rather than in any relation to humans. The compound was doing ecological work in soil and rotting matter long before it met a human nervous system. That we respond to it so profoundly reflects our embeddedness in a deeply conserved serotonergic neurochemistry shared across species. Not design, and not intent.</p>
         </div>
 
         <!-- Species Guide -->
@@ -78,6 +63,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           </table></div>
           <p class="content-p">Potency estimates above are approximate and based on average measured psilocybin/psilocin content; individual specimens can vary considerably. <em>P. cubensis</em> cultivars have been selectively developed for consistency and yield — "cube" varieties (Golden Teacher, B+, Penis Envy, and others) vary in average potency, with Penis Envy and its derivatives consistently producing higher psilocybin concentrations than standard cubensis strains. Penis Envy is typically estimated at 1.5 to 2 times the potency of average cubensis, placing it closer to the moderate-high range.</p>
           <p class="content-p">Any dose calibrated to dried <em>P. cubensis</em> needs significant adjustment if using another species or a high-potency cultivar. Starting with a substantially lower gram weight and waiting the full onset window before reassessing is essential when working with unfamiliar material.</p>
+          <NatureCard id="psilocybin" />
         </div>
 
         <!-- History & Cultural Roots -->
@@ -104,9 +90,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           <p class="content-p">Neuroimaging studies consistently show that psilocybin reduces activity and functional coherence in the default mode network (DMN) — a set of midline cortical regions active during self-referential thought, autobiographical memory, mind-wandering, and the ongoing narrative construction through which we maintain a sense of who we are. The DMN is closely associated with what is sometimes called the narrative self: the continuous internal story that presents as "I, here, doing this."</p>
           <p class="content-p">Psilocybin's disruption of DMN activity corresponds experientially to the loosening of self-world boundaries, and at higher doses, ego dissolution — a temporary collapse of the ordinary sense of being a bounded self separate from the world. This is one of the most replicated findings in psychedelic neuroimaging, and the degree of DMN disruption correlates with the intensity of subjective self-transcendence. DMN disruption also mediates a significant portion of the relationship between psilocybin and therapeutic outcomes, suggesting that the temporary suspension of the narrative self is functionally important for cognitive and emotional reorganisation.</p>
 
-          <h3 class="content-h3">Enactive cognition: altered organism-environment coupling</h3>
-          <p class="content-p">These neuroscientific findings describe mechanisms, but they do not fully explain why psychedelic experiences take the specific phenomenological forms they do — why boundary dissolution so often becomes ecological boundary dissolution, why the world appears alive and communicative, why insights so frequently concern interdependence and belonging. For this, a broader framework is needed.</p>
-          <p class="content-p">Enactive cognitive science — the view developed by Varela, Thompson, and Rosch — understands cognition not as computation inside the skull but as an ongoing process of organism-environment coupling: embodied sense-making through engagement with the world. Psychedelics do not simply alter internal processing; they temporarily reconfigure the terms of this coupling, loosening habitual ego-centred patterns of attention and allowing features of the environment that are ordinarily backgrounded to exert stronger influence on perception and felt experience. The forest encountered on psilocybin is not a hallucination departing from a stable real world; it is a different mode of encountering the same relational world — one in which its living, dynamic, interconnected character becomes temporarily more salient.</p>
+          <p class="content-p">These accounts describe mechanism. They explain less well why psychedelic experiences take the particular phenomenological forms they do — why boundary dissolution so often becomes <em>ecological</em> boundary dissolution. That question needs a broader framework than neuroimaging provides; our <a href="/science/#sci-enactive" class="inline-link">Science</a> page takes it up under enactive cognition.</p>
         </div>
 
         <!-- Effects -->
@@ -201,15 +185,6 @@ import SubstanceHud from '../components/SubstanceHud.astro';
             <div class="callout-label">Psygaia Framework</div>
             <p>The consistent appearance of ecological, relational, and cosmological themes across psilocybin research — boundary dissolution, heightened animacy, insights into interdependence — is the pattern the <a href="https://psygaia.org" target="_blank" rel="noopener">Psygaia Framework</a> was built to address. The framework proposes a biosemiotic and enactive account of why psilocybin experiences so reliably take ecological form, and what this might mean for how we understand healing in relation to planetary health.</p>
           </div>
-        </div>
-
-        <!-- Psilocybin & the Living World -->
-        <div class="content-section">
-          <h2 class="content-h2" id="ecology">Psilocybin &amp; the Living World</h2>
-          <p class="content-p">Among classic psychedelics, psilocybin has the most distinctive relationship with the ecological world — not only because of what it does to human perception, but because of what it is: a compound produced by a fungus, the fruiting body of an organism that lives within soil and decaying matter, part of the mycorrhizal networks through which forests exchange nutrients and chemical signals. This is not incidental context. It is part of why so many people who work with psilocybin mushrooms in natural settings report a qualitatively different relationship to the living world that produced them.</p>
-          <p class="content-p">The research pattern is consistent. People who use psilocybin mushrooms reliably report increases in what researchers measure as "nature-relatedness" — a composite of felt connection, identification with, and concern for the natural world. This effect appears to be mediated by the quality of the experience itself, particularly its self-transcendent and ego-dissolving dimensions, rather than by the pharmacology alone. In other words, it is what happens perceptually and emotionally during the experience — the loosening of the self-world boundary, the encounter with the living world as animate and communicative rather than inert — that seems to produce ecological re-orientation.</p>
-          <p class="content-p">From a biosemiotic perspective, this makes a particular kind of sense. Psilocybin is not a random molecule; it is a compound with ecological functions in the organisms that produce it, a signal that has participated in cross-species chemical relationships for millions of years. When the human organism encounters it, its semiotic sensitivity — the range of environmental signals that register as meaningful and worth attending to — expands. The world does not become less real. It becomes more present: more communicative, more alive, more relational. Plants, fungi, water, soil, the texture of bark and light through leaves — features that ordinarily register at the periphery of attention — move to the centre.</p>
-          <p class="content-p">Many people describe their first genuinely attentive encounter with the nonhuman world during or shortly after a psilocybin experience. Whether that attention persists and deepens over time depends on what happens afterwards — on integration practices that root the insight into ongoing ecological engagement rather than allowing it to become a memory. See our <a href="/nature/" class="inline-link">Psychedelics &amp; Nature</a> and <a href="/integration/" class="inline-link">Integration</a> pages for more.</p>
         </div>
 
         <!-- Risks & Contraindications -->

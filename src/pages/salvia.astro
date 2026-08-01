@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
+import NatureCard from '../components/NatureCard.astro';
 ---
 
 <Base
@@ -33,20 +35,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#sal-what">What salvia is</a></li>
-          <li><a href="#sal-history">History &amp; cultural roots</a></li>
-          <li><a href="#sal-how">How it works</a></li>
-          <li><a href="#sal-effects">Effects</a></li>
-          <li><a href="#sal-dosage">Dosage reference</a></li>
-          <li><a href="#sal-research">What the research shows</a></li>
-          <li><a href="#sal-risks">Risks &amp; harm reduction</a></li>
-          <li><a href="#sal-legal">Legal status</a></li>
-          <li><a href="#sal-faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="salvia" />
 
       <div class="article-body">
 
@@ -55,6 +44,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           <h2 class="content-h2" id="sal-what">What Salvia Divinorum Is</h2>
           <p class="content-p"><em>Salvia divinorum</em> is a large-leafed perennial herb in the mint family (Lamiaceae), native to the Sierra Mazateca highlands of Oaxaca, Mexico. It grows naturally in a very small geographic range &mdash; shaded, humid canyon habitats at altitude &mdash; and has rarely been found reproducing by seed in the wild, leading botanists to suggest it may be a human-maintained cultivar of significant age. Its primary psychoactive compound is salvinorin A &mdash; a terpenoid lactone that is, gram for gram, the most potent naturally occurring psychoactive compound identified: active in humans at doses of 200&ndash;500 micrograms (millionths of a gram) by inhalation.</p>
           <p class="content-p">Salvinorin A is chemically unlike all other known classic psychedelics. While psilocin, DMT, and LSD are indole alkaloids acting primarily at serotonin receptors, salvinorin A is a diterpenoid acting selectively at kappa-opioid receptors (KORs) &mdash; a mechanism unique among psychedelic compounds. This pharmacological distinctiveness produces a phenomenological experience that is categorically different from serotonergic psychedelics: less empathogenic, more disorienting, frequently described as alien or mechanical, and without the emotional warmth or relational quality commonly associated with psilocybin or MDMA.</p>
+          <NatureCard id="salvia" />
         </div>
 
         <!-- History & Cultural Roots -->

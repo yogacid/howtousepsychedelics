@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
 ---
 
 <Base
@@ -33,20 +34,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#lsd-what">What LSD is</a></li>
-          <li><a href="#lsd-pharmacology">Pharmacology</a></li>
-          <li><a href="#lsd-effects">Effects</a></li>
-          <li><a href="#lsd-dosage">Dosage</a></li>
-          <li><a href="#lsd-vs-psilocybin">LSD vs. psilocybin</a></li>
-          <li><a href="#lsd-research">Research</a></li>
-          <li><a href="#lsd-risks">Risks</a></li>
-          <li><a href="#lsd-testing">Testing your supply</a></li>
-          <li><a href="#lsd-faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="lsd" />
 
       <div class="article-body">
 

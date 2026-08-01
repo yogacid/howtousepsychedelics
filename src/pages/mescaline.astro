@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
+import NatureCard from '../components/NatureCard.astro';
 ---
 
 <Base
@@ -33,20 +35,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#mes-what">What mescaline is</a></li>
-          <li><a href="#mes-sources">Peyote vs. San Pedro</a></li>
-          <li><a href="#mes-effects">Effects</a></li>
-          <li><a href="#mes-dosage">Dosage</a></li>
-          <li><a href="#mes-research">Research</a></li>
-          <li><a href="#mes-risks">Risks</a></li>
-          <li><a href="#mes-ethics">Ethics and sovereignty</a></li>
-          <li><a href="#mes-ecology">Ecological significance</a></li>
-          <li><a href="#mes-faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="mescaline" />
 
       <div class="article-body">
 
@@ -66,6 +55,27 @@ import SubstanceHud from '../components/SubstanceHud.astro';
             <div class="callout-label">Peyote conservation</div>
             <p>Peyote populations in their native range are in serious decline. The combination of slow growth, habitat loss, and harvesting pressure means that wild peyote is genuinely threatened. Non-Indigenous use of peyote &mdash; beyond its established ceremonial contexts &mdash; contributes to this pressure. Many Indigenous voices have asked non-Indigenous people explicitly to refrain from seeking peyote.</p>
           </div>
+          <NatureCard id="mescaline" />
+        </div>
+
+        <!-- How Mescaline Works -->
+        <div class="content-section">
+          <h2 class="content-h2" id="mes-how">How Mescaline Works</h2>
+
+          <h3 class="content-h3">A phenethylamine, not a tryptamine</h3>
+          <p class="content-p">Psilocybin, LSD, and DMT are all tryptamines, sharing an indole ring inherited from the same structural family as serotonin. Mescaline is not. It is a phenethylamine, built on the same simple backbone as dopamine and norepinephrine, with three methoxy groups attached to the ring (hence 3,4,5-trimethoxyphenethylamine). This matters practically as well as chemically: the entire 2C family, including <a href="/twocb/" class="inline-link">2C-B</a>, consists of ring-substituted phenethylamines that Alexander Shulgin developed by working outward from the mescaline scaffold. Mescaline is the parent compound of a whole branch of psychedelic chemistry.</p>
+          <p class="content-p">Despite the different structure, the primary target is the same one every classical psychedelic converges on: mescaline is a partial agonist at the serotonin 5-HT2A receptor, with additional activity at 5-HT2C and 5-HT1A. This shared mechanism is why mescaline shows cross-tolerance with psilocybin and LSD, so taking one shortly after another produces markedly blunted effects, even though the molecules look nothing alike.</p>
+
+          <h3 class="content-h3">Why the doses are so large</h3>
+          <p class="content-p">Mescaline is by a wide margin the least potent of the classical psychedelics by weight. An active dose is measured in hundreds of milligrams, against roughly 20&ndash;25 mg for psilocybin and around 100 micrograms for LSD, a difference of several thousandfold between mescaline and LSD. This says nothing about intensity. A full mescaline dose is a full psychedelic experience. It reflects binding affinity: mescaline holds relatively weakly at 5-HT2A, so far more molecules are required to produce comparable receptor occupancy.</p>
+          <p class="content-p">The practical consequence is bulk. Because the compound is weak by weight and the cacti that contain it are mostly water and fibre, a ceremonial dose means consuming a substantial quantity of plant material, which is a large part of why nausea is such a consistent feature of the onset, and why preparations are traditionally reduced by long boiling.</p>
+
+          <h3 class="content-h3">Metabolism, duration, and the MAOI interaction</h3>
+          <p class="content-p">Mescaline's 10&ndash;12 hour duration comes from slow clearance. A substantial fraction is excreted from the body unchanged in urine, and most of the remainder is broken down by monoamine oxidase into 3,4,5-trimethoxyphenylacetic acid. That second route is the reason MAOI antidepressants are flagged as a serious interaction on this page and in the panel above: inhibiting monoamine oxidase removes a primary means of clearing the drug, which can intensify and considerably prolong an experience that is already long.</p>
+
+          <h3 class="content-h3">The other alkaloids, and the limits of what is known</h3>
+          <p class="content-p">Mescaline is the principal psychoactive compound in peyote but not the only one. The cactus contains dozens of additional alkaloids, among them hordenine, pellotine, anhalonine and lophophorine. Some, such as pellotine, have sedative properties of their own. Whether and how this mixture shapes the character of a peyote experience relative to purified mescaline has not been properly characterised. Practitioners consistently report a difference. The pharmacology to explain it does not yet exist.</p>
+          <p class="content-p">A broader caveat applies to this whole section. The network-level accounts of psychedelic action described on our <a href="/science/" class="inline-link">Science</a> page, such as default mode network suppression, the REBUS model and changes in cortical connectivity, were built almost entirely from neuroimaging studies of psilocybin and LSD. Mescaline has attracted very little modern imaging research, largely because a 12-hour session is expensive and demanding to run. It is reasonable to assume broadly similar network effects given the shared 5-HT2A mechanism, but that assumption has not been tested directly, and it should be held as an inference rather than a finding.</p>
         </div>
 
         <!-- Effects -->
@@ -123,15 +133,6 @@ import SubstanceHud from '../components/SubstanceHud.astro';
         </div>
 
         <!-- Ecological Significance -->
-        <div class="content-section">
-          <h2 class="content-h2" id="mes-ecology">Ecological Significance</h2>
-          <p class="content-p">Mescaline-containing cacti are among the most striking examples of psychedelic secondary metabolites with clear ecological functions &mdash; mescaline deters predation by insects and mammals while being harmless or even attractive to certain bird species that disperse cactus seeds. This fits the biosemiotic model central to the Psygaia Framework: chemical compounds functioning as ecological signals with species-specific interpretations.</p>
-          <div class="content-callout">
-            <div class="callout-label">&#9678; Psygaia Framework</div>
-            <p>The mescaline cacti offer some of the most compelling examples of the ecological-semiotic relationships at the heart of the <a href="https://psygaia.org/psygaia-hypothesis" target="_blank" rel="noopener">Psygaia Framework</a> &mdash; organisms producing compounds that reorganise human cognition as part of a larger network of interspecies chemical signalling.</p>
-          </div>
-        </div>
-
         <!-- FAQ -->
         <div class="content-section" id="mes-faq">
           <h2 class="content-h2">Frequently Asked Questions</h2>

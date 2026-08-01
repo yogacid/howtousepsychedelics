@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
 ---
 
 <Base
@@ -33,20 +34,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#ket-what">What ketamine is</a></li>
-          <li><a href="#ket-pharmacology">Pharmacology</a></li>
-          <li><a href="#ket-effects">Effects</a></li>
-          <li><a href="#ket-dosage">Dosage and routes</a></li>
-          <li><a href="#ket-vs-classical">vs. Classical psychedelics</a></li>
-          <li><a href="#ket-research">Clinical research</a></li>
-          <li><a href="#ket-therapy">Ketamine therapy</a></li>
-          <li><a href="#ket-risks">Risks</a></li>
-          <li><a href="#ket-faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="ketamine" />
 
       <div class="article-body">
 

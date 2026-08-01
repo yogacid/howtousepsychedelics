@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
+import NatureCard from '../components/NatureCard.astro';
 ---
 
 <Base
@@ -33,20 +35,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#aya-what">What ayahuasca is</a></li>
-          <li><a href="#aya-pharmacology">Pharmacology</a></li>
-          <li><a href="#aya-effects">Effects and experience</a></li>
-          <li><a href="#aya-ceremony">Ceremony and container</a></li>
-          <li><a href="#aya-research">Research</a></li>
-          <li><a href="#aya-safety">Critical safety: MAOIs</a></li>
-          <li><a href="#aya-risks">Risks and contraindications</a></li>
-          <li><a href="#aya-ethics">Ethics and sovereignty</a></li>
-          <li><a href="#aya-faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="ayahuasca" />
 
       <div class="article-body">
 
@@ -56,6 +45,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           <p class="content-p">Ayahuasca — also known as yag&eacute;, hoasca, daime, and by dozens of other regional names — is a psychoactive brew prepared from the <em>Banisteriopsis caapi</em> vine (the ayahuasca vine itself) and the leaves of <em>Psychotria viridis</em> (chacruna) or other DMT-containing plants. The vine contains beta-carboline alkaloids — primarily harmine, harmaline, and tetrahydroharmine — which are reversible monoamine oxidase inhibitors (MAOIs). These alkaloids inhibit the enzyme that would otherwise break down DMT in the digestive system before it reaches the bloodstream, allowing oral DMT to become psychoactive.</p>
           <p class="content-p">The brew has been used by Indigenous peoples of the Amazon basin — including the Shipibo-Conibo, Shuar, Yawanaw&aacute;, and dozens of other nations — for centuries as a healing, divination, and ceremonial tool. Ayahuasca is not a recreational drug in its original context; it is a medicine administered by trained healers within carefully maintained ceremonial structures.</p>
           <p class="content-p">The brew is now used globally — in Indigenous and neo-Indigenous ceremonies, in syncretic religious traditions (Santo Daime, Uni&atilde;o do Vegetal), in retreat settings, and informally by individuals who prepare it themselves. This global diffusion has created significant ethical, cultural, and safety tensions that anyone engaging with ayahuasca should understand.</p>
+          <NatureCard id="ayahuasca" />
         </div>
 
         <!-- Pharmacology -->

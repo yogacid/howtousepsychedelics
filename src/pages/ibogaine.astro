@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
+import NatureCard from '../components/NatureCard.astro';
 ---
 
 <Base
@@ -33,21 +35,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#ibo-what">What ibogaine is</a></li>
-          <li><a href="#ibo-history">History &amp; cultural roots</a></li>
-          <li><a href="#ibo-how">How it works</a></li>
-          <li><a href="#ibo-effects">Effects</a></li>
-          <li><a href="#ibo-dosage">Dosage reference</a></li>
-          <li><a href="#ibo-research">What the research shows</a></li>
-          <li><a href="#ibo-risks">Risks &amp; cardiac safety</a></li>
-          <li><a href="#ibo-legal">Legal status</a></li>
-          <li><a href="#ibo-access">Accessing treatment</a></li>
-          <li><a href="#ibo-faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="ibogaine" />
 
       <main class="article-body">
 
@@ -57,6 +45,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           <p class="content-p">Ibogaine is an indole alkaloid found primarily in the root bark of <em>Tabernanthe iboga</em>, a shrub native to the rainforests of Central and West Africa &mdash; principally Gabon, Cameroon, and the Republic of Congo. It also occurs in smaller concentrations in several related Apocynaceae species, including <em>Voacanga africana</em> and <em>Tabernaemontana undulata</em>. The compound was first isolated by French and Belgian chemists in 1901 and investigated sporadically through the early twentieth century before interest in its anti-addictive properties emerged in the 1960s.</p>
           <p class="content-p">Ibogaine is structurally classified as a <span class="tt" data-tip="A class of compounds sharing the core indole-ethylamine structure. Classical serotonergic psychedelics — psilocin, DMT, LSD, ibogaine — are tryptamines. The tryptamine scaffold is also the backbone of serotonin and melatonin.">tryptamine</span> but pharmacologically unique: its mechanism of action spans multiple receptor systems simultaneously, differentiating it fundamentally from <span class="tt" data-tip="Relating to the neurotransmitter serotonin and its receptors. Classical psychedelics — psilocybin, LSD, DMT, mescaline — are serotonergic: they produce their primary effects by activating serotonin receptors, particularly 5-HT₂A.">serotonergic</span> psychedelics like psilocybin and LSD. It is both psychoactive and, at relevant doses, a genuine medical intervention requiring clinical-level screening and monitoring. The distinction between ibogaine as a sacramental practice and ibogaine as a pharmacological treatment for addiction is real but the safety considerations apply in both contexts: the same compound, at comparable doses, produces the same cardiac risks regardless of setting.</p>
           <p class="content-p">Total alkaloid extracts from <em>T. iboga</em> root bark (often called "TA" extract) contain ibogaine alongside other iboga alkaloids &mdash; notably ibogaline and ibogamine &mdash; and are used in traditional <span class="tt" data-tip="A complex spiritual and initiation tradition of the Mitsogho, Fang, and related peoples of Gabon and Cameroon, in which iboga root bark is consumed in multi-day initiation ceremonies. Ibogaine was first extracted from the iboga plant used in Bwiti practice.">Bwiti</span> ceremony. Pure ibogaine hydrochloride (HCl) is the form used in most clinical and harm-reduction contexts, as it allows precise dosing. <em>Voacanga africana</em>-derived total alkaloid preparations are also commercially available as legal precursors in some jurisdictions, though their alkaloid composition differs from <em>T. iboga</em>.</p>
+          <NatureCard id="ibogaine" />
         </div>
 
         <!-- History & Cultural Roots -->
@@ -140,6 +129,29 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           <p class="content-p">The ibogaine experience is intense and often psychologically demanding. People with active <span class="tt" data-tip="A mental state characterised by a loss of contact with shared reality — involving hallucinations, delusions, and disorganised thinking. A personal or family history of psychosis or schizophrenia spectrum disorders is a primary contraindication for psychedelic use.">psychosis</span> or schizophrenia spectrum conditions should not receive ibogaine. Severe, untreated mood disorders warrant careful assessment. The life review nature of the experience means that traumatic material frequently surfaces &mdash; integration support before and after is not optional for responsible practice.</p>
           <h3 class="content-h3">Iboga plant sustainability</h3>
           <p class="content-p">Wild <em>Tabernanthe iboga</em> populations are under pressure from overharvesting driven by international demand. The slow growth rate of the plant (root bark of therapeutic potency requires 7&ndash;10+ years of growth) and habitat loss in Central Africa have created a genuine sustainability crisis. Responsible engagement with ibogaine means giving weight to sourcing: providers and individuals who use cultivated or sustainably sourced iboga, or who work with <em>Voacanga africana</em>-derived total alkaloid preparations or synthetic ibogaine where clinically equivalent, contribute less to this pressure.</p>
+        </div>
+
+        <!-- Verifying What You Have -->
+        <div class="content-section">
+          <h2 class="content-h2" id="ibo-testing">Verifying What You Have</h2>
+          <p class="content-p">For most substances on this site, verification means answering "is this the compound it is supposed to be." For ibogaine that question matters, but a second one matters more: <strong>which preparation is this, and how much ibogaine is actually in it</strong>. The dosage table above is expressed in milligrams per kilogram of body weight of <em>pure ibogaine hydrochloride</em>. Applying those numbers to a different preparation produces an error of several fold, and because the dangerous effects are cardiac and dose-dependent, an error in that direction is not recoverable by waiting it out.</p>
+
+          <h3 class="content-h3">The three forms are not interchangeable by weight</h3>
+          <p class="content-p"><strong>Ibogaine hydrochloride (HCl)</strong> is the purified salt, and is what clinical protocols and the mg/kg figures above assume. <strong>Total alkaloid (TA) extract</strong> contains ibogaine alongside ibogaline, ibogamine, tabernanthine and others, and ibogaine is only a portion of the total, and that portion varies substantially between producers and batches. <strong>Powdered root bark</strong> contains ibogaine at a small percentage of its dry weight, varying with the age of the plant, which part of the root it came from, and where it was grown.</p>
+          <p class="content-p">A gram of root bark, a gram of TA, and a gram of HCl therefore deliver dramatically different amounts of the active compound. "One gram of ibogaine" is not a meaningful statement unless the form is specified. If a supplier will not tell you which of the three they are selling, that is the end of the conversation.</p>
+          <p class="content-p">There is a further wrinkle worth knowing: most ibogaine in circulation is semi-synthesised from <em>Voacanga africana</em> rather than extracted from <em>Tabernanthe iboga</em>. As pure HCl this makes no difference, since ibogaine is ibogaine regardless of which plant the precursor came from. But <em>Voacanga</em>-derived total alkaloid preparations have a different alkaloid profile from <em>T. iboga</em> TA, so "TA" does not describe a single, consistent product either.</p>
+
+          <h3 class="content-h3">Reagents will not help you here</h3>
+          <p class="content-p">This is worth saying plainly, because reagent testing is the default assumption people bring from other substances. There is no established colour-reagent protocol that reliably identifies ibogaine, distinguishes it from the other iboga alkaloids, or tells you anything about concentration. The tools that work for MDMA or LSD do not transfer to this problem.</p>
+
+          <div class="content-callout content-callout--warning">
+            <div class="callout-label">Ask for a batch-matched certificate of analysis</div>
+            <p>Meaningful verification of ibogaine means laboratory quantification by HPLC or GC/MS, reported on a <strong>certificate of analysis (CoA)</strong> from an independent lab. A legitimate clinic or supplier will have one and will provide it without resistance.</p>
+            <p>Check three things on it: that it states <strong>ibogaine content as a percentage by weight</strong>, that it names <strong>the form</strong> (HCl, TA, or bark), and above all that its <strong>batch or lot number matches the material you are actually being given</strong>. A CoA for a different lot tells you about someone else's material, not yours. A generic, undated certificate reused across batches is a meaningful warning sign about the operation as a whole.</p>
+          </div>
+
+          <h3 class="content-h3">Verifying the setting is part of verifying the substance</h3>
+          <p class="content-p">With ibogaine, a correct and well-characterised batch does not make an experience safe on its own. The same dose that is manageable with cardiac monitoring, corrected electrolytes and a physician present is the dose that kills people without them. The screening and monitoring requirements are set out in full under <a href="#ibo-risks" class="inline-link">Risks &amp; Cardiac Safety</a> above, and the questions to put to a provider are covered under <a href="#ibo-access" class="inline-link">Accessing Ibogaine Treatment Safely</a> below. Treat a provider who can produce a certificate of analysis but cannot produce an ECG and a baseline electrolyte panel as having answered the easier half of the question.</p>
         </div>
 
         <!-- Legal Status -->

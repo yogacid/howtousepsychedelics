@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Feedback from '../components/Feedback.astro';
 import SubstanceHud from '../components/SubstanceHud.astro';
+import SubstanceNav from '../components/SubstanceNav.astro';
 ---
 
 <Base
@@ -33,21 +34,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
 
     <!-- Table of Contents (sidebar on desktop) -->
     <div class="article-layout">
-      <aside class="article-sidebar">
-        <div class="sidebar-nav-label">Page contents</div>
-        <ul class="sidebar-nav">
-          <li><a href="#mdma-what">What MDMA is</a></li>
-          <li><a href="#mdma-pharmacology">Pharmacology</a></li>
-          <li><a href="#mdma-effects">Effects</a></li>
-          <li><a href="#mdma-dosage">Dosage</a></li>
-          <li><a href="#mdma-research">PTSD research</a></li>
-          <li><a href="#mdma-risks">Risks</a></li>
-          <li><a href="#mdma-relational">Relational risks</a></li>
-          <li><a href="#mdma-neurotoxicity">Neurotoxicity</a></li>
-          <li><a href="#mdma-harm-reduction">Harm reduction</a></li>
-          <li><a href="#mdma-faq">FAQ</a></li>
-        </ul>
-      </aside>
+      <SubstanceNav id="mdma" />
 
       <div class="article-body">
 
@@ -91,7 +78,7 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           </table></div>
           <div class="content-callout">
             <div class="callout-label">Adulteration risk is serious</div>
-            <p>Street MDMA is frequently contaminated or substituted. Fentanyl, methamphetamine, cathinones ("bath salts"), and PMA/PMMA &mdash; which has a dangerous risk profile and is responsible for numerous deaths &mdash; have all been found in substances sold as MDMA. Always test with a Marquis reagent (MDMA turns purple/black) and fentanyl test strips.</p>
+            <p>Street MDMA is frequently contaminated or substituted. Methamphetamine, MDA, synthetic cathinones ("bath salts"), and PMA/PMMA &mdash; which has a dangerous risk profile and is responsible for numerous deaths &mdash; have all been found in substances sold as MDMA. A Marquis reagent alone is not enough to rule these out, and no reagent tells you how strong a sample is. <a href="#mdma-testing" class="inline-link">How to verify what you have &rarr;</a></p>
           </div>
         </div>
 
@@ -138,11 +125,53 @@ import SubstanceHud from '../components/SubstanceHud.astro';
           <p class="content-p">The honest summary is: high doses and frequent use carry credible neurological risk. Whether moderate, infrequent use in a therapeutic context carries meaningful neurotoxic risk in humans is genuinely uncertain. Most harm reduction guidance recommends a maximum of three to four times per year as a precautionary limit, with adequate recovery time between uses.</p>
         </div>
 
+        <!-- Verifying What You Have -->
+        <div class="content-section">
+          <h2 class="content-h2" id="mdma-testing">Verifying What You Have</h2>
+          <p class="content-p">Of every substance covered on this site, MDMA is the one where verification matters most. It is the most commonly adulterated and the most commonly substituted, and several of the compounds sold in its place have killed people who believed they were taking MDMA. There are two separate questions to answer, and they need different tools: <strong>is this MDMA at all</strong>, and <strong>how much of it is there</strong>. Reagents answer the first imperfectly. They do not answer the second at all.</p>
+
+          <h3 class="content-h3">Reagent testing: what each one tells you</h3>
+          <p class="content-p">Reagents are small bottles of acidic solution that change colour on contact with particular classes of compound. You scrape off a few milligrams onto a white ceramic plate, add a drop, and read the colour over about 60 seconds. No single reagent is sufficient. Each one rules out a different set of things.</p>
+          <div class="table-scroll"><table class="dosage-table">
+            <thead><tr><th>Reagent</th><th>MDMA reaction</th><th>What it rules out</th></tr></thead>
+            <tbody>
+              <tr><td>Marquis</td><td>Purple, darkening to black within seconds</td><td>Amphetamine and methamphetamine (orange to brown), DXM (slow grey-black), most cathinones (little or no reaction)</td></tr>
+              <tr><td>Mecke</td><td>Blue-green, darkening to dark blue or black</td><td>Confirms the Marquis result, and flags opioids (green to olive)</td></tr>
+              <tr><td>Simon's</td><td>Blue</td><td><strong>MDA</strong>, which gives no colour change. The single most useful test most people skip</td></tr>
+              <tr><td>Folin</td><td>Little or no reaction</td><td>The complement to Simon's: MDA gives a green to blue-green colour here, so the two together make the MDA distinction reliable</td></tr>
+            </tbody>
+          </table></div>
+          <p class="content-p">Simon's and Folin both work by distinguishing secondary amines (MDMA) from primary amines (MDA). This distinction is worth understanding rather than memorising: MDA is regularly sold as MDMA, is more stimulating and more perceptually active, lasts noticeably longer, and carries a higher neurotoxic burden at equivalent doses. A sample that passes Marquis and Mecke can still be MDA. <strong>Marquis, Mecke, and Simon's together are the practical minimum</strong> for anything sold as MDMA.</p>
+
+          <div class="content-callout content-callout--warning">
+            <div class="callout-label">What reagents cannot tell you</div>
+            <p><strong>Strength.</strong> A pill containing 40 mg and a pill containing 250 mg produce an identical colour. Given how strong pressed pills have become, unknown dose is now a larger source of MDMA harm than adulteration is.</p>
+            <p><strong>Purity.</strong> A strong MDMA reaction can mask an adulterant present alongside it. A textbook purple means MDMA is present, not that nothing else is.</p>
+            <p><strong>Anything about the rest of the pill.</strong> Pressed tablets are not homogeneous. Crush the whole tablet and mix the powder before taking your sample, or you are testing one corner of it.</p>
+            <p>Reagents also degrade. Store them dark and cold, replace them roughly annually, and treat an unexpected result from an old kit as a reason to retest rather than a finding.</p>
+          </div>
+
+          <h3 class="content-h3">The substitutions that actually cause deaths</h3>
+          <p class="content-p"><strong>PMA and PMMA.</strong> The most dangerous substitution by a wide margin, and the reason lab testing is worth the trouble. The mechanism that kills is not the compound's potency but its timing: onset can take well over an hour, so someone who believes they have taken a weak pill redoses, and then both doses arrive together, producing severe hyperthermia and serotonin toxicity. Reagent colours do not distinguish PMA and PMMA from MDMA reliably enough to depend on. <strong>If a pill has not come up after 90 minutes, do not redose.</strong></p>
+          <p class="content-p"><strong>Synthetic cathinones.</strong> N-ethylpentylone has caused mass-casualty incidents at events in New Zealand and Australia, because it is far longer-acting than MDMA and produces agitation, insomnia, and in some cases psychosis lasting well over a day. Cathinones typically give a weak reaction or none at all on Marquis, which means a <em>blank</em> result on something sold as MDMA is a serious red flag, not an inconclusive one. Discard it.</p>
+          <p class="content-p"><strong>Methamphetamine.</strong> Common, and the one substitution reagents handle well: Marquis gives orange to brown rather than purple to black.</p>
+          <p class="content-p"><strong>Fentanyl.</strong> Not a typical MDMA adulterant, being far more associated with opioid and stimulant supply, but cross-contamination from shared equipment does happen, and strips cost very little.</p>
+
+          <h3 class="content-h3">Fentanyl test strips</h3>
+          <p class="content-p">These are not reagents. They are immunoassay strips, and they only work on a properly diluted solution. A sample that is too concentrated can produce a misleading result. Follow the dilution ratio the manufacturer specifies for that particular strip rather than a general rule, and where possible test the solution you would actually consume. A negative strip means fentanyl was not detected in the portion you tested. It does not certify the rest.</p>
+
+          <h3 class="content-h3">Lab testing, which is the real answer</h3>
+          <p class="content-p">Reagents are a screen. Laboratory analysis is an actual measurement, and for MDMA it resolves both questions at once: what the sample is, and in some cases how much of it there is. <strong>DrugsData</strong> (run by Erowid) accepts anonymous mail-in samples in the US, performs GC/MS analysis, and publishes results publicly. In-person drug-checking services operate in a growing number of places, including the Netherlands' long-running DIMS network, The Loop in the UK, and sites across Canada such as Get Your Drugs Tested in Vancouver. Legal status varies considerably by jurisdiction and some places still treat possession-for-testing as an offence, so check locally before posting anything.</p>
+
+          <h3 class="content-h3">What this means for dosing</h3>
+          <p class="content-p">Because strength cannot be established at home, dose by fraction rather than by unit. Take half of an unknown pill or less, wait a minimum of 90 minutes before considering anything further, and cap any redose at half the initial amount, once. The <a href="#mdma-dosage" class="inline-link">dosage table above</a> assumes you know the milligrams. When you don't, that assumption is the thing to be careful about.</p>
+        </div>
+
         <!-- Harm Reduction Principles -->
         <div class="content-section">
           <h2 class="content-h2" id="mdma-harm-reduction">Harm Reduction Principles</h2>
           <ul class="content-list">
-            <li><strong>Test your substance</strong> &mdash; Marquis reagent and fentanyl strips, always.</li>
+            <li><strong>Test your substance</strong> &mdash; Marquis, Mecke and Simon's at minimum, then lab testing where you can get it. <a href="#mdma-testing" class="inline-link">Full guidance &rarr;</a></li>
             <li><strong>Start low</strong> &mdash; 75&ndash;80 mg for a first experience. Effects can be intense even at moderate doses.</li>
             <li><strong>Limit frequency</strong> &mdash; most harm reduction frameworks recommend no more than once every three months.</li>
             <li><strong>Temperature and hydration</strong> &mdash; stay cool, drink 500 mL of water per hour if active, less if sedentary.</li>
