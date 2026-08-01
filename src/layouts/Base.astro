@@ -6,6 +6,7 @@ import MobileDrawer from '../components/MobileDrawer.astro';
 import Footer from '../components/Footer.astro';
 import EmailPopup from '../components/EmailPopup.astro';
 import EmailModal from '../components/EmailModal.astro';
+import BetaNotice from '../components/BetaNotice.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -167,6 +168,9 @@ const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] :
 
   <!-- Email Signup Modal (triggered by Get the Guide buttons) -->
   <div transition:persist="chrome-modal"><EmailModal /></div>
+
+  <!-- First-visit "site under construction" gate -->
+  <div transition:persist="chrome-beta"><BetaNotice /></div>
 
   <!-- Footer -->
   <Footer />
@@ -835,8 +839,45 @@ const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] :
             + '<div class="email-cta-box-desc">Research and mindfulness-based frameworks for preparation, safety, and integration. Used by thousands of readers — delivered to your inbox, no cost.</div>'
             + '<a class="email-cta-btn" href="#get-the-guide">Get the Guide →</a>'
             + '</div>';
-          for (var i = positions.length - 1; i >= 0; i--) {
-            var target = h2s[positions[i]];
+
+          // The CTA goes *before* a section, so whatever ends the previous
+          // section sits directly above it. Sections can end in a card of
+          // their own (.nature-card, and .feedback-card once that script has
+          // run), and landing here would stack two cards back to back.
+          function endsWithCard(el) {
+            var last = el && el.lastElementChild;
+            return !!(last && last.classList
+              && (last.classList.contains('nature-card') || last.classList.contains('feedback-card')));
+          }
+          function slotOk(target, used, j) {
+            if (used.indexOf(j) > -1) return false;
+            var sec = target && target.closest('.content-section');
+            if (!sec) return true;
+            return !endsWithCard(sec.previousElementSibling);
+          }
+          // Nearest acceptable h2 to the ideal position, searching outward.
+          function findSlot(ideal, used) {
+            for (var d = 0; d < h2s.length; d++) {
+              var tries = d === 0 ? [ideal] : [ideal + d, ideal - d];
+              for (var k = 0; k < tries.length; k++) {
+                var j = tries[k];
+                if (j < 1 || j >= h2s.length) continue;
+                if (slotOk(h2s[j], used, j)) return j;
+              }
+            }
+            return -1;
+          }
+
+          // Resolve every slot against the clean DOM before inserting anything.
+          var slots = [];
+          for (var p = 0; p < positions.length; p++) {
+            var slot = findSlot(positions[p], slots);
+            if (slot > -1) slots.push(slot);
+          }
+          slots.sort(function (a, b) { return a - b; });
+
+          for (var i = slots.length - 1; i >= 0; i--) {
+            var target = h2s[slots[i]];
             if (target && target.closest('.content-section')) target.closest('.content-section').insertAdjacentHTML('beforebegin', html);
             else if (target) target.insertAdjacentHTML('beforebegin', html);
           }

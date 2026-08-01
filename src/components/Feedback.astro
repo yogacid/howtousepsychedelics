@@ -370,7 +370,12 @@ const path = Astro.url.pathname;
     // section are usable.
     function usable(section) {
       var next = section.nextElementSibling;
-      return !!(next && next.classList && next.classList.contains('content-section'));
+      if (!(next && next.classList && next.classList.contains('content-section'))) return false;
+      // Cards append to the end of a section, so a section that already ends
+      // in a .nature-card would put two cards back to back.
+      var last = section.lastElementChild;
+      if (last && last.classList && last.classList.contains('nature-card')) return false;
+      return true;
     }
 
     // Nearest usable, unused section to the ideal position, searching outward.

@@ -1,0 +1,323 @@
+---
+// First-visit notice: the site is still being built and may contain errors.
+// Blocking by design — the reader has to acknowledge before continuing, so
+// there is no backdrop-click or Escape dismissal. Optional email signup reuses
+// the same /.netlify/functions/subscribe endpoint as EmailModal/EmailPopup.
+//
+// Lives in a transition:persist wrapper in Base.astro and binds once, so
+// ClientRouter soft-navigations don't re-show or double-bind it.
+---
+
+<div id="betaNotice" class="beta-notice" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="betaNoticeTitle">
+  <div class="beta-notice-backdrop"></div>
+  <div class="beta-notice-card">
+
+    <div id="betaNoticeMain">
+      <span class="beta-notice-eyebrow">Heads up</span>
+      <h2 class="beta-notice-title" id="betaNoticeTitle">This site is still being built.</h2>
+      <p class="beta-notice-body">You are welcome to read anything here, but pages are still being written and revised. Some sections are incomplete, and there will be mistakes we haven't caught yet.</p>
+      <p class="beta-notice-body">Treat everything as a work in progress rather than a finished reference, and check anything that matters against another source. If you spot something wrong, the feedback links on each page go straight to us.</p>
+
+      <button type="button" class="beta-notice-btn" id="betaNoticeAccept">I understand</button>
+
+      <div class="beta-notice-sep"></div>
+
+      <p class="beta-notice-optin">Want to know when it's finished?</p>
+      <div id="betaNoticeForm">
+        <div class="beta-notice-row">
+          <input type="email" id="betaNoticeEmail" class="beta-notice-input" placeholder="Your email (optional)" autocomplete="email" />
+          <button type="button" class="beta-notice-sub" id="betaNoticeSubBtn"><span id="betaNoticeSubText">Sign me up</span></button>
+        </div>
+        <input type="text" id="betaNoticeHp" class="beta-notice-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <p id="betaNoticeError" class="beta-notice-error" style="display:none;"></p>
+        <p class="beta-notice-disclaimer">This adds you to the newsletter, so you will get the welcome emails too, along with a note when the site is finished. Unsubscribe anytime.</p>
+      </div>
+      <p id="betaNoticeThanks" class="beta-notice-thanks" style="display:none;">Thanks. Check your inbox for the welcome email.</p>
+    </div>
+
+  </div>
+</div>
+
+<style is:global>
+  /* Global, matching EmailModal/EmailPopup/Feedback. Scoped styles would let
+     Astro rewrite [data-theme="light"] into [data-astro-cid-…][data-theme="light"],
+     which targets the component instead of <html> and silently kills light mode. */
+  .beta-notice {
+    position: fixed;
+    inset: 0;
+    z-index: 400; /* above email modal (300) — this gates the site */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+  }
+  .beta-notice.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .beta-notice-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+  [data-theme="light"] .beta-notice-backdrop {
+    background: rgba(0,0,0,0.45);
+  }
+
+  .beta-notice-card {
+    position: relative;
+    width: 520px;
+    max-width: calc(100vw - 40px);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    padding: 38px 38px 30px;
+    border-radius: 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+    transform: translateY(12px);
+    transition: transform 0.28s ease;
+  }
+  .beta-notice.open .beta-notice-card { transform: translateY(0); }
+  [data-theme="light"] .beta-notice-card {
+    background: #ffffff;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  }
+
+  .beta-notice-eyebrow {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .beta-notice-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.3rem, 3.4vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--text-primary);
+    margin: 0 0 14px;
+  }
+  .beta-notice-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin: 0 0 12px;
+  }
+
+  .beta-notice-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 8px;
+    padding: 13px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    color: #040a05;
+    background: linear-gradient(135deg, #5cb84a 0%, #2e9fd8 50%, #5cb84a 100%);
+    background-size: 300% 100%;
+    background-position: 0% center;
+    transition: box-shadow 0.25s ease;
+  }
+  .beta-notice-btn:hover {
+    animation: accentShimmer 4s ease-in-out infinite;
+    box-shadow: 0 6px 20px rgba(64,217,204,0.18);
+  }
+  .beta-notice-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .beta-notice-sep {
+    height: 1px;
+    margin: 24px 0 18px;
+    background: var(--border);
+  }
+
+  .beta-notice-optin {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 10px;
+  }
+  .beta-notice-row {
+    display: flex;
+    gap: 8px;
+  }
+  .beta-notice-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 11px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text-primary);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .beta-notice-input::placeholder { color: var(--text-muted); opacity: 0.8; }
+  .beta-notice-input:focus { border-color: var(--accent); }
+
+  .beta-notice-sub {
+    flex: 0 0 auto;
+    padding: 11px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .beta-notice-sub:hover { border-color: var(--accent); color: var(--accent); }
+  .beta-notice-sub:disabled { opacity: 0.55; cursor: default; }
+
+  .beta-notice-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .beta-notice-error {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: #e5794b;
+    margin: 8px 0 0;
+  }
+  .beta-notice-disclaimer,
+  .beta-notice-thanks {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin: 10px 0 0;
+  }
+  .beta-notice-thanks { color: var(--accent); font-size: 0.82rem; }
+
+  @media (max-width: 520px) {
+    .beta-notice-card { padding: 30px 24px 24px; }
+    .beta-notice-row { flex-direction: column; }
+    .beta-notice-sub { width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .beta-notice, .beta-notice-card { transition: none; }
+    .beta-notice-btn:hover { animation: none; }
+  }
+</style>
+
+<script is:inline>
+(function () {
+  if (window.__htupBetaNotice) return;
+  window.__htupBetaNotice = true;
+
+  var KEY = 'htup_beta_ack';
+  var el = document.getElementById('betaNotice');
+  if (!el) return;
+
+  var stored;
+  try { stored = localStorage.getItem(KEY); } catch (e) { stored = null; }
+  if (stored) return;
+
+  var card = el.querySelector('.beta-notice-card');
+  var accept = document.getElementById('betaNoticeAccept');
+  var emailEl = document.getElementById('betaNoticeEmail');
+  var subBtn = document.getElementById('betaNoticeSubBtn');
+  var subText = document.getElementById('betaNoticeSubText');
+  var errorEl = document.getElementById('betaNoticeError');
+  var formWrap = document.getElementById('betaNoticeForm');
+  var thanks = document.getElementById('betaNoticeThanks');
+  var hp = document.getElementById('betaNoticeHp');
+
+  var lastFocus = document.activeElement;
+
+  function open() {
+    el.classList.add('open');
+    el.setAttribute('aria-hidden', 'false');
+    document.documentElement.style.overflow = 'hidden';
+    setTimeout(function () { accept.focus(); }, 60);
+    document.addEventListener('keydown', trap, true);
+  }
+
+  function close() {
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    el.classList.remove('open');
+    el.setAttribute('aria-hidden', 'true');
+    document.documentElement.style.overflow = '';
+    document.removeEventListener('keydown', trap, true);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  // Focus stays inside the dialog. Escape is deliberately inert — the reader
+  // has to acknowledge, so there is no keyboard escape hatch.
+  function trap(e) {
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); return; }
+    if (e.key !== 'Tab') return;
+    var f = card.querySelectorAll('button, input, a[href]');
+    var list = [];
+    for (var i = 0; i < f.length; i++) if (f[i].offsetParent !== null) list.push(f[i]);
+    if (!list.length) return;
+    var first = list[0], last = list[list.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  accept.addEventListener('click', close);
+
+  subBtn.addEventListener('click', function () {
+    var email = (emailEl.value || '').trim();
+    errorEl.style.display = 'none';
+    if (!email || email.indexOf('@') < 0) {
+      errorEl.textContent = 'Enter a valid email, or just continue without one.';
+      errorEl.style.display = 'block';
+      emailEl.focus();
+      return;
+    }
+    subBtn.disabled = true;
+    subText.textContent = 'Sending…';
+    fetch('/.netlify/functions/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, first_name: '', _hp: hp.value, source: 'beta-notice' })
+    })
+      .then(function (r) { return r.ok ? r.json().catch(function () { return {}; }) : Promise.reject(r); })
+      .then(function () {
+        formWrap.style.display = 'none';
+        thanks.style.display = 'block';
+      })
+      .catch(function () {
+        subBtn.disabled = false;
+        subText.textContent = 'Notify me';
+        errorEl.textContent = 'Something went wrong. You can continue without signing up.';
+        errorEl.style.display = 'block';
+      });
+  });
+
+  emailEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); subBtn.click(); }
+  });
+
+  open();
+})();
+</script>
