@@ -45,7 +45,10 @@
   .beta-notice {
     position: fixed;
     inset: 0;
-    z-index: 400; /* above email modal (300) — this gates the site */
+    /* Top of the stack. The site runs nav 1000, drawer 1600, search 2000,
+       skip-link 3000 — a gate has to cover all of them, including the skip
+       link, since nothing should let a reader past it. */
+    z-index: 4000;
     display: flex;
     align-items: center;
     justify-content: center;
