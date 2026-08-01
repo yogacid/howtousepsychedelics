@@ -10,7 +10,9 @@
     "dev:local": "astro dev --no-sync",
     "dev:netlify": "npx netlify dev",
     "og": "node scripts/generate-og-images.mjs",
-    "build": "node scripts/build-search-index.mjs && node scripts/build-glossary-data.mjs && node scripts/generate-og-images.mjs && astro build",
+    "build": "node scripts/build-search-index.mjs && node scripts/build-glossary-data.mjs && node scripts/generate-og-images.mjs && astro build && node scripts/check-sections.mjs",
+    "check:sections": "node scripts/check-sections.mjs",
+    "check:voice": "node scripts/check-voice.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
