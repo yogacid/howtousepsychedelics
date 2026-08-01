@@ -293,7 +293,7 @@ const path = Astro.url.pathname;
   .feedback-modal {
     position: fixed;
     inset: 0;
-    z-index: 900;
+    z-index: 3300; /* above nav (1000) and the guide modal — see scale in global.css */
     display: none;
     align-items: center;
     justify-content: center;

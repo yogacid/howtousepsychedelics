@@ -181,6 +181,27 @@ body.home::after {
 }
 p { text-wrap: pretty; }
 
+/* ══════════════════════════════════════════════
+   Z-INDEX SCALE — check this before adding a layer.
+   Overlays were repeatedly authored below the nav, which left the
+   nav crisp and clickable over a dimmed page.
+
+     4        sticky table headers, in-flow bits
+     800      .toc-fab            (fixed, bottom-right)
+     850      .email-popup        (fixed, same corner — must clear the fab)
+     1000     nav                 (1001 dropdown)
+     1500     .drawer-backdrop
+     1600     .mobile-drawer
+     2000     .search-overlay
+     3000     .skip-link
+     3200     .email-modal        ─┐ full-screen dialogs: above everything
+     3300     .feedback-modal     ─┘ a reader could otherwise click behind
+     4000     .beta-notice          the first-visit gate outranks all of it
+
+   Full-screen dialogs belong above the nav. Corner cards only need to
+   clear whatever shares their corner.
+   ══════════════════════════════════════════════ */
+
 /* ── Skip link (keyboard users) ── */
 .skip-link {
   position: fixed;
