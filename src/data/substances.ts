@@ -5,6 +5,8 @@
 // update both together.
 // ─────────────────────────────────────────────────────────────
 
+import type { SectionManifest } from './sections';
+
 export interface Phase {
   label: string;
   from: number;
@@ -32,6 +34,17 @@ export interface DoseBand {
 export interface Chip {
   text: string;
   tone?: 'accent' | 'warn';
+}
+
+/** Does a living organism make this compound? Drives the nature card. */
+export type Origin = 'natural' | 'semi-synthetic' | 'synthetic';
+
+export interface NatureCard {
+  /**
+   * 2–4 sentences about THIS organism specifically. If the paragraph
+   * could appear on another substance page, it is not finished.
+   */
+  hook: string;
 }
 
 export interface Substance {
@@ -62,6 +75,12 @@ export interface Substance {
   emergency?: string;
   /** plain-language answer to "I'm on antidepressants — what happens?" */
   ssri?: string;
+
+  origin: Origin;
+  /** Required iff origin === 'natural'; asserted by scripts/check-sections.mjs */
+  nature?: NatureCard;
+  /** Which section roles this page currently has — see sections.ts */
+  sections: SectionManifest;
 }
 
 export const substances: Record<string, Substance> = {
@@ -116,6 +135,25 @@ export const substances: Record<string, Substance> = {
     tolerance: { value: '~14 days', sub: 'full reset · strong cross-tolerance with LSD' },
     legal: { value: 'Illegal, exceptions', sub: 'OR & CO services · decrim cities' },
     ssri: 'Usually blunted — not typically dangerous',
+    origin: 'natural',
+    nature: {
+      hook: 'Psilocybin reliably changes how people relate to the living world. The shift tracks with how much ego dissolution happened during the experience: the further the boundary between self and world comes down, the stronger it is. Whether it holds afterward depends on what you do with it.',
+    },
+    sections: {
+      prefix: '',
+      has: ['what', 'origin', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'verifying', 'legal', 'considering', 'faq'],
+      anchors: { origin: 'species', dose: 'dosage', verifying: 'testing', considering: 'preparing' },
+      labels: {
+        what: 'What psilocybin is',
+        origin: 'Species guide',
+        dose: 'Dosage reference',
+        research: 'What the research shows',
+        risks: 'Risks & contraindications',
+        verifying: 'Testing & harm reduction',
+        considering: 'Preparing for an experience',
+      },
+      extra: [{ anchor: 'methods', label: 'Methods of consumption', after: 'dose' }],
+    },
   },
 
   lsd: {
@@ -169,6 +207,18 @@ export const substances: Record<string, Substance> = {
     legal: { value: 'Illegal', sub: 'Schedule I in most jurisdictions' },
     testing: 'Ehrlich reagent rules out NBOMes on blotter',
     ssri: 'Usually blunted — not typically dangerous',
+    origin: 'semi-synthetic',
+    sections: {
+      prefix: 'lsd',
+      has: ['what', 'how', 'effects', 'dose', 'compared', 'research', 'risks', 'verifying', 'faq'],
+      anchors: { how: 'pharmacology', dose: 'dosage', compared: 'vs-psilocybin', verifying: 'testing' },
+      labels: {
+        what: 'What LSD is',
+        how: 'Pharmacology',
+        compared: 'LSD vs. psilocybin',
+        verifying: 'Testing your supply',
+      },
+    },
   },
 
   mdma: {
@@ -218,9 +268,21 @@ export const substances: Record<string, Substance> = {
     },
     tolerance: { value: '1–3 months', sub: 'recommended spacing between sessions' },
     legal: { value: 'Illegal, exceptions', sub: 'Australia: prescribed for PTSD' },
-    testing: 'Marquis + Simon\u2019s reagents distinguish MDMA from cathinones',
+    testing: 'Marquis rules out cathinones, Simon\u2019s rules out MDA \u2014 neither shows strength',
     emergency: 'severe overheating, confusion, or muscle rigidity',
     ssri: 'Largely blocked — added strain without benefit',
+    origin: 'synthetic',
+    sections: {
+      prefix: 'mdma',
+      has: ['what', 'how', 'effects', 'dose', 'research', 'risks', 'verifying', 'faq'],
+      anchors: { how: 'pharmacology', dose: 'dosage', verifying: 'testing' },
+      labels: { what: 'What MDMA is', how: 'Pharmacology', research: 'PTSD research' },
+      extra: [
+        { anchor: 'relational', label: 'Relational risks', after: 'risks' },
+        { anchor: 'neurotoxicity', label: 'Neurotoxicity', after: 'risks' },
+        { anchor: 'harm-reduction', label: 'Harm reduction', after: 'verifying' },
+      ],
+    },
   },
 
   dmt: {
@@ -270,6 +332,21 @@ export const substances: Record<string, Substance> = {
     tolerance: { value: 'None', sub: 'no tolerance develops — unique among psychedelics' },
     legal: { value: 'Illegal', sub: 'Schedule I; ayahuasca exemptions exist' },
     ssri: 'Blunted — and never combine with MAOIs',
+    origin: 'natural',
+    nature: {
+      hook: 'A full DMT dose commonly produces the sense of meeting other beings. People who encounter them describe them as aware and responsive, and clearly not human. Some come away believing the entity was real, including people who held no such belief beforehand. The traditions that use DMT-containing plants have always described a world populated this way.',
+    },
+    sections: {
+      prefix: 'dmt',
+      has: ['what', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'legal', 'faq'],
+      anchors: { dose: 'dosage' },
+      labels: {
+        what: 'What DMT is',
+        dose: 'Dosage & routes',
+        research: 'What the research shows',
+        risks: 'Risks & contraindications',
+      },
+    },
   },
 
   fivemedmt: {
@@ -317,7 +394,24 @@ export const substances: Record<string, Substance> = {
     },
     tolerance: { value: 'Minimal', sub: 'rapid but short-lived' },
     legal: { value: 'Illegal', sub: 'US Schedule I since 2011' },
+    testing: 'No reagent tells it apart from N,N-DMT, lab analysis only',
     ssri: 'Do not combine — serotonergic risk',
+    origin: 'natural',
+    nature: {
+      hook: '5-MeO-DMT dissolves the boundary between self and world more completely than anything else here. No visuals, no entities, no narrative, just the collapse of the distinction. That dissolution is what drives the ecological shift with other psychedelics, and 5-MeO produces it more reliably than any of them.',
+    },
+    sections: {
+      prefix: 'meo',
+      has: ['what', 'origin', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'verifying', 'legal', 'faq'],
+      anchors: { origin: 'sources', dose: 'dosage', verifying: 'testing' },
+      labels: {
+        what: 'What 5-MeO-DMT is',
+        origin: 'Sources: toad vs. synthetic',
+        dose: 'Dosage reference',
+        research: 'What the research shows',
+        risks: 'Risks & contraindications',
+      },
+    },
   },
 
   ayahuasca: {
@@ -365,6 +459,23 @@ export const substances: Record<string, Substance> = {
     legal: { value: 'Varies', sub: 'legal in Brazil & Peru · religious exemptions elsewhere' },
     emergency: 'high fever, rigidity, or racing heart — possible serotonin syndrome',
     ssri: 'Dangerous — serotonin syndrome risk; do not combine',
+    origin: 'natural',
+    nature: {
+      hook: 'Many ayahuasca drinkers describe the vine as a presence that teaches them. Others experience the same insights as coming from within. Both are common. The traditions ayahuasca comes from have always treated the plant as a person.',
+    },
+    sections: {
+      prefix: 'aya',
+      has: ['what', 'how', 'effects', 'ceremony', 'research', 'risks', 'ethics', 'faq'],
+      anchors: { how: 'pharmacology' },
+      labels: {
+        what: 'What ayahuasca is',
+        how: 'Pharmacology',
+        effects: 'Effects and experience',
+        ceremony: 'Ceremony and container',
+        risks: 'Risks and contraindications',
+      },
+      extra: [{ anchor: 'safety', label: 'Critical safety: MAOIs', after: 'research' }],
+    },
   },
 
   mescaline: {
@@ -415,6 +526,20 @@ export const substances: Record<string, Substance> = {
     tolerance: { value: '~14 days', sub: 'cross-tolerance with other classical psychedelics' },
     legal: { value: 'Illegal, exceptions', sub: 'NAC peyote exemption · CO natural medicine' },
     ssri: 'Usually blunted — data limited',
+    origin: 'natural',
+    nature: {
+      hook: 'For the Wixárika, peyote cannot be separated from the place it grows. The annual pilgrimage to Wirikuta retraces an ancestral route, and the healing is understood to depend on walking it properly, not on the cactus alone. Culture and ecology are the same thing in that frame. Western research on mescaline has never studied any of this, and mostly studies people taking it alone in a room.',
+    },
+    sections: {
+      prefix: 'mes',
+      has: ['what', 'origin', 'how', 'effects', 'dose', 'research', 'risks', 'ethics', 'faq'],
+      anchors: { origin: 'sources', dose: 'dosage' },
+      labels: {
+        what: 'What mescaline is',
+        origin: 'Peyote vs. San Pedro',
+        how: 'How mescaline works',
+      },
+    },
   },
 
   ketamine: {
@@ -485,6 +610,20 @@ export const substances: Record<string, Substance> = {
     testing: 'Fentanyl test strips are cheap insurance for any powder',
     emergency: 'unresponsive or vomiting while sedated — recovery position, then call',
     ssri: 'Generally compatible — often co-prescribed clinically',
+    origin: 'synthetic',
+    sections: {
+      prefix: 'ket',
+      has: ['what', 'how', 'effects', 'dose', 'compared', 'research', 'access', 'risks', 'faq'],
+      anchors: { how: 'pharmacology', dose: 'dosage', compared: 'vs-classical', access: 'therapy' },
+      labels: {
+        what: 'What ketamine is',
+        how: 'Pharmacology',
+        dose: 'Dosage and routes',
+        compared: 'vs. Classical psychedelics',
+        research: 'Clinical research',
+        access: 'Ketamine therapy',
+      },
+    },
   },
 
   ibogaine: {
@@ -534,8 +673,25 @@ export const substances: Record<string, Substance> = {
     },
     tolerance: { value: 'N/A', sub: 'typically a single supervised treatment' },
     legal: { value: 'Illegal (US)', sub: 'clinics operate in Mexico & New Zealand' },
+    testing: 'HCl, TA extract & root bark differ several-fold, so demand a batch-matched CoA',
     emergency: 'any chest pain, fainting, or irregular heartbeat',
     ssri: 'Do not combine — cardiac & serotonergic risk',
+    origin: 'natural',
+    nature: {
+      hook: 'Ibogaine tends to turn people inward. Most describe a waking dream of their own past, often childhood memories, running for a day or more. It works on a different receptor system than the serotonergic psychedelics, and the relational and ecological experiences that recur across those do not show up here.',
+    },
+    sections: {
+      prefix: 'ibo',
+      has: ['what', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'verifying', 'legal', 'access', 'faq'],
+      anchors: { dose: 'dosage', verifying: 'testing' },
+      labels: {
+        what: 'What ibogaine is',
+        dose: 'Dosage reference',
+        research: 'What the research shows',
+        risks: 'Risks & cardiac safety',
+        access: 'Accessing treatment',
+      },
+    },
   },
 
   cannabis: {
@@ -603,6 +759,23 @@ export const substances: Record<string, Substance> = {
     },
     tolerance: { value: 'Days–weeks', sub: 'builds with regular use; resets with breaks' },
     legal: { value: 'Varies widely', sub: 'legal in Canada & many US states' },
+    origin: 'natural',
+    nature: {
+      hook: 'Cannabis is the most used plant here and the least understood in this respect. High oral doses can produce states close to a classic psychedelic, but whether that changes how people relate to the living world is simply unknown. It has never been the plant anyone thought to ask the question about.',
+    },
+    sections: {
+      prefix: 'can',
+      has: ['what', 'history', 'how', 'effects', 'research', 'risks', 'legal', 'faq'],
+      labels: {
+        what: 'What cannabis is',
+        research: 'What the research shows',
+        risks: 'Risks & harms',
+      },
+      extra: [
+        { anchor: 'psychedelic', label: 'Is cannabis a psychedelic?', after: 'what' },
+        { anchor: 'combinations', label: 'Cannabis & psychedelics', after: 'research' },
+      ],
+    },
   },
 
   twocb: {
@@ -652,6 +825,19 @@ export const substances: Record<string, Substance> = {
     legal: { value: 'Illegal', sub: 'Schedule I in most jurisdictions' },
     testing: 'Frequently mis-sold — verify with Marquis reagent',
     ssri: 'Limited data — assume blunting and added strain',
+    origin: 'synthetic',
+    sections: {
+      prefix: 'tcb',
+      has: ['what', 'how', 'effects', 'dose', 'compared', 'risks', 'verifying', 'faq'],
+      anchors: { how: 'pharmacology', dose: 'dosage', compared: 'vs-others', verifying: 'testing' },
+      labels: {
+        what: 'What 2C-B is',
+        how: 'Pharmacology',
+        dose: 'Dosage — critical note',
+        compared: 'vs. Psilocybin and LSD',
+        verifying: 'Testing',
+      },
+    },
   },
 
   salvia: {
@@ -714,5 +900,20 @@ export const substances: Record<string, Substance> = {
     },
     tolerance: { value: 'Minimal', sub: 'no significant tolerance reported' },
     legal: { value: 'Varies by state', sub: 'unscheduled federally (US); banned in many states' },
+    origin: 'natural',
+    nature: {
+      hook: 'Salvia acts on the kappa-opioid system rather than serotonin, and what people report is correspondingly strange. Becoming an object. Being somewhere else entirely. Losing all awareness of the room. The relational and ecological themes that recur across other psychedelics do not appear here.',
+    },
+    sections: {
+      prefix: 'sal',
+      has: ['what', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'legal', 'faq'],
+      anchors: { dose: 'dosage' },
+      labels: {
+        what: 'What salvia is',
+        dose: 'Dosage reference',
+        research: 'What the research shows',
+        risks: 'Risks & harm reduction',
+      },
+    },
   },
 };

@@ -1,0 +1,26 @@
+---
+// Sidebar table of contents for substance pages, generated from the
+// section manifest in src/data/substances.ts. Pages no longer hand-write
+// this list, so a page and its TOC cannot drift apart.
+import { substances } from '../data/substances';
+import { resolveSections } from '../data/sections';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const s = substances[id];
+if (!s) throw new Error(`SubstanceNav: unknown substance "${id}"`);
+
+const entries = resolveSections(s.sections);
+---
+
+<aside class="article-sidebar">
+  <div class="sidebar-nav-label">Page contents</div>
+  <ul class="sidebar-nav">
+    {entries.map((e) => (
+      <li><a href={`#${e.anchor}`}>{e.label}</a></li>
+    ))}
+  </ul>
+</aside>

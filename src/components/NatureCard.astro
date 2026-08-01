@@ -1,0 +1,29 @@
+---
+// Ecological note for naturally-occurring substances. Renders only when
+// origin === 'natural', so its presence and absence both carry meaning:
+// eight substances are made by an organism, four come out of a lab.
+//
+// The hook text lives in src/data/substances.ts and must be specific to
+// that organism — see docs/information-architecture.md §6.
+import { substances } from '../data/substances';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const s = substances[id];
+if (!s) throw new Error(`NatureCard: unknown substance "${id}"`);
+
+const show = s.origin === 'natural' && s.nature;
+---
+
+{show && (
+  <aside class="nature-card">
+    <div class="nature-card-label">Ecological note</div>
+    <p class="nature-card-hook">{s.nature!.hook}</p>
+    <a class="nature-card-link" href="/nature/">
+      Why ecological themes recur in psychedelic experience&nbsp;&rarr;
+    </a>
+  </aside>
+)}
