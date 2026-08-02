@@ -1,0 +1,279 @@
+---
+// OPTION B — non-blocking beta banner.
+//
+// Slim strip pinned to the bottom of the viewport. Persistent until
+// dismissed, so it keeps working after the first second, and it never
+// stands between a reader and the page. No acknowledgement.
+//
+// It spans the bottom, where .toc-fab (800) and .email-popup (850) already
+// sit, so it lifts both while visible via html.has-beta-banner.
+---
+
+<div id="betaBanner" class="beta-banner" role="status" aria-hidden="true">
+  <div class="beta-banner-inner">
+    <span class="beta-banner-tag">Beta</span>
+    <p class="beta-banner-text">This site is still being written and will contain errors. Check anything that matters against another source.</p>
+
+    <div class="beta-banner-actions">
+      <button type="button" class="beta-banner-link" id="betaBannerToggle" aria-expanded="false" aria-controls="betaBannerForm">Notify me when it&rsquo;s finished</button>
+      <button type="button" class="beta-banner-close" id="betaBannerClose" aria-label="Dismiss notice">&times;</button>
+    </div>
+  </div>
+
+  <div id="betaBannerForm" class="beta-banner-form" hidden>
+    <div class="beta-banner-row">
+      <input type="email" id="betaBannerEmail" class="beta-banner-input" placeholder="Your email" autocomplete="email" />
+      <button type="button" class="beta-banner-sub" id="betaBannerSubBtn"><span id="betaBannerSubText">Sign up</span></button>
+    </div>
+    <input type="text" id="betaBannerHp" class="beta-banner-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <p id="betaBannerMsg" class="beta-banner-msg" hidden></p>
+  </div>
+</div>
+
+<style is:global>
+  .beta-banner {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    /* Above the corner furniture it spans — see the scale in global.css. */
+    z-index: 880;
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.35);
+    transform: translateY(100%);
+    transition: transform 0.32s ease;
+  }
+  .beta-banner.open { transform: translateY(0); }
+  [data-theme="light"] .beta-banner {
+    background: #ffffff;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.10);
+  }
+
+  /* Lift the corner furniture so the banner does not sit on top of it. */
+  html.has-beta-banner .toc-fab,
+  html.has-beta-banner .email-popup { bottom: calc(24px + var(--beta-banner-h, 56px)); }
+
+  .beta-banner-inner {
+    max-width: var(--max-w, 1200px);
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .beta-banner-tag {
+    flex: 0 0 auto;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #06110f;
+    background: var(--accent);
+    padding: 4px 9px;
+    border-radius: 100px;
+  }
+
+  .beta-banner-text {
+    flex: 1 1 auto;
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .beta-banner-actions {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .beta-banner-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: none;
+    border: none;
+    padding: 6px 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .beta-banner-link:hover { border-bottom-color: var(--accent); }
+
+  .beta-banner-close {
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--text-muted);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .beta-banner-close:hover { color: var(--text-primary); border-color: var(--text-muted); }
+
+  .beta-banner-form {
+    max-width: var(--max-w, 1200px);
+    margin: 0 auto;
+    padding: 0 24px 14px;
+  }
+  .beta-banner-row { display: flex; gap: 8px; max-width: 420px; }
+  .beta-banner-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 9px 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    outline: none;
+  }
+  .beta-banner-input:focus { border-color: var(--accent); }
+  .beta-banner-sub {
+    flex: 0 0 auto;
+    padding: 9px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  .beta-banner-sub:hover { border-color: var(--accent); color: var(--accent); }
+  .beta-banner-sub:disabled { opacity: 0.55; cursor: default; }
+  .beta-banner-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .beta-banner-msg {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    margin: 8px 0 0;
+    color: var(--accent);
+  }
+  .beta-banner-msg.err { color: #e5794b; }
+
+  @media (max-width: 720px) {
+    .beta-banner-inner {
+      flex-wrap: wrap;
+      padding: 11px 16px;
+      gap: 10px;
+    }
+    .beta-banner-text { flex: 1 1 100%; order: 3; font-size: 0.78rem; }
+    .beta-banner-actions { margin-left: auto; }
+    .beta-banner-form { padding: 0 16px 12px; }
+    .beta-banner-row { max-width: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .beta-banner { transition: none; }
+  }
+</style>
+
+<script is:inline>
+(function () {
+  if (window.__htupBetaBanner) return;
+  window.__htupBetaBanner = true;
+
+  var KEY = 'htup_beta_ack';
+  var el = document.getElementById('betaBanner');
+  if (!el) return;
+
+  var stored;
+  try { stored = localStorage.getItem(KEY); } catch (e) { stored = null; }
+  if (stored) return;
+
+  var closeBtn = document.getElementById('betaBannerClose');
+  var toggle = document.getElementById('betaBannerToggle');
+  var formWrap = document.getElementById('betaBannerForm');
+  var emailEl = document.getElementById('betaBannerEmail');
+  var subBtn = document.getElementById('betaBannerSubBtn');
+  var subText = document.getElementById('betaBannerSubText');
+  var msg = document.getElementById('betaBannerMsg');
+  var hp = document.getElementById('betaBannerHp');
+
+  function syncHeight() {
+    document.documentElement.style.setProperty('--beta-banner-h', el.offsetHeight + 'px');
+  }
+
+  function open() {
+    el.classList.add('open');
+    el.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('has-beta-banner');
+    syncHeight();
+  }
+
+  function dismiss() {
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    el.classList.remove('open');
+    el.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('has-beta-banner');
+  }
+
+  closeBtn.addEventListener('click', dismiss);
+
+  toggle.addEventListener('click', function () {
+    var opening = formWrap.hasAttribute('hidden');
+    if (opening) {
+      formWrap.removeAttribute('hidden');
+      toggle.setAttribute('aria-expanded', 'true');
+      emailEl.focus();
+    } else {
+      formWrap.setAttribute('hidden', '');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+    syncHeight();
+  });
+
+  subBtn.addEventListener('click', function () {
+    var email = (emailEl.value || '').trim();
+    msg.setAttribute('hidden', ''); msg.classList.remove('err');
+    if (!email || email.indexOf('@') < 0) {
+      msg.textContent = 'Enter a valid email.';
+      msg.classList.add('err');
+      msg.removeAttribute('hidden');
+      syncHeight();
+      return;
+    }
+    subBtn.disabled = true;
+    subText.textContent = 'Sending…';
+    fetch('/.netlify/functions/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, first_name: '', _hp: hp.value, source: 'beta-banner' })
+    })
+      .then(function (r) { return r.ok ? r.json().catch(function () { return {}; }) : Promise.reject(r); })
+      .then(function () {
+        formWrap.setAttribute('hidden', '');
+        toggle.setAttribute('hidden', '');
+        msg.textContent = 'Thanks. Check your inbox.';
+        msg.removeAttribute('hidden');
+        formWrap.removeAttribute('hidden');
+        syncHeight();
+      })
+      .catch(function () {
+        subBtn.disabled = false;
+        subText.textContent = 'Sign up';
+        msg.textContent = 'Something went wrong.';
+        msg.classList.add('err');
+        msg.removeAttribute('hidden');
+        syncHeight();
+      });
+  });
+
+  emailEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); subBtn.click(); }
+  });
+
+  window.addEventListener('resize', syncHeight);
+  open();
+})();
+</script>
