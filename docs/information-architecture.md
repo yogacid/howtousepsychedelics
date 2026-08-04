@@ -1,7 +1,11 @@
 # Substance Page Information Architecture — Spec
 
-Status: proposed, not implemented
+Status: Phases 1, 2 and 4 shipped 1 Aug 2026. **Phase 3 is next — see §11.**
 Audited: 31 July 2026, against all 12 substance pages in `src/pages/`
+
+**Start here if you are picking this up cold:** read §11 for what's done and
+what's next, then run `npm run check:sections` for the live gap matrix. §1.1
+below is the *original* audit and is now out of date — the checker is truth.
 
 ---
 
@@ -708,7 +712,7 @@ the Gabonese export restriction; mescaline's peyote conservation callout.
 
 ## 11. Sequencing
 
-**Phase 1 — safety gaps. ✅ DONE 31 July 2026 (uncommitted).**
+**Phase 1 — safety gaps. ✅ DONE, shipped 1 Aug 2026 (commit 0238965).**
 - `mdma-testing` — reagent table (Marquis/Mecke/Simon's/Folin), what reagents
   can't tell you, PMA/PMMA and N-ethylpentylone, fentanyl strips, lab testing,
   dosing consequence. Existing one-line mentions in the dosage callout and the
@@ -742,7 +746,7 @@ existing site patterns, and links inside `.article-body p`/`li` pick up the
 existing `.article-body p a` styling — `.inline-link` itself has no CSS rules
 and is a naming convention only.
 
-**Phase 2 — schema. ✅ DONE 1 Aug 2026 (uncommitted).**
+**Phase 2 — schema. ✅ DONE, shipped 1 Aug 2026 (commits c17a07a, 8d05383).**
 - `src/data/sections.ts` — `SectionId` union (12 universal + 4 conditional),
   `SECTION_ORDER`, `DEFAULT_ANCHOR`/`DEFAULT_LABEL`, `SectionManifest`,
   `resolveSections()`, `missingSections()`, `orderDeviation()`.
@@ -768,7 +772,7 @@ The sidebar must match the page, and ayahuasca, mescaline and ketamine don't
 currently follow canonical order. `orderDeviation()` reports them; reordering
 those three pages is Phase 3 work.
 
-**Phase 4 — relocations. ✅ DONE 1 Aug 2026 (uncommitted).**
+**Phase 4 — relocations. ✅ DONE, shipped 1 Aug 2026 (commit 5a10c8c).**
 - "Psilocybin & the Living World" → blog post
   `why-psilocybin-experiences-turn-ecological.md`, expanded with the corrected
   HGT material. Section removed from the psilocybin page.
@@ -787,13 +791,40 @@ link resolves; no stale `#ecology` references anywhere including the search
 index; blog post and `/science/` section both indexed; console clean;
 deep-link landing confirmed visually.
 
-**Phase 3 — migration. NOT STARTED.** Write the 41 remaining universal
-sections (see the checker's matrix for the live count), fold the 8 off-schema
-sections into canonical ones, and reorder ayahuasca, mescaline and ketamine to
-canonical order. Run `npm run check:sections` to see current state.
+**Phase 3 — migration. NOT STARTED. This is the next job.**
+Run `npm run check:sections` for the live matrix — trust it over any number
+written here. As of 1 Aug 2026 it reports **41 universal sections to write**
+and **7 off-schema sections to fold in**. Three parts:
 
-**Phase 5 — surface it.** Coverage matrix on `/substances/`; `origin` as a HUD
-chip and an index filter.
+1. **Write the missing sections.** Biggest holes first: ayahuasca (6 —
+   `origin`, `history`, `dose`, `verifying`, `legal`, `considering`),
+   ketamine (5), 2C-B (5), LSD (4), MDMA (4), mescaline (4). Per-page notes
+   are in §8 above. Follow `docs/voice.md`, and check drafts with
+   `npm run check:voice`.
+2. **Fold in the 7 off-schema sections** — psilocybin `methods`, MDMA
+   `relational`/`neurotoxicity`/`harm-reduction`, ayahuasca `safety`,
+   cannabis `psychedelic`/`combinations`. Each becomes an `h3` inside a
+   canonical section, or justifies a new conditional role.
+3. **Reorder ayahuasca, mescaline and ketamine** to `SECTION_ORDER`. The
+   checker flags these as order drift; `has` in each manifest must then be
+   re-sorted to match the new document order.
 
-**Phase 5 — surface it.** Coverage matrix on `/substances/`; `origin` as a HUD
-chip and an index filter.
+**Phase 5 — surface it. NOT STARTED.** Coverage matrix on `/substances/`,
+built from the same manifests; `origin` as a HUD chip and an index filter.
+
+---
+
+## 12. Not in this spec, but shipped alongside it
+
+Two things a future session will find in the repo that this document does not
+otherwise cover:
+
+- **`docs/voice.md`** — the prose guide, now the standard for site copy, with
+  `npm run check:voice` scanning for the mechanical violations. Its first run
+  found ~89 fixes across *pre-existing* pages, mostly em-dash density
+  (`integration.astro` at 81 against a budget of 10). **None of that backlog
+  has been addressed.** Prose written during the IA work is clean.
+- **The beta gate** (`BetaNotice.astro`, mounted in `Base.astro`) — a
+  first-visit acknowledgement modal, exempt on `/crisis/`, `/checker/` and
+  `/assessment/`. `BetaBanner.astro` is a non-blocking alternative, built and
+  deliberately unused; flip `GATE_STYLE` in `Base.astro` to switch.
