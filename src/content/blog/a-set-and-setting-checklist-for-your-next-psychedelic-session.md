@@ -112,7 +112,7 @@ If you're sitting without professional training, the Facilitation page has a det
 *  Fentanyl test strip used if substance is a pressed pill or powder of uncertain origin
 *  Dose is on the conservative side, especially for a first experience with this substance
 *  Read the substance-specific page for your substance) you understand the expected onset, peak, duration, and common early signs
-*  If uncertain about dose: err lower. You can always go further in a future session; you can't reduce intensity once it has begun.
+*  If uncertain about dose: err lower. You can always go further in a future session. You can't reduce intensity once it has begun.
 
 ### The Day Before Checklist
 
