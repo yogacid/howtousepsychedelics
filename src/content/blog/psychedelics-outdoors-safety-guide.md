@@ -35,7 +35,7 @@ A good location for an outdoor session is private enough to feel safe, familiar 
 
 Outdoors, a sober sitter isn't as optional the way it might be for a familiar indoor session. There's no locked door and no walls to contain a wandering, altered person. Smaller groups are easier to supervise and easier to evacuate, and every person present should know their specific role in advance, not just be "there."
 
-A sitter outdoors needs to be doing more than holding space. They're tracking time, tracking the group's location relative to the way out, watching for anyone drifting toward uneven ground or water, and holding the practical knowledge of what to do if something goes wrong. Our [facilitation and sitter guide](https://howtousepsychedelics.com/facilitation/) covers the role in depth; the outdoor version of that role just has fewer walls doing the work for them.
+A sitter outdoors needs to be doing more than staying present. They're tracking time, tracking the group's location relative to the way out, watching for anyone drifting toward uneven ground or water, and holding the practical knowledge of what to do if something goes wrong. Our [facilitation and sitter guide](https://howtousepsychedelics.com/facilitation/) covers the role in depth; the outdoor version of that role just has fewer walls doing the work for them.
 
 Before you start, decide out loud who is watching the time, who knows basic first aid, and who actually knows the route back. Vague, shared responsibility tends to mean no one is really covering it once the experience is underway.
 
