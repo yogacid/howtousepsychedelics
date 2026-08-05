@@ -211,12 +211,29 @@ to go further. Don't sprinkle it for flavor.
 
 **Words — never use**
 
-delve, tapestry, landscape, leverage, robust, streamline, cutting-edge,
-multifaceted, holistic, synergy, paradigm, game-changer / game-changing,
-groundbreaking, landmark, unlock, unleash, empower, elevate, foster, harness,
-spearhead, embark, evidence-based (belongs to the clinical framing HTUP sits apart
-from), therapeutic (when describing non-clinical, personal use), high vibration,
-raising consciousness, holding space.
+delve, tapestry, leverage, streamline, cutting-edge, multifaceted, holistic,
+paradigm, game-changer / game-changing, groundbreaking, unlock, unleash, empower,
+foster, harness, spearhead, embark, high vibration, raising consciousness.
+
+The test for this list is whether the word is doing work. These are words that
+arrive as filler — they signal effort without adding meaning, and most of them
+are tells for text that was assembled rather than written.
+
+**Words that are only sometimes a problem**
+
+- **evidence-based** — belongs to the clinical framing HTUP sits apart from.
+- **landmark** — fine for a study that genuinely was one, filler otherwise.
+
+These are flagged for a human to judge rather than banned outright.
+
+**Deliberately not banned.** Ordinary English with a legitimate technical sense
+here was removed from this list in August 2026, after a site-wide sweep showed it
+firing almost entirely on correct usage: *robust* ("robust evidence"), *elevate*
+("elevated mood," "elevates the risk"), *synergy* (a pharmacological category in
+the interaction tables), *therapeutic*, *landscape* ("the legal landscape"), and
+*holding space* (the actual subject of `/facilitation/`). A word with a real
+technical meaning in this domain is not filler, and banning it costs more than it
+saves. Prefer the plainer word where one exists; that is a judgement, not a rule.
 
 **Phrases — never use**
 

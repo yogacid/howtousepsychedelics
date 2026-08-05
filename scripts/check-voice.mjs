@@ -21,17 +21,21 @@ const onlyRule = only('--rule');
 
 // ── Rules ───────────────────────────────────────────────────
 // `word: true` wraps the pattern in word boundaries.
+// Filler only. Words with a legitimate technical sense in this domain were
+// removed in Aug 2026 after a site-wide sweep showed them firing almost
+// entirely on correct usage — robust, elevate, synergy, therapeutic,
+// landscape, holding space. See docs/voice.md for the reasoning; don't
+// re-add them without new evidence that they're actually being misused.
 const BANNED_WORDS = [
-  'delve', 'tapestry', 'leverage', 'robust', 'streamline', 'cutting-edge',
-  'multifaceted', 'holistic', 'synergy', 'paradigm', 'game-changer',
+  'delve', 'tapestry', 'leverage', 'streamline', 'cutting-edge',
+  'multifaceted', 'holistic', 'paradigm', 'game-changer',
   'game-changing', 'groundbreaking', 'unlock', 'unleash', 'empower',
-  'elevate', 'foster', 'harness', 'spearhead', 'embark', 'high vibration',
-  'raising consciousness', 'holding space',
+  'foster', 'harness', 'spearhead', 'embark', 'high vibration',
+  'raising consciousness',
 ];
 
-// Flagged but context-dependent — "landscape" is banned as filler, fine in
-// "the legal landscape"; "therapeutic" is banned for non-clinical use.
-const SOFT_WORDS = ['landscape', 'evidence-based', 'therapeutic', 'landmark'];
+// Flagged for a human to judge rather than banned.
+const SOFT_WORDS = ['evidence-based', 'landmark'];
 
 const BANNED_PHRASES = [
   "it's worth noting", 'it is worth noting', "it's important to remember",
