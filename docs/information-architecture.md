@@ -1,6 +1,8 @@
 # Substance Page Information Architecture — Spec
 
-Status: Phases 1, 2 and 4 shipped 1 Aug 2026. **Phase 3 is next — see §11.**
+Status: Phases 1, 2, 3 and 4 shipped. The section schema is fully realised —
+all 12 substance pages carry all 12 universal sections in canonical order,
+with no off-schema debt. **Phase 5 is the only one left — see §11.**
 Audited: 31 July 2026, against all 12 substance pages in `src/pages/`
 
 **Start here if you are picking this up cold:** read §11 for what's done and
@@ -627,9 +629,13 @@ generator works uniformly. This breaks existing deep links — see §10.
 
 ### Totals
 
-New universal sections to write: **38**. Roughly:
-`verifying` ×9 · `legal` ×6 · `history` ×6 · `origin` ×9 · `dose` ×2 ·
-`considering` ×5 · `how` ×1 · `research` ×1
+**All written — see Phase 3 in §11.** The live count when the work began was
+41 (the estimate below was made before the schema landed and undercounted
+`considering`). Roughly: `considering` ×11 · `origin` ×9 · `verifying` ×8 ·
+`legal` ×6 · `history` ×5 · `dose` ×2 · `research` ×1 · `how` ×1.
+
+Run `npm run check:sections` for the live matrix rather than trusting any
+number written here.
 
 ---
 
@@ -791,23 +797,53 @@ link resolves; no stale `#ecology` references anywhere including the search
 index; blog post and `/science/` section both indexed; console clean;
 deep-link landing confirmed visually.
 
-**Phase 3 — migration. NOT STARTED. This is the next job.**
-Run `npm run check:sections` for the live matrix — trust it over any number
-written here. As of 1 Aug 2026 it reports **41 universal sections to write**
-and **7 off-schema sections to fold in**. Three parts:
+**Phase 3 — migration. ✅ DONE, shipped 4 Aug 2026.**
+`npm run check:sections` now reports **0 universal sections to write, 0
+off-schema sections to fold in, 0 order deviations**, and every declared
+anchor resolves. All twelve pages carry the full 12 universal sections.
 
-1. **Write the missing sections.** Biggest holes first: ayahuasca (6 —
-   `origin`, `history`, `dose`, `verifying`, `legal`, `considering`),
-   ketamine (5), 2C-B (5), LSD (4), MDMA (4), mescaline (4). Per-page notes
-   are in §8 above. Follow `docs/voice.md`, and check drafts with
-   `npm run check:voice`.
-2. **Fold in the 7 off-schema sections** — psilocybin `methods`, MDMA
-   `relational`/`neurotoxicity`/`harm-reduction`, ayahuasca `safety`,
-   cannabis `psychedelic`/`combinations`. Each becomes an `h3` inside a
-   canonical section, or justifies a new conditional role.
-3. **Reorder ayahuasca, mescaline and ketamine** to `SECTION_ORDER`. The
-   checker flags these as order drift; `has` in each manifest must then be
+1. **All 41 missing universal sections written** — ayahuasca 6, ketamine 5,
+   2C-B 5, LSD 4, MDMA 4, mescaline 4, cannabis 4, DMT 3, salvia 3,
+   ibogaine 2, 5-MeO 1. Per-page notes in §8 were followed.
+2. **All 7 off-schema sections folded in.** psilocybin `methods` → `h3`
+   under *Dosage*; MDMA `relational` + `neurotoxicity` → `h3`s under
+   *Risks*, `harm-reduction` → absorbed into *If you are considering this*;
+   ayahuasca `safety` → `h3` under *Risks*; cannabis `psychedelic` → `h3`
+   under *What it is*, `combinations` → absorbed into *considering* with the
+   `/checker/` link.
+3. **Reordering done** for ayahuasca, mescaline and ketamine, with `has`
    re-sorted to match the new document order.
+
+**Conditional sections added alongside** (§5.1 matrix now fully realised):
+psilocybin `ethics` (the María Sabina / Wasson material promoted out of
+*History*), mescaline `ceremony`, salvia `ethics`, ibogaine `ceremony` +
+`ethics`, 5-MeO `ethics`, and the reciprocal `compared` pair between DMT and
+5-MeO-DMT — the highest-stakes confusion on the site, now a cross-linked
+table on both pages using the site's own dose figures.
+
+**Also done in this pass:** psilocybin's 1,400-word preparation section cut
+to the substance-specific delta (potency variation, identification, the 4–6h
+clearance, tolerance) after confirming `/preparation/` already covers the
+general material; psilocybin FAQ trimmed 14 → 9.
+
+**Two markup notes for future work.** There is no `h4` styling anywhere in
+`global.css`, so a third heading level must use the site's existing
+`<strong>` lead-in pattern rather than inventing `.content-h4` — psilocybin's
+consumption methods now use that. And several pages put the FAQ `id` on the
+`.content-section` wrapper rather than on the `h2`; any script comparing the
+sidebar to document headings must fall back to the wrapper id or it will
+report false mismatches on lsd, mdma, dmt and mescaline.
+
+Verified: build + checker green; all 12 sidebars match document order; a
+crawl of the built site found **0 broken anchors across 591 internal anchor
+links** (the 190 `#get-the-guide` hits are the email-modal JS hook, not
+anchors); nature cards present on exactly the 8 natural substances and
+absent on the 4 others; no two cards adjacent on any page with the full
+injected complement (3 CTA / 3 feedback / 1 nature); console clean;
+deep-link landing confirmed visually. New prose is clean under
+`npm run check:voice` for banned words and the "Not X. Y." tic. Em-dash
+density remains over budget site-wide — that is the pre-existing backlog in
+§12, untouched here, and the new prose contributed none.
 
 **Phase 5 — surface it. NOT STARTED.** Coverage matrix on `/substances/`,
 built from the same manifests; `origin` as a HUD chip and an index filter.

@@ -141,7 +141,10 @@ export const substances: Record<string, Substance> = {
     },
     sections: {
       prefix: '',
-      has: ['what', 'origin', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'verifying', 'legal', 'considering', 'faq'],
+      has: [
+        'what', 'origin', 'history', 'ethics', 'how', 'effects', 'dose',
+        'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
+      ],
       anchors: { origin: 'species', dose: 'dosage', verifying: 'testing', considering: 'preparing' },
       labels: {
         what: 'What psilocybin is',
@@ -150,9 +153,7 @@ export const substances: Record<string, Substance> = {
         research: 'What the research shows',
         risks: 'Risks & contraindications',
         verifying: 'Testing & harm reduction',
-        considering: 'Preparing for an experience',
       },
-      extra: [{ anchor: 'methods', label: 'Methods of consumption', after: 'dose' }],
     },
   },
 
@@ -210,10 +211,14 @@ export const substances: Record<string, Substance> = {
     origin: 'semi-synthetic',
     sections: {
       prefix: 'lsd',
-      has: ['what', 'how', 'effects', 'dose', 'compared', 'research', 'risks', 'verifying', 'faq'],
+      has: [
+        'what', 'origin', 'history', 'how', 'effects', 'dose', 'compared',
+        'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
+      ],
       anchors: { how: 'pharmacology', dose: 'dosage', compared: 'vs-psilocybin', verifying: 'testing' },
       labels: {
         what: 'What LSD is',
+        origin: 'Where it comes from',
         how: 'Pharmacology',
         compared: 'LSD vs. psilocybin',
         verifying: 'Testing your supply',
@@ -274,14 +279,17 @@ export const substances: Record<string, Substance> = {
     origin: 'synthetic',
     sections: {
       prefix: 'mdma',
-      has: ['what', 'how', 'effects', 'dose', 'research', 'risks', 'verifying', 'faq'],
-      anchors: { how: 'pharmacology', dose: 'dosage', verifying: 'testing' },
-      labels: { what: 'What MDMA is', how: 'Pharmacology', research: 'PTSD research' },
-      extra: [
-        { anchor: 'relational', label: 'Relational risks', after: 'risks' },
-        { anchor: 'neurotoxicity', label: 'Neurotoxicity', after: 'risks' },
-        { anchor: 'harm-reduction', label: 'Harm reduction', after: 'verifying' },
+      has: [
+        'what', 'origin', 'history', 'how', 'effects', 'dose',
+        'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
       ],
+      anchors: { how: 'pharmacology', dose: 'dosage', verifying: 'testing' },
+      labels: {
+        what: 'What MDMA is',
+        origin: 'Where it comes from',
+        how: 'Pharmacology',
+        research: 'PTSD research',
+      },
     },
   },
 
@@ -338,11 +346,16 @@ export const substances: Record<string, Substance> = {
     },
     sections: {
       prefix: 'dmt',
-      has: ['what', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'legal', 'faq'],
-      anchors: { dose: 'dosage' },
+      has: [
+        'what', 'origin', 'history', 'how', 'effects', 'dose', 'compared',
+        'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
+      ],
+      anchors: { dose: 'dosage', verifying: 'testing' },
       labels: {
         what: 'What DMT is',
+        origin: 'Where it comes from',
         dose: 'Dosage & routes',
+        compared: 'Compared to 5-MeO-DMT',
         research: 'What the research shows',
         risks: 'Risks & contraindications',
       },
@@ -402,12 +415,16 @@ export const substances: Record<string, Substance> = {
     },
     sections: {
       prefix: 'meo',
-      has: ['what', 'origin', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'verifying', 'legal', 'faq'],
+      has: [
+        'what', 'origin', 'history', 'ethics', 'how', 'effects', 'dose', 'compared',
+        'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
+      ],
       anchors: { origin: 'sources', dose: 'dosage', verifying: 'testing' },
       labels: {
         what: 'What 5-MeO-DMT is',
         origin: 'Sources: toad vs. synthetic',
         dose: 'Dosage reference',
+        compared: 'Compared to N,N-DMT',
         research: 'What the research shows',
         risks: 'Risks & contraindications',
       },
@@ -465,16 +482,20 @@ export const substances: Record<string, Substance> = {
     },
     sections: {
       prefix: 'aya',
-      has: ['what', 'how', 'effects', 'ceremony', 'research', 'risks', 'ethics', 'faq'],
+      has: [
+        'what', 'origin', 'history', 'ceremony', 'ethics', 'how', 'effects',
+        'dose', 'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
+      ],
       anchors: { how: 'pharmacology' },
       labels: {
         what: 'What ayahuasca is',
+        origin: 'Where it comes from',
         how: 'Pharmacology',
         effects: 'Effects and experience',
         ceremony: 'Ceremony and container',
+        dose: 'Dosage and method',
         risks: 'Risks and contraindications',
       },
-      extra: [{ anchor: 'safety', label: 'Critical safety: MAOIs', after: 'research' }],
     },
   },
 
@@ -532,11 +553,15 @@ export const substances: Record<string, Substance> = {
     },
     sections: {
       prefix: 'mes',
-      has: ['what', 'origin', 'how', 'effects', 'dose', 'research', 'risks', 'ethics', 'faq'],
+      has: [
+        'what', 'origin', 'history', 'ceremony', 'ethics', 'how', 'effects',
+        'dose', 'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
+      ],
       anchors: { origin: 'sources', dose: 'dosage' },
       labels: {
         what: 'What mescaline is',
         origin: 'Peyote vs. San Pedro',
+        ceremony: 'Ceremony and container',
         how: 'How mescaline works',
       },
     },
@@ -613,14 +638,19 @@ export const substances: Record<string, Substance> = {
     origin: 'synthetic',
     sections: {
       prefix: 'ket',
-      has: ['what', 'how', 'effects', 'dose', 'compared', 'research', 'access', 'risks', 'faq'],
+      has: [
+        'what', 'origin', 'history', 'how', 'effects', 'dose', 'compared',
+        'research', 'risks', 'verifying', 'legal', 'access', 'considering', 'faq',
+      ],
       anchors: { how: 'pharmacology', dose: 'dosage', compared: 'vs-classical', access: 'therapy' },
       labels: {
         what: 'What ketamine is',
+        origin: 'Where it comes from',
         how: 'Pharmacology',
         dose: 'Dosage and routes',
         compared: 'vs. Classical psychedelics',
         research: 'Clinical research',
+        risks: 'Risks',
         access: 'Ketamine therapy',
       },
     },
@@ -682,10 +712,15 @@ export const substances: Record<string, Substance> = {
     },
     sections: {
       prefix: 'ibo',
-      has: ['what', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'verifying', 'legal', 'access', 'faq'],
+      has: [
+        'what', 'origin', 'history', 'ceremony', 'ethics', 'how', 'effects', 'dose',
+        'research', 'risks', 'verifying', 'legal', 'access', 'considering', 'faq',
+      ],
       anchors: { dose: 'dosage', verifying: 'testing' },
       labels: {
         what: 'What ibogaine is',
+        origin: 'Where it comes from',
+        ceremony: 'Ceremony and container',
         dose: 'Dosage reference',
         research: 'What the research shows',
         risks: 'Risks & cardiac safety',
@@ -765,16 +800,17 @@ export const substances: Record<string, Substance> = {
     },
     sections: {
       prefix: 'can',
-      has: ['what', 'history', 'how', 'effects', 'research', 'risks', 'legal', 'faq'],
+      has: [
+        'what', 'origin', 'history', 'how', 'effects', 'dose',
+        'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
+      ],
       labels: {
         what: 'What cannabis is',
+        origin: 'Where it comes from',
+        dose: 'Dosage and method',
         research: 'What the research shows',
         risks: 'Risks & harms',
       },
-      extra: [
-        { anchor: 'psychedelic', label: 'Is cannabis a psychedelic?', after: 'what' },
-        { anchor: 'combinations', label: 'Cannabis & psychedelics', after: 'research' },
-      ],
     },
   },
 
@@ -828,13 +864,18 @@ export const substances: Record<string, Substance> = {
     origin: 'synthetic',
     sections: {
       prefix: 'tcb',
-      has: ['what', 'how', 'effects', 'dose', 'compared', 'risks', 'verifying', 'faq'],
+      has: [
+        'what', 'origin', 'history', 'how', 'effects', 'dose', 'compared',
+        'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
+      ],
       anchors: { how: 'pharmacology', dose: 'dosage', compared: 'vs-others', verifying: 'testing' },
       labels: {
         what: 'What 2C-B is',
+        origin: 'Where it comes from',
         how: 'Pharmacology',
         dose: 'Dosage — critical note',
         compared: 'vs. Psilocybin and LSD',
+        research: 'What the research shows',
         verifying: 'Testing',
       },
     },
@@ -906,10 +947,14 @@ export const substances: Record<string, Substance> = {
     },
     sections: {
       prefix: 'sal',
-      has: ['what', 'history', 'how', 'effects', 'dose', 'research', 'risks', 'legal', 'faq'],
-      anchors: { dose: 'dosage' },
+      has: [
+        'what', 'origin', 'history', 'ethics', 'how', 'effects', 'dose',
+        'research', 'risks', 'verifying', 'legal', 'considering', 'faq',
+      ],
+      anchors: { dose: 'dosage', verifying: 'testing' },
       labels: {
         what: 'What salvia is',
+        origin: 'Where it comes from',
         dose: 'Dosage reference',
         research: 'What the research shows',
         risks: 'Risks & harm reduction',
