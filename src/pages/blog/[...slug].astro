@@ -47,7 +47,9 @@ const structuredData = {
       mainEntityOfPage: postUrl,
       datePublished: publishedIso,
       dateModified: modifiedIso,
-      image: `${baseUrl}${post.data.image || '/og-image.png'}`,
+      // Same card the post shares socially — the schema and og:image agreeing
+      // is the point, and every post has a generated one.
+      image: `${baseUrl}${post.data.image || `/og/blog/${post.id}.png`}`,
       author: { '@type': 'Organization', name: post.data.author, url: `${baseUrl}/` },
       publisher: { '@id': `${baseUrl}/#organization` },
       articleSection: post.data.category,
