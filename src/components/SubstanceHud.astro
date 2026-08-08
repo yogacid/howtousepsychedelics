@@ -45,6 +45,14 @@ function doseColor(idx: number, count: number, caution?: boolean) {
   return `background: color-mix(in srgb, var(--accent) ${pct}%, var(--bg-elevated));`;
 }
 
+// Origin is a data field on every substance (it also gates the nature
+// card and filters /substances/), so the HUD can state it plainly.
+const ORIGIN_LABEL: Record<typeof s.origin, string> = {
+  natural: 'Natural',
+  'semi-synthetic': 'Semi-synthetic',
+  synthetic: 'Synthetic',
+};
+
 const evidenceUrl = s.evidence.researchFilter
   ? `/research/?substance=${encodeURIComponent(s.evidence.researchFilter)}`
   : null;
@@ -57,6 +65,7 @@ const evidenceUrl = s.evidence.researchFilter
       <div class="hud-chips">
         <span class="hud-chip"><strong>Class</strong>&nbsp; {s.class}</span>
         <span class="hud-chip"><strong>Mechanism</strong>&nbsp; {s.mechanism}</span>
+        <span class="hud-chip"><strong>Origin</strong>&nbsp; {ORIGIN_LABEL[s.origin]}</span>
         {s.chips.map((c) => (
           <span class={`hud-chip ${c.tone === 'warn' ? 'hud-chip--warn' : 'hud-chip--accent'}`}>{c.text}</span>
         ))}

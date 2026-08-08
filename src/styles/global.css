@@ -5634,6 +5634,229 @@ a.cmp-row:hover .cmp-value { color: var(--accent); }
   .cmp-value { display: none; }
 }
 
+/* ── Section coverage matrix (/substances/) ── */
+.cov-section {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 1rem 1.5rem 4.5rem;
+}
+
+.cov-head { max-width: 72ch; margin-bottom: 1.75rem; }
+.cov-head .content-h2 { margin-top: 0; }
+
+.cov-universal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.cov-universal-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cov-universal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cov-universal-list li {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-body);
+  padding: 0.24rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.cov-universal-list li::before { content: none; }
+
+/* Sheen sits on the scroll container's own box (background-attachment
+   defaults to scroll, so it stays put while the table pans sideways). */
+.cov-scroll {
+  margin: 0;
+  background-color: var(--bg-elevated);
+  background-image: linear-gradient(90deg, transparent, rgba(64,217,204,0.35), transparent);
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: top left;
+}
+
+.cov-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.cov-table th,
+.cov-table td {
+  padding: 0.7rem 0.9rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.cov-table thead th {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  vertical-align: bottom;
+  padding-top: 1.1rem;
+}
+
+.cov-table tbody tr:last-child th,
+.cov-table tbody tr:last-child td { border-bottom: none; }
+
+.cov-table tbody tr { transition: background 0.15s; }
+.cov-table tbody tr:hover { background: rgba(64,217,204,0.045); }
+
+.cov-table .cov-corner,
+.cov-table .cov-name { text-align: left; }
+
+.cov-corner { color: var(--text-muted); }
+
+.cov-name { min-width: 9rem; }
+
+.cov-name a {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.cov-name a:hover { color: var(--accent); }
+
+.cov-name em {
+  display: block;
+  font-style: normal;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 0.12rem;
+}
+
+.cov-yes {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.cov-yes svg { width: 14px; height: 14px; display: block; }
+
+.cov-yes:hover {
+  background: var(--accent);
+  color: var(--bg);
+  transform: scale(1.1);
+}
+
+.cov-no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+}
+
+.cov-no i {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--border-hover);
+}
+
+.cov-legend {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.8rem;
+}
+
+@media (max-width: 700px) {
+  .cov-section { padding: 0.5rem 1rem 3rem; }
+  .cov-table { font-size: 0.78rem; }
+  .cov-table th,
+  .cov-table td { padding: 0.5rem 0.3rem; }
+  /* Wrapping the column heads is what keeps four columns on a phone
+     instead of pushing the table into a sideways scroll. */
+  .cov-table thead th {
+    white-space: normal;
+    line-height: 1.25;
+    font-size: 0.57rem;
+    letter-spacing: 0.03em;
+  }
+  .cov-name { min-width: 0; }
+  .cov-name a { font-size: 0.78rem; }
+  .cov-yes,
+  .cov-no { width: 22px; height: 22px; }
+  .cov-yes svg { width: 12px; height: 12px; }
+  .cov-universal-list li { font-size: 0.68rem; }
+}
+
+/* ── Origin filter (/substances/) ── */
+.origin-filter {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.9rem;
+}
+
+.origin-filter-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.origin-filter .blog-pills { margin-bottom: 0; }
+
+.origin-filter .blog-pill b {
+  font-weight: 600;
+  opacity: 0.6;
+  margin-left: 0.35rem;
+}
+
+/* Card numbers renumber as the filter hides cards: elements set to
+   display:none do not increment a CSS counter. */
+.hub-grid[data-filterable] { counter-reset: hub; }
+
+.hub-grid[data-filterable] .card-num::before {
+  counter-increment: hub;
+  content: counter(hub, decimal-leading-zero);
+}
+
+@media (max-width: 700px) {
+  .origin-filter { padding: 0 1rem; }
+}
+
 /* ── Drawer lead links: hub/overview entries read differently ── */
 .drawer-section-links .drawer-lead {
   color: var(--accent);

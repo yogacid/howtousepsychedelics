@@ -1,0 +1,121 @@
+---
+// Section coverage across the substance guides, built from the same
+// manifests that generate each page's sidebar (see src/data/sections.ts).
+// The twelve universal roles are on every page by definition, so listing
+// them as a promise says more than twelve identical columns would. The
+// table shows the four conditional roles, where a gap is the finding.
+import { substances } from '../data/substances';
+import {
+  CONDITIONAL_SECTIONS,
+  UNIVERSAL_SECTIONS,
+  DEFAULT_LABEL,
+  resolveSections,
+  type SectionId,
+} from '../data/sections';
+import type { Origin } from '../data/substances';
+
+/** Column heads have to survive a phone. Sidebar labels are too long. */
+const SHORT_LABEL: Record<string, string> = {
+  ceremony: 'Ceremony',
+  ethics: 'Ethics',
+  compared: 'Compared to',
+  access: 'Access',
+};
+
+const ORIGIN_LABEL: Record<Origin, string> = {
+  natural: 'Natural',
+  'semi-synthetic': 'Semi-synthetic',
+  synthetic: 'Synthetic',
+};
+
+const ORIGIN_RANK: Record<Origin, number> = {
+  natural: 0,
+  'semi-synthetic': 1,
+  synthetic: 2,
+};
+
+const rows = Object.values(substances)
+  .map((s) => {
+    // resolveSections already applies each page's anchor prefix and
+    // overrides, so a cell can never link at an anchor the page lacks.
+    const anchors: Partial<Record<SectionId, string>> = {};
+    for (const sec of resolveSections(s.sections)) {
+      if (sec.id) anchors[sec.id] = sec.anchor;
+    }
+    return {
+      name: s.name,
+      url: `/${s.id}/`,
+      origin: s.origin,
+      originLabel: ORIGIN_LABEL[s.origin],
+      anchors,
+    };
+  })
+  // Grouped by origin so the column of captions reads as a grouping
+  // rather than noise, alphabetical inside each group.
+  .sort(
+    (a, b) =>
+      ORIGIN_RANK[a.origin] - ORIGIN_RANK[b.origin] || a.name.localeCompare(b.name)
+  );
+---
+
+<section class="cov-section" id="coverage" aria-label="Section coverage by substance">
+
+  <div class="cov-head">
+    <h2 class="content-h2">What Each Guide Covers</h2>
+    <p class="content-p">Every substance guide answers the same twelve questions, so you can move between them without relearning where things are. Four further sections appear only where the question has a real answer. Ceremony is a live question for ayahuasca and an empty one for 2C-B, so the gaps in this table carry as much information as the marks.</p>
+  </div>
+
+  <div class="cov-universal">
+    <span class="cov-universal-label">On every guide</span>
+    <ul class="cov-universal-list">
+      {UNIVERSAL_SECTIONS.map((id) => <li>{DEFAULT_LABEL[id]}</li>)}
+    </ul>
+  </div>
+
+  <div class="table-scroll cov-scroll">
+    <table class="cov-table">
+      <thead>
+        <tr>
+          <th scope="col" class="cov-corner">Where it also applies</th>
+          {CONDITIONAL_SECTIONS.map((id) => (
+            <th scope="col">{SHORT_LABEL[id] ?? DEFAULT_LABEL[id]}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr data-origin={r.origin}>
+            <th scope="row" class="cov-name">
+              <a href={r.url}>{r.name}</a>
+              <em>{r.originLabel}</em>
+            </th>
+            {CONDITIONAL_SECTIONS.map((id) =>
+              r.anchors[id] ? (
+                <td>
+                  <a
+                    class="cov-yes"
+                    href={`${r.url}#${r.anchors[id]}`}
+                    aria-label={`${r.name}: ${DEFAULT_LABEL[id]}`}
+                  >
+                    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                      <path d="M3.5 8.5 6.5 11.5 12.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                </td>
+              ) : (
+                <td>
+                  <span class="cov-no" aria-label="Does not apply">
+                    <i aria-hidden="true"></i>
+                  </span>
+                </td>
+              )
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="cov-legend">Each mark links straight to that section.</p>
+
+</section>

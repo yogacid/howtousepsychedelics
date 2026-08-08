@@ -1,8 +1,9 @@
 # Substance Page Information Architecture — Spec
 
-Status: Phases 1, 2, 3 and 4 shipped. The section schema is fully realised —
+Status: all five phases shipped. The section schema is fully realised —
 all 12 substance pages carry all 12 universal sections in canonical order,
-with no off-schema debt. **Phase 5 is the only one left — see §11.**
+with no off-schema debt, and the manifests now drive reader-facing surfaces
+on `/substances/` as well as the sidebars. **See §11 for what landed.**
 Audited: 31 July 2026, against all 12 substance pages in `src/pages/`
 
 **Start here if you are picking this up cold:** read §11 for what's done and
@@ -845,8 +846,32 @@ deep-link landing confirmed visually. New prose is clean under
 density remains over budget site-wide — that is the pre-existing backlog in
 §12, untouched here, and the new prose contributed none.
 
-**Phase 5 — surface it. NOT STARTED.** Coverage matrix on `/substances/`,
-built from the same manifests; `origin` as a HUD chip and an index filter.
+**Phase 5 — surface it. ✅ DONE, shipped 7 Aug 2026.**
+
+Three surfaces, all reading the manifests rather than repeating them:
+
+- **`<CoverageMatrix>`** (`src/components/CoverageMatrix.astro`), rendered on
+  `/substances/` at `#coverage`. The twelve universal roles are listed as a
+  promise rather than twelve identical columns, because after Phase 3 every
+  page has all of them and a full grid would carry no information. The table
+  is the four **conditional** roles, where a gap is the finding. Each mark
+  links to that page's anchor, resolved through `resolveSections()`, so a
+  cell can never point at an anchor the page lacks. Rows are grouped by
+  `origin`, then alphabetical.
+- **`origin` as a HUD chip** on all 12 substance pages, next to Class and
+  Mechanism in `SubstanceHud.astro`.
+- **Origin filter** on `/substances/`. One control drives three views: the
+  card grid, the duration chart and the coverage matrix all obey
+  `data-origin`. Deep-linkable as `/substances/?origin=natural`.
+
+Two implementation notes worth keeping:
+
+- Hub card numbers come from a CSS counter (`.hub-grid[data-filterable]`)
+  rather than hard-coded text, so a filtered grid renumbers contiguously.
+  Elements hidden with `display:none` do not increment a counter.
+- The matrix fits four columns on a 375px phone only because the column
+  heads wrap and drop to `0.57rem`. It sits in a `.table-scroll` anyway, so
+  a longer label would degrade to a sideways scroll rather than break out.
 
 ---
 
@@ -858,8 +883,12 @@ otherwise cover:
 - **`docs/voice.md`** — the prose guide, now the standard for site copy, with
   `npm run check:voice` scanning for the mechanical violations. Its first run
   found ~89 fixes across *pre-existing* pages, mostly em-dash density
-  (`integration.astro` at 81 against a budget of 10). **None of that backlog
-  has been addressed.** Prose written during the IA work is clean.
+  (`integration.astro` at 81 against a budget of 10). **That backlog was
+  cleared on 5 Aug 2026**; every page is now inside its em-dash budget and the
+  remaining flags are documented keeps. Since 8 Aug 2026 the scanner also reads
+  `src/components`, with em-dash density left unscored below 200 words because
+  the budget rounds to 1 for anything shorter. Copy held in `src/data/*.ts` —
+  the nature hooks, the HUD dose notes — is still unchecked.
 - **The beta gate** (`BetaNotice.astro`, mounted in `Base.astro`) — a
   first-visit acknowledgement modal, exempt on `/crisis/`, `/checker/` and
   `/assessment/`. `BetaBanner.astro` is a non-blocking alternative, built and
