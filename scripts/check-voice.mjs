@@ -5,8 +5,13 @@
 // em-dash density, structural tics. It cannot judge rhythm, whether an
 // opening is concrete, or whether a closing lands. Those need a human.
 //
+// Covers src/pages, src/content/blog, and src/components — components carry
+// reader-facing copy too (banners, HUD labels, the feedback modal), and it was
+// unscanned until Aug 2026.
+//
 // Reports; never fails a build. `npm run check:voice`
-//   --page <name>   limit to one page/post
+//   --page <name>   limit to one page/post/component (substring match,
+//                   e.g. --page components/ for every component)
 //   --rule <id>     limit to one rule
 // ─────────────────────────────────────────────────────────────
 
@@ -54,14 +59,83 @@ const RULES = [
 ];
 
 // ── Text extraction ─────────────────────────────────────────
+
+// Drop {…} expressions that contain no markup — {s.name}, {ri > 0 ? 'a' : b},
+// {'●'.repeat(n)}. Innermost first, repeatedly, so nesting unwinds. Groups that
+// wrap markup are kept: their text nodes are prose ("Reference ranges from
+// published research…" lives inside a ternary in SubstanceHud). A dropped group
+// still gives up any string literal that reads like a sentence, so copy written
+// as a JS string is never silently skipped.
+function dropCodeExpressions(s) {
+  for (let pass = 0; pass < 12; pass++) {
+    let changed = false;
+    s = s.replace(/\{([^{}]*)\}/g, (m, body) => {
+      if (body.includes('<')) return m;
+      changed = true;
+      const kept = [];
+      for (const lit of body.matchAll(/'([^']*)'|"([^"]*)"|`([^`]*)`/g)) {
+        const t = lit[1] ?? lit[2] ?? lit[3] ?? '';
+        if ((t.match(/[A-Za-z]{2,}/g) || []).length >= 2) kept.push(t);
+      }
+      return kept.length ? ` ${kept.join(' ')} ` : ' ';
+    });
+    if (!changed) break;
+  }
+  return s;
+}
+
+// Tag stripper that knows where a tag actually ends: a '>' only closes it when
+// it is outside quotes and braces. `<div style={i > 0 ? …}>` used to cut the tag
+// short and spill its expression into the prose. Everything between '<' and the
+// real '>' is discarded, which is what keeps data-tip / title / aria-label text
+// out of the scan — those are tooltips and labels, not prose.
+function stripTags(s) {
+  let out = '', i = 0;
+  while (i < s.length) {
+    if (s[i] === '<' && /[A-Za-z/!>]/.test(s[i + 1] || '')) {
+      let depth = 0, quote = null;
+      i++;
+      while (i < s.length) {
+        const c = s[i];
+        if (quote) { if (c === quote) quote = null; }
+        else if (c === '"' || c === "'" || c === '`') quote = c;
+        else if (c === '{') depth++;
+        else if (c === '}') depth = Math.max(0, depth - 1);
+        else if (c === '>' && depth === 0) { i++; break; }
+        i++;
+      }
+      out += ' ';
+      continue;
+    }
+    out += s[i];
+    i++;
+  }
+  return out;
+}
+
+// Leftover scaffolding from expressions that wrap markup — `s.doses.bands.map`,
+// `&&`, `=>`, stray parens. Dotted chains are only treated as code when a
+// segment is longer than two characters, so "e.g." and "i.e." survive.
+function dropCodeResidue(s) {
+  s = s.replace(/\b[A-Za-z_$][\w$]*(?:\.[\w$]+)+/g, (m) =>
+    m.split('.').every((seg) => seg.length <= 2) ? m : ' ');
+  s = s.replace(/=>|&&|\|\||===|!==|>=|<=/g, ' ');
+  s = s.replace(/(^|\s)[()]+(?=\s|$)/g, ' ');
+  return s.replace(/[{}]/g, ' ');  // half of a group whose other half wrapped markup
+}
+
 function proseFromAstro(src) {
-  // Strip frontmatter, script/style blocks, tags, and entities so we score
-  // the words a reader actually sees.
+  // Strip frontmatter, script/style blocks, comments, expressions, tags, and
+  // entities so we score the words a reader actually sees.
   let s = src.replace(/^---[\s\S]*?---/, '');
-  s = s.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '');
-  s = s.replace(/<[^>]+>/g, ' ');
+  s = s.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<style[\s\S]*?<\/style>/g, ' ');
+  s = s.replace(/<!--[\s\S]*?-->/g, ' ');
+  s = s.replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, ' ');  // {/* notes to other authors */}
+  s = dropCodeExpressions(s);
+  s = stripTags(s);
+  s = dropCodeResidue(s);
   s = s.replace(/&mdash;/g, '—').replace(/&ndash;/g, '–').replace(/&amp;/g, '&')
-       .replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ');
+       .replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/&#\d+;/g, ' ');
   return s.replace(/\s+/g, ' ').trim();
 }
 function proseFromMd(src) {
@@ -77,12 +151,26 @@ function context(text, idx, len) {
 }
 
 // ── Scan ────────────────────────────────────────────────────
+// A page below 60 words is a stub; a component below 8 is chrome (icon rows,
+// keyboard hints) rather than prose. Both are skipped.
+const MIN_WORDS = { page: 60, component: 8 };
+
+// Em-dash density needs enough prose to mean anything. The budget rounds to 1
+// for everything under 600 words, so on a 40-word banner a single dash reads as
+// at budget and two reads as double — neither is a real judgement. Below this
+// line the count is reported without being called a violation; every other rule
+// still applies.
+const DENSITY_MIN_WORDS = 200;
+
 const files = [];
 for (const f of await readdir(path.join(ROOT, 'src/pages'))) {
-  if (f.endsWith('.astro') && f !== '404.astro') files.push({ name: f.replace('.astro', ''), p: path.join(ROOT, 'src/pages', f), kind: 'astro' });
+  if (f.endsWith('.astro') && f !== '404.astro') files.push({ name: f.replace('.astro', ''), p: path.join(ROOT, 'src/pages', f), kind: 'astro', group: 'page' });
 }
 for (const f of await readdir(path.join(ROOT, 'src/content/blog'))) {
-  if (f.endsWith('.md')) files.push({ name: 'blog/' + f.replace('.md', ''), p: path.join(ROOT, 'src/content/blog', f), kind: 'md' });
+  if (f.endsWith('.md')) files.push({ name: 'blog/' + f.replace('.md', ''), p: path.join(ROOT, 'src/content/blog', f), kind: 'md', group: 'page' });
+}
+for (const f of await readdir(path.join(ROOT, 'src/components'))) {
+  if (f.endsWith('.astro')) files.push({ name: 'components/' + f.replace('.astro', ''), p: path.join(ROOT, 'src/components', f), kind: 'astro', group: 'component' });
 }
 
 const findings = [];
@@ -92,7 +180,7 @@ for (const f of files) {
   if (onlyPage && !f.name.includes(onlyPage)) continue;
   const raw = await readFile(f.p, 'utf8');
   const text = f.kind === 'astro' ? proseFromAstro(raw) : proseFromMd(raw);
-  if (text.split(' ').length < 60) continue;
+  if (!text || text.split(/\s+/).length < MIN_WORDS[f.group]) continue;
   const lower = text.toLowerCase();
   const words = text.split(/\s+/).length;
 
@@ -122,10 +210,12 @@ for (const f of files) {
     }
   }
 
-  // Em-dash density: budget is 1 per 400 words.
+  // Em-dash density: budget is 1 per 400 words, judged only on files long
+  // enough for the budget to mean something.
   const dashes = (text.match(/—/g) || []).length;
-  const budget = Math.max(1, Math.round(words / 400));
-  if ((!onlyRule || onlyRule === 'em-dash') && dashes > budget) {
+  const scored = words >= DENSITY_MIN_WORDS;
+  const budget = scored ? Math.max(1, Math.round(words / 400)) : null;
+  if ((!onlyRule || onlyRule === 'em-dash') && scored && dashes > budget) {
     findings.push({ page: f.name, rule: 'em-dash', sev: 'high', label: 'Em-dash overuse', term: `${dashes} used, budget ${budget}`, ctx: `${words} words` });
   }
 
@@ -134,42 +224,71 @@ for (const f of files) {
     return n ? `${w}×${n}` : null;
   }).filter(Boolean);
 
-  stats.push({ page: f.name, words, dashes, budget, semis: (text.match(/;/g) || []).length, sparing: sparing.join(' ') });
+  stats.push({ group: f.group, page: f.name, words, dashes, budget, semis: (text.match(/;/g) || []).length, sparing: sparing.join(' ') });
 }
 
 // ── Report ──────────────────────────────────────────────────
 const pad = (s, n) => String(s).padEnd(n);
+const groupOf = new Map(files.map((f) => [f.name, f.group]));
 const byPage = {};
 for (const f of findings) (byPage[f.page] ||= []).push(f);
 
 const highTotal = findings.filter((f) => f.sev === 'high').length;
 const checkTotal = findings.filter((f) => f.sev === 'check').length;
 
-console.log('\n  VOICE SCAN — docs/voice.md\n');
-const pages = Object.keys(byPage).sort((a, b) =>
-  byPage[b].filter((x) => x.sev === 'high').length - byPage[a].filter((x) => x.sev === 'high').length);
+console.log('\n  VOICE SCAN — docs/voice.md');
 
-for (const p of pages) {
-  const hi = byPage[p].filter((f) => f.sev === 'high');
-  const ck = byPage[p].filter((f) => f.sev === 'check');
-  if (!hi.length && !ck.length) continue;
-  console.log(`  ${p}  —  ${hi.length} to fix, ${ck.length} to check`);
-  const seen = new Set();
-  for (const f of [...hi, ...ck]) {
-    const key = f.rule + f.term + f.ctx.slice(0, 30);
-    if (seen.has(key)) continue;
-    seen.add(key);
-    console.log(`    ${f.sev === 'high' ? '✗' : '?'} ${pad(f.label + (f.term ? ` "${f.term}"` : ''), 42)} ${f.ctx}`);
+function findingsBlock(group) {
+  const names = Object.keys(byPage)
+    .filter((p) => groupOf.get(p) === group)
+    .sort((a, b) => byPage[b].filter((x) => x.sev === 'high').length - byPage[a].filter((x) => x.sev === 'high').length);
+  for (const p of names) {
+    const hi = byPage[p].filter((f) => f.sev === 'high');
+    const ck = byPage[p].filter((f) => f.sev === 'check');
+    if (!hi.length && !ck.length) continue;
+    console.log(`  ${p}  —  ${hi.length} to fix, ${ck.length} to check`);
+    const seen = new Set();
+    for (const f of [...hi, ...ck]) {
+      const key = f.rule + f.term + f.ctx.slice(0, 30);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      console.log(`    ${f.sev === 'high' ? '✗' : '?'} ${pad(f.label + (f.term ? ` "${f.term}"` : ''), 42)} ${f.ctx}`);
+    }
+    console.log('');
   }
-  console.log('');
+  return names.length;
 }
 
+function densityBlock(group, rows) {
+  console.log(`  ${pad(group === 'page' ? 'page' : 'component', 34)}${pad('words', 8)}${pad('em-dash', 10)}${pad('semis', 8)}sparing-list usage`);
+  for (const s of rows) {
+    // Unscored files show their raw count, marked '·' only when the copy really
+    // leans on dashes: two or more, at better than one per 100 words. A single
+    // dash in a 40-word banner is prose, and marking it would make the column
+    // meaningless — every short file carries a rate past the 1-per-400 budget.
+    const cell = s.budget === null
+      ? `${s.dashes}/–${s.dashes >= 2 && s.dashes > s.words / 100 ? '·' : ' '}`
+      : `${s.dashes}/${s.budget}${s.dashes > s.budget ? '!' : ' '}`;
+    console.log(`  ${pad(s.page, 34)}${pad(s.words, 8)}${pad(cell, 10)}${pad(s.semis, 8)}${s.sparing}`);
+  }
+}
+
+const pageStats = stats.filter((s) => s.group === 'page');
+const compStats = stats.filter((s) => s.group === 'component');
+
+console.log('\n  ── Pages & posts ──\n');
+if (!findingsBlock('page')) console.log('  clean\n');
 console.log('  ── Density (em-dash budget = 1 per 400 words) ──');
-console.log(`  ${pad('page', 34)}${pad('words', 8)}${pad('em-dash', 10)}${pad('semis', 8)}sparing-list usage`);
-for (const s of stats.sort((a, b) => (b.dashes / b.budget) - (a.dashes / a.budget)).slice(0, 18)) {
-  const flag = s.dashes > s.budget ? '!' : ' ';
-  console.log(`  ${pad(s.page, 34)}${pad(s.words, 8)}${pad(`${s.dashes}/${s.budget}${flag}`, 10)}${pad(s.semis, 8)}${s.sparing}`);
+const overBudget = (s) => (s.budget ? s.dashes / s.budget : 0);
+densityBlock('page', pageStats.sort((a, b) => overBudget(b) - overBudget(a)).slice(0, 18));
+
+if (compStats.length) {
+  console.log('\n  ── Components ──\n');
+  if (!findingsBlock('component')) console.log('  clean\n');
+  console.log(`  ── Density (under ${DENSITY_MIN_WORDS} words the budget is not scored; '·' = over rate) ──`);
+  densityBlock('component', compStats.sort((a, b) => (b.dashes / b.words) - (a.dashes / a.words)));
 }
 
-console.log(`\n  ${highTotal} to fix · ${checkTotal} to check · ${stats.length} files scanned`);
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+console.log(`\n  ${highTotal} to fix · ${checkTotal} to check · ${plural(pageStats.length, 'page')} + ${plural(compStats.length, 'component')} scanned`);
 console.log('  Mechanical rules only — rhythm, openings and closings need a human.\n');
