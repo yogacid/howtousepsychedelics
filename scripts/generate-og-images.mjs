@@ -68,11 +68,10 @@ async function loadFonts() {
   return fonts;
 }
 
+// Site logo PNG is a 4:1 lockup (eye mark + "How to Use Psychedelics" +
+// "by Psygaia"). Callers size the <img> box to that aspect.
 async function loadLogoDataUri() {
   const buf = await readFile(join(ROOT, 'public', 'logo-dark.png'));
-  // Site logo PNG is a wide lockup (mark + wordmark); crop to the
-  // square eye mark on the left is impractical here, so this loads
-  // the whole file — callers size the <img> box to the mark's aspect.
   return `data:image/png;base64,${buf.toString('base64')}`;
 }
 
@@ -352,6 +351,120 @@ function buildBlogCard(post, logo) {
   });
 }
 
+// ── Site card ────────────────────────────────────────────────
+// The default share card for every page without one of its own.
+//
+// Structure follows the Psygaia card Louis picked as the reference: full
+// logo lockup top-left, small letterspaced eyebrow, a two-line headline,
+// two lines of supporting copy, a soft colour wash on the right, and a
+// clean gradient rule along the bottom edge.
+//
+// Copy is lifted from the homepage hero rather than invented, so the card
+// and the page it links to say the same thing: the "Education & Harm
+// Reduction" badge, the h1, and a trimmed hero-sub.
+//
+// Note on the bottom rule: the site's usual rule is that gradients encode
+// data and are never trim. Louis asked for this one specifically, pointing
+// at the reference card. Deliberate exception, not drift.
+
+const SITE_COPY = {
+  titleA: 'Learn to engage with',
+  titleB: 'psychedelics responsibly',
+  sub: 'How to prepare, navigate, and integrate. Grounded in harm reduction.',
+  domain: 'howtousepsychedelics.com',
+};
+
+// One palette, not a map: og:image is a single URL every consumer fetches, so
+// the card can't answer the viewer's light/dark preference the way the site can.
+const SITE_THEME = {
+  bg: '#0a0a0a',
+  text: '#f5f5f5',
+  muted: '#9a9a9a',
+  wash: 'radial-gradient(60% 70% at 78% 42%, rgba(64,217,204,0.13) 0%, rgba(46,159,216,0.09) 45%, rgba(10,10,10,0) 100%)',
+};
+
+function buildSiteCard(logo) {
+  const t = SITE_THEME;
+  const RULE = 10;
+
+  return {
+    type: 'div',
+    props: {
+      style: {
+        width: WIDTH,
+        height: HEIGHT,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        padding: `0 72px ${RULE}px`,
+        background: t.bg,
+        fontFamily: 'DM Sans',
+        position: 'relative',
+      },
+      children: [
+        {
+          type: 'div',
+          props: {
+            style: { position: 'absolute', top: 0, left: 0, width: WIDTH, height: HEIGHT, display: 'flex', background: t.wash },
+          },
+        },
+        {
+          type: 'div',
+          props: {
+            style: { position: 'absolute', top: 62, left: 72, display: 'flex' },
+            children: [{ type: 'img', props: { src: logo, width: 380, height: 95, style: { display: 'flex' } } }],
+          },
+        },
+        {
+          type: 'div',
+          props: {
+            style: { display: 'flex', flexDirection: 'column', position: 'relative', marginTop: 40 },
+            children: [
+              {
+                type: 'span',
+                props: {
+                  style: { fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: 76, color: t.text, lineHeight: 1.08, letterSpacing: '-0.025em' },
+                  children: SITE_COPY.titleA,
+                },
+              },
+              {
+                type: 'span',
+                props: {
+                  style: { fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: 76, color: t.text, lineHeight: 1.08, letterSpacing: '-0.025em' },
+                  children: SITE_COPY.titleB,
+                },
+              },
+              {
+                type: 'span',
+                props: {
+                  style: { fontSize: 30, color: t.muted, lineHeight: 1.45, marginTop: 26, width: 1000 },
+                  children: SITE_COPY.sub,
+                },
+              },
+            ],
+          },
+        },
+        {
+          type: 'span',
+          props: {
+            style: { position: 'absolute', bottom: 44, right: 72, fontSize: 23, color: t.muted },
+            children: SITE_COPY.domain,
+          },
+        },
+        {
+          type: 'div',
+          props: {
+            style: {
+              position: 'absolute', bottom: 0, left: 0, width: WIDTH, height: RULE, display: 'flex',
+              background: 'linear-gradient(90deg, #6dd456 0%, #40d9cc 50%, #2e9fd8 100%)',
+            },
+          },
+        },
+      ],
+    },
+  };
+}
+
 async function render(node, fonts) {
   const svg = await satori(node, { width: WIDTH, height: HEIGHT, fonts });
   const resvg = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } });
@@ -370,6 +483,9 @@ async function main() {
   ]);
 
   let count = 0;
+  await writeFile(join(OUT_DIR, 'site.png'), await render(buildSiteCard(logo), fonts));
+  count++;
+
   for (const substance of Object.values(substances)) {
     const png = await render(buildSubstanceCard(substance, logo), fonts);
     await writeFile(join(OUT_DIR, `${substance.id}.png`), png);

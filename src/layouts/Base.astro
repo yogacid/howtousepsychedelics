@@ -28,7 +28,7 @@ const {
   title,
   description,
   canonicalPath = '/',
-  ogImage = '/og-image.png',
+  ogImage = '/og/site.png',
   ogType = 'website',
   hideProgress = false,
   hideEmailPopup = false,
@@ -52,7 +52,8 @@ const GATE_STYLE: 'modal' | 'banner' = 'modal';
 // prop so a page cannot forget to opt out.
 const GATE_EXEMPT = ['/crisis/', '/checker/', '/assessment/'];
 const showGate = !GATE_EXEMPT.includes(trailedPath);
-// Generated per-page cards are 1200×630; the site-wide fallback keeps its size
+// Generated cards — per-page and the site default — are 1200×630. The branch
+// stays for any page still pointing at the old 2048×1072 /og-image.png.
 const [ogImageWidth, ogImageHeight] = ogImage.startsWith('/og/') ? [1200, 630] : [2048, 1072];
 ---
 
